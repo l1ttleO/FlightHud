@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -33,7 +33,7 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
         int i = 0;
         for (IComputer computer : host.faulted) {
-            i += HudComponent.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
+            i += DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
                     FAConfig.indicator().warningColor, highlight);
             y += 10;
         }

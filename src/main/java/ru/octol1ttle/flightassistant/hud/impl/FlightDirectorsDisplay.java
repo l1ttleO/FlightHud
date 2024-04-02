@@ -1,21 +1,22 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class FlightDirectorsIndicator extends HudComponent {
+public class FlightDirectorsDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final AutoFlightComputer autoflight;
 
-    public FlightDirectorsIndicator(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
+    public FlightDirectorsDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
         this.dim = dim;
         this.data = data;
         this.autoflight = autoflight;
@@ -30,7 +31,7 @@ public class FlightDirectorsIndicator extends HudComponent {
         if (autoflight.getTargetPitch() != null) {
             float deltaPitch = autoflight.getTargetPitch() - data.pitch();
             int fdY = MathHelper.clamp(Math.round(dim.yMid - deltaPitch * dim.degreesPerPixel), dim.tFrame + 10, dim.bFrame - 20);
-            drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
+            DrawHelper.drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
         }
 
         if (autoflight.getTargetHeading() != null) {
@@ -43,13 +44,13 @@ public class FlightDirectorsIndicator extends HudComponent {
             }
 
             int fdX = MathHelper.clamp(Math.round(dim.xMid + deltaHeading * dim.degreesPerPixel), dim.lFrame + 10, dim.rFrame - 10);
-            drawVerticalLine(context, fdX, dim.yMid - dim.hFrame / 7, dim.yMid + dim.hFrame / 7, FAConfig.indicator().advisoryColor);
+            DrawHelper.drawVerticalLine(context, fdX, dim.yMid - dim.hFrame / 7, dim.yMid + dim.hFrame / 7, FAConfig.indicator().advisoryColor);
         }
     }
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawMiddleAlignedText(textRenderer, context, Text.translatable("mode.flightassistant.auto.flight_directors"), dim.xMid, dim.yMid - 20, FAConfig.indicator().warningColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("mode.flightassistant.auto.flight_directors"), dim.xMid, dim.yMid - 20, FAConfig.indicator().warningColor);
     }
 
     @Override

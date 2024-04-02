@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -44,7 +44,7 @@ public class FireworkUnsafeAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
-        return HudComponent.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.firework.unsafe"), x, y,
+        return DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.firework.unsafe"), x, y,
                 FAConfig.indicator().warningColor, highlight && data.isFlying());
     }
 }

@@ -1,19 +1,20 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class SpeedIndicator extends HudComponent {
+public class SpeedDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
 
-    public SpeedIndicator(Dimensions dim, AirDataComputer data) {
+    public SpeedDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
         this.data = data;
     }
@@ -33,8 +34,8 @@ public class SpeedIndicator extends HudComponent {
         int xSpeedText = left - 5;
 
         if (FAConfig.indicator().showSpeedReadout) {
-            drawRightAlignedText(textRenderer, context, asText("%.2f", data.speed()), xSpeedText, dim.yMid - 3, FAConfig.indicator().frameColor);
-            drawBorder(context, xSpeedText - 29, dim.yMid - 5, 30, FAConfig.indicator().frameColor);
+            DrawHelper.drawRightAlignedText(textRenderer, context, DrawHelper.asText("%.2f", data.speed()), xSpeedText, dim.yMid - 3, FAConfig.indicator().frameColor);
+            DrawHelper.drawBorder(context, xSpeedText - 29, dim.yMid - 5, 30, FAConfig.indicator().frameColor);
         }
 
         if (FAConfig.indicator().showSpeedScale) {
@@ -44,19 +45,19 @@ public class SpeedIndicator extends HudComponent {
                     continue;
 
                 if (i % 1 == 0) {
-                    drawHorizontalLine(context, left - 2, right, y, FAConfig.indicator().frameColor);
+                    DrawHelper.drawHorizontalLine(context, left - 2, right, y, FAConfig.indicator().frameColor);
                     if (!FAConfig.indicator().showSpeedReadout || y > dim.yMid + 7 || y < dim.yMid - 7) {
-                        drawRightAlignedText(textRenderer, context, asText("%.0f", i), xSpeedText, y - 3, FAConfig.indicator().frameColor);
+                        DrawHelper.drawRightAlignedText(textRenderer, context, DrawHelper.asText("%.0f", i), xSpeedText, y - 3, FAConfig.indicator().frameColor);
                     }
                 }
-                drawHorizontalLine(context, left, right, y, FAConfig.indicator().frameColor);
+                DrawHelper.drawHorizontalLine(context, left, right, y, FAConfig.indicator().frameColor);
             }
         }
     }
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawRightAlignedText(textRenderer, context, Text.translatable("flightassistant.speed_short"), dim.lFrame - 7, dim.yMid - 3, FAConfig.indicator().warningColor);
+        DrawHelper.drawRightAlignedText(textRenderer, context, Text.translatable("flightassistant.speed_short"), dim.lFrame - 7, dim.yMid - 3, FAConfig.indicator().warningColor);
     }
 
     @Override

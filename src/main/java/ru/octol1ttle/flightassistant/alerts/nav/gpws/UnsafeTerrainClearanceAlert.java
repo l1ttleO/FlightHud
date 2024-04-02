@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
@@ -37,7 +37,7 @@ public class UnsafeTerrainClearanceAlert extends BaseAlert implements ICenteredA
             return false;
         }
 
-        HudComponent.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.too_low_terrain"), x, y,
+        DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.too_low_terrain"), x, y,
                 plan.isBelowMinimums()
                         ? FAConfig.indicator().warningColor
                         : FAConfig.indicator().cautionColor

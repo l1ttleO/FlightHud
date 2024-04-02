@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
@@ -35,7 +35,7 @@ public class StallAlert extends BaseAlert implements ICenteredAlert {
             return false;
         }
 
-        HudComponent.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.stall"), x, y, FAConfig.indicator().warningColor, highlight);
+        DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.stall"), x, y, FAConfig.indicator().warningColor, highlight);
         return true;
     }
 }

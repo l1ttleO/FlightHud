@@ -6,6 +6,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 
 public class FAKeyBindings {
     private static KeyBinding toggleFlightDirectors;
@@ -43,7 +44,7 @@ public class FAKeyBindings {
         KeyBindingHelper.registerKeyBinding(lockManualFireworks);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            ComputerHost host = HudRenderer.getHost();
+            ComputerHost host = HudDisplayHost.getHost();
             if (!host.faulted.contains(host.autoflight)) {
                 while (toggleFlightDirectors.wasPressed()) {
                     host.autoflight.flightDirectorsEnabled = !host.autoflight.flightDirectorsEnabled;

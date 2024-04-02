@@ -105,7 +105,7 @@ public class AirDataComputer implements ITickableComputer {
         return !block.isAir();
     }
 
-    public BlockPos findGround(BlockPos.Mutable from) {
+    public BlockPos findGround(BlockPos.Mutable from) { // TODO: use heightmap
         if (!isChunkLoadedAt(from)) {
             return null;
         }

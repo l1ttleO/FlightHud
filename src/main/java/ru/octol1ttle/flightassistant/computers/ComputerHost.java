@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.client.MinecraftClient;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.FlightAssistant;
-import ru.octol1ttle.flightassistant.HudRenderer;
+import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.autoflight.PitchController;
@@ -36,7 +36,7 @@ public class ComputerHost {
     public final List<IComputer> faulted;
     private final List<ITickableComputer> tickables;
 
-    public ComputerHost(@NotNull MinecraftClient mc, HudRenderer renderer) {
+    public ComputerHost(@NotNull MinecraftClient mc, HudDisplayHost renderer) {
         this.data = new AirDataComputer(mc);
         this.time = new TimeComputer(mc);
         this.firework = new FireworkController(mc, data, time);

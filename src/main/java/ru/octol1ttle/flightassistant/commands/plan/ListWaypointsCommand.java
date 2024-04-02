@@ -3,7 +3,7 @@ package ru.octol1ttle.flightassistant.commands.plan;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
-import ru.octol1ttle.flightassistant.HudRenderer;
+import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
 
 public class ListWaypointsCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context) {
-        ComputerHost host = HudRenderer.getHost();
+        ComputerHost host = HudDisplayHost.getHost();
         context.getSource().sendFeedback(Text.translatable("commands.flightassistant.total_waypoints", host.plan.size()));
         FlightPlanner plan = host.plan;
         for (int i = 0; i < plan.size(); i++) {

@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
@@ -36,14 +36,14 @@ public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
         }
 
         if (gpws.descentImpactTime <= PULL_UP_THRESHOLD) {
-            HudComponent.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.pull_up"), x, y,
+            DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.pull_up"), x, y,
                     FAConfig.indicator().warningColor, highlight);
 
             return true;
         }
 
         if (gpws.descentImpactTime <= SINK_RATE_THRESHOLD) {
-            HudComponent.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.sink_rate"), x, y,
+            DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.sink_rate"), x, y,
                     FAConfig.indicator().cautionColor, highlight);
 
             return true;

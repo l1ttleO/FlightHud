@@ -1,10 +1,10 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
@@ -40,10 +40,10 @@ public class FlightMode {
             throw new IllegalStateException("Called render before updating");
         }
         if (time.millis != null && time.millis - lastUpdateTime <= UPDATE_FLASH_TIME) {
-            HudComponent.drawHighlightedMiddleAlignedText(textRenderer, context, lastText, x, y, FAConfig.indicator().cautionColor, time.highlight);
+            DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, lastText, x, y, FAConfig.indicator().cautionColor, time.highlight);
             return;
         }
 
-        HudComponent.drawMiddleAlignedText(textRenderer, context, lastText, x, y, FAConfig.indicator().statusColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, lastText, x, y, FAConfig.indicator().statusColor);
     }
 }

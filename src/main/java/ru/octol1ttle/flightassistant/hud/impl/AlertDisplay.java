@@ -1,10 +1,12 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -12,14 +14,16 @@ import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.safety.AlertController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 
-public class AlertIndicator extends HudComponent {
+public class AlertDisplay implements IHudDisplay {
+    public static final Identifier ID = new Identifier(FlightAssistant.MODID, "alert");
     private final Dimensions dim;
     private final ComputerHost host;
     private final AlertController alert;
     private final TimeComputer time;
 
-    public AlertIndicator(Dimensions dim, ComputerHost host, AlertController alert, TimeComputer time) {
+    public AlertDisplay(Dimensions dim, ComputerHost host, AlertController alert, TimeComputer time) {
         this.dim = dim;
         this.host = host;
         this.alert = alert;
@@ -57,7 +61,7 @@ public class AlertIndicator extends HudComponent {
     }
 
     private void renderFaulted(DrawContext context, TextRenderer textRenderer, Text text) {
-        HudComponent.drawHighlightedText(textRenderer, context, text, dim.lFrame + 5, dim.tFrame + 15,
+        DrawHelper.drawHighlightedText(textRenderer, context, text, dim.lFrame + 5, dim.tFrame + 15,
                 FAConfig.indicator().warningColor, time.highlight);
     }
 

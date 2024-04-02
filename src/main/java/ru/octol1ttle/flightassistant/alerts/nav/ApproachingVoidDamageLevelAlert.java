@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -34,7 +34,7 @@ public class ApproachingVoidDamageLevelAlert extends BaseAlert implements IECAMA
                 ? Text.translatable("alerts.flightassistant.reached_void_damage_level")
                 : Text.translatable("alerts.flightassistant.approaching_void_damage_level");
 
-        return HudComponent.drawHighlightedText(textRenderer, context, text, x, y,
+        return DrawHelper.drawHighlightedText(textRenderer, context, text, x, y,
                 FAConfig.indicator().warningColor, highlight);
     }
 }

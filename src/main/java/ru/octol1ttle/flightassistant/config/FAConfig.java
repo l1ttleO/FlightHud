@@ -21,9 +21,9 @@ public class FAConfig {
             .build();
 
     private static final ConfigClassHandler<IndicatorConfigStorage> INDICATORS_STORAGE_HANDLER = ConfigClassHandler.createBuilder(IndicatorConfigStorage.class)
-            .id(new Identifier(FlightAssistant.MODID, "indicators"))
+            .id(new Identifier(FlightAssistant.MODID, "hud"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
-                    .setPath(YACLPlatform.getConfigDir().resolve("%s/indicators.json5".formatted(FlightAssistant.MODID)))
+                    .setPath(YACLPlatform.getConfigDir().resolve("%s/hud.json5".formatted(FlightAssistant.MODID)))
                     .appendGsonBuilder(GsonBuilder::setPrettyPrinting) // not needed, pretty print by default
                     .setJson5(true)
                     .build())

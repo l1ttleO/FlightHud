@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
@@ -7,14 +7,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class AttitudeIndicator extends HudComponent {
+public class AttitudeDisplay implements IHudDisplay {
     public static final int DEGREES_PER_BAR = 20;
     private final Dimensions dim;
     private final AirDataComputer data;
@@ -22,7 +23,7 @@ public class AttitudeIndicator extends HudComponent {
     private final VoidLevelComputer voidLevel;
     private final AttitudeIndicatorData pitchData = new AttitudeIndicatorData();
 
-    public AttitudeIndicator(Dimensions dim, AirDataComputer data, StallComputer stall, VoidLevelComputer voidLevel) {
+    public AttitudeDisplay(Dimensions dim, AirDataComputer data, StallComputer stall, VoidLevelComputer voidLevel) {
         this.dim = dim;
         this.data = data;
         this.stall = stall;
@@ -89,8 +90,8 @@ public class AttitudeIndicator extends HudComponent {
         int l1 = pitchData.l2 - width;
         int r2 = pitchData.r1 + width;
 
-        drawHorizontalLineDashed(context, l1, pitchData.l2, y, 3, color);
-        drawHorizontalLineDashed(context, pitchData.r1, r2, y, 3, color);
+        DrawHelper.drawHorizontalLineDashed(context, l1, pitchData.l2, y, 3, color);
+        DrawHelper.drawHorizontalLineDashed(context, pitchData.r1, r2, y, 3, color);
     }
 
     private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree, int y) {
@@ -101,24 +102,24 @@ public class AttitudeIndicator extends HudComponent {
         Color color = getPitchColor(degree);
         int dashes = degree < 0 ? 4 : 1;
 
-        drawHorizontalLineDashed(context, pitchData.l1, pitchData.l2, y, dashes, color);
-        drawHorizontalLineDashed(context, pitchData.r1, pitchData.r2, y, dashes, color);
+        DrawHelper.drawHorizontalLineDashed(context, pitchData.l1, pitchData.l2, y, dashes, color);
+        DrawHelper.drawHorizontalLineDashed(context, pitchData.r1, pitchData.r2, y, dashes, color);
 
         int sideTickHeight = degree >= 0 ? 5 : -5;
-        drawVerticalLine(context, pitchData.l1, y, y + sideTickHeight, color);
-        drawVerticalLine(context, pitchData.r2, y, y + sideTickHeight, color);
+        DrawHelper.drawVerticalLine(context, pitchData.l1, y, y + sideTickHeight, color);
+        DrawHelper.drawVerticalLine(context, pitchData.r2, y, y + sideTickHeight, color);
 
         int fontVerticalOffset = degree >= 0 ? 0 : 6;
 
-        drawText(textRenderer, context, asText("%d", Math.round(Math.abs(degree))), pitchData.r2 + 6,
+        DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%d", Math.round(Math.abs(degree))), pitchData.r2 + 6,
                 y - fontVerticalOffset, color);
 
-        drawText(textRenderer, context, asText("%d", Math.round(Math.abs(degree))), pitchData.l1 - 17,
+        DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%d", Math.round(Math.abs(degree))), pitchData.l1 - 17,
                 y - fontVerticalOffset, color);
     }
 
     private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, int yHorizon, Color color) {
-        Text text = asText("^");
+        Text text = DrawHelper.asText("^");
         for (float f = degrees; f <= 90; f += 10) {
             int y = MathHelper.floor((-f * dim.degreesPerPixel) + yHorizon);
 
@@ -130,21 +131,21 @@ public class AttitudeIndicator extends HudComponent {
             context.getMatrices().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f)); // Flip upside down
             context.getMatrices().translate(-dim.xMid, -y, 0);
 
-            drawMiddleAlignedText(textRenderer, context, text, dim.xMid, y, color);
+            DrawHelper.drawMiddleAlignedText(textRenderer, context, text, dim.xMid, y, color);
 
             context.getMatrices().pop();
         }
     }
 
     private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, int yHorizon, Color color) {
-        Text text = asText("^");
+        Text text = DrawHelper.asText("^");
         for (float f = degrees; f >= -90; f -= 10) {
             int y = MathHelper.floor((-f * dim.degreesPerPixel) + yHorizon);
 
             if (outOfFrame(y)) {
                 continue;
             }
-            drawMiddleAlignedText(textRenderer, context, text, dim.xMid, y, color);
+            DrawHelper.drawMiddleAlignedText(textRenderer, context, text, dim.xMid, y, color);
         }
     }
 
@@ -154,7 +155,7 @@ public class AttitudeIndicator extends HudComponent {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.attitude_short"), dim.xMid, dim.yMid - 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.attitude_short"), dim.xMid, dim.yMid - 10, FAConfig.indicator().warningColor);
     }
 
     @Override

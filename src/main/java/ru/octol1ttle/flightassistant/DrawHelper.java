@@ -7,7 +7,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.compatibility.ImmediatelyFastBatchingAccessor;
 
-public abstract class HudComponent {
+public abstract class DrawHelper {
     private static final int SINGLE_LINE_DRAWN = 1;
 
     public static MutableText asText(String key, Object... args) {
@@ -18,7 +18,7 @@ public abstract class HudComponent {
         context.fill(x1, y1, x2, y2, color.getRGB());
     }
 
-    protected static void drawRightAlignedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color) {
+    public static void drawRightAlignedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color) {
         drawText(textRenderer, context, text, x - textRenderer.getWidth(text), y, color);
     }
 
@@ -34,10 +34,10 @@ public abstract class HudComponent {
     public static int drawHighlightedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color, boolean highlight) {
         drawUnbatched(() -> {
             if (highlight) {
-                HudComponent.fill(context, x - 2, y - 1, x + textRenderer.getWidth(text) + 1, y + 8, color);
-                HudComponent.drawText(textRenderer, context, text, x, y, getContrasting(color));
+                DrawHelper.fill(context, x - 2, y - 1, x + textRenderer.getWidth(text) + 1, y + 8, color);
+                DrawHelper.drawText(textRenderer, context, text, x, y, getContrasting(color));
             } else {
-                HudComponent.drawText(textRenderer, context, text, x, y, color);
+                DrawHelper.drawText(textRenderer, context, text, x, y, color);
             }
         });
         return SINGLE_LINE_DRAWN;
@@ -75,7 +75,7 @@ public abstract class HudComponent {
         context.drawBorder(x, y, w, 11, color.getRGB());
     }
 
-    protected static void drawHorizontalLineDashed(DrawContext context, int x1, int x2, int y,
+    public static void drawHorizontalLineDashed(DrawContext context, int x1, int x2, int y,
                                                    int dashCount, Color color) {
         int width = x2 - x1;
         int segmentCount = dashCount * 2 - 1;
@@ -95,10 +95,4 @@ public abstract class HudComponent {
             context.drawHorizontalLine(dx1, dx2, y, color.getRGB());
         }
     }
-
-    public abstract void render(DrawContext context, TextRenderer textRenderer);
-
-    public abstract void renderFaulted(DrawContext context, TextRenderer textRenderer);
-
-    public abstract String getId();
 }

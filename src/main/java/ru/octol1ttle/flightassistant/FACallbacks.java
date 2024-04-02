@@ -16,6 +16,7 @@ import ru.octol1ttle.flightassistant.commands.SelectCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -43,20 +44,20 @@ public class FACallbacks {
 
     private static void setupWorldRender() {
         WorldRenderEvents.END.register(context ->
-                HudRenderer.getHost().tick()
+                HudDisplayHost.getHost().tick()
         );
     }
 
     private static void setupHudRender() {
         AlternateHudRendererCallback.EVENT.register((drawContext, tickDelta) ->
-                HudRenderer.INSTANCE.render(MinecraftClient.getInstance(), drawContext, tickDelta)
+                HudDisplayHost.INSTANCE.render(MinecraftClient.getInstance(), drawContext, tickDelta)
         );
     }
 
     private static void setupUseItem() {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
-            ComputerHost host = HudRenderer.getHost();
+            ComputerHost host = HudDisplayHost.getHost();
             if (!world.isClient() || host.faulted.contains(host.firework)) {
                 return TypedActionResult.pass(stack);
             }

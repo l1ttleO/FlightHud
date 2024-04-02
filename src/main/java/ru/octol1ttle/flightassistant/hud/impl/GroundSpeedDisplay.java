@@ -1,19 +1,20 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class GroundSpeedIndicator extends HudComponent {
+public class GroundSpeedDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
 
-    public GroundSpeedIndicator(Dimensions dim, AirDataComputer data) {
+    public GroundSpeedDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
         this.data = data;
     }
@@ -26,7 +27,7 @@ public class GroundSpeedIndicator extends HudComponent {
 
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.25f);
-        drawText(textRenderer, context,
+        DrawHelper.drawText(textRenderer, context,
                 Text.translatable("flightassistant.ground_speed_short", ": %.2f".formatted(data.velocity.horizontalLength())),
                 x, dim.bFrame, FAConfig.indicator().frameColor);
     }
@@ -36,7 +37,7 @@ public class GroundSpeedIndicator extends HudComponent {
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.25f);
 
-        drawText(textRenderer, context, Text.translatable("flightassistant.ground_speed_short", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.ground_speed_short", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
     @Override

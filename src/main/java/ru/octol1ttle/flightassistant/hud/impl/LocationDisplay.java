@@ -1,20 +1,21 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class LocationIndicator extends HudComponent {
+public class LocationDisplay implements IHudDisplay {
 
     private final Dimensions dim;
     private final AirDataComputer data;
 
-    public LocationIndicator(Dimensions dim, AirDataComputer data) {
+    public LocationDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
         this.data = data;
     }
@@ -31,12 +32,12 @@ public class LocationIndicator extends HudComponent {
         int xLoc = MathHelper.floor(data.position().x);
         int zLoc = MathHelper.floor(data.position().z);
 
-        drawText(textRenderer, context, asText("%d / %d", xLoc, zLoc), x, y, FAConfig.indicator().frameColor);
+        DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%d / %d", xLoc, zLoc), x, y, FAConfig.indicator().frameColor);
     }
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawText(textRenderer, context, Text.translatable("flightassistant.location_short"),
+        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.location_short"),
                 dim.lFrame + 15, dim.bFrame, FAConfig.indicator().warningColor);
     }
 

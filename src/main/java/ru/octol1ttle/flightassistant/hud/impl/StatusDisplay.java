@@ -1,21 +1,22 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class StatusIndicator extends HudComponent {
+public class StatusDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final FireworkController firework;
     private final FlightPlanner plan;
 
-    public StatusIndicator(Dimensions dim, FireworkController firework, FlightPlanner plan) {
+    public StatusDisplay(Dimensions dim, FireworkController firework, FlightPlanner plan) {
         this.dim = dim;
         this.firework = firework;
         this.plan = plan;
@@ -35,7 +36,7 @@ public class StatusIndicator extends HudComponent {
             } else {
                 fireworkColor = FAConfig.indicator().warningColor;
             }
-            drawRightAlignedText(textRenderer, context,
+            DrawHelper.drawRightAlignedText(textRenderer, context,
                     Text.translatable("status.flightassistant.firework_count", firework.safeFireworkCount),
                     x, y += 10, fireworkColor);
         }
@@ -43,7 +44,7 @@ public class StatusIndicator extends HudComponent {
         if (FAConfig.indicator().showDistanceToWaypoint) {
             Double distance = plan.getDistanceToWaypoint();
             if (distance != null) {
-                drawRightAlignedText(textRenderer, context,
+                DrawHelper.drawRightAlignedText(textRenderer, context,
                         Text.translatable("status.flightassistant.waypoint_distance", distance.intValue()),
                         x, y + 10, FAConfig.indicator().statusColor);
             }
@@ -52,7 +53,7 @@ public class StatusIndicator extends HudComponent {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawRightAlignedText(textRenderer, context,
+        DrawHelper.drawRightAlignedText(textRenderer, context,
                 Text.translatable("flightassistant.status_short"),
                 dim.rFrame - 5, dim.tFrame + 15, FAConfig.indicator().warningColor);
     }

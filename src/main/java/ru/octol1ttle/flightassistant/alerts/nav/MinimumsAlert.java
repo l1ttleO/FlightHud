@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -41,7 +41,7 @@ public class MinimumsAlert extends BaseAlert implements IECAMAlert {
             return 0;
         }
 
-        return HudComponent.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.reached_minimums"), x, y,
+        return DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.reached_minimums"), x, y,
                 FAConfig.indicator().cautionColor, false);
     }
 }

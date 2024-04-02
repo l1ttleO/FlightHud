@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -7,7 +7,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
@@ -15,7 +16,7 @@ import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class FlightModeIndicator extends HudComponent {
+public class FlightModeDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final TimeComputer time;
@@ -28,7 +29,7 @@ public class FlightModeIndicator extends HudComponent {
     private final FlightMode lateralMode;
     private final FlightMode automationMode;
 
-    public FlightModeIndicator(Dimensions dim, AirDataComputer data, TimeComputer time, FireworkController firework, AutoFlightComputer autoflight, FlightPlanner plan) {
+    public FlightModeDisplay(Dimensions dim, AirDataComputer data, TimeComputer time, FireworkController firework, AutoFlightComputer autoflight, FlightPlanner plan) {
         this.dim = dim;
         this.data = data;
         this.time = time;
@@ -181,7 +182,7 @@ public class FlightModeIndicator extends HudComponent {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawText(textRenderer, context, Text.translatable("flightassistant.flight_mode_short"), dim.lFrame + dim.wFrame / 5, dim.bFrame - 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.flight_mode_short"), dim.lFrame + dim.wFrame / 5, dim.bFrame - 10, FAConfig.indicator().warningColor);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
@@ -6,18 +6,19 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class HeadingIndicator extends HudComponent {
+public class HeadingDisplay implements IHudDisplay {
 
     private final Dimensions dim;
     private final AirDataComputer data;
     private final AutoFlightComputer autoflight;
 
-    public HeadingIndicator(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
+    public HeadingDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
         this.dim = dim;
         this.data = data;
         this.autoflight = autoflight;
@@ -35,12 +36,12 @@ public class HeadingIndicator extends HudComponent {
 
         if (FAConfig.indicator().showHeadingReadout) {
             Color color = getHeadingColor(data.heading());
-            drawText(textRenderer, context, asText("%03d", Math.round(data.heading())), dim.xMid - 8, yText, color);
-            drawBorder(context, dim.xMid - 15, yText - 2, 30, color);
+            DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%03d", Math.round(data.heading())), dim.xMid - 8, yText, color);
+            DrawHelper.drawBorder(context, dim.xMid - 15, yText - 2, 30, color);
         }
 
         if (FAConfig.indicator().showHeadingScale) {
-            drawMiddleAlignedText(textRenderer, context, asText("^"), dim.xMid, top + 10, FAConfig.indicator().frameColor);
+            DrawHelper.drawMiddleAlignedText(textRenderer, context, DrawHelper.asText("^"), dim.xMid, top + 10, FAConfig.indicator().frameColor);
 
             for (int i = -540; i < 540; i++) {
                 int x = (i * dim.degreesPerPixel) + xNorth;
@@ -60,20 +61,20 @@ public class HeadingIndicator extends HudComponent {
 
                 if (forceMark || i % 15 == 0 && enoughSpace) {
                     if (i % 90 == 0) {
-                        drawText(textRenderer, context, headingToDirection(degrees), x - 2, yText + 10, color);
-                        drawText(textRenderer, context, asText(headingToAxis(degrees)), x - 8, yText + 20, color);
+                        DrawHelper.drawText(textRenderer, context, headingToDirection(degrees), x - 2, yText + 10, color);
+                        DrawHelper.drawText(textRenderer, context, DrawHelper.asText(headingToAxis(degrees)), x - 8, yText + 20, color);
                     } else {
-                        drawVerticalLine(context, x, top + 3, top + 10, color);
+                        DrawHelper.drawVerticalLine(context, x, top + 3, top + 10, color);
                     }
 
                     if (!FAConfig.indicator().showHeadingReadout || x <= dim.xMid - 26 || x >= dim.xMid + 26) {
-                        drawText(textRenderer, context, asText("%03d", degrees), x - 8, yText, color);
+                        DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%03d", degrees), x - 8, yText, color);
                     }
                     continue;
                 }
 
                 if (i % 5 == 0 && enoughSpace) {
-                    drawVerticalLine(context, x, top + 6, top + 10, color);
+                    DrawHelper.drawVerticalLine(context, x, top + 6, top + 10, color);
                 }
             }
         }
@@ -90,7 +91,7 @@ public class HeadingIndicator extends HudComponent {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawText(textRenderer, context, Text.translatable("flightassistant.heading_short"), dim.xMid - 8, dim.tFrame - 17, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.heading_short"), dim.xMid - 8, dim.tFrame - 17, FAConfig.indicator().warningColor);
     }
 
     @Override

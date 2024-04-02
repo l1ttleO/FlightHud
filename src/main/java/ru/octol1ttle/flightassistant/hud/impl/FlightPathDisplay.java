@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
@@ -6,17 +6,18 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class FlightPathIndicator extends HudComponent {
+public class FlightPathDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final GPWSComputer gpws;
 
-    public FlightPathIndicator(Dimensions dim, AirDataComputer data, GPWSComputer gpws) {
+    public FlightPathDisplay(Dimensions dim, AirDataComputer data, GPWSComputer gpws) {
         this.dim = dim;
         this.data = data;
         this.gpws = gpws;
@@ -51,20 +52,21 @@ public class FlightPathIndicator extends HudComponent {
         int b = y + 3;
 
         Color color = gpws.getGPWSLampColor();
-        drawVerticalLine(context, l, t, b, color);
-        drawVerticalLine(context, r, t, b, color);
+        // TODO: move to DrawHelper
+        DrawHelper.drawVerticalLine(context, l, t, b, color);
+        DrawHelper.drawVerticalLine(context, r, t, b, color);
 
-        drawHorizontalLine(context, l, r, t, color);
-        drawHorizontalLine(context, l, r, b, color);
+        DrawHelper.drawHorizontalLine(context, l, r, t, color);
+        DrawHelper.drawHorizontalLine(context, l, r, b, color);
 
-        drawVerticalLine(context, x, t - 5, t, color);
-        drawHorizontalLine(context, l - 4, l, y, color);
-        drawHorizontalLine(context, r, r + 4, y, color);
+        DrawHelper.drawVerticalLine(context, x, t - 5, t, color);
+        DrawHelper.drawHorizontalLine(context, l - 4, l, y, color);
+        DrawHelper.drawHorizontalLine(context, r, r + 4, y, color);
     }
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.flight_path_short"), dim.xMid, dim.yMid + 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.flight_path_short"), dim.xMid, dim.yMid + 10, FAConfig.indicator().warningColor);
     }
 
     @Override

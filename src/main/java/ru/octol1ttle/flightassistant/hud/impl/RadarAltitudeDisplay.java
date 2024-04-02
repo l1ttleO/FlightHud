@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.indicators;
+package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
@@ -6,17 +6,18 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class RadarAltitudeIndicator extends HudComponent {
+public class RadarAltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final FlightPlanner plan;
 
-    public RadarAltitudeIndicator(Dimensions dim, AirDataComputer data, FlightPlanner plan) {
+    public RadarAltitudeDisplay(Dimensions dim, AirDataComputer data, FlightPlanner plan) {
         this.dim = dim;
         this.data = data;
         this.plan = plan;
@@ -37,9 +38,9 @@ public class RadarAltitudeIndicator extends HudComponent {
         int safeLevel = data.groundLevel == data.voidLevel() ? data.voidLevel() + 16 : data.groundLevel;
         Color color = getAltitudeColor(safeLevel, data.altitude());
 
-        drawText(textRenderer, context, Text.translatable(data.groundLevel == data.voidLevel() ? "flightassistant.void_level" : "flightassistant.ground_level"), xAltText - 10, bottom, color);
-        drawText(textRenderer, context, asText("%d", MathHelper.floor(data.heightAboveGround())), xAltText, bottom, color);
-        drawBorder(context, xAltText - 2, bottom - 2, 28, color);
+        DrawHelper.drawText(textRenderer, context, Text.translatable(data.groundLevel == data.voidLevel() ? "flightassistant.void_level" : "flightassistant.ground_level"), xAltText - 10, bottom, color);
+        DrawHelper.drawText(textRenderer, context, DrawHelper.asText("%d", MathHelper.floor(data.heightAboveGround())), xAltText, bottom, color);
+        DrawHelper.drawBorder(context, xAltText - 2, bottom - 2, 28, color);
     }
 
     private Color getAltitudeColor(int safeLevel, float altitude) {
@@ -57,7 +58,7 @@ public class RadarAltitudeIndicator extends HudComponent {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        drawText(textRenderer, context, Text.translatable("flightassistant.radar_short"), dim.rFrame - 3, dim.bFrame, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.radar_short"), dim.rFrame - 3, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
     @Override

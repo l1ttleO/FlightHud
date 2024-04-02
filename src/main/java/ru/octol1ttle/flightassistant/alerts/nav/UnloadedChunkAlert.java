@@ -4,7 +4,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.HudComponent;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -25,7 +25,7 @@ public class UnloadedChunkAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
-        return HudComponent.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.unloaded_chunk"), x, y,
+        return DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.unloaded_chunk"), x, y,
                 FAConfig.indicator().warningColor, highlight);
     }
 

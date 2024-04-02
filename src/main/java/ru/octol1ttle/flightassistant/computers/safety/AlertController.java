@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.sound.SoundManager;
 import ru.octol1ttle.flightassistant.AlertSoundInstance;
-import ru.octol1ttle.flightassistant.HudRenderer;
+import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
@@ -32,7 +32,7 @@ public class AlertController implements ITickableComputer {
     private final SoundManager manager;
     private final List<BaseAlert> allAlerts;
 
-    public AlertController(ComputerHost host, SoundManager manager, HudRenderer renderer) {
+    public AlertController(ComputerHost host, SoundManager manager, HudDisplayHost renderer) {
         this.host = host;
         this.manager = manager;
         // TODO: ECAM actions
