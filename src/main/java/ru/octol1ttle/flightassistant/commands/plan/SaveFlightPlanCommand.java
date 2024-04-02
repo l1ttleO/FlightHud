@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.serialization.FlightPlanSerializer;
 
 public class SaveFlightPlanCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         String name = StringArgumentType.getString(context, "name");
         FlightPlanSerializer.save(host.plan, name);
         context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_saved", host.plan.size(), name));

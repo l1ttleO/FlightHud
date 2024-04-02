@@ -14,17 +14,14 @@ import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.PitchController;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightPlanner extends ArrayList<Waypoint> implements ITickableComputer {
-    private final AirDataComputer data;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private @Nullable Waypoint targetWaypoint;
     public boolean autolandAllowed = false;
     public @Nullable Integer fallbackApproachAltitude = null;
     public @Nullable Integer landAltitude = null;
-
-    public FlightPlanner(AirDataComputer data) {
-        this.data = data;
-    }
 
     @Override
     public void tick() {

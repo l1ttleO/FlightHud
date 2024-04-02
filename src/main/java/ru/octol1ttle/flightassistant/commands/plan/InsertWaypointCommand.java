@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
 
 public class InsertWaypointCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context, Waypoint waypoint) throws CommandSyntaxException {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         if (host.plan.isEmpty() && waypoint instanceof LandingWaypoint) {
             WaypointUtil.throwIfFirstLanding(host.plan, waypoint);
         }

@@ -1,7 +1,11 @@
-package ru.octol1ttle.flightassistant.hud.api;
+package ru.octol1ttle.flightassistant.registries;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.ApiStatus;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 
 public abstract class HudDisplayRegistry {
     private static final HashMap<Identifier, IHudDisplay> DISPLAYS = new HashMap<>();
@@ -12,5 +16,10 @@ public abstract class HudDisplayRegistry {
         }
 
         DISPLAYS.put(id, display);
+    }
+
+    @ApiStatus.Internal
+    public static Set<Map.Entry<Identifier, IHudDisplay>> getDisplays() {
+        return DISPLAYS.entrySet();
     }
 }

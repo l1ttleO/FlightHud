@@ -26,7 +26,7 @@ public class ExcessiveTerrainClosureAlert extends BaseAlert implements ICentered
 
     public ExcessiveTerrainClosureAlert(GPWSComputer gpws, TimeComputer time) {
         this.gpws = gpws;
-        this.time = time;
+        this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 
     @Override

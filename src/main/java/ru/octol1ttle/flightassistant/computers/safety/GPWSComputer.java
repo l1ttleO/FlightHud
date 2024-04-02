@@ -11,6 +11,7 @@ import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class GPWSComputer implements ITickableComputer {
     private static final int STATUS_PLAYER_INVULNERABLE = -1;
@@ -25,17 +26,12 @@ public class GPWSComputer implements ITickableComputer {
     private static final float CAUTION_THRESHOLD = 10.0f;
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private static final float PITCH_CORRECT_THRESHOLD = 2.5f;
-    private final AirDataComputer data;
-    private final FlightPlanner plan;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     public float descentImpactTime = STATUS_UNKNOWN;
     public float terrainImpactTime = STATUS_UNKNOWN;
     public LandingClearanceStatus landingClearanceStatus = LandingClearanceStatus.UNKNOWN;
     public boolean fireworkUseSafe = true;
-
-    public GPWSComputer(AirDataComputer data, FlightPlanner plan) {
-        this.data = data;
-        this.plan = plan;
-    }
 
     @Override
     public void tick() {

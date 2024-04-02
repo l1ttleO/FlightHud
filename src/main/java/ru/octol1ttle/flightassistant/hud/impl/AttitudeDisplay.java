@@ -4,6 +4,7 @@ import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
@@ -25,7 +26,7 @@ public class AttitudeDisplay implements IHudDisplay {
 
     public AttitudeDisplay(Dimensions dim, AirDataComputer data, StallComputer stall, VoidLevelComputer voidLevel) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.stall = stall;
         this.voidLevel = voidLevel;
     }

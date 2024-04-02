@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 
@@ -15,7 +14,7 @@ public abstract class EntityMixin {
     public float preventUpsetPitch(float pitchDelta) {
         Entity that = (Entity) (Object) this;
 
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         if (that instanceof ClientPlayerEntity && host.data.canAutomationsActivate()) {
             float oldPitch = host.data.pitch();
             float newPitch = oldPitch + (-pitchDelta);

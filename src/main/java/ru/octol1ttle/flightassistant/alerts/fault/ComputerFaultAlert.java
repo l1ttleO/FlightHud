@@ -1,19 +1,10 @@
 package ru.octol1ttle.flightassistant.alerts.fault;
 
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
-import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.computers.IComputer;
-import ru.octol1ttle.flightassistant.config.FAConfig;
 
-public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
-    private final ComputerHost host;
+public abstract class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
+    /*private final ComputerHost host;
 
     public ComputerFaultAlert(ComputerHost host) {
         this.host = host;
@@ -39,5 +30,5 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
         }
 
         return i;
-    }
+    }*/
 }

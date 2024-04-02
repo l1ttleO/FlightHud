@@ -4,20 +4,16 @@ import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ChunkStatusComputer implements ITickableComputer {
     private static final int WARN_THRESHOLD = 2500; // MS
     private static final int PROTECT_THRESHOLD = 5000; // MS
-    private final AirDataComputer data;
-    private final TimeComputer time;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
     private float lastLoaded;
     private float lastDiff;
-
-    public ChunkStatusComputer(AirDataComputer data, TimeComputer time) {
-        this.data = data;
-        this.time = time;
-    }
 
     @Override
     public void tick() {

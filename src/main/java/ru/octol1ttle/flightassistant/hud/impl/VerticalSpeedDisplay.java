@@ -16,7 +16,7 @@ public class VerticalSpeedDisplay implements IHudDisplay {
 
     public VerticalSpeedDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

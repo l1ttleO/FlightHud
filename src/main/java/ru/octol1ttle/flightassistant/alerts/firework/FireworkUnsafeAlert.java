@@ -21,7 +21,7 @@ public class FireworkUnsafeAlert extends BaseAlert implements IECAMAlert {
     private final FireworkController firework;
 
     public FireworkUnsafeAlert(AirDataComputer data, FireworkController firework) {
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.firework = firework;
     }
 

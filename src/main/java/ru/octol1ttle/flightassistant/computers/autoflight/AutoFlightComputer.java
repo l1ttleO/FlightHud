@@ -9,16 +9,16 @@ import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
-
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class AutoFlightComputer implements ITickableComputer {
-    private final AirDataComputer data;
-    private final GPWSComputer gpws;
-    private final FlightPlanner plan;
-    private final FireworkController firework;
-    private final PitchController pitch;
-    private final YawController yaw;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+    private final PitchController pitch = ComputerRegistry.resolve(PitchController.class);
+    private final YawController yaw = ComputerRegistry.resolve(YawController.class);
 
     public boolean flightDirectorsEnabled = false;
     public boolean autoFireworkEnabled = false;
@@ -30,15 +30,6 @@ public class AutoFlightComputer implements ITickableComputer {
     public Integer selectedSpeed;
     public Integer selectedAltitude;
     public Integer selectedHeading;
-
-    public AutoFlightComputer(AirDataComputer data, GPWSComputer gpws, FlightPlanner plan, FireworkController firework, PitchController pitch, YawController yaw) {
-        this.data = data;
-        this.gpws = gpws;
-        this.plan = plan;
-        this.firework = firework;
-        this.pitch = pitch;
-        this.yaw = yaw;
-    }
 
     @Override
     public void tick() {

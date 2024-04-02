@@ -18,7 +18,7 @@ public class ElytraHealthDisplay implements IHudDisplay {
 
     public ElytraHealthDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

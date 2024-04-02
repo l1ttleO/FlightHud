@@ -5,21 +5,19 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.sound.SoundManager;
 import ru.octol1ttle.flightassistant.AlertSoundInstance;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutoFireworkOffAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutopilotOffAlert;
 import ru.octol1ttle.flightassistant.alerts.fault.ComputerFaultAlert;
-import ru.octol1ttle.flightassistant.alerts.fault.IndicatorFaultAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkNoResponseAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkUnsafeAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.ApproachingVoidDamageLevelAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.MinimumsAlert;
+import ru.octol1ttle.flightassistant.alerts.nav.UnloadedChunkAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.gpws.ExcessiveDescentAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.gpws.ExcessiveTerrainClosureAlert;
-import ru.octol1ttle.flightassistant.alerts.nav.UnloadedChunkAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.gpws.UnsafeTerrainClearanceAlert;
 import ru.octol1ttle.flightassistant.alerts.other.ElytraHealthLowAlert;
 import ru.octol1ttle.flightassistant.alerts.other.StallAlert;
@@ -32,7 +30,7 @@ public class AlertController implements ITickableComputer {
     private final SoundManager manager;
     private final List<BaseAlert> allAlerts;
 
-    public AlertController(ComputerHost host, SoundManager manager, HudDisplayHost renderer) {
+    public AlertController(ComputerHost host, SoundManager manager) {
         this.host = host;
         this.manager = manager;
         // TODO: ECAM actions
@@ -43,7 +41,7 @@ public class AlertController implements ITickableComputer {
                 new UnsafeTerrainClearanceAlert(host.gpws, host.plan),
                 new AutopilotOffAlert(host.autoflight), new AutoFireworkOffAlert(host.autoflight),
                 new MinimumsAlert(host.plan),
-                new ComputerFaultAlert(host), new IndicatorFaultAlert(renderer),
+                //new ComputerFaultAlert(host), new IndicatorFaultAlert(renderer),
                 new ApproachingVoidDamageLevelAlert(host.voidLevel),
                 new ElytraHealthLowAlert(host.data),
                 new FireworkUnsafeAlert(host.data, host.firework), new FireworkNoResponseAlert(host.firework)

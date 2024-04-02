@@ -19,7 +19,7 @@ public class RadarAltitudeDisplay implements IHudDisplay {
 
     public RadarAltitudeDisplay(Dimensions dim, AirDataComputer data, FlightPlanner plan) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.plan = plan;
     }
 

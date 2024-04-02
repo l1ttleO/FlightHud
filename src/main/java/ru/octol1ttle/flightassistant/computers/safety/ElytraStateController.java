@@ -6,15 +6,12 @@ import ru.octol1ttle.flightassistant.MinecraftProtocolVersions;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ElytraStateController implements ITickableComputer {
-    private final AirDataComputer data;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private boolean syncedState;
     private boolean changesPending;
-
-    public ElytraStateController(AirDataComputer data) {
-        this.data = data;
-    }
 
     @Override
     public void tick() {

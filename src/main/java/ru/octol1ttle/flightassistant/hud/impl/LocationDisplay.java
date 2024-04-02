@@ -17,7 +17,7 @@ public class LocationDisplay implements IHudDisplay {
 
     public LocationDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

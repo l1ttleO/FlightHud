@@ -16,7 +16,7 @@ public class GroundSpeedDisplay implements IHudDisplay {
 
     public GroundSpeedDisplay(Dimensions dim, AirDataComputer data) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

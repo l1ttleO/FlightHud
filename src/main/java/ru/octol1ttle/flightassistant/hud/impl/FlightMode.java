@@ -19,7 +19,7 @@ public class FlightMode {
     private Text lastText;
 
     public FlightMode(TimeComputer time) {
-        this.time = time;
+        this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 
     public void update(Text newText) {

@@ -18,7 +18,7 @@ public class FlightDirectorsDisplay implements IHudDisplay {
 
     public FlightDirectorsDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.autoflight = autoflight;
     }
 

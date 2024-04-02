@@ -8,11 +8,11 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 
 public class AltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
@@ -22,7 +22,7 @@ public class AltitudeDisplay implements IHudDisplay {
 
     public AltitudeDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight, FlightPlanner plan) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.autoflight = autoflight;
         this.plan = plan;
     }

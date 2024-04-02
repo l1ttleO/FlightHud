@@ -44,7 +44,7 @@ public class FAKeyBindings {
         KeyBindingHelper.registerKeyBinding(lockManualFireworks);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            ComputerHost host = HudDisplayHost.getHost();
+            ComputerHost host = ComputerHost.instance();
             if (!host.faulted.contains(host.autoflight)) {
                 while (toggleFlightDirectors.wasPressed()) {
                     host.autoflight.flightDirectorsEnabled = !host.autoflight.flightDirectorsEnabled;

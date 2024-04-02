@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
 
 public class ReplaceWaypointCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context, Waypoint waypoint) throws CommandSyntaxException {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         int waypointIndex = IntegerArgumentType.getInteger(context, "replaceAt");
         WaypointUtil.throwIfNotFound(host.plan, waypointIndex);
 

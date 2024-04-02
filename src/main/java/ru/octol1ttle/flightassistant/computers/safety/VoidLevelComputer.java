@@ -5,19 +5,14 @@ import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class VoidLevelComputer implements ITickableComputer {
-    private final AirDataComputer data;
-    private final FireworkController firework;
-    private final StallComputer stall;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
     public VoidLevelStatus status = VoidLevelStatus.UNKNOWN;
     public float minimumSafePitch = -90.0f;
-
-    public VoidLevelComputer(AirDataComputer data, FireworkController firework, StallComputer stall) {
-        this.data = data;
-        this.firework = firework;
-        this.stall = stall;
-    }
 
     @Override
     public void tick() {

@@ -5,17 +5,13 @@ import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class StallComputer implements ITickableComputer {
-    private final FireworkController firework;
-    private final AirDataComputer data;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     public StallStatus status = StallStatus.UNKNOWN;
     public float maximumSafePitch = 90.0f;
-
-    public StallComputer(FireworkController firework, AirDataComputer data) {
-        this.firework = firework;
-        this.data = data;
-    }
 
     @Override
     public void tick() {

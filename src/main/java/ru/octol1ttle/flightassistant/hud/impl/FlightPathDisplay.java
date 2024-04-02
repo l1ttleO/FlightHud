@@ -19,7 +19,7 @@ public class FlightPathDisplay implements IHudDisplay {
 
     public FlightPathDisplay(Dimensions dim, AirDataComputer data, GPWSComputer gpws) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.gpws = gpws;
     }
 

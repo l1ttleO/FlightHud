@@ -3,17 +3,12 @@ package ru.octol1ttle.flightassistant.computers.autoflight;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class YawController implements ITickableComputer {
-    private final TimeComputer time;
-    private final AirDataComputer data;
-
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     public Float targetHeading;
-
-    public YawController(TimeComputer time, AirDataComputer data) {
-        this.time = time;
-        this.data = data;
-    }
 
     @Override
     public void tick() {

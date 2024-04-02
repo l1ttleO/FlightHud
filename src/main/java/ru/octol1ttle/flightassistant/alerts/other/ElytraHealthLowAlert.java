@@ -15,7 +15,7 @@ public class ElytraHealthLowAlert extends BaseAlert implements IECAMAlert {
     private final AirDataComputer data;
 
     public ElytraHealthLowAlert(AirDataComputer data) {
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

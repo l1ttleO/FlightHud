@@ -1,17 +1,24 @@
 package ru.octol1ttle.flightassistant.hud;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.util.Identifier;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.compatibility.ImmediatelyFastBatchingAccessor;
+import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.computers.TimeComputer;
+import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.computers.safety.AlertController;
+import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
+import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.HUDConfig;
-import ru.octol1ttle.flightassistant.hud.api.HudDisplayRegistry;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.AlertDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.AltitudeDisplay;
@@ -28,34 +35,41 @@ import ru.octol1ttle.flightassistant.hud.impl.SpeedDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.StatusDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.VerticalSpeedDisplay;
 import ru.octol1ttle.flightassistant.mixin.GameRendererInvoker;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
+import ru.octol1ttle.flightassistant.registries.HudDisplayRegistry;
 
 public class HudDisplayHost {
-    @NotNull
-    public final ComputerHost host;
     private final Dimensions dim = new Dimensions();
-    private final List<IHudDisplay> displays;
-    public final List<IHudDisplay> faulted;
 
-    public HudDisplayHost(MinecraftClient mc) {
-        this.host = new ComputerHost(mc, this);
-        HudDisplayRegistry.register(AlertDisplay.ID, new AlertDisplay(dim, host, host.alert, host.time));
-        this.displays = new ArrayList<>(List.of(
-                new AlertDisplay(dim, host, host.alert, host.time),
-                new AltitudeDisplay(dim, host.data, host.autoflight, host.plan),
-                new AttitudeDisplay(dim, host.data, host.stall, host.voidLevel),
-                new ElytraHealthDisplay(dim, host.data),
-                new FlightDirectorsDisplay(dim, host.data, host.autoflight),
-                new FlightModeDisplay(dim, host.data, host.time, host.firework, host.autoflight, host.plan),
-                new FlightPathDisplay(dim, host.data, host.gpws),
-                new GroundSpeedDisplay(dim, host.data),
-                new HeadingDisplay(dim, host.data, host.autoflight),
-                new RadarAltitudeDisplay(dim, host.data, host.plan),
-                new LocationDisplay(dim, host.data),
-                new SpeedDisplay(dim, host.data),
-                new StatusDisplay(dim, host.firework, host.plan),
-                new VerticalSpeedDisplay(dim, host.data)
-        ));
-        this.faulted = new ArrayList<>(displays.size());
+    public HudDisplayHost(ComputerHost computerHost) {
+        HudDisplayRegistry.register(FlightAssistant.id("alert"),
+                new AlertDisplay(dim, computerHost, ComputerRegistry.resolve(AlertController.class), ComputerRegistry.resolve(TimeComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("altitude"),
+                new AltitudeDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(AutoFlightComputer.class), ComputerRegistry.resolve(FlightPlanner.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("attitude"),
+                new AttitudeDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(StallComputer.class), ComputerRegistry.resolve(VoidLevelComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("elytra_health"),
+                new ElytraHealthDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("flight_directors"),
+                new FlightDirectorsDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(AutoFlightComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("flight_mode"),
+                new FlightModeDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(TimeComputer.class), ComputerRegistry.resolve(FireworkController.class), ComputerRegistry.resolve(AutoFlightComputer.class), ComputerRegistry.resolve(FlightPlanner.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("flight_path"),
+                new FlightPathDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(GPWSComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("ground_speed"),
+                new GroundSpeedDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("heading"),
+                new HeadingDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(AutoFlightComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("radar_altitude"),
+                new RadarAltitudeDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class), ComputerRegistry.resolve(FlightPlanner.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("location"),
+                new LocationDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("speed"),
+                new SpeedDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("status"),
+                new StatusDisplay(dim, ComputerRegistry.resolve(FireworkController.class), ComputerRegistry.resolve(FlightPlanner.class)));
+        HudDisplayRegistry.register(FlightAssistant.id("vertical_speed"),
+                new VerticalSpeedDisplay(dim, ComputerRegistry.resolve(AirDataComputer.class)));
     }
 
     public void render(MinecraftClient mc, DrawContext context, float tickDelta) {
@@ -71,15 +85,14 @@ public class HudDisplayHost {
         if (batchAll) {
             ImmediatelyFastBatchingAccessor.beginHudBatching();
         }
-        for (int i = displays.size() - 1; i >= 0; i--) {
-            IHudDisplay display = displays.get(i);
+
+        for (Map.Entry<Identifier, IHudDisplay> entry : HudDisplayRegistry.getDisplays()) {
+            IHudDisplay display = entry.getValue();
             drawBatchedComponent(() -> {
                 try {
                     display.render(context, mc.textRenderer);
                 } catch (Throwable t) {
-                    FlightAssistant.LOGGER.error("Exception rendering display", t);
-                    faulted.add(display);
-                    displays.remove(display);
+                    FlightAssistant.LOGGER.error("Exception rendering display with ID: %s".formatted(entry.getKey()), t);
                 }
             });
         }
@@ -87,15 +100,7 @@ public class HudDisplayHost {
             ImmediatelyFastBatchingAccessor.endHudBatching();
         }
 
-        for (IHudDisplay display : faulted) {
-            drawBatchedComponent(() -> {
-                try {
-                    display.renderFaulted(context, mc.textRenderer);
-                } catch (Throwable t) {
-                    FlightAssistant.LOGGER.error("Exception rendering faulted display", t);
-                }
-            });
-        }
+        // TODO: faulted display renders
 
         context.getMatrices().pop();
     }
@@ -108,14 +113,6 @@ public class HudDisplayHost {
         draw.run();
         if (batch) {
             ImmediatelyFastBatchingAccessor.endHudBatching();
-        }
-    }
-
-    public void resetFaulted() {
-        for (int i = faulted.size() - 1; i >= 0; i--) {
-            IHudDisplay display = faulted.get(i);
-            faulted.remove(display);
-            displays.add(display);
         }
     }
 }

@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
 
 public class ListWaypointsCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context) {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         context.getSource().sendFeedback(Text.translatable("commands.flightassistant.total_waypoints", host.plan.size()));
         FlightPlanner plan = host.plan;
         for (int i = 0; i < plan.size(); i++) {

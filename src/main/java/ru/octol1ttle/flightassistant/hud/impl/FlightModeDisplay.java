@@ -31,8 +31,8 @@ public class FlightModeDisplay implements IHudDisplay {
 
     public FlightModeDisplay(Dimensions dim, AirDataComputer data, TimeComputer time, FireworkController firework, AutoFlightComputer autoflight, FlightPlanner plan) {
         this.dim = dim;
-        this.data = data;
-        this.time = time;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
+        this.time = ComputerRegistry.resolve(TimeComputer.class);
         this.firework = firework;
         this.autoflight = autoflight;
         this.plan = plan;

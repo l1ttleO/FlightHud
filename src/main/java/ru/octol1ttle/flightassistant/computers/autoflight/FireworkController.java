@@ -10,11 +10,12 @@ import net.minecraft.util.Hand;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FireworkController implements ITickableComputer {
     private final MinecraftClient mc;
-    private final AirDataComputer data;
-    private final TimeComputer time;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
     public int safeFireworkCount = Integer.MAX_VALUE;
     public boolean fireworkResponded = true;
@@ -25,10 +26,8 @@ public class FireworkController implements ITickableComputer {
     public boolean activationInProgress = false;
     public boolean lockManualFireworks = false;
 
-    public FireworkController(MinecraftClient mc, AirDataComputer data, TimeComputer time) {
+    public FireworkController(MinecraftClient mc) {
         this.mc = mc;
-        this.data = data;
-        this.time = time;
     }
 
     @Override

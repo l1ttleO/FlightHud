@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.shadowhunter22.api.client.renderer.v1.AlternateHudRendererCallback;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.MinecraftClient;
@@ -12,20 +13,24 @@ import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.TypedActionResult;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
-import ru.octol1ttle.flightassistant.commands.SelectCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
+import ru.octol1ttle.flightassistant.commands.SelectCommand;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.config.FAConfig;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class FACallbacks {
     public static void setup() {
+        setupClientStart();
         setupCommandRegistration();
         setupWorldRender();
         setupHudRender();
         setupUseItem();
+    }
+
+    private static void setupClientStart() {
+        ClientLifecycleEvents.CLIENT_STARTED.register(FlightAssistant::onClientStarted);
     }
 
     private static void setupCommandRegistration() {
@@ -44,20 +49,20 @@ public class FACallbacks {
 
     private static void setupWorldRender() {
         WorldRenderEvents.END.register(context ->
-                HudDisplayHost.getHost().tick()
+                ComputerHost.instance().tick()
         );
     }
 
     private static void setupHudRender() {
         AlternateHudRendererCallback.EVENT.register((drawContext, tickDelta) ->
-                HudDisplayHost.INSTANCE.render(MinecraftClient.getInstance(), drawContext, tickDelta)
+                FlightAssistant.getDisplayHost().render(MinecraftClient.getInstance(), drawContext, tickDelta)
         );
     }
 
     private static void setupUseItem() {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
-            ComputerHost host = HudDisplayHost.getHost();
+            ComputerHost host = ComputerHost.instance();
             if (!world.isClient() || host.faulted.contains(host.firework)) {
                 return TypedActionResult.pass(stack);
             }

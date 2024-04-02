@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.computers.ComputerHost;
 public class FireworkRocketEntityMixin {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", shift = At.Shift.AFTER))
     public void onFireworkActivation(CallbackInfo ci) {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         if (host.faulted.contains(host.firework)) {
             return;
         }

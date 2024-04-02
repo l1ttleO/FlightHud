@@ -10,7 +10,7 @@ import ru.octol1ttle.flightassistant.computers.ComputerHost;
 
 public class RemoveWaypointCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        ComputerHost host = HudDisplayHost.getHost();
+        ComputerHost host = ComputerHost.instance();
         int waypointIndex = IntegerArgumentType.getInteger(context, "waypointIndex");
         WaypointUtil.throwIfNotFound(host.plan, waypointIndex);
 

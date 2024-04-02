@@ -9,28 +9,20 @@ import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class PitchController implements ITickableComputer {
     public static final float CLIMB_PITCH = 55.0f;
     public static final float ALTITUDE_PRESERVE_PITCH = 15.0f;
     public static final float GLIDE_PITCH = -2.2f;
     public static final float DESCEND_PITCH = -35.0f;
-    private final AirDataComputer data;
-    private final StallComputer stall;
-    private final TimeComputer time;
-    private final VoidLevelComputer voidLevel;
-    private final GPWSComputer gpws;
-    private final ChunkStatusComputer chunkStatus;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
+    private final VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final ChunkStatusComputer chunkStatus = ComputerRegistry.resolve(ChunkStatusComputer.class);
     public Float targetPitch = null;
-
-    public PitchController(AirDataComputer data, StallComputer stall, TimeComputer time, VoidLevelComputer voidLevel, GPWSComputer gpws, ChunkStatusComputer chunkStatus) {
-        this.data = data;
-        this.stall = stall;
-        this.time = time;
-        this.voidLevel = voidLevel;
-        this.gpws = gpws;
-        this.chunkStatus = chunkStatus;
-    }
 
     @Override
     public void tick() {

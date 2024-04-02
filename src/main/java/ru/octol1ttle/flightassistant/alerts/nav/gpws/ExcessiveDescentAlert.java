@@ -11,6 +11,7 @@ import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
@@ -20,7 +21,7 @@ public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
     private final GPWSComputer gpws;
 
     public ExcessiveDescentAlert(AirDataComputer data, GPWSComputer gpws) {
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.gpws = gpws;
     }
 

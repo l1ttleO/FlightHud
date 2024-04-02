@@ -20,7 +20,7 @@ public class HeadingDisplay implements IHudDisplay {
 
     public HeadingDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
         this.dim = dim;
-        this.data = data;
+        this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.autoflight = autoflight;
     }
 
