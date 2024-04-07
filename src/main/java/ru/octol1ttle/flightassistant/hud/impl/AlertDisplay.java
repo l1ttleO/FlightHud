@@ -8,7 +8,6 @@ import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.safety.AlertController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -17,13 +16,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AlertDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final ComputerHost host;
     private final AlertController alert;
     private final TimeComputer time;
 
-    public AlertDisplay(Dimensions dim, ComputerHost host) {
+    public AlertDisplay(Dimensions dim) {
         this.dim = dim;
-        this.host = host;
         this.alert = ComputerRegistry.resolve(AlertController.class);
         this.time = ComputerRegistry.resolve(TimeComputer.class);
     }

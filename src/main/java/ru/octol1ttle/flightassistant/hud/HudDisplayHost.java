@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.compatibility.ImmediatelyFastBatchingAccessor;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.HUDConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
@@ -31,8 +30,8 @@ import ru.octol1ttle.flightassistant.registries.HudDisplayRegistry;
 public class HudDisplayHost {
     private final Dimensions dim = new Dimensions();
 
-    public HudDisplayHost(ComputerHost computerHost) {
-        HudDisplayRegistry.register(FlightAssistant.id("alert"), new AlertDisplay(dim, computerHost));
+    public HudDisplayHost() {
+        HudDisplayRegistry.register(FlightAssistant.id("alert"), new AlertDisplay(dim));
         HudDisplayRegistry.register(FlightAssistant.id("altitude"), new AltitudeDisplay(dim));
         HudDisplayRegistry.register(FlightAssistant.id("attitude"), new AttitudeDisplay(dim));
         HudDisplayRegistry.register(FlightAssistant.id("elytra_health"), new ElytraHealthDisplay(dim));

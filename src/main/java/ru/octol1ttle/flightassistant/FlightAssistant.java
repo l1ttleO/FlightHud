@@ -33,7 +33,7 @@ public class FlightAssistant implements ClientModInitializer {
         if (displayHost != null) {
             throw new IllegalStateException();
         }
-        displayHost = new HudDisplayHost(computerHost);
+        displayHost = new HudDisplayHost();
     }
 
     public static HudDisplayHost getDisplayHost() {
