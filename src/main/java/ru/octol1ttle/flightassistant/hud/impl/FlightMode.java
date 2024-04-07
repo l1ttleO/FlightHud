@@ -12,14 +12,13 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightMode {
     private static final int UPDATE_FLASH_TIME = 3000;
-    private final TimeComputer time;
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     @Nullable
     private Float lastUpdateTime;
     @Nullable
     private Text lastText;
 
     public FlightMode() {
-        this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 
     public void update(Text newText) {

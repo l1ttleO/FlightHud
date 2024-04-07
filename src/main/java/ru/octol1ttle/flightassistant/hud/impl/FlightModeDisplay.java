@@ -19,11 +19,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightModeDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final TimeComputer time;
-    private final FireworkController firework;
-    private final AutoFlightComputer autoflight;
-    private final FlightPlanner plan;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     private final FlightMode fireworkMode;
     private final FlightMode verticalMode;
@@ -32,11 +32,6 @@ public class FlightModeDisplay implements IHudDisplay {
 
     public FlightModeDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.time = ComputerRegistry.resolve(TimeComputer.class);
-        this.firework = ComputerRegistry.resolve(FireworkController.class);
-        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
 
         this.fireworkMode = new FlightMode();
         this.verticalMode = new FlightMode();

@@ -13,11 +13,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AutoFireworkOffAlert extends BaseAlert implements IECAMAlert {
-    private final AutoFlightComputer autoflight;
-
-    public AutoFireworkOffAlert() {
-        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
-    }
+    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
 
     @Override
     public boolean isTriggered() {

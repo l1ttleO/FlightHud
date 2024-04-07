@@ -14,11 +14,7 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class StallAlert extends BaseAlert implements ICenteredAlert {
-    private final StallComputer stall;
-
-    public StallAlert() {
-        this.stall = ComputerRegistry.resolve(StallComputer.class);
-    }
+    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
 
     @Override
     public boolean isTriggered() {

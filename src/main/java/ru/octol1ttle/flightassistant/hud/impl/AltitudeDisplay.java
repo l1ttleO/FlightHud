@@ -17,15 +17,12 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final AutoFlightComputer autoflight;
-    private final FlightPlanner plan;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     public AltitudeDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override

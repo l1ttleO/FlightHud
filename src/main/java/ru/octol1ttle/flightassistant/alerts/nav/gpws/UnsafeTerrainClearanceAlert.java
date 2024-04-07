@@ -14,13 +14,8 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class UnsafeTerrainClearanceAlert extends BaseAlert implements ICenteredAlert {
-    private final GPWSComputer gpws;
-    private final FlightPlanner plan;
-
-    public UnsafeTerrainClearanceAlert() {
-        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
-    }
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     @Override
     public boolean isTriggered() {

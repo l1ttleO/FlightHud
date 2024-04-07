@@ -15,13 +15,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightPathDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final GPWSComputer gpws;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
 
     public FlightPathDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
     }
 
     @Override

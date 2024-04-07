@@ -20,15 +20,10 @@ public class ExcessiveTerrainClosureAlert extends BaseAlert implements ICentered
 
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private static final float DELAY_ALERT_FOR = 0.5f;
-    private final GPWSComputer gpws;
-    private final TimeComputer time;
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private boolean delayFull = false;
     private float delay = 0.0f;
-
-    public ExcessiveTerrainClosureAlert() {
-        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
-        this.time = ComputerRegistry.resolve(TimeComputer.class);
-    }
 
     @Override
     public boolean isTriggered() {

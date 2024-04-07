@@ -15,13 +15,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class RadarAltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final FlightPlanner plan;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     public RadarAltitudeDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override

@@ -28,12 +28,11 @@ import ru.octol1ttle.flightassistant.registries.AlertRegistry;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AlertController implements ITickableComputer {
-    public final List<BaseAlert> activeAlerts;
-    private final AirDataComputer airData;
+    public final List<BaseAlert> activeAlerts = new ArrayList<>();
+    private final AirDataComputer airData = ComputerRegistry.resolve(AirDataComputer.class);
     private final SoundManager manager;
 
     public AlertController(SoundManager manager) {
-        this.airData = ComputerRegistry.resolve(AirDataComputer.class);
         this.manager = manager;
         // TODO: ECAM actions
         AlertRegistry.register(new StallAlert());
@@ -50,8 +49,6 @@ public class AlertController implements ITickableComputer {
         AlertRegistry.register(new ElytraHealthLowAlert());
         AlertRegistry.register(new FireworkUnsafeAlert());
         AlertRegistry.register(new FireworkNoResponseAlert());
-
-        activeAlerts = new ArrayList<>();
     }
 
     @Override

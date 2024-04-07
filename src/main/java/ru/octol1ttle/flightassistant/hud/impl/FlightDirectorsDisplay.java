@@ -14,13 +14,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightDirectorsDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final AutoFlightComputer autoflight;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
 
     public FlightDirectorsDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
     }
 
     @Override

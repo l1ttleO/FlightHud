@@ -13,11 +13,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class UnloadedChunkAlert extends BaseAlert implements IECAMAlert {
-    private final ChunkStatusComputer chunkStatus;
-
-    public UnloadedChunkAlert() {
-        this.chunkStatus = ComputerRegistry.resolve(ChunkStatusComputer.class);
-    }
+    private final ChunkStatusComputer chunkStatus = ComputerRegistry.resolve(ChunkStatusComputer.class);
 
     @Override
     public boolean isTriggered() {

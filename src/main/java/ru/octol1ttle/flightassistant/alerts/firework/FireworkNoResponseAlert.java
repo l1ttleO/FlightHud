@@ -14,12 +14,7 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class FireworkNoResponseAlert extends BaseAlert implements IECAMAlert {
-
-    private final FireworkController firework;
-
-    public FireworkNoResponseAlert() {
-        this.firework = ComputerRegistry.resolve(FireworkController.class);
-    }
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
 
     @Override
     public boolean isTriggered() {

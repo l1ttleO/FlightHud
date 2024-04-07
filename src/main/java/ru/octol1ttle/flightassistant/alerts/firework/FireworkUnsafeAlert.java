@@ -18,13 +18,8 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class FireworkUnsafeAlert extends BaseAlert implements IECAMAlert {
-    private final AirDataComputer data;
-    private final FireworkController firework;
-
-    public FireworkUnsafeAlert() {
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.firework = ComputerRegistry.resolve(FireworkController.class);
-    }
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
 
     @Override
     public boolean isTriggered() {

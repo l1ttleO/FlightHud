@@ -19,16 +19,13 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class AttitudeDisplay implements IHudDisplay {
     public static final int DEGREES_PER_BAR = 20;
     private final Dimensions dim;
-    private final AirDataComputer data;
-    private final StallComputer stall;
-    private final VoidLevelComputer voidLevel;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
+    private final VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
     private final AttitudeIndicatorData pitchData = new AttitudeIndicatorData();
 
     public AttitudeDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.stall = ComputerRegistry.resolve(StallComputer.class);
-        this.voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
     }
 
     @Override

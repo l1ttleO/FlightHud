@@ -16,13 +16,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AlertDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AlertController alert;
-    private final TimeComputer time;
+    private final AlertController alert = ComputerRegistry.resolve(AlertController.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
     public AlertDisplay(Dimensions dim) {
         this.dim = dim;
-        this.alert = ComputerRegistry.resolve(AlertController.class);
-        this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 
     @Override

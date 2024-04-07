@@ -14,13 +14,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class StatusDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final FireworkController firework;
-    private final FlightPlanner plan;
+    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     public StatusDisplay(Dimensions dim) {
         this.dim = dim;
-        this.firework = ComputerRegistry.resolve(FireworkController.class);
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override

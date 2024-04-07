@@ -13,12 +13,8 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class MinimumsAlert extends BaseAlert implements IECAMAlert {
-    private final FlightPlanner plan;
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private boolean triggered = false;
-
-    public MinimumsAlert() {
-        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
-    }
 
     @Override
     public boolean isTriggered() {

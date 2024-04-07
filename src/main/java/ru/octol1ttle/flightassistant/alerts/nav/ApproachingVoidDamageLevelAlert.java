@@ -13,11 +13,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ApproachingVoidDamageLevelAlert extends BaseAlert implements IECAMAlert {
-    private final VoidLevelComputer voidLevel;
-
-    public ApproachingVoidDamageLevelAlert() {
-        this.voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
-    }
+    private final VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
 
     @Override
     public boolean isTriggered() {

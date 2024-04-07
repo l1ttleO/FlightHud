@@ -13,11 +13,10 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class VerticalSpeedDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final AirDataComputer data;
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
 
     public VerticalSpeedDisplay(Dimensions dim) {
         this.dim = dim;
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }
 
     @Override

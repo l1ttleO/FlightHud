@@ -13,11 +13,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ElytraHealthLowAlert extends BaseAlert implements IECAMAlert {
-    private final AirDataComputer data;
-
-    public ElytraHealthLowAlert() {
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-    }
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
 
     @Override
     public boolean isTriggered() {

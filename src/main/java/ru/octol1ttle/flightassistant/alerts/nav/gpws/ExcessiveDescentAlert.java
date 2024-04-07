@@ -17,13 +17,8 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
     private static final float SINK_RATE_THRESHOLD = 7.5f;
     private static final float PULL_UP_THRESHOLD = 5.0f;
-    private final AirDataComputer data;
-    private final GPWSComputer gpws;
-
-    public ExcessiveDescentAlert() {
-        this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
-    }
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
 
     @Override
     public boolean isTriggered() {
