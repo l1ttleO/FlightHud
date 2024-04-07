@@ -46,8 +46,8 @@ public class FAKeyBindings {
         KeyBindingHelper.registerKeyBinding(lockManualFireworks);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
-            if (/*!faulted.contains(autoflight)*/true) {
+            if (!ComputerRegistry.isFaulted(AutoFlightComputer.class)) {
+                AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
                 while (toggleFlightDirectors.wasPressed()) {
                     autoflight.flightDirectorsEnabled = !autoflight.flightDirectorsEnabled;
                 }
@@ -69,8 +69,8 @@ public class FAKeyBindings {
                 }
             }
 
-            AlertController alert = ComputerRegistry.resolve(AlertController.class);
-            if (/*!faulted.contains(alert)*/true) {
+            if (!ComputerRegistry.isFaulted(AlertController.class)) {
+                AlertController alert = ComputerRegistry.resolve(AlertController.class);
                 while (hideAlert.wasPressed()) {
                     alert.hide();
                 }
@@ -79,8 +79,8 @@ public class FAKeyBindings {
                 }
             }
 
-            FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
-            if (/*!faulted.contains(firework)*/true) {
+            if (!ComputerRegistry.isFaulted(FireworkController.class)) {
+                FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
                 while (lockManualFireworks.wasPressed()) {
                     firework.lockManualFireworks = !firework.lockManualFireworks;
                 }

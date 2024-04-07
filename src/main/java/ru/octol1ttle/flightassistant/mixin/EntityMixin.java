@@ -20,18 +20,15 @@ public abstract class EntityMixin {
         Entity that = (Entity) (Object) this;
 
         AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-        GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
-        StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
-        VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
         if (that instanceof ClientPlayerEntity && data.canAutomationsActivate()) {
             float oldPitch = data.pitch();
             float newPitch = oldPitch + (-pitchDelta);
 
-            boolean isStalling = /*!faulted.contains(stall) && */stall.isPitchUnsafe(newPitch);
+            boolean isStalling = !ComputerRegistry.isFaulted(StallComputer.class) && ComputerRegistry.resolve(StallComputer.class).isPitchUnsafe(newPitch);
             boolean stallLock = FAConfig.computer().stallProtection.override() && isStalling;
 
-            boolean gpwsLock = !isStalling/* && !faulted.contains(gpws) */&& gpws.shouldBlockPitchChanges();
-            boolean voidLevelLock = /*!faulted.contains(voidLevel) && */voidLevel.shouldBlockPitchChange(newPitch);
+            boolean gpwsLock = !isStalling && !ComputerRegistry.isFaulted(GPWSComputer.class) && ComputerRegistry.resolve(GPWSComputer.class).shouldBlockPitchChanges();
+            boolean voidLevelLock = !ComputerRegistry.isFaulted(VoidLevelComputer.class) && ComputerRegistry.resolve(VoidLevelComputer.class).shouldBlockPitchChange(newPitch);
 
             if (stallLock && newPitch > oldPitch ||
                     (gpwsLock || voidLevelLock) && newPitch < oldPitch) {

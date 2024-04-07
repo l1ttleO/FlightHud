@@ -12,10 +12,9 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class FireworkRocketEntityMixin {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", shift = At.Shift.AFTER))
     public void onFireworkActivation(CallbackInfo ci) {
-        FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
-        /*if (host.faulted.contains(host.firework)) {
+        if (ComputerRegistry.isFaulted(FireworkController.class)) {
             return;
-        }*/
-        firework.fireworkResponded = true;
+        }
+        ComputerRegistry.resolve(FireworkController.class).fireworkResponded = true;
     }
 }

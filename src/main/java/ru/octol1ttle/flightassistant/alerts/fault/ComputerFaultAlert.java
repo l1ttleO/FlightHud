@@ -1,18 +1,21 @@
 package ru.octol1ttle.flightassistant.alerts.fault;
 
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.NotNull;
+import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
+import ru.octol1ttle.flightassistant.computers.IComputer;
+import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public abstract class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
-    /*private final ComputerHost host;
-
-    public ComputerFaultAlert(ComputerHost host) {
-        this.host = host;
-    }
-
+public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
     @Override
     public boolean isTriggered() {
-        return !host.faulted.isEmpty();
+        return ComputerRegistry.anyFaulted();
     }
 
     @Override
@@ -23,12 +26,16 @@ public abstract class ComputerFaultAlert extends BaseAlert implements IECAMAlert
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
         int i = 0;
-        for (IComputer computer : host.faulted) {
-            i += DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
-                    FAConfig.indicator().warningColor, highlight);
-            y += 10;
+        for (IComputer computer : ComputerRegistry.getComputers()) {
+            if (ComputerRegistry.isFaulted(computer.getClass())) {
+                i += DrawHelper.drawHighlightedText(textRenderer, context,
+                        Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
+                        FAConfig.indicator().warningColor, highlight
+                );
+                y += 10;
+            }
         }
 
         return i;
-    }*/
+    }
 }

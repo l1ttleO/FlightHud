@@ -1,28 +1,23 @@
 package ru.octol1ttle.flightassistant.alerts.fault;
 
+import java.util.Map;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.alerts.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.config.FAConfig;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.HudDisplayRegistry;
 
-
-public abstract class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
-    /*private final HudDisplayHost renderer;
-
-    public IndicatorFaultAlert(HudDisplayHost renderer) {
-        this.renderer = renderer;
-    }
-
+public class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
     @Override
     public boolean isTriggered() {
-        return !renderer.faulted.isEmpty();
+        return HudDisplayRegistry.anyFaulted();
     }
 
     @Override
@@ -33,12 +28,16 @@ public abstract class IndicatorFaultAlert extends BaseAlert implements IECAMAler
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
         int i = 0;
-        for (IHudDisplay display : renderer.faulted) {
-            i += DrawHelper.drawText(textRenderer, context, Text.translatable("alerts.flightassistant.fault.hud." + display.getId()), x, y,
-                    FAConfig.indicator().cautionColor);
-            y += 10;
+        for (Map.Entry<Identifier, IHudDisplay> entry : HudDisplayRegistry.getDisplays()) {
+            Identifier id = entry.getKey();
+            if (HudDisplayRegistry.isFaulted(id)) {
+                i += DrawHelper.drawText(textRenderer, context,
+                        Text.translatable("alerts.flightassistant.fault.hud." + id), x, y,
+                        FAConfig.indicator().cautionColor);
+                y += 10;
+            }
         }
 
         return i;
-    }*/
+    }
 }

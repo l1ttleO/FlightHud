@@ -72,7 +72,7 @@ public class FACallbacks {
             FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
             TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
-            if (!world.isClient()/* || faulted.contains(firework)*/) {
+            if (!world.isClient() || ComputerRegistry.isFaulted(FireworkController.class)) {
                 return TypedActionResult.pass(stack);
             }
             if (!data.isFlying() || !(stack.getItem() instanceof FireworkRocketItem)) {
@@ -80,7 +80,7 @@ public class FACallbacks {
             }
 
             boolean gpwsLocksFireworks = FAConfig.computer().lockFireworksFacingTerrain;
-            boolean gpwsDanger = /*!faulted.contains(gpws) && */gpwsLocksFireworks && (gpws.isInDanger() || !gpws.fireworkUseSafe);
+            boolean gpwsDanger = !ComputerRegistry.isFaulted(GPWSComputer.class) && gpwsLocksFireworks && (gpws.isInDanger() || !gpws.fireworkUseSafe);
 
             boolean unsafeFireworks = FAConfig.computer().lockUnsafeFireworks && !firework.isFireworkSafe(player.getStackInHand(hand));
 
@@ -89,8 +89,9 @@ public class FACallbacks {
             }
 
             if (firework.fireworkResponded) {
-                if (/*!faulted.contains(time) && */time.millis != null) {
+                if (!ComputerRegistry.isFaulted(TimeComputer.class) && time.millis != null) {
                     firework.lastUseTime = time.millis;
+                    firework.lastDiff = 0.0f;
                 }
                 firework.fireworkResponded = false;
             }

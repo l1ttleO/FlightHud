@@ -63,20 +63,23 @@ public class HudDisplayHost {
         }
 
         for (Map.Entry<Identifier, IHudDisplay> entry : HudDisplayRegistry.getDisplays()) {
+            Identifier id = entry.getKey();
             IHudDisplay display = entry.getValue();
             drawBatchedComponent(() -> {
                 try {
-                    display.render(context, mc.textRenderer);
+                    if (!HudDisplayRegistry.isFaulted(id)) {
+                        display.render(context, mc.textRenderer);
+                    } else {
+                        display.renderFaulted(context, mc.textRenderer);
+                    }
                 } catch (Throwable t) {
-                    FlightAssistant.LOGGER.error("Exception rendering display with ID: %s".formatted(entry.getKey()), t);
+                    HudDisplayRegistry.markFaulted(id, t, "Exception rendering display with ID: %s".formatted(id));
                 }
             });
         }
         if (batchAll) {
             ImmediatelyFastBatchingAccessor.endHudBatching();
         }
-
-        // TODO: faulted display renders
 
         context.getMatrices().pop();
     }

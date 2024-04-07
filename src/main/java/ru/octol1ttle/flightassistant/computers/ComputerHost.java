@@ -24,21 +24,24 @@ public class ComputerHost {
     public ComputerHost(@NotNull MinecraftClient mc) {
         ComputerRegistry.register(new AirDataComputer(mc));
         ComputerRegistry.register(new TimeComputer(mc));
-        ComputerRegistry.register(new StallComputer());
-        ComputerRegistry.register(new ChunkStatusComputer());
-        ComputerRegistry.register(new GPWSComputer());
-        ComputerRegistry.register(new VoidLevelComputer());
-        ComputerRegistry.register(new ElytraStateController());
-        ComputerRegistry.register(new FlightPlanner());
-        ComputerRegistry.register(new AutoFlightComputer());
         ComputerRegistry.register(new FireworkController(mc));
-        ComputerRegistry.register(new AlertController(mc.getSoundManager()));
-        ComputerRegistry.register(new PitchController());
+        ComputerRegistry.register(new ChunkStatusComputer());
+        ComputerRegistry.register(new StallComputer());
+        ComputerRegistry.register(new VoidLevelComputer());
+        ComputerRegistry.register(new FlightPlanner());
+        ComputerRegistry.register(new GPWSComputer());
+        ComputerRegistry.register(new ElytraStateController());
         ComputerRegistry.register(new YawController());
+        ComputerRegistry.register(new PitchController());
+        ComputerRegistry.register(new AutoFlightComputer());
+        ComputerRegistry.register(new AlertController(mc.getSoundManager()));
     }
 
     public void tick() {
         for (IComputer computer : ComputerRegistry.getComputers()) {
+            if (ComputerRegistry.isFaulted(computer.getClass())) {
+                continue;
+            }
             if (!(computer instanceof ITickableComputer tickable)) {
                 continue;
             }
@@ -46,9 +49,9 @@ public class ComputerHost {
             try {
                 tickable.tick();
             } catch (AssertionError e) {
-                FlightAssistant.LOGGER.error("Invalid data encountered by computer", e);
+                ComputerRegistry.markFaulted(computer, e, "Invalid data encountered by computer");
             } catch (Throwable t) {
-                FlightAssistant.LOGGER.error("Exception ticking computer", t);
+                ComputerRegistry.markFaulted(computer, t, "Exception ticking computer");
             }
         }
     }

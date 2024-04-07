@@ -10,6 +10,8 @@ import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutoFireworkOffAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutopilotOffAlert;
+import ru.octol1ttle.flightassistant.alerts.fault.ComputerFaultAlert;
+import ru.octol1ttle.flightassistant.alerts.fault.IndicatorFaultAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkNoResponseAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkUnsafeAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.ApproachingVoidDamageLevelAlert;
@@ -40,6 +42,8 @@ public class AlertController implements ITickableComputer {
         AlertRegistry.register(new ExcessiveTerrainClosureAlert());
         AlertRegistry.register(new UnsafeTerrainClearanceAlert());
         AlertRegistry.register(new AutopilotOffAlert());
+        AlertRegistry.register(new ComputerFaultAlert());
+        AlertRegistry.register(new IndicatorFaultAlert());
         AlertRegistry.register(new AutoFireworkOffAlert());
         AlertRegistry.register(new MinimumsAlert());
         AlertRegistry.register(new ApproachingVoidDamageLevelAlert());

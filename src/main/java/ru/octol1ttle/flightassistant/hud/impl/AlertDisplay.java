@@ -33,10 +33,10 @@ public class AlertDisplay implements IHudDisplay {
         if (!FAConfig.indicator().showAlerts) {
             return;
         }
-        /*if (host.faulted.contains(alert)) {
+        if (ComputerRegistry.isFaulted(AlertController.class)) {
             renderFaulted(context, textRenderer, Text.translatable("alerts.flightassistant.fault.computers.alert_mgr"));
             return;
-        }*/
+        }
         boolean renderedCentered = false;
         int x = dim.lFrame + 5;
         int y = dim.tFrame + 15;
