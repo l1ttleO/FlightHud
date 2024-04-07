@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
-
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class FlightMode {
@@ -18,7 +18,7 @@ public class FlightMode {
     @Nullable
     private Text lastText;
 
-    public FlightMode(TimeComputer time) {
+    public FlightMode() {
         this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 

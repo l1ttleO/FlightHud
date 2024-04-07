@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.safety.AlertController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AlertDisplay implements IHudDisplay {
     private final Dimensions dim;
@@ -20,10 +21,10 @@ public class AlertDisplay implements IHudDisplay {
     private final AlertController alert;
     private final TimeComputer time;
 
-    public AlertDisplay(Dimensions dim, ComputerHost host, AlertController alert, TimeComputer time) {
+    public AlertDisplay(Dimensions dim, ComputerHost host) {
         this.dim = dim;
         this.host = host;
-        this.alert = alert;
+        this.alert = ComputerRegistry.resolve(AlertController.class);
         this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 
@@ -32,10 +33,10 @@ public class AlertDisplay implements IHudDisplay {
         if (!FAConfig.indicator().showAlerts) {
             return;
         }
-        if (host.faulted.contains(alert)) {
+        /*if (host.faulted.contains(alert)) {
             renderFaulted(context, textRenderer, Text.translatable("alerts.flightassistant.fault.computers.alert_mgr"));
             return;
-        }
+        }*/
         boolean renderedCentered = false;
         int x = dim.lFrame + 5;
         int y = dim.tFrame + 15;

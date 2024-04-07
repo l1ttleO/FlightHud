@@ -10,14 +10,15 @@ import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class FireworkNoResponseAlert extends BaseAlert implements IECAMAlert {
 
     private final FireworkController firework;
 
-    public FireworkNoResponseAlert(FireworkController firework) {
-        this.firework = firework;
+    public FireworkNoResponseAlert() {
+        this.firework = ComputerRegistry.resolve(FireworkController.class);
     }
 
     @Override

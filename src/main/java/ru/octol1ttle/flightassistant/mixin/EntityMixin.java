@@ -5,25 +5,33 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.computers.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
+import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
+@SuppressWarnings("UnreachableCode")
 @Mixin(Entity.class)
 public abstract class EntityMixin {
     @ModifyVariable(method = "changeLookDirection", at = @At("STORE"), ordinal = 0)
     public float preventUpsetPitch(float pitchDelta) {
         Entity that = (Entity) (Object) this;
 
-        ComputerHost host = ComputerHost.instance();
-        if (that instanceof ClientPlayerEntity && host.data.canAutomationsActivate()) {
-            float oldPitch = host.data.pitch();
+        AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+        GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+        StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
+        VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
+        if (that instanceof ClientPlayerEntity && data.canAutomationsActivate()) {
+            float oldPitch = data.pitch();
             float newPitch = oldPitch + (-pitchDelta);
 
-            boolean isStalling = !host.faulted.contains(host.stall) && host.stall.isPitchUnsafe(newPitch);
+            boolean isStalling = /*!faulted.contains(stall) && */stall.isPitchUnsafe(newPitch);
             boolean stallLock = FAConfig.computer().stallProtection.override() && isStalling;
 
-            boolean gpwsLock = !isStalling && !host.faulted.contains(host.gpws) && host.gpws.shouldBlockPitchChanges();
-            boolean voidLevelLock = !host.faulted.contains(host.voidLevel) && host.voidLevel.shouldBlockPitchChange(newPitch);
+            boolean gpwsLock = !isStalling/* && !faulted.contains(gpws) */&& gpws.shouldBlockPitchChanges();
+            boolean voidLevelLock = /*!faulted.contains(voidLevel) && */voidLevel.shouldBlockPitchChange(newPitch);
 
             if (stallLock && newPitch > oldPitch ||
                     (gpwsLock || voidLevelLock) && newPitch < oldPitch) {

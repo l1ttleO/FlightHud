@@ -20,9 +20,9 @@ public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
     private final AirDataComputer data;
     private final GPWSComputer gpws;
 
-    public ExcessiveDescentAlert(AirDataComputer data, GPWSComputer gpws) {
+    public ExcessiveDescentAlert() {
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.gpws = gpws;
+        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
     }
 
     @Override

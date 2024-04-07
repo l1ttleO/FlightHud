@@ -6,13 +6,15 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.serialization.FlightPlanLoadResult;
 import ru.octol1ttle.flightassistant.serialization.FlightPlanSerializer;
 
 public class LoadFlightPlanCommand {
 
     public static int execute(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException {
-        ComputerHost host = ComputerHost.instance();
+        FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
         String name = StringArgumentType.getString(context, "name");
         FlightPlanLoadResult result = FlightPlanSerializer.load(name);
         if (result.getType() != FlightPlanLoadResult.LoadResultType.SUCCESS) {
@@ -21,9 +23,9 @@ public class LoadFlightPlanCommand {
             return -1;
         }
 
-        host.plan.clear();
-        host.plan.addAll(result.getWaypoints());
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_loaded", host.plan.size(), name));
+        plan.clear();
+        plan.addAll(result.getWaypoints());
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_loaded", plan.size(), name));
         return 0;
     }
 }

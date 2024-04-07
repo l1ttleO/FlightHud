@@ -8,13 +8,14 @@ import net.minecraft.util.math.MathHelper;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightModeDisplay implements IHudDisplay {
     private final Dimensions dim;
@@ -29,18 +30,18 @@ public class FlightModeDisplay implements IHudDisplay {
     private final FlightMode lateralMode;
     private final FlightMode automationMode;
 
-    public FlightModeDisplay(Dimensions dim, AirDataComputer data, TimeComputer time, FireworkController firework, AutoFlightComputer autoflight, FlightPlanner plan) {
+    public FlightModeDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
         this.time = ComputerRegistry.resolve(TimeComputer.class);
-        this.firework = firework;
-        this.autoflight = autoflight;
-        this.plan = plan;
+        this.firework = ComputerRegistry.resolve(FireworkController.class);
+        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
 
-        this.fireworkMode = new FlightMode(this.time);
-        this.verticalMode = new FlightMode(this.time);
-        this.lateralMode = new FlightMode(this.time);
-        this.automationMode = new FlightMode(this.time);
+        this.fireworkMode = new FlightMode();
+        this.verticalMode = new FlightMode();
+        this.lateralMode = new FlightMode();
+        this.automationMode = new FlightMode();
     }
 
     // TODO: consider delegating mode update tasks to a computer

@@ -15,8 +15,13 @@ import net.minecraft.util.TypedActionResult;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.commands.SelectCommand;
+import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.computers.TimeComputer;
+import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -62,28 +67,32 @@ public class FACallbacks {
     private static void setupUseItem() {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getStackInHand(hand);
-            ComputerHost host = ComputerHost.instance();
-            if (!world.isClient() || host.faulted.contains(host.firework)) {
+            AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+            GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+            FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+            TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
+
+            if (!world.isClient()/* || faulted.contains(firework)*/) {
                 return TypedActionResult.pass(stack);
             }
-            if (!host.data.isFlying() || !(stack.getItem() instanceof FireworkRocketItem)) {
+            if (!data.isFlying() || !(stack.getItem() instanceof FireworkRocketItem)) {
                 return TypedActionResult.pass(stack);
             }
 
             boolean gpwsLocksFireworks = FAConfig.computer().lockFireworksFacingTerrain;
-            boolean gpwsDanger = !host.faulted.contains(host.gpws) && gpwsLocksFireworks && (host.gpws.isInDanger() || !host.gpws.fireworkUseSafe);
+            boolean gpwsDanger = /*!faulted.contains(gpws) && */gpwsLocksFireworks && (gpws.isInDanger() || !gpws.fireworkUseSafe);
 
-            boolean unsafeFireworks = FAConfig.computer().lockUnsafeFireworks && !host.firework.isFireworkSafe(player.getStackInHand(hand));
+            boolean unsafeFireworks = FAConfig.computer().lockUnsafeFireworks && !firework.isFireworkSafe(player.getStackInHand(hand));
 
-            if (!host.firework.activationInProgress && (unsafeFireworks || host.firework.lockManualFireworks || gpwsDanger)) {
+            if (!firework.activationInProgress && (unsafeFireworks || firework.lockManualFireworks || gpwsDanger)) {
                 return TypedActionResult.fail(stack);
             }
 
-            if (host.firework.fireworkResponded) {
-                if (!host.faulted.contains(host.time) && host.time.millis != null) {
-                    host.firework.lastUseTime = host.time.millis;
+            if (firework.fireworkResponded) {
+                if (/*!faulted.contains(time) && */time.millis != null) {
+                    firework.lastUseTime = time.millis;
                 }
-                host.firework.fireworkResponded = false;
+                firework.fireworkResponded = false;
             }
 
             return TypedActionResult.pass(stack);

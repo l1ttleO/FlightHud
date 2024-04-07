@@ -10,7 +10,6 @@ import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutoFireworkOffAlert;
 import ru.octol1ttle.flightassistant.alerts.autoflight.AutopilotOffAlert;
-import ru.octol1ttle.flightassistant.alerts.fault.ComputerFaultAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkNoResponseAlert;
 import ru.octol1ttle.flightassistant.alerts.firework.FireworkUnsafeAlert;
 import ru.octol1ttle.flightassistant.alerts.nav.ApproachingVoidDamageLevelAlert;
@@ -21,37 +20,39 @@ import ru.octol1ttle.flightassistant.alerts.nav.gpws.ExcessiveTerrainClosureAler
 import ru.octol1ttle.flightassistant.alerts.nav.gpws.UnsafeTerrainClearanceAlert;
 import ru.octol1ttle.flightassistant.alerts.other.ElytraHealthLowAlert;
 import ru.octol1ttle.flightassistant.alerts.other.StallAlert;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
+import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ITickableComputer;
+import ru.octol1ttle.flightassistant.registries.AlertRegistry;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AlertController implements ITickableComputer {
     public final List<BaseAlert> activeAlerts;
-    private final ComputerHost host;
+    private final AirDataComputer airData;
     private final SoundManager manager;
-    private final List<BaseAlert> allAlerts;
 
-    public AlertController(ComputerHost host, SoundManager manager) {
-        this.host = host;
+    public AlertController(SoundManager manager) {
+        this.airData = ComputerRegistry.resolve(AirDataComputer.class);
         this.manager = manager;
         // TODO: ECAM actions
-        allAlerts = List.of(
-                new StallAlert(host.stall),
-                new UnloadedChunkAlert(host.chunkStatus),
-                new ExcessiveDescentAlert(host.data, host.gpws), new ExcessiveTerrainClosureAlert(host.gpws, host.time),
-                new UnsafeTerrainClearanceAlert(host.gpws, host.plan),
-                new AutopilotOffAlert(host.autoflight), new AutoFireworkOffAlert(host.autoflight),
-                new MinimumsAlert(host.plan),
-                //new ComputerFaultAlert(host), new IndicatorFaultAlert(renderer),
-                new ApproachingVoidDamageLevelAlert(host.voidLevel),
-                new ElytraHealthLowAlert(host.data),
-                new FireworkUnsafeAlert(host.data, host.firework), new FireworkNoResponseAlert(host.firework)
-        );
-        activeAlerts = new ArrayList<>(allAlerts.size());
+        AlertRegistry.register(new StallAlert());
+        AlertRegistry.register(new UnloadedChunkAlert());
+        AlertRegistry.register(new ExcessiveDescentAlert());
+        AlertRegistry.register(new ExcessiveTerrainClosureAlert());
+        AlertRegistry.register(new UnsafeTerrainClearanceAlert());
+        AlertRegistry.register(new AutopilotOffAlert());
+        AlertRegistry.register(new AutoFireworkOffAlert());
+        AlertRegistry.register(new MinimumsAlert());
+        AlertRegistry.register(new ApproachingVoidDamageLevelAlert());
+        AlertRegistry.register(new ElytraHealthLowAlert());
+        AlertRegistry.register(new FireworkUnsafeAlert());
+        AlertRegistry.register(new FireworkNoResponseAlert());
+
+        activeAlerts = new ArrayList<>();
     }
 
     @Override
     public void tick() {
-        for (BaseAlert alert : allAlerts) {
+        for (BaseAlert alert : AlertRegistry.getAlerts()) {
             if (alert.isTriggered()) {
                 if (!activeAlerts.contains(alert)) {
                     activeAlerts.add(alert);
@@ -96,7 +97,7 @@ public class AlertController implements ITickableComputer {
                 }
             }
 
-            if (!host.data.isFlying()
+            if (!airData.isFlying()
                     || data.sound() == null
                     || alert.hidden || alert.played
                     || interrupt && !soundChanged) {

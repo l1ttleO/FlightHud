@@ -13,12 +13,12 @@ public class ResetCommand {
                         .then(literal("computers")
                                 .then(literal("all")
                                         .executes(context -> {
-                                            ComputerHost.instance().resetComputers(true);
+                                            //ComputerHost.instance().resetComputers(true);
                                             return 0;
                                         }))
                                 .then(literal("faulted")
                                         .executes(context -> {
-                                            ComputerHost.instance().resetComputers(false);
+                                            //ComputerHost.instance().resetComputers(false);
                                             return 0;
                                         })
                                 )

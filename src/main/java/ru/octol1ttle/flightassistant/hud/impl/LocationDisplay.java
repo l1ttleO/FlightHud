@@ -6,16 +6,17 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class LocationDisplay implements IHudDisplay {
 
     private final Dimensions dim;
     private final AirDataComputer data;
 
-    public LocationDisplay(Dimensions dim, AirDataComputer data) {
+    public LocationDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
     }

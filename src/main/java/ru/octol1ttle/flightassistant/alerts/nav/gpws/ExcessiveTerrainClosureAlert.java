@@ -12,6 +12,7 @@ import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class ExcessiveTerrainClosureAlert extends BaseAlert implements ICenteredAlert {
@@ -24,8 +25,8 @@ public class ExcessiveTerrainClosureAlert extends BaseAlert implements ICentered
     private boolean delayFull = false;
     private float delay = 0.0f;
 
-    public ExcessiveTerrainClosureAlert(GPWSComputer gpws, TimeComputer time) {
-        this.gpws = gpws;
+    public ExcessiveTerrainClosureAlert() {
+        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
         this.time = ComputerRegistry.resolve(TimeComputer.class);
     }
 

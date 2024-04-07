@@ -1,6 +1,5 @@
 package ru.octol1ttle.flightassistant.computers;
 
-import java.util.Map;
 import net.minecraft.client.MinecraftClient;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.FlightAssistant;
@@ -23,33 +22,33 @@ public class ComputerHost {
     }
 
     public ComputerHost(@NotNull MinecraftClient mc) {
-        ComputerRegistry.register(FlightAssistant.id("data"), () -> new AirDataComputer(mc));
-        ComputerRegistry.register(FlightAssistant.id("time"), () -> new TimeComputer(mc));
-        ComputerRegistry.register(FlightAssistant.id("firework"), () -> new FireworkController(mc));
-        ComputerRegistry.register(FlightAssistant.id("chunk_status"), ChunkStatusComputer::new);
-        ComputerRegistry.register(FlightAssistant.id("stall"), StallComputer::new);
-        ComputerRegistry.register(FlightAssistant.id("void_level"), VoidLevelComputer::new);
-        ComputerRegistry.register(FlightAssistant.id("flight_plan"), FlightPlanner::new);
-        ComputerRegistry.register(FlightAssistant.id("ground_proximity"), GPWSComputer::new);
-        ComputerRegistry.register(FlightAssistant.id("elytra_state"), ElytraStateController::new);
-        ComputerRegistry.register(FlightAssistant.id("yaw"), YawController::new);
-        ComputerRegistry.register(FlightAssistant.id("pitch"), PitchController::new);
-        ComputerRegistry.register(FlightAssistant.id("autoflight"), AutoFlightComputer::new);
-        ComputerRegistry.register(FlightAssistant.id("alert"), () -> new AlertController(this, mc.getSoundManager()));
+        ComputerRegistry.register(new AirDataComputer(mc));
+        ComputerRegistry.register(new TimeComputer(mc));
+        ComputerRegistry.register(new StallComputer());
+        ComputerRegistry.register(new ChunkStatusComputer());
+        ComputerRegistry.register(new GPWSComputer());
+        ComputerRegistry.register(new VoidLevelComputer());
+        ComputerRegistry.register(new ElytraStateController());
+        ComputerRegistry.register(new FlightPlanner());
+        ComputerRegistry.register(new AutoFlightComputer());
+        ComputerRegistry.register(new FireworkController(mc));
+        ComputerRegistry.register(new AlertController(mc.getSoundManager()));
+        ComputerRegistry.register(new PitchController());
+        ComputerRegistry.register(new YawController());
     }
 
     public void tick() {
-        for (Map.Entry<Class<IComputer>, IComputer> computer : ComputerRegistry.getComputers()) {
-            if (!(computer.getValue() instanceof ITickableComputer tickable)) {
+        for (IComputer computer : ComputerRegistry.getComputers()) {
+            if (!(computer instanceof ITickableComputer tickable)) {
                 continue;
             }
 
             try {
                 tickable.tick();
             } catch (AssertionError e) {
-                FlightAssistant.LOGGER.error("Invalid data encountered by computer with ID: %s".formatted(computer.getKey()), e);
+                FlightAssistant.LOGGER.error("Invalid data encountered by computer", e);
             } catch (Throwable t) {
-                FlightAssistant.LOGGER.error("Exception ticking computer with ID: %s".formatted(computer.getKey()), t);
+                FlightAssistant.LOGGER.error("Exception ticking computer", t);
             }
         }
     }

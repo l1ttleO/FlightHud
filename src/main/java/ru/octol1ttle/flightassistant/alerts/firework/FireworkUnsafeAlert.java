@@ -14,15 +14,16 @@ import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class FireworkUnsafeAlert extends BaseAlert implements IECAMAlert {
     private final AirDataComputer data;
     private final FireworkController firework;
 
-    public FireworkUnsafeAlert(AirDataComputer data, FireworkController firework) {
+    public FireworkUnsafeAlert() {
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.firework = firework;
+        this.firework = ComputerRegistry.resolve(FireworkController.class);
     }
 
     @Override

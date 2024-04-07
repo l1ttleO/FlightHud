@@ -7,20 +7,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightPathDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final GPWSComputer gpws;
 
-    public FlightPathDisplay(Dimensions dim, AirDataComputer data, GPWSComputer gpws) {
+    public FlightPathDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.gpws = gpws;
+        this.gpws = ComputerRegistry.resolve(GPWSComputer.class);
     }
 
     @Override

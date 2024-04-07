@@ -4,17 +4,17 @@ import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AttitudeDisplay implements IHudDisplay {
     public static final int DEGREES_PER_BAR = 20;
@@ -24,11 +24,11 @@ public class AttitudeDisplay implements IHudDisplay {
     private final VoidLevelComputer voidLevel;
     private final AttitudeIndicatorData pitchData = new AttitudeIndicatorData();
 
-    public AttitudeDisplay(Dimensions dim, AirDataComputer data, StallComputer stall, VoidLevelComputer voidLevel) {
+    public AttitudeDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.stall = stall;
-        this.voidLevel = voidLevel;
+        this.stall = ComputerRegistry.resolve(StallComputer.class);
+        this.voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
     }
 
     @Override

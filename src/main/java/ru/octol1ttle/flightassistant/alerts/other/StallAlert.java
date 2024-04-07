@@ -10,13 +10,14 @@ import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class StallAlert extends BaseAlert implements ICenteredAlert {
     private final StallComputer stall;
 
-    public StallAlert(StallComputer stall) {
-        this.stall = stall;
+    public StallAlert() {
+        this.stall = ComputerRegistry.resolve(StallComputer.class);
     }
 
     @Override

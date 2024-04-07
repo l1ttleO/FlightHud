@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
@@ -20,11 +21,11 @@ public class AltitudeDisplay implements IHudDisplay {
     private final AutoFlightComputer autoflight;
     private final FlightPlanner plan;
 
-    public AltitudeDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight, FlightPlanner plan) {
+    public AltitudeDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.autoflight = autoflight;
-        this.plan = plan;
+        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override

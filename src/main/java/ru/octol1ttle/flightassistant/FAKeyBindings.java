@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
+import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.safety.AlertController;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FAKeyBindings {
     private static KeyBinding toggleFlightDirectors;
@@ -44,41 +46,43 @@ public class FAKeyBindings {
         KeyBindingHelper.registerKeyBinding(lockManualFireworks);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            ComputerHost host = ComputerHost.instance();
-            if (!host.faulted.contains(host.autoflight)) {
+            AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+            if (/*!faulted.contains(autoflight)*/true) {
                 while (toggleFlightDirectors.wasPressed()) {
-                    host.autoflight.flightDirectorsEnabled = !host.autoflight.flightDirectorsEnabled;
+                    autoflight.flightDirectorsEnabled = !autoflight.flightDirectorsEnabled;
                 }
 
                 while (toggleAutoFirework.wasPressed()) {
-                    if (!host.autoflight.autoFireworkEnabled) {
-                        host.autoflight.autoFireworkEnabled = true;
+                    if (!autoflight.autoFireworkEnabled) {
+                        autoflight.autoFireworkEnabled = true;
                     } else {
-                        host.autoflight.disconnectAutoFirework(false);
+                        autoflight.disconnectAutoFirework(false);
                     }
                 }
 
                 while (toggleAutoPilot.wasPressed()) {
-                    if (!host.autoflight.autoPilotEnabled) {
-                        host.autoflight.autoPilotEnabled = true;
+                    if (!autoflight.autoPilotEnabled) {
+                        autoflight.autoPilotEnabled = true;
                     } else {
-                        host.autoflight.disconnectAutopilot(false);
+                        autoflight.disconnectAutopilot(false);
                     }
                 }
             }
 
-            if (!host.faulted.contains(host.alert)) {
+            AlertController alert = ComputerRegistry.resolve(AlertController.class);
+            if (/*!faulted.contains(alert)*/true) {
                 while (hideAlert.wasPressed()) {
-                    host.alert.hide();
+                    alert.hide();
                 }
                 while (recallAlert.wasPressed()) {
-                    host.alert.recall();
+                    alert.recall();
                 }
             }
 
-            if (!host.faulted.contains(host.firework)) {
+            FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+            if (/*!faulted.contains(firework)*/true) {
                 while (lockManualFireworks.wasPressed()) {
-                    host.firework.lockManualFireworks = !host.firework.lockManualFireworks;
+                    firework.lockManualFireworks = !firework.lockManualFireworks;
                 }
             }
         });

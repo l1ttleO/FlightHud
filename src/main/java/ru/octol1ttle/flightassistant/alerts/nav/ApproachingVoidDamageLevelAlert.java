@@ -10,12 +10,13 @@ import ru.octol1ttle.flightassistant.alerts.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.IECAMAlert;
 import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ApproachingVoidDamageLevelAlert extends BaseAlert implements IECAMAlert {
     private final VoidLevelComputer voidLevel;
 
-    public ApproachingVoidDamageLevelAlert(VoidLevelComputer voidLevel) {
-        this.voidLevel = voidLevel;
+    public ApproachingVoidDamageLevelAlert() {
+        this.voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
     }
 
     @Override

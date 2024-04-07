@@ -13,8 +13,8 @@ import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 
 
-public class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
-    private final HudDisplayHost renderer;
+public abstract class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
+    /*private final HudDisplayHost renderer;
 
     public IndicatorFaultAlert(HudDisplayHost renderer) {
         this.renderer = renderer;
@@ -40,5 +40,5 @@ public class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
         }
 
         return i;
-    }
+    }*/
 }

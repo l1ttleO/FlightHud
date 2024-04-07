@@ -8,12 +8,12 @@ import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
 import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ListWaypointsCommand {
     public static int execute(CommandContext<FabricClientCommandSource> context) {
-        ComputerHost host = ComputerHost.instance();
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.total_waypoints", host.plan.size()));
-        FlightPlanner plan = host.plan;
+        FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.total_waypoints", plan.size()));
         for (int i = 0; i < plan.size(); i++) {
             Waypoint waypoint = plan.get(i);
             Text feedback;

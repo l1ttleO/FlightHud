@@ -6,20 +6,21 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class StatusDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final FireworkController firework;
     private final FlightPlanner plan;
 
-    public StatusDisplay(Dimensions dim, FireworkController firework, FlightPlanner plan) {
+    public StatusDisplay(Dimensions dim) {
         this.dim = dim;
-        this.firework = firework;
-        this.plan = plan;
+        this.firework = ComputerRegistry.resolve(FireworkController.class);
+        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override

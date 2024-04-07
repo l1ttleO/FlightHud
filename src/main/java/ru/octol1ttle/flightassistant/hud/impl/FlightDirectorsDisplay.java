@@ -6,20 +6,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FlightDirectorsDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final AutoFlightComputer autoflight;
 
-    public FlightDirectorsDisplay(Dimensions dim, AirDataComputer data, AutoFlightComputer autoflight) {
+    public FlightDirectorsDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.autoflight = autoflight;
+        this.autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
     }
 
     @Override

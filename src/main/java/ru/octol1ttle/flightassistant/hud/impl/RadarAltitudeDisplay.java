@@ -7,20 +7,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.computers.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
+import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class RadarAltitudeDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data;
     private final FlightPlanner plan;
 
-    public RadarAltitudeDisplay(Dimensions dim, AirDataComputer data, FlightPlanner plan) {
+    public RadarAltitudeDisplay(Dimensions dim) {
         this.dim = dim;
         this.data = ComputerRegistry.resolve(AirDataComputer.class);
-        this.plan = plan;
+        this.plan = ComputerRegistry.resolve(FlightPlanner.class);
     }
 
     @Override
