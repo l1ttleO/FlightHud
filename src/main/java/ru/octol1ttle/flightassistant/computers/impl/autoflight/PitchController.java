@@ -1,6 +1,7 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.util.math.MathHelper;
+import ru.octol1ttle.flightassistant.computers.api.IComputer;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -33,10 +34,12 @@ public class PitchController implements ITickableComputer {
         float maximumSafePitch = 90.0f;
         float minimumSafePitch = -90.0f;
         for (IPitchLimiter limiter : IPitchLimiter.instances) {
-            if (limiter.getProtectionMode().recover()) {
-                maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
-                minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
+            if (!limiter.getProtectionMode().recover()
+                    || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+                continue;
             }
+            maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
+            minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
         }
 
         if (data.pitch() > maximumSafePitch) {

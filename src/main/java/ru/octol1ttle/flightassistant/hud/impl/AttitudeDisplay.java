@@ -8,6 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.computers.api.IComputer;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
@@ -52,6 +53,9 @@ public class AttitudeDisplay implements IHudDisplay {
         float maximumSafePitch = 90.0f;
         float minimumSafePitch = -90.0f;
         for (IPitchLimiter limiter : IPitchLimiter.instances) {
+            if (limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+                continue;
+            }
             maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
             minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
         }
