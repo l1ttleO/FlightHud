@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.jetbrains.annotations.ApiStatus;
-import ru.octol1ttle.flightassistant.alerts.BaseAlert;
+import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 
 public abstract class AlertRegistry {
     private static final List<BaseAlert> instances = new ArrayList<>();

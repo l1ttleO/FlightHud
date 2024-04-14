@@ -5,8 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ClearWaypointsCommand {

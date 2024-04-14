@@ -5,7 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.computers.TimeComputer;
+import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 

@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 
 public class FlightPlanLoadResult {
     private final @Nullable List<Waypoint> loaded;

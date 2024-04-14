@@ -3,9 +3,9 @@ package ru.octol1ttle.flightassistant.commands.plan;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.text.Text;
-import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingWaypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 
 public class WaypointUtil {
     private static final SimpleCommandExceptionType FLIGHT_PLAN_EMPTY = new SimpleCommandExceptionType(Text.translatable("commands.flightassistant.flight_plan_empty"));

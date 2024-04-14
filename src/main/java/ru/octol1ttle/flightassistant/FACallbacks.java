@@ -15,11 +15,11 @@ import net.minecraft.util.TypedActionResult;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.commands.SelectCommand;
-import ru.octol1ttle.flightassistant.computers.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.computers.TimeComputer;
-import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
-import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 

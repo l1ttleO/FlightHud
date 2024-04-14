@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 @Mixin(FireworkRocketEntity.class)

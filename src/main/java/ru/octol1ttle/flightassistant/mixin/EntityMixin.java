@@ -5,10 +5,10 @@ import net.minecraft.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import ru.octol1ttle.flightassistant.computers.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.safety.GPWSComputer;
-import ru.octol1ttle.flightassistant.computers.safety.StallComputer;
-import ru.octol1ttle.flightassistant.computers.safety.VoidLevelComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 

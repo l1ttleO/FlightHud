@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
-import ru.octol1ttle.flightassistant.computers.autoflight.FireworkController;
-import ru.octol1ttle.flightassistant.computers.safety.AlertController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FAKeyBindings {

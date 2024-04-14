@@ -16,9 +16,9 @@ import ru.octol1ttle.flightassistant.commands.plan.LoadFlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.plan.RemoveWaypointCommand;
 import ru.octol1ttle.flightassistant.commands.plan.ReplaceWaypointCommand;
 import ru.octol1ttle.flightassistant.commands.plan.SaveFlightPlanCommand;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingMinimums;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingMinimums;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingWaypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;

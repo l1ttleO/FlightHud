@@ -3,11 +3,9 @@ package ru.octol1ttle.flightassistant.commands.plan;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
-import ru.octol1ttle.flightassistant.hud.HudDisplayHost;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.computers.navigation.FlightPlanner;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingWaypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ListWaypointsCommand {

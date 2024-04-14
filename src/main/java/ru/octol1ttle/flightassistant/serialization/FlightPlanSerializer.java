@@ -10,7 +10,7 @@ import net.minecraft.MinecraftVersion;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.MinecraftProtocolVersions;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 import ru.octol1ttle.flightassistant.serialization.api.ISerializableFactory;
 import ru.octol1ttle.flightassistant.serialization.api.ISerializableList;
 import ru.octol1ttle.flightassistant.serialization.api.ISerializableObject;

@@ -3,8 +3,7 @@ package ru.octol1ttle.flightassistant.commands;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import ru.octol1ttle.flightassistant.computers.ComputerHost;
-import ru.octol1ttle.flightassistant.computers.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;

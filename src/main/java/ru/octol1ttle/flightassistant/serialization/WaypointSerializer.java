@@ -1,9 +1,9 @@
 package ru.octol1ttle.flightassistant.serialization;
 
 import org.joml.Vector2d;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingMinimums;
-import ru.octol1ttle.flightassistant.computers.navigation.LandingWaypoint;
-import ru.octol1ttle.flightassistant.computers.navigation.Waypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingMinimums;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingWaypoint;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 import ru.octol1ttle.flightassistant.serialization.api.ISerializableObject;
 
 public class WaypointSerializer {

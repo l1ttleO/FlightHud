@@ -13,7 +13,7 @@ import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import java.awt.Color;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-import ru.octol1ttle.flightassistant.computers.safety.ElytraStateController;
+import ru.octol1ttle.flightassistant.computers.impl.safety.ElytraStateController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.HUDConfig;

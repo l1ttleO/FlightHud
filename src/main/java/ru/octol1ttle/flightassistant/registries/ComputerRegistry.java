@@ -8,7 +8,7 @@ import java.util.Objects;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.FlightAssistant;
-import ru.octol1ttle.flightassistant.computers.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.IComputer;
 
 @SuppressWarnings("unchecked")
 public abstract class ComputerRegistry {
