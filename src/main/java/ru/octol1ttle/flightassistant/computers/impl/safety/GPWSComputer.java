@@ -7,13 +7,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class GPWSComputer implements ITickableComputer {
+public class GPWSComputer implements ITickableComputer, IPitchLimiter {
     private static final int STATUS_PLAYER_INVULNERABLE = -1;
     private static final int STATUS_FALL_DISTANCE_TOO_LOW = -2;
     private static final int STATUS_SPEED_SAFE = -3;
@@ -63,11 +64,6 @@ public class GPWSComputer implements ITickableComputer {
         }
 
         return FAConfig.indicator().frameColor;
-    }
-
-    public boolean shouldBlockPitchChanges() {
-        return FAConfig.computer().sinkrateProtection.override() && positiveLessOrEquals(descentImpactTime, PULL_UP_THRESHOLD)
-                || FAConfig.computer().terrainProtection.override() && positiveLessOrEquals(terrainImpactTime, PULL_UP_THRESHOLD);
     }
 
     private float computeDescentImpactTime() {
@@ -168,6 +164,12 @@ public class GPWSComputer implements ITickableComputer {
             }
         }
         return at;
+    }
+
+    @Override
+    public boolean blockPitchChange(Direction direction) {
+        return FAConfig.computer().sinkrateProtection.override() && positiveLessOrEquals(descentImpactTime, PULL_UP_THRESHOLD)
+                || FAConfig.computer().terrainProtection.override() && positiveLessOrEquals(terrainImpactTime, PULL_UP_THRESHOLD);
     }
 
     @Override

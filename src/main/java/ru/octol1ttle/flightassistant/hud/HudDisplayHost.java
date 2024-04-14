@@ -26,6 +26,7 @@ import ru.octol1ttle.flightassistant.hud.impl.StatusDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.VerticalSpeedDisplay;
 import ru.octol1ttle.flightassistant.mixin.GameRendererInvoker;
 import ru.octol1ttle.flightassistant.registries.HudDisplayRegistry;
+import ru.octol1ttle.flightassistant.registries.events.CustomHudDisplayRegistrationCallback;
 
 public class HudDisplayHost {
     private final Dimensions dim = new Dimensions();
@@ -45,6 +46,8 @@ public class HudDisplayHost {
         HudDisplayRegistry.register(FlightAssistant.id("speed"), new SpeedDisplay(dim));
         HudDisplayRegistry.register(FlightAssistant.id("status"), new StatusDisplay(dim));
         HudDisplayRegistry.register(FlightAssistant.id("vertical_speed"), new VerticalSpeedDisplay(dim));
+
+        CustomHudDisplayRegistrationCallback.EVENT.invoker().registerCustomDisplays();
     }
 
     public void render(MinecraftClient mc, DrawContext context, float tickDelta) {

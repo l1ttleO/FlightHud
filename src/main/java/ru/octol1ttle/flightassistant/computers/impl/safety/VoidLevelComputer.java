@@ -1,13 +1,16 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
+import net.minecraft.util.math.Direction;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
+import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class VoidLevelComputer implements ITickableComputer {
+public class VoidLevelComputer implements ITickableComputer, IPitchLimiter {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
@@ -65,8 +68,19 @@ public class VoidLevelComputer implements ITickableComputer {
         return status == VoidLevelStatus.APPROACHING_DAMAGE_LEVEL || status == VoidLevelStatus.REACHED_DAMAGE_LEVEL;
     }
 
-    public boolean shouldBlockPitchChange(float newPitch) {
-        return FAConfig.computer().voidProtection.override() && newPitch < minimumSafePitch;
+    @Override
+    public float getMinimumPitch() {
+        return minimumSafePitch;
+    }
+
+    @Override
+    public boolean blockPitchChange(Direction direction) {
+        return direction == Direction.DOWN && status == VoidLevelStatus.REACHED_DAMAGE_LEVEL;
+    }
+
+    @Override
+    public ComputerConfig.ProtectionMode getProtectionMode() {
+        return FAConfig.computer().voidProtection;
     }
 
     @Override

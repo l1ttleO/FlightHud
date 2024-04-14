@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
 
 @SuppressWarnings("unchecked")
 public abstract class ComputerRegistry {
@@ -22,6 +23,7 @@ public abstract class ComputerRegistry {
         }
 
         instances.put(clazz, computer);
+        ComputerRegisteredCallback.EVENT.invoker().onComputerRegistered(computer);
     }
 
     public static <T extends IComputer> T resolve(Class<T> clazz) {

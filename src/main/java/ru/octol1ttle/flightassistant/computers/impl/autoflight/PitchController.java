@@ -1,14 +1,14 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.util.math.MathHelper;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.ChunkStatusComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
-import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class PitchController implements ITickableComputer {
@@ -30,10 +30,19 @@ public class PitchController implements ITickableComputer {
             return;
         }
 
-        if (FAConfig.computer().stallProtection.recover() && data.pitch() > 0.0f && data.pitch() > stall.maximumSafePitch) {
-            smoothSetPitch(stall.maximumSafePitch, time.deltaTime);
-        } else if (FAConfig.computer().voidProtection.recover() && data.pitch() < voidLevel.minimumSafePitch) {
-            smoothSetPitch(voidLevel.minimumSafePitch, time.deltaTime);
+        float maximumSafePitch = 90.0f;
+        float minimumSafePitch = -90.0f;
+        for (IPitchLimiter limiter : IPitchLimiter.instances) {
+            if (limiter.getProtectionMode().recover()) {
+                maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
+                minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
+            }
+        }
+
+        if (data.pitch() > maximumSafePitch) {
+            smoothSetPitch(maximumSafePitch, time.deltaTime);
+        } else if (data.pitch() < minimumSafePitch) {
+            smoothSetPitch(minimumSafePitch, time.deltaTime);
         }
 
         if (gpws.shouldCorrectSinkrate()) {

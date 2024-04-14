@@ -8,6 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
@@ -48,10 +49,17 @@ public class AttitudeDisplay implements IHudDisplay {
 
         drawLadder(textRenderer, context, yHorizon);
 
-        drawPushArrows(textRenderer, context, stall.maximumSafePitch, yHorizon, FAConfig.indicator().warningColor);
+        float maximumSafePitch = 90.0f;
+        float minimumSafePitch = -90.0f;
+        for (IPitchLimiter limiter : IPitchLimiter.instances) {
+            maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
+            minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
+        }
+
+        drawPushArrows(textRenderer, context, maximumSafePitch, yHorizon, FAConfig.indicator().warningColor);
         drawReferenceMark(context, PitchController.CLIMB_PITCH, yHorizon, getPitchColor(PitchController.CLIMB_PITCH));
         drawReferenceMark(context, PitchController.GLIDE_PITCH, yHorizon, getPitchColor(PitchController.GLIDE_PITCH));
-        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, voidLevel.minimumSafePitch), yHorizon, FAConfig.indicator().warningColor);
+        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, Math.min(maximumSafePitch, minimumSafePitch)), yHorizon, FAConfig.indicator().warningColor);
 
         pitchData.l1 -= pitchData.margin;
         pitchData.r2 += pitchData.margin;

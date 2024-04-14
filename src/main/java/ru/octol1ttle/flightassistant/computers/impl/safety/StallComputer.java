@@ -1,13 +1,16 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class StallComputer implements ITickableComputer {
+public class StallComputer implements ITickableComputer, IPitchLimiter {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     public StallStatus status = StallStatus.UNKNOWN;
@@ -51,8 +54,19 @@ public class StallComputer implements ITickableComputer {
         return status == StallStatus.FULL_STALL ? -90.0f : MathHelper.clamp(data.speed() * 3.0f, 0.0f, 90.0f);
     }
 
-    public boolean isPitchUnsafe(float newPitch) {
-        return newPitch > maximumSafePitch || status == StallStatus.FULL_STALL;
+    @Override
+    public float getMaximumPitch() {
+        return maximumSafePitch;
+    }
+
+    @Override
+    public boolean blockPitchChange(Direction direction) {
+        return direction == Direction.UP && status == StallStatus.FULL_STALL;
+    }
+
+    @Override
+    public ComputerConfig.ProtectionMode getProtectionMode() {
+        return FAConfig.computer().stallProtection;
     }
 
     @Override

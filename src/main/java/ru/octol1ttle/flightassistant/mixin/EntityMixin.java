@@ -2,14 +2,13 @@ package ru.octol1ttle.flightassistant.mixin;
 
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
-import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 @SuppressWarnings("UnreachableCode")
@@ -24,15 +23,17 @@ public abstract class EntityMixin {
             float oldPitch = data.pitch();
             float newPitch = oldPitch + (-pitchDelta);
 
-            boolean isStalling = !ComputerRegistry.isFaulted(StallComputer.class) && ComputerRegistry.resolve(StallComputer.class).isPitchUnsafe(newPitch);
-            boolean stallLock = FAConfig.computer().stallProtection.override() && isStalling;
+            for (IPitchLimiter limiter : IPitchLimiter.instances) {
+                if (!limiter.getProtectionMode().override()
+                        || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+                    continue;
+                }
 
-            boolean gpwsLock = !isStalling && !ComputerRegistry.isFaulted(GPWSComputer.class) && ComputerRegistry.resolve(GPWSComputer.class).shouldBlockPitchChanges();
-            boolean voidLevelLock = !ComputerRegistry.isFaulted(VoidLevelComputer.class) && ComputerRegistry.resolve(VoidLevelComputer.class).shouldBlockPitchChange(newPitch);
-
-            if (stallLock && newPitch > oldPitch ||
-                    (gpwsLock || voidLevelLock) && newPitch < oldPitch) {
-                return 0.0f;
+                if (limiter.blockPitchChange(newPitch > oldPitch ? Direction.UP : Direction.DOWN)
+                        || newPitch > oldPitch && limiter.getMaximumPitch() < newPitch
+                        || newPitch < oldPitch && limiter.getMinimumPitch() > newPitch) {
+                    return 0.0f;
+                }
             }
         }
 

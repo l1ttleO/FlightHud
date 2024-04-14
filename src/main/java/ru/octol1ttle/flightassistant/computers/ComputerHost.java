@@ -19,6 +19,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
+import ru.octol1ttle.flightassistant.registries.events.CustomComputerRegistrationCallback;
 
 public class ComputerHost {
     public static ComputerHost instance() {
@@ -39,6 +40,8 @@ public class ComputerHost {
         ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new AutoFlightComputer());
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
+
+        CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();
     }
 
     public void tick() {

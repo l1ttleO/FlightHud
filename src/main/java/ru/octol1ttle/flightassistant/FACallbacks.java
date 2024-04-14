@@ -15,6 +15,7 @@ import net.minecraft.util.TypedActionResult;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.commands.SelectCommand;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.ComputerHost;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
@@ -22,6 +23,7 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkControlle
 import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
+import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
@@ -32,6 +34,7 @@ public class FACallbacks {
         setupWorldRender();
         setupHudRender();
         setupUseItem();
+        setupComputerRegistered();
     }
 
     private static void setupClientStart() {
@@ -97,6 +100,14 @@ public class FACallbacks {
             }
 
             return TypedActionResult.pass(stack);
+        });
+    }
+
+    private static void setupComputerRegistered() {
+        ComputerRegisteredCallback.EVENT.register(computer -> {
+            if (computer instanceof IPitchLimiter limiter) {
+                IPitchLimiter.instances.add(limiter);
+            }
         });
     }
 }
