@@ -43,7 +43,7 @@ public class ComputerConfig {
     public boolean openElytraAutomatically = true;
 
     @SerialEntry
-    public ProtectionMode unloadedChunkProtection = ProtectionMode.HARD;
+    public boolean preserveAltitudeInUnloadedChunk = true;
 
     public enum GlobalAutomationsMode implements NameableEnum {
         FULL,

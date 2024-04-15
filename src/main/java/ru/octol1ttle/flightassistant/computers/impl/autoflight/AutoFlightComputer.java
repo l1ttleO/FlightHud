@@ -7,17 +7,16 @@ import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
 public class AutoFlightComputer implements ITickableComputer {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
-    private final PitchController pitch = ComputerRegistry.resolve(PitchController.class);
     private final YawController yaw = ComputerRegistry.resolve(YawController.class);
 
     public boolean flightDirectorsEnabled = false;
@@ -48,7 +47,6 @@ public class AutoFlightComputer implements ITickableComputer {
             }
         }
 
-        pitch.targetPitch = autoPilotEnabled ? getTargetPitch() : null;
         yaw.targetHeading = autoPilotEnabled ? getTargetHeading() : null;
     }
 
@@ -109,7 +107,6 @@ public class AutoFlightComputer implements ITickableComputer {
         disconnectAutoFirework(true);
         disconnectAutopilot(true);
 
-        pitch.targetPitch = null;
         yaw.targetHeading = null;
     }
 }

@@ -9,7 +9,7 @@ import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -18,7 +18,7 @@ public class ExcessiveDescentAlert extends BaseAlert implements ICenteredAlert {
     private static final float SINK_RATE_THRESHOLD = 7.5f;
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
 
     @Override
     public boolean isTriggered() {

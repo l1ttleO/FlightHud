@@ -1,13 +1,9 @@
 package ru.octol1ttle.flightassistant.computers.api;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.util.math.Direction;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 
 public interface IPitchLimiter {
-    List<IPitchLimiter> instances = new ArrayList<>();
-
     default ComputerConfig.ProtectionMode getProtectionMode() {
         return ComputerConfig.ProtectionMode.HARD;
     }

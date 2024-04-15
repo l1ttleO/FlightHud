@@ -8,12 +8,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.computers.api.IComputer;
-import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
-import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -22,8 +19,7 @@ public class AttitudeDisplay implements IHudDisplay {
     public static final int DEGREES_PER_BAR = 20;
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
-    private final VoidLevelComputer voidLevel = ComputerRegistry.resolve(VoidLevelComputer.class);
+    private final PitchLimitComputer limit = ComputerRegistry.resolve(PitchLimitComputer.class);
     private final AttitudeIndicatorData pitchData = new AttitudeIndicatorData();
 
     public AttitudeDisplay(Dimensions dim) {
@@ -50,20 +46,10 @@ public class AttitudeDisplay implements IHudDisplay {
 
         drawLadder(textRenderer, context, yHorizon);
 
-        float maximumSafePitch = 90.0f;
-        float minimumSafePitch = -90.0f;
-        for (IPitchLimiter limiter : IPitchLimiter.instances) {
-            if (limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
-                continue;
-            }
-            maximumSafePitch = Math.min(maximumSafePitch, limiter.getMaximumPitch());
-            minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
-        }
-
-        drawPushArrows(textRenderer, context, maximumSafePitch, yHorizon, FAConfig.indicator().warningColor);
+        drawPushArrows(textRenderer, context, limit.maximumSafePitch, yHorizon, FAConfig.indicator().warningColor);
         drawReferenceMark(context, PitchController.CLIMB_PITCH, yHorizon, getPitchColor(PitchController.CLIMB_PITCH));
         drawReferenceMark(context, PitchController.GLIDE_PITCH, yHorizon, getPitchColor(PitchController.GLIDE_PITCH));
-        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, Math.min(maximumSafePitch, minimumSafePitch)), yHorizon, FAConfig.indicator().warningColor);
+        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, Math.min(limit.maximumSafePitch, limit.minimumSafePitch)), yHorizon, FAConfig.indicator().warningColor);
 
         pitchData.l1 -= pitchData.margin;
         pitchData.r2 += pitchData.margin;
@@ -73,7 +59,7 @@ public class AttitudeDisplay implements IHudDisplay {
     }
 
     private Color getPitchColor(float degree) {
-        return degree < Math.max(PitchController.DESCEND_PITCH, voidLevel.minimumSafePitch) || degree > stall.maximumSafePitch
+        return degree < Math.max(PitchController.DESCEND_PITCH, limit.minimumSafePitch) || degree > limit.maximumSafePitch
                 ? FAConfig.indicator().warningColor : FAConfig.indicator().frameColor;
     }
 

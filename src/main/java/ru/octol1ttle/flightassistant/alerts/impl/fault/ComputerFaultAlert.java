@@ -9,6 +9,7 @@ import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -26,8 +27,20 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
         int i = 0;
+
+        boolean drawnAlternateLaw = false;
         for (IComputer computer : ComputerRegistry.getComputers()) {
             if (ComputerRegistry.isFaulted(computer.getClass())) {
+                if (!drawnAlternateLaw && computer instanceof IPitchLimiter) {
+                    i += DrawHelper.drawHighlightedText(textRenderer, context,
+                            Text.translatable("alerts.flightassistant.fault.computers.pitch_normal_law"), x, y,
+                            FAConfig.indicator().warningColor, highlight
+                    );
+                    y += 10;
+
+                    drawnAlternateLaw = true;
+                }
+
                 i += DrawHelper.drawHighlightedText(textRenderer, context,
                         Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
                         FAConfig.indicator().warningColor, highlight

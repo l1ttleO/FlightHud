@@ -9,17 +9,17 @@ import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class UnsafeTerrainClearanceAlert extends BaseAlert implements ICenteredAlert {
-    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     @Override
     public boolean isTriggered() {
-        return gpws.landingClearanceStatus == GPWSComputer.LandingClearanceStatus.TOO_LOW;
+        return gpws.landingClearanceStatus == GroundProximityComputer.LandingClearanceStatus.TOO_LOW;
     }
 
     @Override

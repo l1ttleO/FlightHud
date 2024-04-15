@@ -1,12 +1,17 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
+import net.minecraft.util.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class ChunkStatusComputer implements ITickableComputer {
+public class ChunkStatusComputer implements ITickableComputer, IPitchController {
     private static final int WARN_THRESHOLD = 2500; // MS
     private static final int PROTECT_THRESHOLD = 5000; // MS
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
@@ -31,12 +36,21 @@ public class ChunkStatusComputer implements ITickableComputer {
         }
     }
 
-    public boolean shouldPreserveAltitude() {
-        return FAConfig.computer().unloadedChunkProtection.recover() && lastDiff >= PROTECT_THRESHOLD;
-    }
-
     public boolean shouldWarn() {
         return lastDiff >= WARN_THRESHOLD;
+    }
+
+    @Override
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getTargetPitch() {
+        if (FAConfig.computer().preserveAltitudeInUnloadedChunk && lastDiff >= PROTECT_THRESHOLD) {
+            return new Pair<>(PitchController.ALTITUDE_PRESERVE_PITCH, 1.0f);
+        }
+        return null;
+    }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.HIGH;
     }
 
     @Override

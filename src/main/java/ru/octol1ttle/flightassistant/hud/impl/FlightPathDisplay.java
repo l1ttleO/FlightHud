@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -16,7 +16,7 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class FlightPathDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
 
     public FlightPathDisplay(Dimensions dim) {
         this.dim = dim;

@@ -10,7 +10,7 @@ import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.ICenteredAlert;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -20,7 +20,7 @@ public class ExcessiveTerrainClosureAlert extends BaseAlert implements ICentered
 
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private static final float DELAY_ALERT_FOR = 0.5f;
-    private final GPWSComputer gpws = ComputerRegistry.resolve(GPWSComputer.class);
+    private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private boolean delayFull = false;
     private float delay = 0.0f;

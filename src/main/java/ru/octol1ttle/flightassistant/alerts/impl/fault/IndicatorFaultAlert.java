@@ -32,7 +32,7 @@ public class IndicatorFaultAlert extends BaseAlert implements IECAMAlert {
             Identifier id = entry.getKey();
             if (HudDisplayRegistry.isFaulted(id)) {
                 i += DrawHelper.drawText(textRenderer, context,
-                        Text.translatable("alerts.flightassistant.fault.hud." + id), x, y,
+                        Text.translatable("alerts.flightassistant.fault.hud." + id.getPath()), x, y,
                         FAConfig.indicator().cautionColor);
                 y += 10;
             }

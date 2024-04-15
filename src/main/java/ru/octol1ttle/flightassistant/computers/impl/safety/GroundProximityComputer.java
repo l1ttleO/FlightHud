@@ -1,12 +1,16 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import java.awt.Color;
+import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -14,7 +18,7 @@ import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class GPWSComputer implements ITickableComputer, IPitchLimiter {
+public class GroundProximityComputer implements ITickableComputer, IPitchLimiter, IPitchController {
     private static final int STATUS_PLAYER_INVULNERABLE = -1;
     private static final int STATUS_FALL_DISTANCE_TOO_LOW = -2;
     private static final int STATUS_SPEED_SAFE = -3;
@@ -45,15 +49,6 @@ public class GPWSComputer implements ITickableComputer, IPitchLimiter {
     public boolean isInDanger() {
         return getGPWSLampColor() == FAConfig.indicator().warningColor;
     }
-
-    public boolean shouldCorrectSinkrate() {
-        return FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD);
-    }
-
-    public boolean shouldCorrectTerrain() {
-        return FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PULL_UP_THRESHOLD);
-    }
-
 
     public Color getGPWSLampColor() {
         if (positiveLessOrEquals(descentImpactTime, PULL_UP_THRESHOLD) || positiveLessOrEquals(terrainImpactTime, PULL_UP_THRESHOLD)) {
@@ -183,6 +178,22 @@ public class GPWSComputer implements ITickableComputer, IPitchLimiter {
         terrainImpactTime = STATUS_UNKNOWN;
         landingClearanceStatus = LandingClearanceStatus.UNKNOWN;
         fireworkUseSafe = true;
+    }
+
+    @Override
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getTargetPitch() {
+        if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
+            return new Pair<>(90.0f, 1 / descentImpactTime);
+        } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
+            return new Pair<>(90.0f, 1 / terrainImpactTime);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.HIGH;
     }
 
     public enum LandingClearanceStatus {

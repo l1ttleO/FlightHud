@@ -337,10 +337,10 @@ public class FAModMenuImpl implements ModMenuApi {
                         .build())
 
                 .option(LabelOption.create(Text.translatable("config.flightassistant.computers.chunk_state")))
-                .option(Option.<ComputerConfig.ProtectionMode>createBuilder()
-                        .name(Text.translatable("config.flightassistant.computers.chunk_state.protection"))
-                        .binding(defaults.unloadedChunkProtection, () -> config.unloadedChunkProtection, o -> config.unloadedChunkProtection = o)
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ComputerConfig.ProtectionMode.class))
+                .option(Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.flightassistant.computers.chunk_state.preserve_altitude"))
+                        .binding(defaults.preserveAltitudeInUnloadedChunk, () -> config.preserveAltitudeInUnloadedChunk, o -> config.preserveAltitudeInUnloadedChunk = o)
+                        .controller(TickBoxControllerBuilder::create)
                         .build())
 
                 .build();

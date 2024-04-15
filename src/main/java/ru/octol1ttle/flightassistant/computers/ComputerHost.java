@@ -11,11 +11,13 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightCompute
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.YawController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.ProtectionsPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.ChunkStatusComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.ElytraStateController;
-import ru.octol1ttle.flightassistant.computers.impl.safety.GPWSComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -30,14 +32,16 @@ public class ComputerHost {
         ComputerRegistry.register(new AirDataComputer(mc));
         ComputerRegistry.register(new TimeComputer(mc));
         ComputerRegistry.register(new FireworkController(mc));
+        ComputerRegistry.register(new PitchLimitComputer());
+        ComputerRegistry.register(new PitchController());
+        ComputerRegistry.register(new ProtectionsPitchController());
         ComputerRegistry.register(new ChunkStatusComputer());
         ComputerRegistry.register(new StallComputer());
         ComputerRegistry.register(new VoidLevelComputer());
         ComputerRegistry.register(new FlightPlanner());
-        ComputerRegistry.register(new GPWSComputer());
+        ComputerRegistry.register(new GroundProximityComputer());
         ComputerRegistry.register(new ElytraStateController());
         ComputerRegistry.register(new YawController());
-        ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new AutoFlightComputer());
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
