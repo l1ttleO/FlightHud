@@ -16,6 +16,7 @@ import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
+// TODO: this handles too much stuff
 public class FlightPlanner extends ArrayList<Waypoint> implements ITickableComputer {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private @Nullable Waypoint targetWaypoint;
@@ -174,6 +175,20 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
     public boolean isBelowMinimums() {
         Integer minimums = getMinimums(data.groundLevel);
         return data.isFlying() && minimums != null && data.altitude() <= minimums;
+    }
+
+    public Integer getCruiseAltitude() {
+        Integer cruiseAltitude = null;
+        for (Waypoint waypoint : this) {
+            if (waypoint.targetAltitude() != null) {
+                if (cruiseAltitude == null) {
+                    cruiseAltitude = waypoint.targetAltitude();
+                }
+                cruiseAltitude = Math.max(cruiseAltitude, waypoint.targetAltitude());
+            }
+        }
+
+        return cruiseAltitude;
     }
 
     public void execute(int waypointIndex) {

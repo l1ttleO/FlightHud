@@ -36,6 +36,7 @@ public abstract class ComputerRegistry {
             throw new IllegalStateException("Computer already marked as faulted");
         }
 
+        computer.reset();
         faulted.add(clazz);
         FlightAssistant.LOGGER.error(Objects.requireNonNullElse(message, "Computer encountered a fault"), cause);
     }

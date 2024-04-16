@@ -6,11 +6,13 @@ import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.YawController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.AutopilotPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.ProtectionsPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
@@ -43,6 +45,8 @@ public class ComputerHost {
         ComputerRegistry.register(new ElytraStateController());
         ComputerRegistry.register(new YawController());
         ComputerRegistry.register(new AutoFlightComputer());
+        ComputerRegistry.register(new FlightPhaseComputer());
+        ComputerRegistry.register(new AutopilotPitchController());
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
         CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();
@@ -59,7 +63,7 @@ public class ComputerHost {
 
             try {
                 tickable.tick();
-            } catch (AssertionError e) {
+            } catch (AssertionError e) { // TODO: stop using AssertionErrors
                 ComputerRegistry.markFaulted(computer, e, "Invalid data encountered by computer");
             } catch (Throwable t) {
                 ComputerRegistry.markFaulted(computer, t, "Exception ticking computer");

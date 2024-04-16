@@ -163,6 +163,10 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
 
     @Override
     public boolean blockPitchChange(Direction direction) {
+        if (direction != Direction.UP) {
+            return false;
+        }
+
         return FAConfig.computer().sinkrateProtection.override() && positiveLessOrEquals(descentImpactTime, PULL_UP_THRESHOLD)
                 || FAConfig.computer().terrainProtection.override() && positiveLessOrEquals(terrainImpactTime, PULL_UP_THRESHOLD);
     }

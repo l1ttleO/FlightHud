@@ -51,8 +51,6 @@ public class PitchController implements ITickableComputer {
                 lastPriority = controller.getPriority();
             }
         }
-
-        //smoothSetPitch(TODO autopilotTargetPitch, time.deltaTime);
     }
 
     /**

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -16,6 +17,7 @@ public class StatusDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
+    private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
 
     public StatusDisplay(Dimensions dim) {
         this.dim = dim;
@@ -45,8 +47,12 @@ public class StatusDisplay implements IHudDisplay {
             if (distance != null) {
                 DrawHelper.drawRightAlignedText(textRenderer, context,
                         Text.translatable("status.flightassistant.waypoint_distance", distance.intValue()),
-                        x, y + 10, FAConfig.indicator().statusColor);
+                        x, y += 10, FAConfig.indicator().statusColor);
             }
+        }
+
+        if (phase.phase != FlightPhaseComputer.FlightPhase.UNKNOWN) {
+            DrawHelper.drawRightAlignedText(textRenderer, context, phase.phase.text, x, y + 10, FAConfig.indicator().statusColor);
         }
     }
 
