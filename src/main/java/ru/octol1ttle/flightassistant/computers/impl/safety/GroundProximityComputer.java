@@ -163,7 +163,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
 
     @Override
     public boolean blockPitchChange(Direction direction) {
-        if (direction != Direction.UP) {
+        if (direction != Direction.DOWN) {
             return false;
         }
 
