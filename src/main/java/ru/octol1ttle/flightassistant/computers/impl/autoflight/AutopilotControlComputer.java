@@ -132,6 +132,10 @@ public class AutopilotControlComputer implements ITickableComputer, IPitchContro
 
     @Override
     public void reset() {
+        targetPitch = null;
+        targetHeading = null;
+
+        autoflight.disconnectAutoFirework(true);
         autoflight.disconnectAutopilot(true);
     }
 }
