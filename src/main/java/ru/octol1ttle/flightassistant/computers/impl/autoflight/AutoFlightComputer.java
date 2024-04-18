@@ -14,7 +14,6 @@ public class AutoFlightComputer implements ITickableComputer {
     private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
-    private final YawController yaw = ComputerRegistry.resolve(YawController.class);
 
     public boolean flightDirectorsEnabled = false;
     public boolean autoFireworkEnabled = false;
@@ -43,8 +42,6 @@ public class AutoFlightComputer implements ITickableComputer {
                 firework.activateFirework(false);
             }
         }
-
-        yaw.targetHeading = autoPilotEnabled ? getTargetHeading() : null;
     }
 
     public @Nullable Integer getTargetSpeed() {
@@ -83,7 +80,5 @@ public class AutoFlightComputer implements ITickableComputer {
         flightDirectorsEnabled = false;
         disconnectAutoFirework(true);
         disconnectAutopilot(true);
-
-        yaw.targetHeading = null;
     }
 }

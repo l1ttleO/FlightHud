@@ -10,21 +10,7 @@ public interface IPitchController {
      * @return a pair of two floats: the first one is the target pitch, second is the delta time multiplier. If 'null', the controller doesn't want any pitch at this moment
      */
     @Nullable
-    Pair<@NotNull Float, @NotNull Float> getTargetPitch();
+    Pair<@NotNull Float, @NotNull Float> getControlledPitch();
 
-    Priority getPriority();
-
-    enum Priority {
-        HIGHEST(0),
-        HIGH(1),
-        NORMAL(2),
-        LOW(3),
-        LOWEST(4);
-
-        public final int priority;
-
-        Priority(int priority) {
-            this.priority = priority;
-        }
-    }
+    ControllerPriority getPriority();
 }

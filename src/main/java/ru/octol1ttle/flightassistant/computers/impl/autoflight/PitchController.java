@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
+import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -39,13 +40,13 @@ public class PitchController implements ITickableComputer {
             return;
         }
 
-        IPitchController.Priority lastPriority = null;
+        ControllerPriority lastPriority = null;
         for (IPitchController controller : controllers) {
             if (lastPriority != null && controller.getPriority() != lastPriority) {
                 break;
             }
 
-            Pair<@NotNull Float, @NotNull Float> targetPitch = controller.getTargetPitch();
+            Pair<@NotNull Float, @NotNull Float> targetPitch = controller.getControlledPitch();
             if (targetPitch != null) {
                 smoothSetPitch(targetPitch.getLeft(), MathHelper.clamp(time.deltaTime * targetPitch.getRight(), 0.001f, 1.0f));
                 lastPriority = controller.getPriority();

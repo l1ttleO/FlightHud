@@ -8,7 +8,7 @@ import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.AutopilotPitchComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotControlComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -17,7 +17,7 @@ public class FlightDirectorsDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
-    private final AutopilotPitchComputer autoPitch = ComputerRegistry.resolve(AutopilotPitchComputer.class);
+    private final AutopilotControlComputer autopilot = ComputerRegistry.resolve(AutopilotControlComputer.class);
 
     public FlightDirectorsDisplay(Dimensions dim) {
         this.dim = dim;
@@ -29,14 +29,14 @@ public class FlightDirectorsDisplay implements IHudDisplay {
             return;
         }
 
-        if (autoPitch.targetPitch != null) {
-            float deltaPitch = autoPitch.targetPitch - data.pitch();
+        if (autopilot.targetPitch != null) {
+            float deltaPitch = autopilot.targetPitch - data.pitch();
             int fdY = MathHelper.clamp(Math.round(dim.yMid - deltaPitch * dim.degreesPerPixel), dim.tFrame + 10, dim.bFrame - 20);
             DrawHelper.drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
         }
 
-        if (autoflight.getTargetHeading() != null) {
-            float deltaHeading = autoflight.getTargetHeading() - data.heading();
+        if (autopilot.targetHeading != null) {
+            float deltaHeading = autopilot.targetHeading - data.heading();
             if (deltaHeading < -180.0f) {
                 deltaHeading += 360.0f;
             }

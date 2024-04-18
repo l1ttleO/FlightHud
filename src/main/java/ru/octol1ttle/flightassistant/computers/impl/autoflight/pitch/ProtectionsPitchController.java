@@ -3,6 +3,7 @@ package ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch;
 import net.minecraft.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -15,7 +16,7 @@ public class ProtectionsPitchController implements IComputer, IPitchController {
     private final PitchLimitComputer limit = ComputerRegistry.resolve(PitchLimitComputer.class);
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getTargetPitch() {
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
         Pair<Float, Float> safePitches = limit.getSafePitches(ComputerConfig.ProtectionMode::recover);
 
         if (data.pitch() > safePitches.getRight()) {
@@ -28,8 +29,8 @@ public class ProtectionsPitchController implements IComputer, IPitchController {
     }
 
     @Override
-    public Priority getPriority() {
-        return Priority.HIGHEST;
+    public ControllerPriority getPriority() {
+        return ControllerPriority.HIGHEST;
     }
 
     @Override

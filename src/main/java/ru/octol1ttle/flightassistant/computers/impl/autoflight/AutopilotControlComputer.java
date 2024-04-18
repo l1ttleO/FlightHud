@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch;
+package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
@@ -6,25 +6,27 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
+import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class AutopilotPitchComputer implements ITickableComputer, IPitchController {
+public class AutopilotControlComputer implements ITickableComputer, IPitchController, IHeadingController {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     public Float targetPitch;
+    public Float targetHeading;
 
     @Override
     public void tick() {
         targetPitch = computeTargetPitch();
+        targetHeading = computeTargetHeading();
     }
 
     private Float computeTargetPitch() {
@@ -92,8 +94,16 @@ public class AutopilotPitchComputer implements ITickableComputer, IPitchControll
         return degrees;
     }
 
+    private Float computeTargetHeading() {
+        if (phase.phase == FlightPhaseComputer.FlightPhase.TAKEOFF || phase.phase == FlightPhaseComputer.FlightPhase.GO_AROUND) {
+            return data.heading();
+        }
+
+        return autoflight.getTargetHeading();
+    }
+
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getTargetPitch() {
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
         if (!autoflight.autoPilotEnabled || targetPitch == null) {
             return null;
         }
@@ -102,13 +112,22 @@ public class AutopilotPitchComputer implements ITickableComputer, IPitchControll
     }
 
     @Override
-    public Priority getPriority() {
-        return Priority.NORMAL;
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledHeading() {
+        if (!autoflight.autoPilotEnabled || targetHeading == null) {
+            return null;
+        }
+
+        return new Pair<>(targetHeading, 1.0f);
+    }
+
+    @Override
+    public ControllerPriority getPriority() {
+        return ControllerPriority.NORMAL;
     }
 
     @Override
     public String getId() {
-        return "autopilot_pitch_ctl";
+        return "autopilot_ctl";
     }
 
     @Override

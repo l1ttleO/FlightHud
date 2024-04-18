@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
@@ -185,7 +186,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getTargetPitch() {
+    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
         if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
             return new Pair<>(90.0f, 1 / descentImpactTime);
         } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
@@ -196,8 +197,8 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
-    public Priority getPriority() {
-        return Priority.HIGH;
+    public ControllerPriority getPriority() {
+        return ControllerPriority.HIGH;
     }
 
     public enum LandingClearanceStatus {
