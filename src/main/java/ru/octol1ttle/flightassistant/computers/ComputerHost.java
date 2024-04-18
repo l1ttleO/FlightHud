@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightCompute
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.YawController;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.AutopilotPitchController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.AutopilotPitchComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.ProtectionsPitchController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
@@ -46,7 +46,7 @@ public class ComputerHost {
         ComputerRegistry.register(new YawController());
         ComputerRegistry.register(new AutoFlightComputer());
         ComputerRegistry.register(new FlightPhaseComputer());
-        ComputerRegistry.register(new AutopilotPitchController());
+        ComputerRegistry.register(new AutopilotPitchComputer());
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
         CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();

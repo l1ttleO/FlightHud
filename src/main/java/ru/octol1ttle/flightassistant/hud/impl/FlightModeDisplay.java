@@ -113,10 +113,8 @@ public class FlightModeDisplay implements IHudDisplay {
 
         if (plan.landAltitude != null) {
             verticalMode.update(Text.translatable("mode.flightassistant.vert.land", plan.landAltitude));
-        } else if (!autoflight.autoPilotEnabled || diff <= 5) {
+        } else if (!autoflight.autoPilotEnabled || diff <= 10) {
             verticalMode.update(Text.translatable("mode.flightassistant.vert.alt_hold" + type, targetAltitude));
-        } else if (diff <= 10) {
-            verticalMode.update(Text.translatable("mode.flightassistant.vert.alt_approaching" + type, targetAltitude));
         } else if (targetAltitude > data.altitude()) {
             verticalMode.update(Text.translatable("mode.flightassistant.vert.climb" + type, targetAltitude));
         } else {

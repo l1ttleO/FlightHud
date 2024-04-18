@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.AutopilotPitchComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -16,6 +17,7 @@ public class FlightDirectorsDisplay implements IHudDisplay {
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final AutopilotPitchComputer autoPitch = ComputerRegistry.resolve(AutopilotPitchComputer.class);
 
     public FlightDirectorsDisplay(Dimensions dim) {
         this.dim = dim;
@@ -27,8 +29,8 @@ public class FlightDirectorsDisplay implements IHudDisplay {
             return;
         }
 
-        if (autoflight.getTargetPitch() != null) {
-            float deltaPitch = autoflight.getTargetPitch() - data.pitch();
+        if (autoPitch.targetPitch != null) {
+            float deltaPitch = autoPitch.targetPitch - data.pitch();
             int fdY = MathHelper.clamp(Math.round(dim.yMid - deltaPitch * dim.degreesPerPixel), dim.tFrame + 10, dim.bFrame - 20);
             DrawHelper.drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
         }

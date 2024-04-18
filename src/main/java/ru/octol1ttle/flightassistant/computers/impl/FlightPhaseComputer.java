@@ -75,7 +75,8 @@ public class FlightPhaseComputer implements ITickableComputer {
             float heightAboveDestination = data.altitude() - plan.landAltitude;
             minimumHeight = MathHelper.clamp(heightAboveDestination, 0.0f, minimumHeight);
 
-            if (heightAboveDestination - minimumHeight >= 5.0f || (wasAutolandAllowed && !plan.autolandAllowed)) {
+            if (heightAboveDestination - minimumHeight >= 5.0f
+                    || wasAutolandAllowed && !plan.autolandAllowed && plan.getDistanceToWaypoint() > 10.0f && heightAboveDestination > 2.0f) {
                 phase = FlightPhase.GO_AROUND;
             }
         }
@@ -87,7 +88,7 @@ public class FlightPhaseComputer implements ITickableComputer {
         return phase == FlightPhase.APPROACH || phase == FlightPhase.LAND;
     }
 
-    private boolean isNearDestination() {
+    public boolean isNearDestination() {
         return isAboutToLand() || phase == FlightPhase.GO_AROUND;
     }
 

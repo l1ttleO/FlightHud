@@ -1,11 +1,8 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector2d;
-import ru.octol1ttle.flightassistant.FAMathHelper;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -56,26 +53,6 @@ public class AutoFlightComputer implements ITickableComputer {
 
     public @Nullable Integer getTargetAltitude() {
         return selectedAltitude != null ? selectedAltitude : plan.getManagedAltitude();
-    }
-
-    public @Nullable Float getTargetPitch() {
-        if (getTargetAltitude() == null) {
-            return null;
-        }
-
-        double altitudeDelta = getTargetAltitude() - data.altitude();
-
-        double distance;
-        Vector2d planPos = plan.getTargetPosition();
-
-        boolean isTargetingApproachAltitude = plan.isOnApproach() && !plan.autolandAllowed;
-        if (planPos != null && selectedAltitude == null && !isTargetingApproachAltitude) {
-            distance = Vector2d.distance(planPos.x, planPos.y, data.position().x, data.position().z);
-        } else {
-            distance = Math.max(15.0f, data.speed() * 2.0f);
-        }
-
-        return FAMathHelper.toDegrees(MathHelper.atan2(altitudeDelta, distance));
     }
 
     public @Nullable Float getTargetHeading() {
