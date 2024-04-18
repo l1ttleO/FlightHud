@@ -15,6 +15,10 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class AutopilotOffAlert extends BaseAlert implements IECAMAlert {
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
 
+    public AutopilotOffAlert() {
+        this.hidden = true;
+    }
+
     @Override
     public boolean isTriggered() {
         return !autoflight.autoPilotEnabled;
