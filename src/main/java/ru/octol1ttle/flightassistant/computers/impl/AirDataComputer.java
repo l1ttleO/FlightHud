@@ -7,11 +7,13 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3f;
@@ -29,7 +31,7 @@ public class AirDataComputer implements ITickableComputer {
     public float roll;
     public float flightPitch;
     public float flightYaw;
-    public int groundLevel;
+    public float groundLevel;
     public Float elytraHealth;
     public boolean isCurrentChunkLoaded;
 
@@ -93,12 +95,12 @@ public class AirDataComputer implements ITickableComputer {
         return null;
     }
 
-    private int computeGroundLevel() {
+    private float computeGroundLevel() {
         if (!isCurrentChunkLoaded) {
             return groundLevel; // last known cache
         }
-        BlockPos ground = findGround(player().getBlockPos().mutableCopy());
-        return ground == null ? voidLevel() : ground.getY();
+        Vec3d ground = findGround(player().getBlockPos().mutableCopy());
+        return ground == null ? voidLevel() : (float) ground.getY();
     }
 
     public boolean isGround(BlockPos pos) {
@@ -106,18 +108,19 @@ public class AirDataComputer implements ITickableComputer {
         return !block.isAir();
     }
 
-    public BlockPos findGround(BlockPos.Mutable from) { // TODO: use heightmap/raycast
+    public Vec3d findGround(BlockPos.Mutable from) {
         if (!isChunkLoadedAt(from)) {
             return null;
         }
-        int start = from.getY();
 
-        while (from.getY() >= world().getBottomY()) {
-            if (isGround(from.move(Direction.DOWN)) || start - from.getY() > 1500) {
-                return from;
-            }
-        }
-        return null;
+        BlockHitResult result = world().raycast(new RaycastContext(
+                position().offset(Direction.UP, 0.5),
+                position().withAxis(Direction.Axis.Y, voidLevel()),
+                RaycastContext.ShapeType.COLLIDER,
+                RaycastContext.FluidHandling.ANY,
+                player()
+        ));
+        return result.getPos();
     }
 
     public static float toHeading(float yawDegrees) {
@@ -164,11 +167,7 @@ public class AirDataComputer implements ITickableComputer {
     }
 
     public float heightAboveGround() {
-        float height = Math.max(0.0f, altitude() - groundLevel);
-        if (height < 1.0f && isCurrentChunkLoaded) {
-            throw new AssertionError(height);
-        }
-        return height;
+        return altitude() - groundLevel;
     }
 
     public int voidLevel() {

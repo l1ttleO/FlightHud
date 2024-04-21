@@ -152,7 +152,7 @@
   "alerts.flightassistant.fault.hud.speed": "ОТКАЗ ИНДИК СКОР",
   "alerts.flightassistant.fault.hud.status": "ОТКАЗ ИНДИК СТАТУСА",
   "alerts.flightassistant.fault.hud.flt_dir": "ОТКАЗ УКАЗАТ ПОЛЕТА",
-  "alerts.flightassistant.fault.hud.radar": "ОТКАЗ ИНДИК РАДИОВЫС",
+  "alerts.flightassistant.fault.hud.radar_altitude": "ОТКАЗ ИНДИК РАДИОВЫС",
   "alerts.flightassistant.fault.hud.ground_speed": "ОТКАЗ ИНДИК ГОРИЗ СКОР",
   "alerts.flightassistant.fault.hud.vertical_speed": "ОТКАЗ ИНДИК ВЕРТ СКОР",
 

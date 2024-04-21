@@ -5,6 +5,7 @@ import java.util.Objects;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
@@ -44,7 +45,8 @@ public class AltitudeDisplay implements IHudDisplay {
         int yFloor = dim.yMid - floorOffset;
         int xAltText = right + 5;
 
-        int safeLevel = data.groundLevel == data.voidLevel() ? data.voidLevel() + 16 : data.groundLevel;
+        int groundLevel = MathHelper.ceil(data.groundLevel);
+        int safeLevel = data.groundLevel == data.voidLevel() ? data.voidLevel() + 16 : groundLevel;
 
         if (FAConfig.indicator().showAltitudeReadout) {
             Color color = getAltitudeColor(safeLevel, data.altitude());
@@ -55,7 +57,7 @@ public class AltitudeDisplay implements IHudDisplay {
         if (FAConfig.indicator().showAltitudeScale) {
             for (int i = -130; i < 1300; i++) {
                 int y = (dim.hScreen - i * blocksPerPixel) - yFloor;
-                if (y > (bottom - 5) || i < data.groundLevel) {
+                if (y > (bottom - 5) || i < groundLevel) {
                     continue;
                 }
                 if (y < top) {
@@ -66,8 +68,8 @@ public class AltitudeDisplay implements IHudDisplay {
                 Integer targetAltitude = autoflight.getTargetAltitude();
                 Integer minimums = plan.getMinimums(data.groundLevel);
 
-                boolean forceMark = shouldForceMark(i, data.groundLevel, targetAltitude, minimums);
-                boolean enoughSpace = isEnoughSpace(i, data.groundLevel, targetAltitude, minimums);
+                boolean forceMark = shouldForceMark(i, groundLevel, targetAltitude, minimums);
+                boolean enoughSpace = isEnoughSpace(i, groundLevel, targetAltitude, minimums);
 
                 if (forceMark || i % 50 == 0 && enoughSpace) {
                     DrawHelper.drawHorizontalLine(context, left, right + 2, y, color);
@@ -105,7 +107,7 @@ public class AltitudeDisplay implements IHudDisplay {
     }
 
     private Color getAltitudeColor(int safeLevel, float altitude) {
-        if (altitude <= safeLevel) {
+        if (!data.player().isOnGround() && altitude <= safeLevel) {
             return FAConfig.indicator().warningColor;
         }
 

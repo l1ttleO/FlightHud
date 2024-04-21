@@ -1,6 +1,7 @@
 package ru.octol1ttle.flightassistant.computers.impl.navigation;
 
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 
@@ -12,14 +13,14 @@ public class LandingWaypoint extends Waypoint {
         this.minimums = minimums;
     }
 
-    public Integer minimums(int ground) {
+    public Integer minimums(double ground) {
         if (minimums == null) {
             return null;
         }
 
         return switch (minimums.type()) {
             case ABSOLUTE -> minimums.altitude();
-            case ABOVE_GROUND -> ground + minimums.altitude();
+            case ABOVE_GROUND -> MathHelper.ceil(ground + minimums.altitude());
         };
     }
 

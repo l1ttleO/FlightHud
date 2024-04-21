@@ -34,7 +34,7 @@ public class RadarAltitudeDisplay implements IHudDisplay {
 
         int bottom = dim.bFrame;
         int xAltText = dim.rFrame + 7;
-        int safeLevel = data.groundLevel == data.voidLevel() ? data.voidLevel() + 16 : data.groundLevel;
+        int safeLevel = data.groundLevel == data.voidLevel() ? data.voidLevel() + 16 : MathHelper.ceil(data.groundLevel);
         Color color = getAltitudeColor(safeLevel, data.altitude());
 
         DrawHelper.drawText(textRenderer, context, Text.translatable(data.groundLevel == data.voidLevel() ? "flightassistant.void_level" : "flightassistant.ground_level"), xAltText - 10, bottom, color);

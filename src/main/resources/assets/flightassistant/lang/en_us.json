@@ -152,7 +152,7 @@
   "alerts.flightassistant.fault.hud.speed": "SPD DISPLAY FAULT",
   "alerts.flightassistant.fault.hud.status": "STATUS DISPLAY FAULT",
   "alerts.flightassistant.fault.hud.flt_dir": "FLT DIR FAULT",
-  "alerts.flightassistant.fault.hud.radar": "R/ALT DISPLAY FAULT",
+  "alerts.flightassistant.fault.hud.radar_altitude": "R/ALT DISPLAY FAULT",
   "alerts.flightassistant.fault.hud.ground_speed": "G/SPD DISPLAY FAULT",
   "alerts.flightassistant.fault.hud.vertical_speed": "V/SPD DISPLAY FAULT",
 

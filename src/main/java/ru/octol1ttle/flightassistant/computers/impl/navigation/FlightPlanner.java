@@ -56,11 +56,11 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
             return false;
         }
 
-        BlockPos landPos = data.findGround(new BlockPos.Mutable(target.x, data.world().getTopY(), target.y));
+        Vec3d landPos = data.findGround(new BlockPos.Mutable(target.x, data.world().getTopY(), target.y));
         if (landPos == null) {
             return false;
         }
-        landAltitude = landPos.getY();
+        landAltitude = MathHelper.ceil(landPos.getY());
 
         float minimumHeight = Math.min(data.heightAboveGround(), Math.abs(data.altitude() - landAltitude));
         if (distance / minimumHeight >= AirDataComputer.OPTIMUM_GLIDE_RATIO) {
@@ -156,7 +156,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
         return this.get(index);
     }
 
-    public @Nullable Integer getMinimums(int ground) {
+    public @Nullable Integer getMinimums(double ground) {
         if (targetWaypoint instanceof LandingWaypoint land) {
             return land.minimums(ground);
         }
