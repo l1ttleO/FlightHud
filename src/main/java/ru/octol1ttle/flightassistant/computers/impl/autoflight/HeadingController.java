@@ -6,6 +6,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
@@ -13,7 +14,7 @@ import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
 
-public class HeadingController implements ITickableComputer {
+public class HeadingController implements ITickableComputer, IAutopilotProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private final List<IHeadingController> controllers = new ArrayList<>();
@@ -38,9 +39,9 @@ public class HeadingController implements ITickableComputer {
                 break;
             }
 
-            Pair<@NotNull Float, @NotNull Float> targetPitch = controller.getControlledHeading();
-            if (targetPitch != null) {
-                smoothSetHeading(targetPitch.getLeft(), MathHelper.clamp(time.deltaTime * targetPitch.getRight(), 0.001f, 1.0f));
+            Pair<@NotNull Float, @NotNull Float> targetHeading = controller.getControlledHeading();
+            if (targetHeading != null) {
+                smoothSetHeading(targetHeading.getLeft(), MathHelper.clamp(time.deltaTime * targetHeading.getRight(), 0.001f, 1.0f));
                 lastPriority = controller.getPriority();
             }
         }

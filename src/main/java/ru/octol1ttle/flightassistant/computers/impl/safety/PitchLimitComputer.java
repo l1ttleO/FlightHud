@@ -2,17 +2,18 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.Direction;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
 
-public class PitchLimitComputer implements ITickableComputer {
+public class PitchLimitComputer implements ITickableComputer, INormalLawProvider {
     private final List<IPitchLimiter> limiters = new ArrayList<>();
     public float minimumSafePitch = -90.0f;
     public float maximumSafePitch = 90.0f;
@@ -40,14 +41,14 @@ public class PitchLimitComputer implements ITickableComputer {
 
     /**
      * Gets the pitches which are considered safe by pitch limiters satisfying a condition.
-     * @param condition The condition that pitch limiters' protection mode must satisfy in order to be considered
+     * @param predicate The condition that pitch limiters' protection mode must satisfy in order to be considered
      * @return a pair of two floats: the first one is the minimum safe pitch, second is the maximum safe pitch
      */
-    public Pair<Float, Float> getSafePitches(Function<ComputerConfig.ProtectionMode, Boolean> condition) {
+    public Pair<Float, Float> getSafePitches(Predicate<ComputerConfig.ProtectionMode> predicate) {
         float minimum = -90.0f;
         float maximum = 90.0f;
         for (IPitchLimiter limiter : limiters) {
-            if (!condition.apply(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+            if (!predicate.test(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
                 continue;
             }
 
@@ -58,9 +59,9 @@ public class PitchLimitComputer implements ITickableComputer {
         return new Pair<>(minimum, maximum);
     }
 
-    public boolean blockPitchChange(Direction direction, Function<ComputerConfig.ProtectionMode, Boolean> condition) {
+    public boolean blockPitchChange(Direction direction, Predicate<ComputerConfig.ProtectionMode> predicate) {
         for (IPitchLimiter limiter : limiters) {
-            if (!condition.apply(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+            if (!predicate.test(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
                 continue;
             }
 

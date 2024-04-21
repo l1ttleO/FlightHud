@@ -1,19 +1,30 @@
-package ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch;
+package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
-import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
+import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class ProtectionsPitchController implements IComputer, IPitchController {
+public class FlightProtectionsComputer implements ITickableComputer, IPitchController, INormalLawProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final PitchLimitComputer limit = ComputerRegistry.resolve(PitchLimitComputer.class);
+    public FlightControlLaw law = FlightControlLaw.NORMAL;
+
+    @Override
+    public void tick() {
+        if (ComputerRegistry.anyFaulted(computer -> computer instanceof INormalLawProvider)) {
+            law = FlightControlLaw.ALTERNATE;
+            return;
+        }
+
+        law = FlightControlLaw.NORMAL;
+    }
 
     @Override
     public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
@@ -35,10 +46,16 @@ public class ProtectionsPitchController implements IComputer, IPitchController {
 
     @Override
     public String getId() {
-        return "pitch_normal_law";
+        return "flight_prot";
     }
 
     @Override
     public void reset() {
+        law = FlightControlLaw.NORMAL;
+    }
+
+    public enum FlightControlLaw {
+        NORMAL,
+        ALTERNATE
     }
 }

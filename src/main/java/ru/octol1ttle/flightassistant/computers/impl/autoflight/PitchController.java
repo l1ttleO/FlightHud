@@ -7,6 +7,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
+import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -15,7 +16,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
 
-public class PitchController implements ITickableComputer {
+public class PitchController implements ITickableComputer, INormalLawProvider {
     public static final float CLIMB_PITCH = 55.0f;
     public static final float ALTITUDE_PRESERVE_PITCH = 15.0f;
     public static final float GLIDE_PITCH = -2.2f;

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
@@ -15,7 +16,7 @@ import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class AutopilotControlComputer implements ITickableComputer, IPitchController, IHeadingController {
+public class AutopilotControlComputer implements ITickableComputer, IPitchController, IHeadingController, IAutopilotProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);

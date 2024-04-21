@@ -1,19 +1,22 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
+import ru.octol1ttle.flightassistant.computers.impl.safety.FlightProtectionsComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 
-public class AutoFlightComputer implements ITickableComputer {
+public class AutoFlightComputer implements ITickableComputer, IAutopilotProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
+    private final FlightProtectionsComputer prot = ComputerRegistry.resolve(FlightProtectionsComputer.class);
 
     public boolean flightDirectorsEnabled = false;
     public boolean autoFireworkEnabled = false;
@@ -41,6 +44,12 @@ public class AutoFlightComputer implements ITickableComputer {
                     && data.pitch() > 0) {
                 firework.activateFirework(false);
             }
+        }
+
+        if (prot.law != FlightProtectionsComputer.FlightControlLaw.NORMAL
+                || ComputerRegistry.anyFaulted(computer -> computer instanceof IAutopilotProvider)) {
+            disconnectAutoFirework(true);
+            disconnectAutopilot(true);
         }
     }
 

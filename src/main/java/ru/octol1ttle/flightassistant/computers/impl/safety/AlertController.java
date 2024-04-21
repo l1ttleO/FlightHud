@@ -5,9 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.client.sound.SoundManager;
 import ru.octol1ttle.flightassistant.AlertSoundInstance;
-import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
+import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.impl.autoflight.AutoFireworkOffAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.autoflight.AutopilotOffAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.fault.ComputerFaultAlert;
@@ -21,9 +21,10 @@ import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.ExcessiveDescentAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.ExcessiveTerrainClosureAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.UnsafeTerrainClearanceAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.other.ElytraHealthLowAlert;
+import ru.octol1ttle.flightassistant.alerts.impl.other.ProtectionsLostAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.other.StallAlert;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.registries.AlertRegistry;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.CustomAlertRegistrationCallback;
@@ -37,19 +38,20 @@ public class AlertController implements ITickableComputer {
         this.manager = manager;
         // TODO: ECAM actions
         AlertRegistry.register(new StallAlert());
-        AlertRegistry.register(new UnloadedChunkAlert());
         AlertRegistry.register(new ExcessiveDescentAlert());
         AlertRegistry.register(new ExcessiveTerrainClosureAlert());
         AlertRegistry.register(new UnsafeTerrainClearanceAlert());
         AlertRegistry.register(new AutopilotOffAlert());
+        AlertRegistry.register(new ProtectionsLostAlert());
+        AlertRegistry.register(new UnloadedChunkAlert());
         AlertRegistry.register(new ComputerFaultAlert());
-        AlertRegistry.register(new IndicatorFaultAlert());
         AlertRegistry.register(new AutoFireworkOffAlert());
         AlertRegistry.register(new MinimumsAlert());
         AlertRegistry.register(new ApproachingVoidDamageLevelAlert());
         AlertRegistry.register(new ElytraHealthLowAlert());
         AlertRegistry.register(new FireworkUnsafeAlert());
         AlertRegistry.register(new FireworkNoResponseAlert());
+        AlertRegistry.register(new IndicatorFaultAlert());
 
         CustomAlertRegistrationCallback.EVENT.invoker().registerCustomAlerts();
     }

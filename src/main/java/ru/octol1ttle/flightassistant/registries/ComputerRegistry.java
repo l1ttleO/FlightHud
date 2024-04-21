@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.FlightAssistant;
@@ -47,6 +48,16 @@ public abstract class ComputerRegistry {
 
     public static boolean anyFaulted() {
         return !faulted.isEmpty();
+    }
+
+    public static boolean anyFaulted(Predicate<IComputer> predicate) {
+        for (Class<IComputer> clazz : faulted) {
+            if (predicate.test(instances.get(clazz))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static void resetFaulted() {

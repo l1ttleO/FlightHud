@@ -137,7 +137,7 @@
   "alerts.flightassistant.fault.computers.heading_ctl": "ОТКАЗ АВТОМ УПР КУРСОМ",
   "alerts.flightassistant.fault.computers.elytra_state": "ОТКАЗ УПР ЭЛИТРАМИ (ЗАЩИТЫ ПОТЕР)",
   "alerts.flightassistant.fault.computers.chunk_state": "ОТКАЗ СОСТ ЧАНКОВ",
-  "alerts.flightassistant.fault.computers.pitch_normal_law": "АЛЬТН РЕЖИМ УПРАВ (ЗАЩИТЫ ПОТЕР)",
+  "alerts.flightassistant.fault.computers.flight_prot": "АЛЬТН РЕЖИМ УПРАВ (ЗАЩИТЫ ПОТЕР)",
   "alerts.flightassistant.fault.computers.pitch_limit": "ОТКАЗ ОГРАНИЧ ТАНГАЖА",
   "alerts.flightassistant.fault.computers.autopilot_ctl": "ОТКАЗ АВТОПИЛОТА",
   "alerts.flightassistant.fault.computers.flight_phase": "ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА",

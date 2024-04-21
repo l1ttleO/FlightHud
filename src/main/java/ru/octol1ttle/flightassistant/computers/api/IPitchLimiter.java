@@ -3,7 +3,7 @@ package ru.octol1ttle.flightassistant.computers.api;
 import net.minecraft.util.math.Direction;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 
-public interface IPitchLimiter {
+public interface IPitchLimiter extends INormalLawProvider {
     default ComputerConfig.ProtectionMode getProtectionMode() {
         return ComputerConfig.ProtectionMode.HARD;
     }

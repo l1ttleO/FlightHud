@@ -13,7 +13,7 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkControlle
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.HeadingController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotControlComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.pitch.ProtectionsPitchController;
+import ru.octol1ttle.flightassistant.computers.impl.safety.FlightProtectionsComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.ChunkStatusComputer;
@@ -36,7 +36,7 @@ public class ComputerHost {
         ComputerRegistry.register(new FireworkController(mc));
         ComputerRegistry.register(new PitchLimitComputer());
         ComputerRegistry.register(new PitchController());
-        ComputerRegistry.register(new ProtectionsPitchController());
+        ComputerRegistry.register(new FlightProtectionsComputer());
         ComputerRegistry.register(new ChunkStatusComputer());
         ComputerRegistry.register(new StallComputer());
         ComputerRegistry.register(new VoidLevelComputer());
