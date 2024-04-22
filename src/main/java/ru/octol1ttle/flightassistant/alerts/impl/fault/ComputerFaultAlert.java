@@ -20,7 +20,7 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public @NotNull AlertSoundData getSoundData() {
-        return AlertSoundData.MASTER_WARNING;
+        return AlertSoundData.MASTER_CAUTION;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
             if (ComputerRegistry.isFaulted(computer.getClass())) {
                 i += DrawHelper.drawHighlightedText(textRenderer, context,
                         Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
-                        FAConfig.indicator().warningColor, highlight
+                        FAConfig.indicator().cautionColor, highlight
                 );
                 y += 10;
             }

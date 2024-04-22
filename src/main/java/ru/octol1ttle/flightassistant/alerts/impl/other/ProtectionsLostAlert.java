@@ -22,14 +22,14 @@ public class ProtectionsLostAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public @NotNull AlertSoundData getSoundData() {
-        return AlertSoundData.MASTER_CAUTION;
+        return AlertSoundData.MASTER_WARNING;
     }
 
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
         return DrawHelper.drawHighlightedText(textRenderer, context,
                 Text.translatable("alerts.flightassistant.fault.computers.flight_prot"), x, y,
-                FAConfig.indicator().cautionColor, highlight
+                FAConfig.indicator().warningColor, highlight
         );
     }
 }
