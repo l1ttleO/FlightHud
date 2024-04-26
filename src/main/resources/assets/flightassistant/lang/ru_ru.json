@@ -48,6 +48,7 @@
   "config.flightassistant.indicators.info.alerts": "Показывать предупреждения",
   "config.flightassistant.indicators.info.firework_count": "Показывать счётчик фейерверков",
   "config.flightassistant.indicators.info.waypoint_distance": "Показывать расстояние до точки назначения",
+  "config.flightassistant.indicators.info.flight_phase": "Показывать фазу полёта",
   "config.flightassistant.indicators.misc": "Прочее",
   "config.flightassistant.indicators.misc.attitude": "Показывать индикатор ориентации",
   "config.flightassistant.indicators.misc.flight_path": "Показывать иконку пути полёта",
@@ -158,6 +159,14 @@
 
   "status.flightassistant.firework_count": "КОЛ-ВО ФРВКОВ: %s",
   "status.flightassistant.waypoint_distance": "РАССТ: %s",
+  "status.flightassistant.phase.on_ground": "НА ЗЕМЛЕ",
+  "status.flightassistant.phase.takeoff": "ВЗЛЕТ",
+  "status.flightassistant.phase.climb": "НАБОР",
+  "status.flightassistant.phase.cruise": "КРЕЙСЕР",
+  "status.flightassistant.phase.descent": "СНИЖЕНИЕ",
+  "status.flightassistant.phase.approach": "ПОДХОД",
+  "status.flightassistant.phase.land": "ПОСАДКА",
+  "status.flightassistant.phase.go_around": "ВТОРОЙ КРУГ",
 
   "mode.flightassistant.minimums.absolute": "МИНИМ %s",
   "mode.flightassistant.minimums.relative": "МИНИМ +%s",

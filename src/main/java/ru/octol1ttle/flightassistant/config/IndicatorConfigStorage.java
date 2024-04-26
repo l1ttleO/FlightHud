@@ -72,6 +72,8 @@ public class IndicatorConfigStorage {
         public boolean showFireworkCount = true;
         @SerialEntry
         public boolean showDistanceToWaypoint = true;
+        @SerialEntry
+        public boolean showFlightPhase = true;
 
         @SerialEntry
         public boolean showAttitudeIndicator = true;
@@ -119,6 +121,7 @@ public class IndicatorConfigStorage {
             this.showAutomationStatus = false;
             this.showFireworkCount = false;
             this.showDistanceToWaypoint = false;
+            this.showFlightPhase = false;
 
             return this;
         }

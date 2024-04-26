@@ -209,6 +209,11 @@ public class FAModMenuImpl implements ModMenuApi {
                         .binding(defaults.showDistanceToWaypoint, () -> config.showDistanceToWaypoint, o -> config.showDistanceToWaypoint = o)
                         .controller(TickBoxControllerBuilder::create)
                         .build())
+                .option(Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.flightassistant.indicators.info.flight_phase"))
+                        .binding(defaults.showFlightPhase, () -> config.showFlightPhase, o -> config.showFlightPhase = o)
+                        .controller(TickBoxControllerBuilder::create)
+                        .build())
 
                 .option(LabelOption.create(Text.translatable("config.flightassistant.indicators.misc")))
                 .option(Option.<Boolean>createBuilder()

@@ -51,7 +51,7 @@ public class StatusDisplay implements IHudDisplay {
             }
         }
 
-        if (phase.phase != FlightPhaseComputer.FlightPhase.UNKNOWN) {
+        if (FAConfig.indicator().showFlightPhase && phase.phase != FlightPhaseComputer.FlightPhase.UNKNOWN) {
             DrawHelper.drawRightAlignedText(textRenderer, context, phase.phase.text, x, y + 10, FAConfig.indicator().statusColor);
         }
     }

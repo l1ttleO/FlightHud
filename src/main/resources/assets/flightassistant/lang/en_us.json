@@ -48,6 +48,7 @@
   "config.flightassistant.indicators.info.alerts": "Show alerts",
   "config.flightassistant.indicators.info.firework_count": "Show firework count",
   "config.flightassistant.indicators.info.waypoint_distance": "Show distance to waypoint",
+  "config.flightassistant.indicators.info.flight_phase": "Show flight phase",
   "config.flightassistant.indicators.misc": "Miscellaneous",
   "config.flightassistant.indicators.misc.attitude": "Show attitude",
   "config.flightassistant.indicators.misc.flight_path": "Show flight path vector icon",
