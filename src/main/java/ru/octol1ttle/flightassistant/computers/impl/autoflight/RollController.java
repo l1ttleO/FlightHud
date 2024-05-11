@@ -7,12 +7,12 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.FlightAssistant;
-import ru.octol1ttle.flightassistant.compatibility.doabarrelroll.DaBRRollActuator;
+import ru.octol1ttle.flightassistant.compatibility.doabarrelroll.DaBRRollHandler;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
-import ru.octol1ttle.flightassistant.computers.api.IRollActuator;
 import ru.octol1ttle.flightassistant.computers.api.IRollController;
+import ru.octol1ttle.flightassistant.computers.api.IRollHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
@@ -24,12 +24,12 @@ public class RollController implements ITickableComputer, INormalLawProvider {
     private final List<IRollController> controllers = new ArrayList<>();
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    private @Nullable IRollActuator rollActuator = null;
+    private @Nullable IRollHandler rollHandler = null;
 
     public RollController() {
         CustomComputerRegistrationCallback.EVENT.register(() -> {
             if (FabricLoader.getInstance().isModLoaded("do_a_barrel_roll")) {
-                ComputerRegistry.register(new DaBRRollActuator());
+                ComputerRegistry.register(new DaBRRollHandler());
             }
         });
         ComputerRegisteredCallback.EVENT.register(computer -> {
@@ -37,12 +37,12 @@ public class RollController implements ITickableComputer, INormalLawProvider {
                 controllers.add(controller);
                 controllers.sort(Comparator.comparingInt(ctl -> ctl.getPriority().priority));
             }
-            if (computer instanceof IRollActuator actuator) {
-                if (rollActuator != null) {
-                    FlightAssistant.LOGGER.warn("Multiple roll actuators found! Discarding actuator %s".formatted(actuator.getClass().getName()));
+            if (computer instanceof IRollHandler handler) {
+                if (rollHandler != null) {
+                    FlightAssistant.LOGGER.warn("Multiple roll handlers found! Discarding handler %s".formatted(handler.getClass().getName()));
                 } else {
-                    rollActuator = actuator;
-                    FlightAssistant.LOGGER.info("Active roll actuator is %s".formatted(rollActuator.getClass().getName()));
+                    rollHandler = handler;
+                    FlightAssistant.LOGGER.info("Active roll handler is %s".formatted(rollHandler.getClass().getName()));
                 }
             }
         });
@@ -50,7 +50,7 @@ public class RollController implements ITickableComputer, INormalLawProvider {
 
     @Override
     public void tick() {
-        if (!data.canAutomationsActivate() || rollActuator == null) {
+        if (!data.canAutomationsActivate() || rollHandler == null) {
             return;
         }
 
@@ -75,7 +75,9 @@ public class RollController implements ITickableComputer, INormalLawProvider {
      * @param delta Delta time, in seconds
      */
     public void smoothSetRoll(float roll, float delta) {
-        float difference = roll - data.roll;
+        assert rollHandler != null;
+
+        float difference = roll - rollHandler.getRoll();
         if (difference < -180.0f) {
             difference += 360.0f;
         }
@@ -87,11 +89,10 @@ public class RollController implements ITickableComputer, INormalLawProvider {
         if (Math.abs(difference) < 0.05f) {
             newRoll = roll;
         } else {
-            newRoll = data.roll + difference * delta;
+            newRoll = rollHandler.getRoll() + difference * delta;
         }
 
-        assert rollActuator != null;
-        rollActuator.setRoll(newRoll);
+        rollHandler.setRoll(newRoll);
     }
 
     @Override

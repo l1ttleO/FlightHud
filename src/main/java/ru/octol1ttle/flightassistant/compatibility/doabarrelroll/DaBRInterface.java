@@ -1,14 +1,16 @@
 package ru.octol1ttle.flightassistant.compatibility.doabarrelroll;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import nl.enjarai.doabarrelroll.api.RollEntity;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public class DaBRInterface {
-    public static void setRoll(float newRoll) {
-        if (MinecraftClient.getInstance().player != null) {
-            ((RollEntity) MinecraftClient.getInstance().player).doABarrelRoll$setRoll(newRoll);
-        }
+    static float getRoll(PlayerEntity player) {
+        return ((RollEntity) player).doABarrelRoll$getRoll();
+    }
+
+    static void setRoll(PlayerEntity player, float newRoll) {
+        ((RollEntity) player).doABarrelRoll$setRoll(newRoll);
     }
 }

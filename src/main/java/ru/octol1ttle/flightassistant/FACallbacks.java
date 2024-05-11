@@ -53,7 +53,7 @@ public class FACallbacks {
     }
 
     private static void setupWorldRender() {
-        WorldRenderEvents.END.register(context ->
+        WorldRenderEvents.START.register(context ->
                 ComputerHost.instance().tick()
         );
     }
