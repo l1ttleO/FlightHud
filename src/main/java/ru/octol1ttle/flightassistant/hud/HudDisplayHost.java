@@ -6,7 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.FlightAssistant;
-import ru.octol1ttle.flightassistant.compatibility.ImmediatelyFastBatchingAccessor;
+import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.HUDConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
@@ -51,7 +51,7 @@ public class HudDisplayHost {
     }
 
     public void render(MinecraftClient mc, DrawContext context, float tickDelta) {
-        GameRendererInvoker renderer = (GameRendererInvoker) mc.gameRenderer; // TODO: replace with AW once on Loom 1.6
+        GameRendererInvoker renderer = (GameRendererInvoker) mc.gameRenderer;
         dim.update(context, renderer.invokeGetFov(mc.gameRenderer.getCamera(), tickDelta, true));
 
         float hudScale = FAConfig.hud().hudScale;
@@ -59,41 +59,26 @@ public class HudDisplayHost {
 
         context.getMatrices().push();
         context.getMatrices().scale(hudScale, hudScale, hudScale);
-
-        if (batchAll) {
-            ImmediatelyFastBatchingAccessor.beginHudBatching();
-        }
+        HUDBatching.tryBeginIf(batchAll);
 
         for (Map.Entry<Identifier, IHudDisplay> entry : HudDisplayRegistry.getDisplays()) {
             Identifier id = entry.getKey();
             IHudDisplay display = entry.getValue();
-            drawBatchedComponent(() -> {
-                try {
-                    if (!HudDisplayRegistry.isFaulted(id)) {
-                        display.render(context, mc.textRenderer);
-                    } else {
-                        display.renderFaulted(context, mc.textRenderer);
-                    }
-                } catch (Throwable t) {
-                    HudDisplayRegistry.markFaulted(id, t, "Exception rendering display with ID: %s".formatted(id));
+            boolean perComponent = FlightAssistant.canUseBatching() && FAConfig.hud().batchedRendering == HUDConfig.BatchedRendering.PER_COMPONENT;
+            HUDBatching.tryBeginIf(perComponent);
+            try {
+                if (!HudDisplayRegistry.isFaulted(id)) {
+                    display.render(context, mc.textRenderer);
+                } else {
+                    display.renderFaulted(context, mc.textRenderer);
                 }
-            });
-        }
-        if (batchAll) {
-            ImmediatelyFastBatchingAccessor.endHudBatching();
+            } catch (Throwable t) {
+                HudDisplayRegistry.markFaulted(id, t, "Exception rendering display with ID: %s".formatted(id));
+            }
+            HUDBatching.tryEndIf(perComponent);
         }
 
+        HUDBatching.tryEndIf(batchAll);
         context.getMatrices().pop();
-    }
-
-    public void drawBatchedComponent(Runnable draw) {
-        boolean batch = FlightAssistant.canUseBatching() && FAConfig.hud().batchedRendering == HUDConfig.BatchedRendering.PER_COMPONENT;
-        if (batch) {
-            ImmediatelyFastBatchingAccessor.beginHudBatching();
-        }
-        draw.run();
-        if (batch) {
-            ImmediatelyFastBatchingAccessor.endHudBatching();
-        }
     }
 }

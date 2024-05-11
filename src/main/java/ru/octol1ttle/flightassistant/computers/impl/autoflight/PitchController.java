@@ -3,9 +3,8 @@ package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
@@ -47,9 +46,9 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
                 break;
             }
 
-            Pair<@NotNull Float, @NotNull Float> targetPitch = controller.getControlledPitch();
-            if (targetPitch != null) {
-                smoothSetPitch(targetPitch.getLeft(), MathHelper.clamp(time.deltaTime * targetPitch.getRight(), 0.001f, 1.0f));
+            ControlInput pitchInput = controller.getControlledPitch();
+            if (pitchInput != null) {
+                smoothSetPitch(pitchInput.target(), MathHelper.clamp(time.deltaTime * pitchInput.deltaTimeMultiplier(), 0.001f, 1.0f));
                 lastPriority = controller.getPriority();
             }
         }

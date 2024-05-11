@@ -1,15 +1,14 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import java.awt.Color;
-import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
@@ -186,11 +185,11 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
+    public @Nullable ControlInput getControlledPitch() {
         if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new Pair<>(90.0f, 1 / descentImpactTime);
+            return new ControlInput(90.0f, 1 / descentImpactTime);
         } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new Pair<>(90.0f, 1 / terrainImpactTime);
+            return new ControlInput(90.0f, 1 / terrainImpactTime);
         }
 
         return null;

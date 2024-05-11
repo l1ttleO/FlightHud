@@ -41,7 +41,7 @@ public class AttitudeDisplay implements IHudDisplay {
 
         context.getMatrices().push();
         context.getMatrices().translate(xMid, yMid, 0);
-        context.getMatrices().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(data.roll));
+        context.getMatrices().multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(data.roll));
         context.getMatrices().translate(-xMid, -yMid, 0);
 
         drawLadder(textRenderer, context, yHorizon);

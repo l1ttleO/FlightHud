@@ -5,7 +5,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import ru.octol1ttle.flightassistant.compatibility.ImmediatelyFastBatchingAccessor;
+import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
 
 public abstract class DrawHelper {
     private static final int SINGLE_LINE_DRAWN = 1;
@@ -32,14 +32,14 @@ public abstract class DrawHelper {
     }
 
     public static int drawHighlightedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color, boolean highlight) {
-        drawUnbatched(() -> {
-            if (highlight) {
-                DrawHelper.fill(context, x - 2, y - 1, x + textRenderer.getWidth(text) + 1, y + 8, color);
-                DrawHelper.drawText(textRenderer, context, text, x, y, getContrasting(color));
-            } else {
-                DrawHelper.drawText(textRenderer, context, text, x, y, color);
-            }
-        });
+        HUDBatching.tryEnd();
+        if (highlight) {
+            DrawHelper.fill(context, x - 2, y - 1, x + textRenderer.getWidth(text) + 1, y + 8, color);
+            DrawHelper.drawText(textRenderer, context, text, x, y, getContrasting(color));
+        } else {
+            DrawHelper.drawText(textRenderer, context, text, x, y, color);
+        }
+        HUDBatching.tryBegin();
         return SINGLE_LINE_DRAWN;
     }
 
@@ -51,16 +51,6 @@ public abstract class DrawHelper {
     // that name doe
     public static void drawHighlightedMiddleAlignedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color, boolean highlight) {
         drawHighlightedText(textRenderer, context, text, x - textRenderer.getWidth(text) / 2, y, color, highlight);
-    }
-
-    public static void drawUnbatched(Runnable draw) {
-        if (FlightAssistant.isHUDBatched()) {
-            ImmediatelyFastBatchingAccessor.endHudBatching();
-        }
-        draw.run();
-        if (FlightAssistant.isHUDBatched()) {
-            ImmediatelyFastBatchingAccessor.beginHudBatching();
-        }
     }
 
     public static void drawHorizontalLine(DrawContext context, int x1, int x2, int y, Color color) {

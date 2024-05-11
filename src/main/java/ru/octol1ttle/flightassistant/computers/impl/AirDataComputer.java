@@ -69,11 +69,8 @@ public class AirDataComputer implements ITickableComputer {
         };
     }
 
-    private float computeRoll(Matrix3f normalMatrix) {
-        float y = normalMatrix.getRowColumn(0, 1);
-        float x = normalMatrix.getRowColumn(1, 1);
-
-        return validate(FAMathHelper.toDegrees(Math.atan2(y, x)), 180.0f);
+    private float computeRoll(Matrix3f matrix) {
+        return validate(FAMathHelper.toDegrees(Math.atan2(-matrix.m10(), matrix.m11())), -180.0f, 180.0f);
     }
 
     private float computeFlightPitch(Vec3d velocity, float pitch) {

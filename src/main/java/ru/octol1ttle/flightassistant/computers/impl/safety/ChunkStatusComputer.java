@@ -1,12 +1,11 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
-import net.minecraft.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -42,9 +41,9 @@ public class ChunkStatusComputer implements ITickableComputer, IPitchController 
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
+    public @Nullable ControlInput getControlledPitch() {
         if (FAConfig.computer().preserveAltitudeInUnloadedChunk && lastDiff >= PROTECT_THRESHOLD) {
-            return new Pair<>(PitchController.ALTITUDE_PRESERVE_PITCH, 1.0f);
+            return new ControlInput(PitchController.ALTITUDE_PRESERVE_PITCH, 1.0f);
         }
         return null;
     }

@@ -1,8 +1,8 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
@@ -27,13 +27,13 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
+    public @Nullable ControlInput getControlledPitch() {
         Pair<Float, Float> safePitches = limit.getSafePitches(ComputerConfig.ProtectionMode::recover);
 
         if (data.pitch() > safePitches.getRight()) {
-            return new Pair<>(safePitches.getRight(), 1.0f);
+            return new ControlInput(safePitches.getRight(), 1.0f);
         } else if (data.pitch() < safePitches.getLeft()) {
-            return new Pair<>(safePitches.getLeft(), 1.0f);
+            return new ControlInput(safePitches.getLeft(), 1.0f);
         }
 
         return null;

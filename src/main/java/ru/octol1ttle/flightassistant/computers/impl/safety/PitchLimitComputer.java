@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.Direction;
-import ru.octol1ttle.flightassistant.computers.api.IComputer;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
@@ -31,7 +30,7 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
         minimumSafePitch = -90.0f;
         maximumSafePitch = 90.0f;
         for (IPitchLimiter limiter : limiters) {
-            if (limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+            if (ComputerRegistry.isFaulted(limiter.getClass())) {
                 continue;
             }
             minimumSafePitch = Math.max(minimumSafePitch, limiter.getMinimumPitch());
@@ -48,7 +47,7 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
         float minimum = -90.0f;
         float maximum = 90.0f;
         for (IPitchLimiter limiter : limiters) {
-            if (!predicate.test(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+            if (!predicate.test(limiter.getProtectionMode()) || ComputerRegistry.isFaulted(limiter.getClass())) {
                 continue;
             }
 
@@ -61,7 +60,7 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
 
     public boolean blockPitchChange(Direction direction, Predicate<ComputerConfig.ProtectionMode> predicate) {
         for (IPitchLimiter limiter : limiters) {
-            if (!predicate.test(limiter.getProtectionMode()) || limiter instanceof IComputer computer && ComputerRegistry.isFaulted(computer.getClass())) {
+            if (!predicate.test(limiter.getProtectionMode()) || ComputerRegistry.isFaulted(limiter.getClass())) {
                 continue;
             }
 

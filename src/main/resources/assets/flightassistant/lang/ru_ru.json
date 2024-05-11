@@ -145,6 +145,8 @@
   "alerts.flightassistant.fault.computers.pitch_limit": "ОТКАЗ ОГРАНИЧ ТАНГАЖА",
   "alerts.flightassistant.fault.computers.autopilot_ctl": "ОТКАЗ АВТОПИЛОТА",
   "alerts.flightassistant.fault.computers.flight_phase": "ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА",
+  "alerts.flightassistant.fault.computers.roll_ctl": "ОТКАЗ АВТОМ УПР КРЕНОМ",
+  "alerts.flightassistant.fault.computers.dabr_roll": "ОТКАЗ ПРИВОДА КРЕНА DABR",
   "alerts.flightassistant.fault.hud.alert": "ОТКАЗ ИНДИК ПРЕДУПР",
   "alerts.flightassistant.fault.hud.altitude": "ОТКАЗ ИНДИК ВЫС",
   "alerts.flightassistant.fault.hud.elytra_health": "ОТКАЗ ИНДИК ЗДОР ЭЛ",

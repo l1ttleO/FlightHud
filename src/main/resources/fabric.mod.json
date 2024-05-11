@@ -43,7 +43,8 @@
   },
   "recommends": {
     "immediatelyfast": ">=1.2.0",
-    "modmenu": "*"
+    "modmenu": "*",
+    "do_a_barrel_roll": "*"
   },
   "breaks": {
     "immediatelyfast": "<1.2.0"

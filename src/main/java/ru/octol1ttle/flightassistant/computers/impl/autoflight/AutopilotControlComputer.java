@@ -1,22 +1,22 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.MathHelper;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
-import ru.octol1ttle.flightassistant.computers.api.IPitchController;
-import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
+import ru.octol1ttle.flightassistant.computers.api.IPitchController;
+import ru.octol1ttle.flightassistant.computers.api.IRollController;
+import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class AutopilotControlComputer implements ITickableComputer, IPitchController, IHeadingController, IAutopilotProvider {
+public class AutopilotControlComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
@@ -104,21 +104,30 @@ public class AutopilotControlComputer implements ITickableComputer, IPitchContro
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledPitch() {
+    public @Nullable ControlInput getControlledPitch() {
         if (!autoflight.autoPilotEnabled || targetPitch == null) {
             return null;
         }
 
-        return new Pair<>(targetPitch, 1.0f);
+        return new ControlInput(targetPitch, 1.0f);
     }
 
     @Override
-    public @Nullable Pair<@NotNull Float, @NotNull Float> getControlledHeading() {
+    public @Nullable ControlInput getControlledHeading() {
         if (!autoflight.autoPilotEnabled || targetHeading == null) {
             return null;
         }
 
-        return new Pair<>(targetHeading, 1.0f);
+        return new ControlInput(targetHeading, 1.0f);
+    }
+
+    @Override
+    public @Nullable ControlInput getControlledRoll() {
+        if (!autoflight.autoPilotEnabled || targetPitch == null && targetHeading == null) {
+            return null;
+        }
+
+        return new ControlInput(0.0f, 2.0f);
     }
 
     @Override
