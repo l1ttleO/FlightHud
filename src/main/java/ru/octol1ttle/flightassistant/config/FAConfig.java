@@ -54,7 +54,7 @@ public class FAConfig {
         return HUD_HANDLER.instance();
     }
 
-    public static IndicatorConfigStorage.IndicatorConfig indicator() {
+    public static IndicatorConfig indicator() {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) {
             throw new IllegalStateException("Attempted to retrieve indicator settings when there is no player");

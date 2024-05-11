@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.config.IndicatorConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ElytraHealthLowAlert extends BaseAlert implements IECAMAlert {
@@ -17,7 +18,7 @@ public class ElytraHealthLowAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public boolean isTriggered() {
-        return data.elytraHealth != null && data.elytraHealth <= 5.0f;
+        return data.elytraHealth != null && data.elytraHealth.getInUnits(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE) <= 5.0f;
     }
 
     @Override

@@ -17,6 +17,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.ElytraStateController
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.HUDConfig;
+import ru.octol1ttle.flightassistant.config.IndicatorConfig;
 import ru.octol1ttle.flightassistant.config.IndicatorConfigStorage;
 
 public class FAModMenuImpl implements ModMenuApi {
@@ -89,7 +90,7 @@ public class FAModMenuImpl implements ModMenuApi {
                 .build();
     }
 
-    private ConfigCategory indicators(Text name, IndicatorConfigStorage.IndicatorConfig config, IndicatorConfigStorage.IndicatorConfig defaults) {
+    private ConfigCategory indicators(Text name, IndicatorConfig config, IndicatorConfig defaults) {
         return ConfigCategory.createBuilder()
                 .name(name)
 
@@ -236,6 +237,12 @@ public class FAModMenuImpl implements ModMenuApi {
                         .binding(defaults.showElytraHealth, () -> config.showElytraHealth, o -> config.showElytraHealth = o)
                         .controller(TickBoxControllerBuilder::create)
                         .build())
+                .option(Option.<IndicatorConfig.ElytraHealthDisplayUnits>createBuilder()
+                        .name(Text.translatable("config.flightassistant.indicators.misc.elytra_health_units"))
+                        .binding(defaults.elytraHealthUnits, () -> config.elytraHealthUnits, o -> config.elytraHealthUnits = o)
+                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(IndicatorConfig.ElytraHealthDisplayUnits.class))
+                        .build()
+                )
 
                 .build();
     }

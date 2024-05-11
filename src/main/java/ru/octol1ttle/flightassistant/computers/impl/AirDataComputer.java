@@ -1,12 +1,14 @@
 package ru.octol1ttle.flightassistant.computers.impl;
 
+import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -16,11 +18,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
+import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
+import ru.octol1ttle.flightassistant.config.IndicatorConfig;
 
 import static net.minecraft.SharedConstants.TICKS_PER_SECOND;
 
@@ -32,7 +37,7 @@ public class AirDataComputer implements ITickableComputer {
     public float flightPitch;
     public float flightYaw;
     public float groundLevel;
-    public Float elytraHealth;
+    public @Nullable ElytraHealth elytraHealth = null;
     public boolean isCurrentChunkLoaded;
 
     public AirDataComputer(MinecraftClient mc) {
@@ -86,12 +91,13 @@ public class AirDataComputer implements ITickableComputer {
         return validate(FAMathHelper.toDegrees(Math.atan2(-velocity.x, velocity.z)), 180.0f);
     }
 
-    private Float computeElytraHealth() {
-        ItemStack stack = player().getEquippedStack(EquipmentSlot.CHEST);
-        if (stack != null && stack.getItem().equals(Items.ELYTRA)) {
-            float remain = (float) (stack.getMaxDamage() - stack.getDamage()) / stack.getMaxDamage();
-            return validate(remain * 100.0f, 0.0f, 100.0f);
+    private ElytraHealth computeElytraHealth() {
+        for (ItemStack stack : Iterables.concat(player().getArmorItems(), player().getHandItems())) {
+            if (Items.ELYTRA.equals(stack.getItem())) {
+                return new ElytraHealth(stack.copy());
+            }
         }
+
         return null;
     }
 
@@ -217,5 +223,41 @@ public class AirDataComputer implements ITickableComputer {
         groundLevel = 0;
         elytraHealth = null;
         isCurrentChunkLoaded = true;
+    }
+
+    public static class ElytraHealth {
+        private final ItemStack stack;
+
+        public ElytraHealth(ItemStack stack) {
+            if (!Items.ELYTRA.equals(stack.getItem())) {
+                throw new AssertionError();
+            }
+            this.stack = stack;
+        }
+
+        public float getInUnits(IndicatorConfig.ElytraHealthDisplayUnits units) {
+            float remaining = (stack.getMaxDamage() - 1) - stack.getDamage();
+            return switch (units) {
+                case REMAINING_DURABILITY -> validate(remaining, 0.0f, stack.getMaxDamage());
+                case PERCENTAGE -> validate(remaining / stack.getMaxDamage() * 100.0f, 0.0f, 100.0f);
+            };
+        }
+
+        public Text format(IndicatorConfig.ElytraHealthDisplayUnits units) {
+            if (!stack.isDamageable()) {
+                return Text.translatable("flightassistant.infinite_short");
+            }
+
+            MutableText text = DrawHelper.asText("%s", MathHelper.ceil(getInUnits(units)));
+            if (units == IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE) {
+                text.append("%");
+            }
+
+            return text;
+        }
+
+        public boolean isUsable() {
+            return stack.getMaxDamage() - stack.getDamage() > 1;
+        }
     }
 }

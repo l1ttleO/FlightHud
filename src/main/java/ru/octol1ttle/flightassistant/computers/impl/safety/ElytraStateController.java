@@ -28,7 +28,7 @@ public class ElytraStateController implements ITickableComputer {
         }
 
         boolean flying = data.isFlying() || data.player().getAbilities().flying;
-        boolean hasUsableElytra = data.elytraHealth != null && data.elytraHealth > (1 / 432.0f);
+        boolean hasUsableElytra = data.elytraHealth != null && data.elytraHealth.isUsable();
         boolean notLookingToClutch = data.pitch() > -70.0f;
         if (FAConfig.computer().openElytraAutomatically
                 && data.fallDistance() > 3.0f && !flying && hasUsableElytra && notLookingToClutch) {
