@@ -25,7 +25,7 @@ public class FlightDirectorsDisplay implements IHudDisplay {
 
     @Override
     public void render(DrawContext context, TextRenderer textRenderer) {
-        if (!autoflight.flightDirectorsEnabled) {
+        if (!autoflight.flightDirectorsEnabled || Math.abs(data.roll) >= 90.0f) {
             return;
         }
 
