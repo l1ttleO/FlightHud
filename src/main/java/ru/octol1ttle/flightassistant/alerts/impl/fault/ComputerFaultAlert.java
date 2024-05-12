@@ -9,6 +9,7 @@ import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.computers.api.IComputer;
+import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -28,9 +29,12 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
         int i = 0;
 
         for (IComputer computer : ComputerRegistry.getComputers()) {
-            if (ComputerRegistry.isFaulted(computer.getClass())) {
+            if (computer instanceof ITickableComputer tickable && ComputerRegistry.isFaulted(computer.getClass())) {
                 i += DrawHelper.drawHighlightedText(textRenderer, context,
-                        Text.translatable("alerts.flightassistant.fault.computers." + computer.getId()), x, y,
+                        /* TODO:
+                            let computers define their own Texts corresponding to their faults
+                         */
+                        Text.translatable("alerts.flightassistant.fault.computers." + tickable.getId()), x, y,
                         FAConfig.indicator().cautionColor, highlight
                 );
                 y += 10;

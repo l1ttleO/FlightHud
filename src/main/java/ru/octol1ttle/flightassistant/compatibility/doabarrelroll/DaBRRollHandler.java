@@ -20,11 +20,6 @@ public class DaBRRollHandler implements IRollHandler {
     }
 
     @Override
-    public String getId() {
-        return "dabr_roll";
-    }
-
-    @Override
     public void reset() {
     }
 }
