@@ -8,7 +8,5 @@ public interface IPitchController {
      * @return a {@link ControlInput} with {@link ControlInput#target} being the target pitch
      */
     @Nullable
-    ControlInput getControlledPitch();
-
-    ControllerPriority getPriority();
+    ControlInput getPitchInput();
 }

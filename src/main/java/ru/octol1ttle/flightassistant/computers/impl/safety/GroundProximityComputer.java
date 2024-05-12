@@ -9,10 +9,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -185,19 +185,14 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
-    public @Nullable ControlInput getControlledPitch() {
+    public @Nullable ControlInput getPitchInput() {
         if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new ControlInput(90.0f, 1 / descentImpactTime);
+            return new ControlInput(90.0f, 1 / descentImpactTime, InputPriority.HIGH);
         } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new ControlInput(90.0f, 1 / terrainImpactTime);
+            return new ControlInput(90.0f, 1 / terrainImpactTime, InputPriority.HIGH);
         }
 
         return null;
-    }
-
-    @Override
-    public ControllerPriority getPriority() {
-        return ControllerPriority.HIGH;
     }
 
     public enum LandingClearanceStatus {

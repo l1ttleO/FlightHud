@@ -5,10 +5,10 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
@@ -29,7 +29,6 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
         ComputerRegisteredCallback.EVENT.register((computer -> {
             if (computer instanceof IPitchController controller) {
                 controllers.add(controller);
-                controllers.sort(Comparator.comparingInt(ctl -> ctl.getPriority().priority));
             }
         }));
     }
@@ -40,17 +39,23 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
             return;
         }
 
-        ControllerPriority lastPriority = null;
+        List<ControlInput> inputs = new ArrayList<>();
         for (IPitchController controller : controllers) {
-            if (lastPriority != null && controller.getPriority() != lastPriority) {
+            ControlInput input = controller.getPitchInput();
+            if (input != null) {
+                inputs.add(input);
+            }
+        }
+        inputs.sort(Comparator.comparingInt(input -> input.priority().numerical));
+
+        InputPriority lastPriority = null;
+        for (ControlInput input : inputs) {
+            if (lastPriority != null && input.priority() != lastPriority) {
                 break;
             }
 
-            ControlInput pitchInput = controller.getControlledPitch();
-            if (pitchInput != null) {
-                smoothSetPitch(pitchInput.target(), MathHelper.clamp(time.deltaTime * pitchInput.deltaTimeMultiplier(), 0.001f, 1.0f));
-                lastPriority = controller.getPriority();
-            }
+            smoothSetPitch(input.target(), MathHelper.clamp(time.deltaTime * input.deltaTimeMultiplier(), 0.001f, 1.0f));
+            lastPriority = input.priority();
         }
     }
 

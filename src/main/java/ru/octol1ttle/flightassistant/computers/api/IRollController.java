@@ -9,7 +9,5 @@ public interface IRollController extends IComputer {
      * @return a {@link ControlInput} with {@link ControlInput#target} being the target roll
      */
     @Nullable
-    ControlInput getControlledRoll();
-
-    ControllerPriority getPriority();
+    ControlInput getRollInput();
 }

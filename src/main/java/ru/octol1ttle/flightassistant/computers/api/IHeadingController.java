@@ -8,7 +8,5 @@ public interface IHeadingController extends IComputer {
      * @return a {@link ControlInput} with {@link ControlInput#target} being the target heading
      */
     @Nullable
-    ControlInput getControlledHeading();
-
-    ControllerPriority getPriority();
+    ControlInput getHeadingInput();
 }

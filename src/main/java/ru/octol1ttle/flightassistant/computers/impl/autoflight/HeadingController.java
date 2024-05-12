@@ -1,13 +1,14 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -31,18 +32,23 @@ public class HeadingController implements ITickableComputer, IAutopilotProvider 
         if (!data.canAutomationsActivate()) {
             return;
         }
-
-        ControllerPriority lastPriority = null;
+        List<ControlInput> inputs = new ArrayList<>();
         for (IHeadingController controller : controllers) {
-            if (lastPriority != null && controller.getPriority() != lastPriority) {
+            ControlInput input = controller.getHeadingInput();
+            if (input != null) {
+                inputs.add(input);
+            }
+        }
+        inputs.sort(Comparator.comparingInt(input -> input.priority().numerical));
+
+        InputPriority lastPriority = null;
+        for (ControlInput input : inputs) {
+            if (lastPriority != null && input.priority() != lastPriority) {
                 break;
             }
 
-            ControlInput headingInput = controller.getControlledHeading();
-            if (headingInput != null) {
-                smoothSetHeading(headingInput.target(), MathHelper.clamp(time.deltaTime * headingInput.deltaTimeMultiplier(), 0.001f, 1.0f));
-                lastPriority = controller.getPriority();
-            }
+            smoothSetHeading(input.target(), MathHelper.clamp(time.deltaTime * input.deltaTimeMultiplier(), 0.001f, 1.0f));
+            lastPriority = input.priority();
         }
     }
 

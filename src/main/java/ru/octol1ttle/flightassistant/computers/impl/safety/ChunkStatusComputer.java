@@ -2,9 +2,9 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
@@ -41,16 +41,11 @@ public class ChunkStatusComputer implements ITickableComputer, IPitchController 
     }
 
     @Override
-    public @Nullable ControlInput getControlledPitch() {
+    public @Nullable ControlInput getPitchInput() {
         if (FAConfig.computer().preserveAltitudeInUnloadedChunk && lastDiff >= PROTECT_THRESHOLD) {
-            return new ControlInput(PitchController.ALTITUDE_PRESERVE_PITCH, 1.0f);
+            return new ControlInput(PitchController.ALTITUDE_PRESERVE_PITCH, 1.0f, InputPriority.HIGH);
         }
         return null;
-    }
-
-    @Override
-    public ControllerPriority getPriority() {
-        return ControllerPriority.HIGH;
     }
 
     @Override

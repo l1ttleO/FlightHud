@@ -5,12 +5,12 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.ControllerPriority;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IRollController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
@@ -104,35 +104,30 @@ public class AutopilotControlComputer implements ITickableComputer, IAutopilotPr
     }
 
     @Override
-    public @Nullable ControlInput getControlledPitch() {
+    public @Nullable ControlInput getPitchInput() {
         if (!autoflight.autoPilotEnabled || targetPitch == null) {
             return null;
         }
 
-        return new ControlInput(targetPitch, 1.0f);
+        return new ControlInput(targetPitch, 1.0f, InputPriority.NORMAL);
     }
 
     @Override
-    public @Nullable ControlInput getControlledHeading() {
+    public @Nullable ControlInput getHeadingInput() {
         if (!autoflight.autoPilotEnabled || targetHeading == null) {
             return null;
         }
 
-        return new ControlInput(targetHeading, 1.0f);
+        return new ControlInput(targetHeading, 1.0f, InputPriority.NORMAL);
     }
 
     @Override
-    public @Nullable ControlInput getControlledRoll() {
+    public @Nullable ControlInput getRollInput() {
         if (!autoflight.autoPilotEnabled || targetPitch == null && targetHeading == null) {
             return null;
         }
 
-        return new ControlInput(0.0f, 2.0f);
-    }
-
-    @Override
-    public ControllerPriority getPriority() {
-        return ControllerPriority.NORMAL;
+        return new ControlInput(0.0f, 2.0f, InputPriority.NORMAL);
     }
 
     @Override
