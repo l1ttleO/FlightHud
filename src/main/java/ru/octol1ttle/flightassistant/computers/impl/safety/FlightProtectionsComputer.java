@@ -27,7 +27,7 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
     }
 
     @Override
-    public @Nullable ControlInput getControlledPitch() {
+    public @Nullable ControlInput getPitchInput() {
         Pair<Float, Float> safePitches = limit.getSafePitches(ComputerConfig.ProtectionMode::recover);
 
         if (data.pitch() > safePitches.getRight()) {
