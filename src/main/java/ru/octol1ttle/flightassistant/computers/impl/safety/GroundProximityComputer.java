@@ -32,6 +32,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private static final float PITCH_CORRECT_THRESHOLD = 2.5f;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
+    private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     public float descentImpactTime = STATUS_UNKNOWN;
     public float terrainImpactTime = STATUS_UNKNOWN;
@@ -162,8 +163,19 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
+    public @Nullable ControlInput getPitchInput() {
+        if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
+            return new ControlInput(90.0f, 1 / descentImpactTime, InputPriority.HIGH);
+        } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
+            return new ControlInput(90.0f, 1 / terrainImpactTime, InputPriority.HIGH);
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean blockPitchChange(Direction direction) {
-        if (direction != Direction.DOWN) {
+        if (direction != Direction.DOWN || stall.status == StallComputer.StallStatus.FULL_STALL) {
             return false;
         }
 
@@ -182,17 +194,6 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         terrainImpactTime = STATUS_UNKNOWN;
         landingClearanceStatus = LandingClearanceStatus.UNKNOWN;
         fireworkUseSafe = true;
-    }
-
-    @Override
-    public @Nullable ControlInput getPitchInput() {
-        if (FAConfig.computer().sinkrateProtection.recover() && positiveLessOrEquals(descentImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new ControlInput(90.0f, 1 / descentImpactTime, InputPriority.HIGH);
-        } else if (FAConfig.computer().terrainProtection.recover() && positiveLessOrEquals(terrainImpactTime, PITCH_CORRECT_THRESHOLD)) {
-            return new ControlInput(90.0f, 1 / terrainImpactTime, InputPriority.HIGH);
-        }
-
-        return null;
     }
 
     public enum LandingClearanceStatus {
