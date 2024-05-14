@@ -14,7 +14,7 @@ public class AddWaypointCommand {
         WaypointUtil.throwIfFirstLanding(plan, waypoint);
 
         plan.add(waypoint);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint_created", plan.size() - 1, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint.created", plan.size() - 1, plan.size()));
         return 0;
     }
 }

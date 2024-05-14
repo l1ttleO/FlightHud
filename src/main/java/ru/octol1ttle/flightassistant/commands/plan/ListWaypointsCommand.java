@@ -24,7 +24,7 @@ public class ListWaypointsCommand {
                         landing.formatMinimums());
             } else {
                 feedback = Text.translatable(
-                        "commands.flightassistant.waypoint_info.normal",
+                        "commands.flightassistant.waypoint_info",
                         i,
                         (int) waypoint.targetPosition().x,
                         (int) waypoint.targetPosition().y,
