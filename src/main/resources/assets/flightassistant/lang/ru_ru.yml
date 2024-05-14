@@ -1,0 +1,269 @@
+mod.flightassistant: Flight Assistant
+
+key.flightassistant:
+  toggle_display_mode: Переключить режим интерфейса
+  toggle_flight_directors: Переключить указатели полёта
+  toggle_auto_firework: Переключить авто-фейерверк
+  toggle_auto_pilot: Переключить автопилот
+  hide_alert: Скрыть первое предупреждение
+  recall_alert: Показать последнее скрытое предупреждение
+  lock_manual_fireworks: Заблокировать ручные фейерверки
+
+config.flightassistant:
+  category:
+    hud_settings: Настройки HUD
+    not_flying_no_elytra: На земле (без элитр)
+    not_flying_has_elytra: На земле (с элитрами)
+    flying: В полёте
+    computer_settings: Защиты полёта
+  hud:
+    batching:
+      .: Группированная отрисовка HUD
+      no_batching: Не группировать
+      per_component: Группировать по компонентам
+      single_batch: Группировать всё целиком
+    scale: Масштаб HUD
+    frame_width: Ширина рамки HUD
+    frame_height: Высота рамки HUD
+  indicators:
+    color:
+      .: Цвета
+      frame: Цвет рамки HUD
+      status: Цвет информирующих элементов
+      advisory: Цвет указывающих элементов
+      caution: Цвет предупреждений
+      warning: Цвет опасности
+    speed:
+      .: Скорость
+      scale: Показывать шкалу скорости
+      readout: Показывать значение скорости
+      ground_readout: Показывать значение горизонтальной скорости
+      vertical_readout: Показывать значение вертикальной скорости
+    altitude:
+      .: Высота
+      scale: Показывать шкалу высоты
+      readout: Показывать значение высоты
+      ground: Показывать высоту над землёй
+    heading:
+      .: Курс
+      scale: Показывать шкалу курса
+      readout: Показывать значение курса
+    automation:
+      .: Автоматизация
+      firework: Показывать режим фейерверков
+      vertical: Показывать вертикальный режим
+      lateral: Показывать горизонтальный режим
+      status: Показывать статус автоматизации
+    info:
+      .: Информация
+      alerts: Показывать предупреждения
+      firework_count: Показывать счётчик фейерверков
+      waypoint_distance: Показывать расстояние до точки назначения
+      flight_phase: Показывать фазу полёта
+    misc:
+      .: Прочее
+      attitude: Показывать индикатор ориентации
+      flight_path: Показывать иконку пути полёта
+      coordinates: Показывать координаты
+      elytra_health: Показывать здоровье элитр
+      elytra_health_units:
+        .: Единицы здоровья элитр
+        percentage: Проценты
+        remaining_durability: Оставшаяся прочность
+  computers:
+    global:
+      .: Глобальный режим автоматизаций
+      full: Всегда включены (МОЖЕТ БЫТЬ ЗАПРЕЩЕНО НА СЕРВЕРАХ)
+      no_overlays: Только при отсутствии оверлеев
+      disabled: Выключены
+    warning:
+      screen_and_audio: Экран и звук
+      audio_only: Только звук
+      screen_only: Только экран
+      disabled: Выключено
+    protection:
+      hard: Строгая
+      soft: Мягкая
+      disabled: Выключена
+    firework:
+      .: Фейерверки
+      lock_unsafe: Блокировать опасные фейерверки
+      lock_gpws: Блокировать фейерверки при взгляде на землю
+    stall:
+      .: Сваливание
+      warning: Режим предупреждения о сваливании
+      protection: Режим защиты от сваливания
+      fireworks: Использовать фейерверки для восстановления
+    gpws:
+      .: Система предупреждения о близости земли (GPWS)
+      sinkrate:
+        warning: Режим предупреждения о быстром снижении
+        protection: Режим защиты от быстрого снижения
+      terrain:
+        warning: Режим предупреждения о приближении к земле
+        protection: Режим защиты от приближения к земле
+      landing:
+        warning: Режим предупреждения о близости с землёй при посадке
+    void_level:
+      .: Уровень пустоты
+      protection: Режим защиты от пересечения уровня пустоты
+      fireworks: Использовать фейерверки для восстановления
+    elytra_state:
+      .: Состояние элитр
+      close_underwater: Закрывать элитры под водой
+      open_automatically: Автоматически раскрывать элитры
+    chunk_state:
+      .: Состояние чанков
+      preserve_altitude: Автоматически сохранять высоту в незагруженных чанках
+
+commands.flightassistant:
+  no_such_waypoint: На указанной позиции нет точки назначения
+  nothing_to_clear: Нет точек назначения для очищения
+  first_wp_cannot_be_landing: Первая точка назначения не может быть посадочной
+  cannot_execute_from_landing: План полёта не может быть выполнен, начиная с посадочной точки назначения
+  waypoint:
+    created: Создана точка назначения с позицией %s (теперь всего %s точек назначения)
+    removed: Удалена точка назначения с позицией %s (теперь всего %s точек назначения)
+    inserted: Добавлена точка назначения на позицию %s (теперь всего %s точек назначения)
+    replaced: Заменена точка назначения на позиции %s (теперь всего %s точек назначения)
+  flight_plan:
+    cleared: Очищены все точки назначения, начиная с позиции %s (теперь всего %s точек назначения)
+    executed: Выполнен план полёта, начиная с точки назначения на позиции %s (всего %s точек назначения)
+    saved: Сохранён план полёта с %s точками назначения как "%s"
+    loaded: Загружен план полёта с %s точками назначения из "%s"
+    not_found: Не найден план полёта с таким именем
+    not_supported: Этот план полёта не может быть загружен на текущей версии Minecraft
+    load_error: Произошла ошибка при загрузке этого плана полёта
+    empty: План полёта пуст!
+  total_waypoints: Всего %s точек назначения
+  waypoint_info:
+    .: 'Позиция: %s | X: %s | Z: %s | Высота: %s | Скорость %s'
+    land: 'Позиция %s: | X: %s | Z: %s | Мин. высота снижения: %s'
+    not_set: '-'
+
+alerts.flightassistant:
+  gpws:
+    pull_up: ТЯНИ ВВЕРХ
+    sink_rate: СКОР. СНИЖЕНИЯ
+    terrain_ahead: ЗЕМЛЯ ВПЕРЕДИ
+    too_low_terrain: СЛИШКОМ НИЗКО - ЗЕМЛЯ
+    reached_minimums: ДОСТИГН МИНИМ ВЫС СНИЖ
+  stall: СВАЛИВАНИЕ
+  unloaded_chunk: ЧАНК НЕ ЗАГРУЖЕН
+  elytra_health_low: ЗДОРОВЬЕ ЭЛИТР НИЗК.
+  void_damage_level:
+    approaching: ПРИБЛИЖЕНИЕ К ВЫСОТЕ УРОНА ПУСТОТЫ
+    reached: ДОСТИГНУТА ВЫСОТА УРОНА ПУСТОТЫ
+  autoflight:
+    autopilot_off: АВТОПИЛОТ ВЫКЛ
+    auto_firework_off: АВТО-ФРВК ВЫКЛ
+  firework:
+    no_response: ФРВК ОТКАЗ
+    unsafe: ФРВК ВЗРЫВООПАСЕН
+  fault:
+    computers:
+      air_data: ОТКАЗ КДП (ИНСТР ПОТЕР)
+      time_prvd: ОТКАЗ СИСТ ВРЕМЕНИ
+      auto_flt: ОТКАЗ АВТО ПОЛЕТА
+      frwk_ctl: ОТКАЗ АВТО УПР ФРВК (ЗАЩИТЫ ПОТЕР)
+      pitch_ctl: ОТКАЗ АВТО УПР ТАНГАЖЕМ
+      flt_plan: F/ОТКАЗ ПЛАНИР ПОЛЕТА
+      alert_mgr: ОТКАЗ СИСТ ПРЕДУПР (ВСЕ ПРЕДУПР ПОТЕР)
+      gpws: ОТКАЗ GPWS
+      stall_det: ОТКАЗ СИСТ ОБНАРУЖ СВАЛИВ
+      void_level: ОТКАЗ СИСТ УРОВНЯ ПУСТОТЫ
+      heading_ctl: ОТКАЗ АВТО УПР КУРСОМ
+      flight_prot: АЛЬТН РЕЖИМ УПРАВ (ЗАЩИТЫ ПОТЕР)
+      elytra_state: ОТКАЗ УПР ЭЛИТРАМИ (ЗАЩИТЫ ПОТЕР)
+      chunk_state: ОТКАЗ СОСТ ЧАНКОВ
+      pitch_limit: ОТКАЗ ОГРАНИЧ ТАНГАЖА
+      autopilot_ctl: ОТКАЗ АВТОПИЛОТА
+      flight_phase: ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА
+      roll_ctl: ОТКАЗ АВТО УПР КРЕНОМ
+      dabr_roll: ОТКАЗ УПР КРЕНОМ DABR
+    hud:
+      alert: ОТКАЗ ИНДИК ПРЕДУПР
+      altitude: ОТКАЗ ИНДИК ВЫС
+      elytra_health: ОТКАЗ ИНДИК ЗДОР ЭЛ
+      flight_mode: ОТКАЗ ИНДИК РЕЖИМА
+      flight_path: ОТКАЗ ИНДИК ВЕКТОРА
+      heading: ОТКАЗ ИНДИК КУРСА
+      location: ОТКАЗ ИНДИК КООРД
+      attitude: ОТКАЗ ИНДИК ОРИЕНТ
+      speed: ОТКАЗ ИНДИК СКОР
+      status: ОТКАЗ ИНДИК СТАТУСА
+      flt_dir: ОТКАЗ УКАЗАТ ПОЛЕТА
+      radar_altitude: ОТКАЗ ИНДИК РАДИОВЫС
+      ground_speed: ОТКАЗ ИНДИК ГОРИЗ СКОР
+      vertical_speed: ОТКАЗ ИНДИК ВЕРТ СКОР
+
+status.flightassistant:
+  firework_count: 'КОЛ-ВО ФРВКОВ: %s'
+  waypoint_distance: 'РАССТ: %s'
+  phase:
+    on_ground: НА ЗЕМЛЕ
+    takeoff: ВЗЛЕТ
+    climb: НАБОР
+    cruise: КРЕЙСЕР
+    descent: СНИЖЕНИЕ
+    approach: ПОДХОД
+    land: ПОСАДКА
+    go_around: ВТОРОЙ КРУГ
+
+mode.flightassistant:
+  minimums:
+    absolute: МИНИМ %s
+    relative: МИНИМ +%s
+    not_set: НЕТ МИНИМ
+  firework:
+    none_in_hotbar: НЕТ ФРВКОВ
+    locked: ТОЛЬКО А/ФРВК
+    manual: РУЧН ФРВК
+    no_spd_alt: УСТАН СКОР/ВЫС
+    protection: ФРВК ЗАЩИТА
+    idle: ФРВК СНИЖ
+    climb: ФРВК НАБОР
+    speed:
+      selected: СКОР %s
+      managed: П. СКОР %s
+  vert:
+    climb:
+      selected: НАБОР %s
+      managed: П. НАБОР %s
+    descend:
+      selected: СНИЖ %s
+      managed: П. СНИЖ %s
+    alt_hold:
+      selected: ВЫС %s
+      managed: П. ВЫС %s
+    land: ПОСАДКА %s
+  lat:
+    heading: КУРС %s
+    position: ПОЗ %s %s
+    approach: ЗАХОД %s %s
+  auto:
+    flight_directors: УК
+    auto_firework: А/ФРВК
+    autopilot: АП
+
+short.flightassistant:
+  north: С
+  east: В
+  south: Ю
+  west: З
+  ground_level: З
+  void_level: П
+  elytra: Э
+  ground_speed: Г/С%s
+  vertical_speed: В/С%s
+  altitude: ВЫС
+  elytra_health: ЗДОР ЭЛ
+  infinite: БЕСК
+  flight_mode: РЕЖИМ
+  flight_path: ВЕКТОР
+  heading: КУРС
+  location: КООРД
+  attitude: ОРИЕНТ
+  speed: СКОР
+  status: СТС
+  radar: Р/ВЫС

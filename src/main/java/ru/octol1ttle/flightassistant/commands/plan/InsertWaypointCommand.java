@@ -19,7 +19,7 @@ public class InsertWaypointCommand {
 
         int waypointIndex = IntegerArgumentType.getInteger(context, "insertAt");
         plan.add(waypointIndex, waypoint);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint_inserted", waypointIndex, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint.inserted", waypointIndex, plan.size()));
         return 0;
     }
 }

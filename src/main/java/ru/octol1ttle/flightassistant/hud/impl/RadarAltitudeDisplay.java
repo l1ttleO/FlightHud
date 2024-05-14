@@ -57,7 +57,7 @@ public class RadarAltitudeDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.radar_short"), dim.rFrame - 3, dim.bFrame, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.radar"), dim.rFrame - 3, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
     @Override

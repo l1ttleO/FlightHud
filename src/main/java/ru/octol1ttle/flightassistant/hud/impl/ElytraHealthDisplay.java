@@ -35,7 +35,7 @@ public class ElytraHealthDisplay implements IHudDisplay {
                 color = percentage <= 10.0f ? FAConfig.indicator().cautionColor : FAConfig.indicator().frameColor;
             }
             DrawHelper.drawBorder(context, x - 3, y - 2, 30, color);
-            DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.elytra_short"), x - 10, y, color);
+            DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.elytra"), x - 10, y, color);
 
             DrawHelper.drawText(textRenderer, context, data.elytraHealth.format(FAConfig.indicator().elytraHealthUnits), x, y, color);
         }
@@ -43,7 +43,7 @@ public class ElytraHealthDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.elytra_health_short"),
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.elytra_health"),
                 dim.xMid, dim.bFrame,
                 FAConfig.indicator().warningColor);
     }

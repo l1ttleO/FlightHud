@@ -242,7 +242,7 @@ public class AirDataComputer implements ITickableComputer {
 
         public Text format(IndicatorConfig.ElytraHealthDisplayUnits units) {
             if (!stack.isDamageable()) {
-                return Text.translatable("flightassistant.infinite_short");
+                return Text.translatable("short.flightassistant.infinite");
             }
 
             MutableText text = DrawHelper.asText("%s", MathHelper.ceil(getInUnits(units)));

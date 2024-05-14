@@ -23,7 +23,7 @@ public class ClearWaypointsCommand {
             }
         }
 
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_cleared", fromWaypoint, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan.cleared", fromWaypoint, plan.size()));
         return 0;
     }
 }

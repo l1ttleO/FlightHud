@@ -37,7 +37,7 @@ public class LocationDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.location_short"),
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.location"),
                 dim.lFrame + 15, dim.bFrame, FAConfig.indicator().warningColor);
     }
 

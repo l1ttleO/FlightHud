@@ -90,7 +90,7 @@ public class HeadingDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.heading_short"), dim.xMid - 8, dim.tFrame - 17, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.heading"), dim.xMid - 8, dim.tFrame - 17, FAConfig.indicator().warningColor);
     }
 
     @Override
@@ -100,10 +100,10 @@ public class HeadingDisplay implements IHudDisplay {
 
     private Text headingToDirection(int degrees) {
         return switch (degrees) {
-            case 0, 360 -> Text.translatable("flightassistant.north_short");
-            case 90 -> Text.translatable("flightassistant.east_short");
-            case 180 -> Text.translatable("flightassistant.south_short");
-            case 270 -> Text.translatable("flightassistant.west_short");
+            case 0, 360 -> Text.translatable("short.flightassistant.north");
+            case 90 -> Text.translatable("short.flightassistant.east");
+            case 180 -> Text.translatable("short.flightassistant.south");
+            case 270 -> Text.translatable("short.flightassistant.west");
             default -> throw new IllegalArgumentException("Degree range out of bounds: " + degrees);
         };
     }

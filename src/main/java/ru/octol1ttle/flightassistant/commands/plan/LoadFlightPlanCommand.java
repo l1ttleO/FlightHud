@@ -24,7 +24,7 @@ public class LoadFlightPlanCommand {
 
         plan.clear();
         plan.addAll(result.getWaypoints());
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_loaded", plan.size(), name));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan.loaded", plan.size(), name));
         return 0;
     }
 }

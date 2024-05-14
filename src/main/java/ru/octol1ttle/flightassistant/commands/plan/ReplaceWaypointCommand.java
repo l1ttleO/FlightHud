@@ -16,7 +16,7 @@ public class ReplaceWaypointCommand {
         WaypointUtil.throwIfNotFound(plan, waypointIndex);
 
         plan.set(waypointIndex, waypoint);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint_replaced", waypointIndex, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint.replaced", waypointIndex, plan.size()));
         return 0;
     }
 }

@@ -14,7 +14,7 @@ public class SaveFlightPlanCommand {
         FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
         String name = StringArgumentType.getString(context, "name");
         FlightPlanSerializer.save(plan, name);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_saved", plan.size(), name));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan.saved", plan.size(), name));
         return 0;
     }
 }

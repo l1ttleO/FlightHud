@@ -57,7 +57,7 @@ public class SpeedDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawRightAlignedText(textRenderer, context, Text.translatable("flightassistant.speed_short"), dim.lFrame - 7, dim.yMid - 3, FAConfig.indicator().warningColor);
+        DrawHelper.drawRightAlignedText(textRenderer, context, Text.translatable("short.flightassistant.speed"), dim.lFrame - 7, dim.yMid - 3, FAConfig.indicator().warningColor);
     }
 
     @Override

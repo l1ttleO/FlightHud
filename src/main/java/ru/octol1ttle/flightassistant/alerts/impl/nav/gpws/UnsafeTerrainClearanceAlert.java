@@ -5,9 +5,9 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.ICenteredAlert;
+import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -33,7 +33,7 @@ public class UnsafeTerrainClearanceAlert extends BaseAlert implements ICenteredA
             return false;
         }
 
-        DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.too_low_terrain"), x, y,
+        DrawHelper.drawHighlightedMiddleAlignedText(textRenderer, context, Text.translatable("alerts.flightassistant.gpws.too_low_terrain"), x, y,
                 plan.isBelowMinimums()
                         ? FAConfig.indicator().warningColor
                         : FAConfig.indicator().cautionColor

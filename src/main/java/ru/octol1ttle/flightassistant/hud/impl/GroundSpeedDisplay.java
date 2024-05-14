@@ -28,7 +28,7 @@ public class GroundSpeedDisplay implements IHudDisplay {
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.25f);
         DrawHelper.drawText(textRenderer, context,
-                Text.translatable("flightassistant.ground_speed_short", ": %.2f".formatted(data.velocity.horizontalLength())),
+                Text.translatable("short.flightassistant.ground_speed", ": %.2f".formatted(data.velocity.horizontalLength())),
                 x, dim.bFrame, FAConfig.indicator().frameColor);
     }
 
@@ -37,7 +37,7 @@ public class GroundSpeedDisplay implements IHudDisplay {
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.25f);
 
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.ground_speed_short", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.ground_speed", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ExecutePlanCommand {
         }
 
         plan.execute(fromWaypoint);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan_executed", fromWaypoint, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.flight_plan.executed", fromWaypoint, plan.size()));
         return 0;
     }
 }

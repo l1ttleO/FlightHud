@@ -151,7 +151,7 @@ public class AttitudeDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.attitude_short"), dim.xMid, dim.yMid - 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("short.flightassistant.attitude"), dim.xMid, dim.yMid - 10, FAConfig.indicator().warningColor);
     }
 
     @Override

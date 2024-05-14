@@ -65,7 +65,7 @@ public class FlightPathDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("flightassistant.flight_path_short"), dim.xMid, dim.yMid + 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("short.flightassistant.flight_path"), dim.xMid, dim.yMid + 10, FAConfig.indicator().warningColor);
     }
 
     @Override

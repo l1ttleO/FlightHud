@@ -28,7 +28,7 @@ public class VerticalSpeedDisplay implements IHudDisplay {
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.75f - 7);
         DrawHelper.drawText(textRenderer, context,
-                Text.translatable("flightassistant.vertical_speed_short", ": %.2f".formatted(data.velocity.y)),
+                Text.translatable("short.flightassistant.vertical_speed", ": %.2f".formatted(data.velocity.y)),
                 x, dim.bFrame, data.velocity.y <= -10.0f ? FAConfig.indicator().warningColor : FAConfig.indicator().frameColor);
     }
 
@@ -37,7 +37,7 @@ public class VerticalSpeedDisplay implements IHudDisplay {
         int frameWidth = dim.rFrame - dim.lFrame;
         int x = MathHelper.floor(dim.lFrame + frameWidth * 0.75f - 7);
 
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.vertical_speed_short", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.vertical_speed", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
     @Override

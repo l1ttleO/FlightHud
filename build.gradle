@@ -1,6 +1,6 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
-	id 'maven-publish'
+    id 'me.fallenbreath.yamlang' version '1.3.1'
 }
 
 version = project.mod_version
@@ -59,7 +59,7 @@ dependencies {
 	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}+${project.minecraft_version}"
 	// Optional: Mod Menu to access the YACL config screen
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
-    // Optional: immediatelyfast for batching support to increase rendering performance
+    // Optional: ImmediatelyFast for batching support to increase rendering performance
 	modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+${project.minecraft_version}-fabric"
     // Optional: Do a Barrel Roll to control roll via RollController
     modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}+${project.minecraft_version}-fabric"
@@ -71,6 +71,11 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
+}
+
+yamlang {
+    targetSourceSets = [sourceSets.main]
+    inputDir = 'assets/flightassistant/lang'
 }
 
 tasks.withType(JavaCompile).configureEach {

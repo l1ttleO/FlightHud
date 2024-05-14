@@ -85,7 +85,7 @@ public class FlightModeDisplay implements IHudDisplay {
                 if (firework.lockManualFireworks) {
                     fireworkMode.update(Text.translatable("mode.flightassistant.firework.locked"), true);
                 } else {
-                    fireworkMode.update(Text.translatable("mode.flightassistant.firework.armed"));
+                    fireworkMode.update(Text.translatable("mode.flightassistant.firework.no_spd_alt"), true);
                 }
             }
         } else {
@@ -151,10 +151,10 @@ public class FlightModeDisplay implements IHudDisplay {
             appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.flight_directors"));
         }
         if (autoflight.autoFireworkEnabled) {
-            appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.firework"));
+            appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.auto_firework"));
         }
         if (autoflight.autoPilotEnabled) {
-            appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.pilot"));
+            appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.autopilot"));
         }
         if (automationStatus.getSiblings().isEmpty()) {
             return;
@@ -176,7 +176,7 @@ public class FlightModeDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("flightassistant.flight_mode_short"), dim.lFrame + dim.wFrame / 5, dim.bFrame - 10, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.flight_mode"), dim.lFrame + dim.wFrame / 5, dim.bFrame - 10, FAConfig.indicator().warningColor);
     }
 
     @Override

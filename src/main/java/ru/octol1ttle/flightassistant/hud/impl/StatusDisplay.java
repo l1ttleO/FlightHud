@@ -59,7 +59,7 @@ public class StatusDisplay implements IHudDisplay {
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
         DrawHelper.drawRightAlignedText(textRenderer, context,
-                Text.translatable("flightassistant.status_short"),
+                Text.translatable("short.flightassistant.status"),
                 dim.rFrame - 5, dim.tFrame + 15, FAConfig.indicator().warningColor);
     }
 

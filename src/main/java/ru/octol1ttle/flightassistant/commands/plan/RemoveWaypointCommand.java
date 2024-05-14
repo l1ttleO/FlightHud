@@ -15,7 +15,7 @@ public class RemoveWaypointCommand {
         WaypointUtil.throwIfNotFound(plan, waypointIndex);
 
         plan.remove(waypointIndex);
-        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint_removed", waypointIndex, plan.size()));
+        context.getSource().sendFeedback(Text.translatable("commands.flightassistant.waypoint.removed", waypointIndex, plan.size()));
         return 0;
     }
 }

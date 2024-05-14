@@ -24,10 +24,10 @@ public class FlightPlanLoadResult {
     }
 
     public enum LoadResultType {
-        SUCCESS(Text.translatable("commands.flightassistant.flight_plan_loaded")),
-        NOT_FOUND(Text.translatable("commands.flightassistant.flight_plan_not_found")),
-        NBT_NOT_SUPPORTED(Text.translatable("commands.flightassistant.flight_plan_not_supported")),
-        ERROR(Text.translatable("commands.flightassistant.flight_plan_load_error"));
+        SUCCESS(Text.translatable("commands.flightassistant.flight_plan.loaded")),
+        NOT_FOUND(Text.translatable("commands.flightassistant.flight_plan.not_found")),
+        NBT_NOT_SUPPORTED(Text.translatable("commands.flightassistant.flight_plan.not_supported")),
+        ERROR(Text.translatable("commands.flightassistant.flight_plan.load_error"));
 
         private final Text text;
 

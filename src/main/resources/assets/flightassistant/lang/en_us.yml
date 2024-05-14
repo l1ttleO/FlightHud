@@ -1,0 +1,269 @@
+mod.flightassistant: Flight Assistant
+
+key.flightassistant:
+  toggle_display_mode: Switch display mode
+  toggle_flight_directors: Toggle flight directors
+  toggle_auto_firework: Toggle auto-firework
+  toggle_auto_pilot: Toggle autopilot
+  hide_alert: Hide first alert
+  recall_alert: Recall last hidden alert
+  lock_manual_fireworks: Lock manual fireworks
+
+config.flightassistant:
+  category:
+    hud_settings: HUD settings
+    not_flying_no_elytra: Not flying (no Elytra)
+    not_flying_has_elytra: Not flying (with Elytra)
+    flying: Flying
+    computer_settings: Flight protections
+  hud:
+    batching:
+      .: Batched HUD rendering
+      no_batching: No batching
+      per_component: Batch per component
+      single_batch: Single batch
+    scale: HUD scale
+    frame_width: HUD frame width
+    frame_height: HUD frame height
+  indicators:
+    color:
+      .: Colors
+      frame: HUD frame color
+      status: Status color
+      advisory: Advisory color
+      caution: Caution color
+      warning: Warning color
+    speed:
+      .: Speed
+      scale: Show speed scale
+      readout: Show speed readout
+      ground_readout: Show ground speed readout
+      vertical_readout: Show vertical speed readout
+    altitude:
+      .: Altitude
+      scale: Show altitude scale
+      readout: Show altitude readout
+      ground: Show height above ground
+    heading:
+      .: Heading
+      scale: Show heading scale
+      readout: Show heading readout
+    automation:
+      .: Automation
+      firework: Show firework mode
+      vertical: Show vertical mode
+      lateral: Show lateral mode
+      status: Show automation status
+    info:
+      .: Information
+      alerts: Show alerts
+      firework_count: Show firework count
+      waypoint_distance: Show distance to waypoint
+      flight_phase: Show flight phase
+    misc:
+      .: Miscellaneous
+      attitude: Show attitude
+      flight_path: Show flight path vector icon
+      coordinates: Show coordinates
+      elytra_health: Show Elytra health
+      elytra_health_units:
+        .: Elytra health units
+        percentage: Percentage
+        remaining_durability: Remaining durability
+  computers:
+    global:
+      .: Global automations mode
+      full: Always enabled (BANNABLE ON SERVERS)
+      no_overlays: Only when no screen overlays
+      disabled: Disabled
+    warning:
+      screen_and_audio: Screen & Audio
+      audio_only: Audio Only
+      screen_only: Screen Only
+      disabled: Disabled
+    protection:
+      hard: Hard
+      soft: Soft
+      disabled: Disabled
+    firework:
+      .: Fireworks
+      lock_unsafe: Lock unsafe fireworks
+      lock_gpws: Lock fireworks when facing terrain
+    stall:
+      .: Stall
+      warning: Stall warning mode
+      protection: Stall protection mode
+      fireworks: Use fireworks for recovery
+    gpws:
+      .: Ground Proximity Warning System
+      sinkrate:
+        warning: Sinkrate warning mode
+        protection: Sinkrate protection mode
+      terrain:
+        warning: Terrain warning mode
+        protection: Terrain protection mode
+      landing:
+        warning: Landing clearance warning mode
+    void_level:
+      .: Void level
+      protection: Void level protection mode
+      fireworks: Use fireworks for recovery
+    elytra_state:
+      .: Elytra state
+      close_underwater: Close Elytra when submerged in water
+      open_automatically: Open Elytra automatically
+    chunk_state:
+      .: Chunk state
+      preserve_altitude: Automatically preserve altitude in unloaded chunks
+
+commands.flightassistant:
+  no_such_waypoint: There is no waypoint at that index
+  nothing_to_clear: There are no waypoints to clear
+  first_wp_cannot_be_landing: The first waypoint cannot be a landing waypoint
+  cannot_execute_from_landing: The flight plan cannot be executed starting from a landing waypoint
+  waypoint:
+    created: Created waypoint at index %s (now %s waypoints in total)
+    removed: Removed waypoint at index %s (now %s waypoints in total)
+    inserted: Inserted waypoint at index %s (now %s waypoints in total)
+    replaced: Replaced waypoint at index %s (now %s waypoints in total)
+  flight_plan:
+    cleared: Cleared all waypoints starting from index %s (now %s waypoints in total)
+    executed: Executed flight plan starting from waypoint at index %s (%s waypoints in total)
+    saved: Saved flight plan with %s waypoints as "%s"
+    loaded: Loaded flight plan with %s waypoints from "%s"
+    not_found: There is no plan with that name
+    not_supported: This plan cannot be loaded in the current version of Minecraft
+    load_error: There was an error loading this plan
+    empty: The flight plan is empty!
+  total_waypoints: There are %s waypoints in total
+  waypoint_info:
+    .: 'Index %s: | X: %s | Z: %s | Altitude: %s | Speed %s'
+    land: 'Index %s: | X: %s | Z: %s | Minimums: %s'
+    not_set: '-'
+
+alerts.flightassistant:
+  gpws:
+    pull_up: PULL UP
+    sink_rate: SINK RATE
+    terrain_ahead: TERRAIN AHEAD
+    too_low_terrain: TOO LOW - TERRAIN
+    reached_minimums: REACHED MINIMUMS
+  stall: STALL
+  unloaded_chunk: UNLOADED CHUNK
+  elytra_health_low: ELYTRA HEALTH LOW
+  void_damage_level:
+    approaching: APPROACHING VOID DAMAGE LEVEL
+    reached: REACHED VOID DAMAGE LEVEL
+  autoflight:
+    autopilot_off: AUTOPILOT OFF
+    auto_firework_off: AUTO-FIREWORK OFF
+  firework:
+    no_response: FRWK NO RESPONSE
+    unsafe: FRWK EXPLOSIVE
+  fault:
+    computers:
+      air_data: ADC FAULT (INSTRUMENTS LOST)
+      time_prvd: TIME PRVD FAULT
+      auto_flt: AUTO FLT SYS FAULT
+      frwk_ctl: AUTO FRWK CTL FAULT (PROT LOST)
+      pitch_ctl: AUTO PITCH CTL FAULT
+      flt_plan: F/PLAN FAULT
+      alert_mgr: ALERT SYS FAULT (ALL ALERTS LOST)
+      gpws: GPWS FAULT
+      stall_det: STALL DET FAULT
+      void_level: VOID LVL SYS FAULT
+      heading_ctl: AUTO HDG CTL FAULT
+      flight_prot: F/CTL ALTN LAW (PROT LOST)
+      elytra_state: ELYTRA SYS FAULT (PROT LOST)
+      chunk_state: CHUNK SYS FAULT
+      pitch_limit: PITCH LIMIT FAULT
+      autopilot_ctl: AUTOPILOT FAULT
+      flight_phase: F/PHASE SYS FAULT
+      roll_ctl: AUTO ROLL CTL FAULT
+      dabr_roll: DABR ROLL CTL FAULT
+    hud:
+      alert: ALERT DISPLAY FAULT
+      altitude: ALT DISPLAY FAULT
+      elytra_health: E/HLTH DISPLAY FAULT
+      flight_mode: F/MODE DISPLAY FAULT
+      flight_path: F/PATH DISPLAY FAULT
+      heading: HDG DISPLAY FAULT
+      location: LOC DISPLAY FAULT
+      attitude: ATT DISPLAY FAULT
+      speed: SPD DISPLAY FAULT
+      status: STATUS DISPLAY FAULT
+      flt_dir: FLT DIR FAULT
+      radar_altitude: R/ALT DISPLAY FAULT
+      ground_speed: G/SPD DISPLAY FAULT
+      vertical_speed: V/SPD DISPLAY FAULT
+
+status.flightassistant:
+  firework_count: 'FRWK CNT: %s'
+  waypoint_distance: 'WP/DIST: %s'
+  phase:
+    on_ground: ON GROUND
+    takeoff: TAKEOFF
+    climb: CLIMB
+    cruise: CRUISE
+    descent: DESCENT
+    approach: APPROACH
+    land: LAND
+    go_around: GO AROUND
+
+mode.flightassistant:
+  minimums:
+    absolute: MINIM %s
+    relative: MINIM +%s
+    not_set: NO MINIMS
+  firework:
+    none_in_hotbar: NO FRWKS
+    locked: A/FRWK ONLY
+    manual: MAN FRWK
+    no_spd_alt: SET SPD/ALT
+    protection: FRWK PROT
+    idle: FRWK IDLE
+    climb: FRWK CLB
+    speed:
+      selected: SPD %s
+      managed: P. SPD %s
+  vert:
+    climb:
+      selected: CLB %s
+      managed: P. CLB %s
+    descend:
+      selected: DES %s
+      managed: P. DES %s
+    alt_hold:
+      selected: ALT %s
+      managed: P. ALT %s
+    land: LAND %s
+  lat:
+    heading: HDG %s
+    position: POS %s %s
+    approach: APPR %s %s
+  auto:
+    flight_directors: FD
+    auto_firework: A/FRWK
+    autopilot: AP
+
+short.flightassistant:
+  north: N
+  east: E
+  south: S
+  west: W
+  ground_level: G
+  void_level: V
+  elytra: E
+  ground_speed: G/S%s
+  vertical_speed: V/S%s
+  altitude: ALT
+  elytra_health: E/HLTH
+  infinite: INF
+  flight_mode: F/MODE
+  flight_path: F/PATH
+  heading: HDG
+  location: LOC
+  attitude: ATT
+  speed: SPD
+  status: STS
+  radar: R/ALT

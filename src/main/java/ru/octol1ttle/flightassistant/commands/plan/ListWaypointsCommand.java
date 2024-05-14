@@ -16,19 +16,21 @@ public class ListWaypointsCommand {
             Waypoint waypoint = plan.get(i);
             Text feedback;
             if (waypoint instanceof LandingWaypoint landing) {
-                feedback = Text.translatable("commands.flightassistant.land_waypoint_info",
+                feedback = Text.translatable(
+                        "commands.flightassistant.waypoint_info.land",
                         i,
                         (int) waypoint.targetPosition().x,
                         (int) waypoint.targetPosition().y,
                         landing.formatMinimums());
             } else {
-                //noinspection WrongTypeInTranslationArgs
-                feedback = Text.translatable("commands.flightassistant.waypoint_info",
+                feedback = Text.translatable(
+                        "commands.flightassistant.waypoint_info.normal",
                         i,
                         (int) waypoint.targetPosition().x,
                         (int) waypoint.targetPosition().y,
-                        waypoint.targetAltitude() != null ? waypoint.targetAltitude() : Text.translatable("commands.flightassistant.waypoint_info_not_set"),
-                        waypoint.targetSpeed() != null ? waypoint.targetSpeed() : Text.translatable("commands.flightassistant.waypoint_info_not_set"));
+                        waypoint.targetAltitude() != null ? waypoint.targetAltitude() : Text.translatable("commands.flightassistant.waypoint_info.not_set"),
+                        waypoint.targetSpeed() != null ? waypoint.targetSpeed() : Text.translatable("commands.flightassistant.waypoint_info.not_set")
+                );
             }
 
             context.getSource().sendFeedback(feedback);

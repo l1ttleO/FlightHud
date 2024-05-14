@@ -8,7 +8,7 @@ import ru.octol1ttle.flightassistant.computers.impl.navigation.LandingWaypoint;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.Waypoint;
 
 public class WaypointUtil {
-    private static final SimpleCommandExceptionType FLIGHT_PLAN_EMPTY = new SimpleCommandExceptionType(Text.translatable("commands.flightassistant.flight_plan_empty"));
+    private static final SimpleCommandExceptionType FLIGHT_PLAN_EMPTY = new SimpleCommandExceptionType(Text.translatable("commands.flightassistant.flight_plan.empty"));
     private static final SimpleCommandExceptionType NO_SUCH_WAYPOINT = new SimpleCommandExceptionType(Text.translatable("commands.flightassistant.no_such_waypoint"));
     private static final SimpleCommandExceptionType FIRST_WAYPOINT_CANNOT_BE_LANDING = new SimpleCommandExceptionType(Text.translatable("commands.flightassistant.first_wp_cannot_be_landing"));
 
