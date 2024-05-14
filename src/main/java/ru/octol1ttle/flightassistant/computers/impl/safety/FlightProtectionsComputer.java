@@ -46,7 +46,7 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
 
     @Override
     public void reset() {
-        law = FlightControlLaw.NORMAL;
+        law = FlightControlLaw.ALTERNATE;
     }
 
     public enum FlightControlLaw {
