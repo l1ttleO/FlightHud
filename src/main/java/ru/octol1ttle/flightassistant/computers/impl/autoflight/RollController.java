@@ -55,6 +55,9 @@ public class RollController implements ITickableComputer, INormalLawProvider {
 
         List<ControlInput> inputs = new ArrayList<>();
         for (IRollController controller : controllers) {
+            if (ComputerRegistry.isFaulted(controller.getClass())) {
+                continue;
+            }
             ControlInput input = controller.getRollInput();
             if (input != null) {
                 inputs.add(input);

@@ -47,7 +47,7 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
         float minimum = -90.0f;
         float maximum = 90.0f;
         for (IPitchLimiter limiter : limiters) {
-            if (!predicate.test(limiter.getProtectionMode()) || ComputerRegistry.isFaulted(limiter.getClass())) {
+            if (ComputerRegistry.isFaulted(limiter.getClass()) || !predicate.test(limiter.getProtectionMode())) {
                 continue;
             }
 
@@ -60,7 +60,7 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
 
     public boolean blockPitchChange(Direction direction, Predicate<ComputerConfig.ProtectionMode> predicate) {
         for (IPitchLimiter limiter : limiters) {
-            if (!predicate.test(limiter.getProtectionMode()) || ComputerRegistry.isFaulted(limiter.getClass())) {
+            if (ComputerRegistry.isFaulted(limiter.getClass()) || !predicate.test(limiter.getProtectionMode())) {
                 continue;
             }
 

@@ -41,6 +41,9 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
 
         List<ControlInput> inputs = new ArrayList<>();
         for (IPitchController controller : controllers) {
+            if (ComputerRegistry.isFaulted(controller.getClass())) {
+                continue;
+            }
             ControlInput input = controller.getPitchInput();
             if (input != null) {
                 inputs.add(input);

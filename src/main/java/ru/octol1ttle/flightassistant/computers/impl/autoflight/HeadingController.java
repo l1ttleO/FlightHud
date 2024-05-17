@@ -34,6 +34,9 @@ public class HeadingController implements ITickableComputer, IAutopilotProvider 
         }
         List<ControlInput> inputs = new ArrayList<>();
         for (IHeadingController controller : controllers) {
+            if (ComputerRegistry.isFaulted(controller.getClass())) {
+                continue;
+            }
             ControlInput input = controller.getHeadingInput();
             if (input != null) {
                 inputs.add(input);
