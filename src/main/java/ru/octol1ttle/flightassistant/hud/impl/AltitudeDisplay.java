@@ -126,7 +126,7 @@ public class AltitudeDisplay implements IHudDisplay {
 
     @Override
     public void renderFaulted(DrawContext context, TextRenderer textRenderer) {
-        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant_altitude"), dim.rFrame + 7, dim.yMid - 3, FAConfig.indicator().warningColor);
+        DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.altitude"), dim.rFrame + 7, dim.yMid - 3, FAConfig.indicator().warningColor);
     }
 
     @Override
