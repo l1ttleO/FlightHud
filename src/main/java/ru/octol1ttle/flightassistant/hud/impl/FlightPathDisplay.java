@@ -24,7 +24,7 @@ public class FlightPathDisplay implements IHudDisplay {
 
     @Override
     public void render(DrawContext context, TextRenderer textRenderer) {
-        if (!FAConfig.indicator().showFlightPath) {
+        if (!FAConfig.indicator().showFlightPath || Math.abs(data.roll) > 0.001f) {
             return;
         }
 
