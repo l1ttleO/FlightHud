@@ -32,16 +32,13 @@ public class StallComputer implements ITickableComputer, IPitchLimiter {
         if (data.isInvulnerableTo(data.player().getDamageSources().fall())) {
             return StallStatus.PLAYER_INVULNERABLE;
         }
-        if (data.pitch() <= 0.0f) {
-            return StallStatus.PITCH_SAFE;
-        }
         if (data.fallDistance() <= 3.0f) {
             return StallStatus.FALL_DISTANCE_TOO_LOW;
         }
-        if (data.velocity.horizontalLength() >= -data.velocity.y) {
-            return StallStatus.AIRSPEED_SAFE;
+        if (data.pitch() - data.flightPitch <= 45.0f) {
+            return StallStatus.AOA_SAFE;
         }
-        if (data.velocity.y > -10.0f) {
+        if (data.pitch() - data.flightPitch <= 90.0f || data.velocity.y > -10.0f) {
             return StallStatus.APPROACHING_STALL;
         }
         return StallStatus.FULL_STALL;
@@ -51,7 +48,7 @@ public class StallComputer implements ITickableComputer, IPitchLimiter {
         if (!data.isFlying() || status == StallStatus.UNKNOWN || status == StallStatus.PLAYER_INVULNERABLE) {
             return 90.0f;
         }
-        return status == StallStatus.FULL_STALL ? -90.0f : MathHelper.clamp(data.speed() * 3.0f, 0.0f, 90.0f);
+        return MathHelper.clamp(data.flightPitch + 90.0f, 0.0f, 90.0f);
     }
 
     @Override
@@ -83,8 +80,7 @@ public class StallComputer implements ITickableComputer, IPitchLimiter {
     public enum StallStatus {
         FULL_STALL,
         APPROACHING_STALL,
-        AIRSPEED_SAFE,
-        PITCH_SAFE,
+        AOA_SAFE,
         FALL_DISTANCE_TOO_LOW,
         PLAYER_INVULNERABLE,
         UNKNOWN
