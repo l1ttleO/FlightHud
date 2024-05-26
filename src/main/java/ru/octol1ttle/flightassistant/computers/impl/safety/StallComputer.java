@@ -2,8 +2,8 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
+import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
@@ -29,7 +29,7 @@ public class StallComputer implements ITickableComputer, IPitchLimiter {
         if (!data.isFlying() || data.player().isTouchingWater()) {
             return StallStatus.UNKNOWN;
         }
-        if (data.player().isInvulnerableTo(data.player().getDamageSources().fall())) {
+        if (data.isInvulnerableTo(data.player().getDamageSources().fall())) {
             return StallStatus.PLAYER_INVULNERABLE;
         }
         if (data.pitch() <= 0.0f) {

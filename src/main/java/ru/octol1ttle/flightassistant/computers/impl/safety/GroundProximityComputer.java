@@ -66,7 +66,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         if (!data.isFlying() || data.player().isTouchingWater()) {
             return STATUS_UNKNOWN;
         }
-        if (data.player().isInvulnerableTo(data.player().getDamageSources().fall())) {
+        if (data.isInvulnerableTo(data.player().getDamageSources().fall())) {
             return STATUS_PLAYER_INVULNERABLE;
         }
         if (data.fallDistance() <= 3.0f) {
@@ -85,7 +85,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         if (!data.isFlying() || data.player().isTouchingWater()) {
             return STATUS_UNKNOWN;
         }
-        if (data.player().isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
+        if (data.isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
             return STATUS_PLAYER_INVULNERABLE;
         }
         Vec3d end = data.position().add(data.velocity.multiply(TERRAIN_RAYCAST_AHEAD_SECONDS));
@@ -109,7 +109,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         if (!data.isFlying() || data.player().isTouchingWater()) {
             return true;
         }
-        if (data.player().isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
+        if (data.isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
             return true;
         }
         Vec3d end = data.position().add(Vec3d.fromPolar(data.pitch(), data.yaw()).multiply(FIREWORK_SPEED * TERRAIN_RAYCAST_AHEAD_SECONDS));

@@ -2,8 +2,8 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.math.Direction;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
@@ -30,7 +30,7 @@ public class VoidLevelComputer implements ITickableComputer, IPitchLimiter {
         if (!data.isFlying() || data.player().isTouchingWater()) {
             return VoidLevelStatus.UNKNOWN;
         }
-        if (data.player().isInvulnerableTo(data.player().getDamageSources().outOfWorld())) {
+        if (data.isInvulnerableTo(data.player().getDamageSources().outOfWorld())) {
             return VoidLevelStatus.PLAYER_INVULNERABLE;
         }
 

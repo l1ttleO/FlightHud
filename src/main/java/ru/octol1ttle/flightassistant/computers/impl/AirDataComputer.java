@@ -5,8 +5,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
@@ -67,6 +69,16 @@ public class AirDataComputer implements ITickableComputer {
             case NO_OVERLAYS -> flying && mc.currentScreen == null && mc.getOverlay() == null;
             case DISABLED -> false;
         };
+    }
+
+    public boolean isInvulnerableTo(DamageSource source) {
+        return player().isInvulnerableTo(source)
+                || player().getAbilities().invulnerable && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                || player().getAbilities().allowFlying && source.isIn(DamageTypeTags.IS_FALL);
+    }
+
+    public boolean isInvulnerable() {
+        return player().isInvulnerable() || player().getAbilities().invulnerable;
     }
 
     private float computeRoll(Matrix3f matrix) {
