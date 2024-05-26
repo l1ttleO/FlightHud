@@ -8,8 +8,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Hand;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -122,7 +122,7 @@ public class FireworkController implements ITickableComputer, IAutopilotProvider
         if (!(stack.getItem() instanceof FireworkRocketItem)) {
             return false;
         }
-        if (data.player().isInvulnerable()) {
+        if (data.isInvulnerable()) {
             return true;
         }
         NbtCompound nbtCompound = stack.getSubNbt("Fireworks");
