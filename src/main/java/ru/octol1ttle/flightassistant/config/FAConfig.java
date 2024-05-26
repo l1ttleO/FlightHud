@@ -64,9 +64,11 @@ public class FAConfig {
             return INDICATORS_STORAGE_HANDLER.instance().flying;
         }
 
-        for (ItemStack stack : client.player.getItemsEquipped()) {
-            if (Items.ELYTRA.equals(stack.getItem())) {
-                return INDICATORS_STORAGE_HANDLER.instance().notFlyingHasElytra;
+        if (!client.player.getAbilities().allowFlying) {
+            for (ItemStack stack : client.player.getItemsEquipped()) {
+                if (Items.ELYTRA.equals(stack.getItem())) {
+                    return INDICATORS_STORAGE_HANDLER.instance().notFlyingHasElytra;
+                }
             }
         }
 
