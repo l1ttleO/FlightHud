@@ -1,9 +1,10 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'me.fallenbreath.yamlang' version '1.3.1'
+    id 'me.modmuss50.mod-publish-plugin' version '0.5.1'
 }
 
-version = project.mod_version
+version = "${project.mod_version}-dev+mc${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -96,4 +97,86 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
+}
+
+publishMods {
+    file = remapJar.archiveFile
+    version = project.version
+    changelog = getRootProject().file("CHANGELOG.md").text
+    type = STABLE
+    modLoaders.add("fabric")
+
+    def min = property('publish_target_min')
+    def max = property('publish_target_max')
+
+    def minecraftVersion = min == max ? min : "${min}-${max}"
+    displayName = "FlightAssistant ${property('mod_version')} (MC ${minecraftVersion})"
+
+    if (providers.gradleProperty('modrinthToken').present) {
+        modrinth {
+            projectId = property('mod_modrinth')
+            accessToken = providers.gradleProperty('modrinthToken').get()
+
+            if (min == max) {
+                minecraftVersions.add(min)
+            } else {
+                minecraftVersionRange {
+                    start = min
+                    end = max
+                }
+            }
+
+            requires {
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "yacl"
+            }
+            optional {
+                slug = "modmenu"
+            }
+            optional {
+                slug = "immediatelyfast"
+            }
+        }
+    }
+
+    if (providers.gradleProperty('curseforgeToken').present) {
+        curseforge {
+            projectId = property('mod_curseforge')
+            accessToken = providers.gradleProperty('curseforgeToken').get()
+
+            if (min == max) {
+                minecraftVersions.add(min)
+            } else {
+                minecraftVersionRange {
+                    start = min
+                    end = max
+                }
+            }
+
+            requires {
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "yacl"
+            }
+            optional {
+                slug = "modmenu"
+            }
+            optional {
+                slug = "immediatelyfast"
+            }
+        }
+    }
+
+    if (providers.gradleProperty('githubToken').present) {
+        github {
+            repository = property('mod_github')
+            accessToken = providers.gradleProperty('githubToken').get()
+
+            commitish = property('git_branch')
+            tagName = project.version
+        }
+    }
 }
