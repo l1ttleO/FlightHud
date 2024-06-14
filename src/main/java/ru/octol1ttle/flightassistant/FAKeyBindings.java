@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -46,8 +46,8 @@ public class FAKeyBindings {
         KeyBindingHelper.registerKeyBinding(lockManualFireworks);
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (!ComputerRegistry.isFaulted(AutoFlightComputer.class)) {
-                AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+            if (!ComputerRegistry.isFaulted(AutoFlightController.class)) {
+                AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
                 while (toggleFlightDirectors.wasPressed()) {
                     autoflight.flightDirectorsEnabled = !autoflight.flightDirectorsEnabled;
                 }

@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -17,7 +17,7 @@ public class HeadingDisplay implements IHudDisplay {
 
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
 
     public HeadingDisplay(Dimensions dim) {
         this.dim = dim;

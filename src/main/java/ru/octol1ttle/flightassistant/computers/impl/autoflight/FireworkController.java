@@ -56,8 +56,11 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
             i++;
         }
 
-        if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
-            activateFirework(false);
+
+        if (thrust.thrustHandler == this || !thrust.thrustHandler.canBeUsed()) {
+            if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
+                activateFirework(false);
+            }
         }
     }
 
@@ -134,6 +137,11 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
         }
         NbtCompound nbtCompound = stack.getSubNbt("Fireworks");
         return nbtCompound == null || nbtCompound.getList("Explosions", NbtElement.COMPOUND_TYPE).isEmpty();
+    }
+
+    @Override
+    public boolean canBeUsed() {
+        return true;
     }
 
     @Override

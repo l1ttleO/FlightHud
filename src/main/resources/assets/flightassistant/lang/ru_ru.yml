@@ -229,6 +229,7 @@ mode.flightassistant:
       managed: П. СКОР %s
   vert:
     climb:
+      optimum: ОПТ НАБОР
       selected: НАБОР %s
       managed: П. НАБОР %s
     descend:
@@ -239,8 +240,9 @@ mode.flightassistant:
       managed: П. ВЫС %s
     land: ПОСАДКА %s
   lat:
-    heading: КУРС %s
-    position: ПОЗ %s %s
+    current: ТЕКУЩ КУРС
+    selected: КУРС %s
+    managed: ПОЗ %s %s
     approach: ЗАХОД %s %s
   auto:
     flight_directors: УК

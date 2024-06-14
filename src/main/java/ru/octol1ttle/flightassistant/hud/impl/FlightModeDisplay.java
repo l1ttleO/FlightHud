@@ -10,7 +10,7 @@ import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -22,7 +22,7 @@ public class FlightModeDisplay implements IHudDisplay {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
-    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     private final FlightMode fireworkMode;

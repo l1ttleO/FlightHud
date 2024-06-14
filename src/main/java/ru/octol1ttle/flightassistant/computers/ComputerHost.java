@@ -8,8 +8,8 @@ import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotControlComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.HeadingController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
@@ -35,22 +35,25 @@ public class ComputerHost {
     public ComputerHost(@NotNull MinecraftClient mc) {
         ComputerRegistry.register(new AirDataComputer(mc));
         ComputerRegistry.register(new TimeComputer(mc));
+
         ComputerRegistry.register(new FireworkController(mc));
         ComputerRegistry.register(new PitchLimitComputer());
         ComputerRegistry.register(new FlightProtectionsComputer());
-        ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new ChunkStatusComputer());
         ComputerRegistry.register(new StallComputer());
         ComputerRegistry.register(new VoidLevelComputer());
         ComputerRegistry.register(new FlightPlanner());
         ComputerRegistry.register(new GroundProximityComputer());
         ComputerRegistry.register(new ElytraStateController());
+
+        ComputerRegistry.register(new AutoFlightController());
+        ComputerRegistry.register(new FlightPhaseComputer());
+        ComputerRegistry.register(new ThrustController());
+        ComputerRegistry.register(new AutopilotComputer());
+        ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new HeadingController());
         ComputerRegistry.register(new RollController());
-        ComputerRegistry.register(new AutoFlightComputer());
-        ComputerRegistry.register(new FlightPhaseComputer());
-        ComputerRegistry.register(new AutopilotControlComputer());
-        ComputerRegistry.register(new ThrustController());
+
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
         CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();

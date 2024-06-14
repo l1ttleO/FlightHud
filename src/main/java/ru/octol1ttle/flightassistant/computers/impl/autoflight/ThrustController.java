@@ -22,9 +22,9 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     private static final float MIN_TO_MAX_SPOOL_UP_TIME = 5.0f;
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private final List<IThrustController> controllers = new ArrayList<>();
+    public IThrustHandler thrustHandler;
     public float currentThrust = 0.0f;
     public float targetThrust = 0.0f;
-    private boolean thrustHandlerRegistered = false;
 
     public ThrustController() {
         CustomComputerRegistrationCallback.EVENT.register(() -> {
@@ -37,12 +37,12 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
                 controllers.add(controller);
             }
             if (computer instanceof IThrustHandler handler) {
-                if (thrustHandlerRegistered) {
+                if (thrustHandler != null && !(thrustHandler instanceof FireworkController)) {
                     FlightAssistant.LOGGER.error("Multiple thrust handlers found! Discarding handler %s".formatted(handler.getClass().getName()));
                     return false;
                 }
-                if (!(handler instanceof FireworkController)) {
-                    thrustHandlerRegistered = true;
+                thrustHandler = handler;
+                if (!(thrustHandler instanceof FireworkController)) {
                     FlightAssistant.LOGGER.info("Active thrust handler is %s".formatted(handler.getClass().getName()));
                 }
             }

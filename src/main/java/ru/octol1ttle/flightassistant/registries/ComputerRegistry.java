@@ -23,8 +23,11 @@ public abstract class ComputerRegistry {
             throw new IllegalStateException("Computer already registered with class: %s".formatted(clazz));
         }
 
-        instances.put(clazz, computer);
-        AllowComputerRegisterCallback.EVENT.invoker().allowRegister(computer);
+        if (AllowComputerRegisterCallback.EVENT.invoker().allowRegister(computer)) {
+            instances.put(clazz, computer);
+        } else {
+            FlightAssistant.LOGGER.info("Denied registration of computer %s".formatted(computer.getClass().getName()));
+        }
     }
 
     public static <T extends IComputer> T resolve(Class<T> clazz) {

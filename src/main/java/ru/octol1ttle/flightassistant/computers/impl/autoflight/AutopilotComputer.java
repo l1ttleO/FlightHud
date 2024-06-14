@@ -1,6 +1,8 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
@@ -9,33 +11,63 @@ import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.IRollController;
+import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
+import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class AutopilotControlComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController {
+public class AutopilotComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController, IThrustController {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final AutoFlightComputer autoflight = ComputerRegistry.resolve(AutoFlightComputer.class);
+    private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
-    public Float targetPitch;
-    public Float targetHeading;
+    private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
+    public Text verticalMode;
+    public Text lateralMode;
+    public Text thrustMode;
+    private Float targetPitch;
+    private Float targetHeading;
+    private Float targetThrust;
 
     @Override
     public void tick() {
-        targetPitch = computeTargetPitch();
-        targetHeading = computeTargetHeading();
+        if (phase.phase == FlightPhaseComputer.FlightPhase.TAKEOFF
+                || phase.phase == FlightPhaseComputer.FlightPhase.GO_AROUND && data.heightAboveGround() < 15.0f) {
+            setTargetThrust(1.0f, Text.translatable("mode.flightassistant.thrust.toga"));
+            setTargetPitch(PitchController.CLIMB_PITCH, Text.translatable("mode.flightassistant.vert.climb.optimum"));
+            setTargetHeading(data.heading(), Text.translatable("mode.flightassistant.lat.current"));
+
+            return;
+        }
+
+        tickLateral();
+
+        Integer targetAltitude = autoflight.getTargetAltitude();
+        if (targetAltitude == null) {
+            targetPitch = null;
+            targetThrust = null;
+            return;
+        }
+
+        boolean useThrustConservatively = thrust.thrustHandler instanceof FireworkController || !thrust.thrustHandler.canBeUsed();
+        // TODO
+        throw new NotImplementedException();
+    }
+
+    private void tickLateral() {
+        Vector2d planPos = plan.getTargetPosition();
+        if (autoflight.selectedHeading != null) {
+            setTargetHeading(Float.valueOf(autoflight.selectedHeading), Text.translatable("mode.flightassistant.lat.selected", autoflight.selectedHeading));
+        } else if (planPos != null) {
+            setTargetHeading(plan.getManagedHeading(), Text.translatable("mode.flightassistant.lat.managed", (int) planPos.x, (int) planPos.y));
+        }
     }
 
     private Float computeTargetPitch() {
-        if (phase.phase == FlightPhaseComputer.FlightPhase.TAKEOFF
-                || phase.phase == FlightPhaseComputer.FlightPhase.GO_AROUND && data.heightAboveGround() < 15.0f) {
-            return PitchController.CLIMB_PITCH;
-        }
-
         Integer targetAltitude = autoflight.getTargetAltitude();
         if (targetAltitude == null) {
             return null;
@@ -95,12 +127,27 @@ public class AutopilotControlComputer implements ITickableComputer, IAutopilotPr
         return degrees;
     }
 
-    private Float computeTargetHeading() {
-        if (phase.phase == FlightPhaseComputer.FlightPhase.TAKEOFF || phase.phase == FlightPhaseComputer.FlightPhase.GO_AROUND) {
-            return data.heading();
-        }
+    public Float getTargetPitch() {
+        return targetPitch;
+    }
 
-        return autoflight.getTargetHeading();
+    public void setTargetPitch(Float targetPitch, Text mode) {
+        this.targetPitch = targetPitch;
+        this.verticalMode = mode;
+    }
+
+    public Float getTargetHeading() {
+        return targetHeading;
+    }
+
+    public void setTargetHeading(Float targetHeading, Text mode) {
+        this.targetHeading = targetHeading;
+        this.lateralMode = mode;
+    }
+
+    public void setTargetThrust(Float targetThrust, Text mode) {
+        this.targetThrust = targetThrust;
+        this.thrustMode = mode;
     }
 
     @Override
@@ -131,6 +178,15 @@ public class AutopilotControlComputer implements ITickableComputer, IAutopilotPr
     }
 
     @Override
+    public ThrustControlInput getThrustInput() {
+        if (!autoflight.autoThrustEnabled || targetThrust == null) {
+            return null;
+        }
+
+        return new ThrustControlInput(targetThrust, InputPriority.NORMAL);
+    }
+
+    @Override
     public String getId() {
         return "autopilot_ctl";
     }
@@ -138,7 +194,10 @@ public class AutopilotControlComputer implements ITickableComputer, IAutopilotPr
     @Override
     public void reset() {
         targetPitch = null;
+        verticalMode = null;
         targetHeading = null;
+        lateralMode = null;
+        targetThrust = null;
 
         autoflight.disconnectAutoFirework(true);
         autoflight.disconnectAutopilot(true);
