@@ -138,6 +138,9 @@ publishMods {
             optional {
                 slug = "immediatelyfast"
             }
+            optional {
+                slug = "do-a-barrel-roll"
+            }
         }
     }
 
@@ -166,6 +169,9 @@ publishMods {
             }
             optional {
                 slug = "immediatelyfast"
+            }
+            optional {
+                slug = "do-a-barrel-roll"
             }
         }
     }
