@@ -28,24 +28,26 @@ import ru.octol1ttle.flightassistant.mixin.GameRendererInvoker;
 import ru.octol1ttle.flightassistant.registries.HudDisplayRegistry;
 import ru.octol1ttle.flightassistant.registries.events.CustomHudDisplayRegistrationCallback;
 
+import static ru.octol1ttle.flightassistant.FlightAssistant.id;
+
 public class HudDisplayHost {
     private final Dimensions dim = new Dimensions();
 
     public HudDisplayHost() {
-        HudDisplayRegistry.register(FlightAssistant.id("alert"), new AlertDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("altitude"), new AltitudeDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("attitude"), new AttitudeDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("elytra_health"), new ElytraHealthDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("flight_directors"), new FlightDirectorsDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("flight_mode"), new FlightModeDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("flight_path"), new FlightPathDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("ground_speed"), new GroundSpeedDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("heading"), new HeadingDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("radar_altitude"), new RadarAltitudeDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("location"), new LocationDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("speed"), new SpeedDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("status"), new StatusDisplay(dim));
-        HudDisplayRegistry.register(FlightAssistant.id("vertical_speed"), new VerticalSpeedDisplay(dim));
+        HudDisplayRegistry.register(id("alert"), new AlertDisplay(dim));
+        HudDisplayRegistry.register(id("altitude"), new AltitudeDisplay(dim));
+        HudDisplayRegistry.register(id("attitude"), new AttitudeDisplay(dim));
+        HudDisplayRegistry.register(id("elytra_health"), new ElytraHealthDisplay(dim));
+        HudDisplayRegistry.register(id("flight_directors"), new FlightDirectorsDisplay(dim));
+        HudDisplayRegistry.register(id("flight_mode"), new FlightModeDisplay(dim));
+        HudDisplayRegistry.register(id("flight_path"), new FlightPathDisplay(dim));
+        HudDisplayRegistry.register(id("ground_speed"), new GroundSpeedDisplay(dim));
+        HudDisplayRegistry.register(id("heading"), new HeadingDisplay(dim));
+        HudDisplayRegistry.register(id("radar_altitude"), new RadarAltitudeDisplay(dim));
+        HudDisplayRegistry.register(id("location"), new LocationDisplay(dim));
+        HudDisplayRegistry.register(id("speed"), new SpeedDisplay(dim));
+        HudDisplayRegistry.register(id("status"), new StatusDisplay(dim));
+        HudDisplayRegistry.register(id("vertical_speed"), new VerticalSpeedDisplay(dim));
 
         CustomHudDisplayRegistrationCallback.EVENT.invoker().registerCustomDisplays();
     }

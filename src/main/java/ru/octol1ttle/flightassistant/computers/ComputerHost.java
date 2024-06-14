@@ -14,6 +14,7 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkControlle
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.HeadingController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.RollController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.ChunkStatusComputer;
@@ -36,8 +37,8 @@ public class ComputerHost {
         ComputerRegistry.register(new TimeComputer(mc));
         ComputerRegistry.register(new FireworkController(mc));
         ComputerRegistry.register(new PitchLimitComputer());
-        ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new FlightProtectionsComputer());
+        ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new ChunkStatusComputer());
         ComputerRegistry.register(new StallComputer());
         ComputerRegistry.register(new VoidLevelComputer());
@@ -49,6 +50,7 @@ public class ComputerHost {
         ComputerRegistry.register(new AutoFlightComputer());
         ComputerRegistry.register(new FlightPhaseComputer());
         ComputerRegistry.register(new AutopilotControlComputer());
+        ComputerRegistry.register(new ThrustController());
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
         CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();

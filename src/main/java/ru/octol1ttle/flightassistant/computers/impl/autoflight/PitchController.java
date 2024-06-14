@@ -13,7 +13,7 @@ import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
-import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
+import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 
 public class PitchController implements ITickableComputer, INormalLawProvider {
     public static final float CLIMB_PITCH = 55.0f;
@@ -26,10 +26,11 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
     private final PitchLimitComputer limit = ComputerRegistry.resolve(PitchLimitComputer.class);
 
     public PitchController() {
-        ComputerRegisteredCallback.EVENT.register((computer -> {
+        AllowComputerRegisterCallback.EVENT.register((computer -> {
             if (computer instanceof IPitchController controller) {
                 controllers.add(controller);
             }
+            return true;
         }));
     }
 

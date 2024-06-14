@@ -17,7 +17,7 @@ import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
-import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
+import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 import ru.octol1ttle.flightassistant.registries.events.CustomComputerRegistrationCallback;
 
 public class RollController implements ITickableComputer, INormalLawProvider {
@@ -32,18 +32,20 @@ public class RollController implements ITickableComputer, INormalLawProvider {
                 ComputerRegistry.register(new DaBRRollHandler());
             }
         });
-        ComputerRegisteredCallback.EVENT.register(computer -> {
+        AllowComputerRegisterCallback.EVENT.register(computer -> {
             if (computer instanceof IRollController controller) {
                 controllers.add(controller);
             }
             if (computer instanceof IRollHandler handler) {
                 if (rollHandler != null) {
-                    FlightAssistant.LOGGER.warn("Multiple roll handlers found! Discarding handler %s".formatted(handler.getClass().getName()));
+                    FlightAssistant.LOGGER.error("Multiple roll handlers found! Discarding handler %s".formatted(handler.getClass().getName()));
+                    return false;
                 } else {
                     rollHandler = handler;
                     FlightAssistant.LOGGER.info("Active roll handler is %s".formatted(rollHandler.getClass().getName()));
                 }
             }
+            return true;
         });
     }
 

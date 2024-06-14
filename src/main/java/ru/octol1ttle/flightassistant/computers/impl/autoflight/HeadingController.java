@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
-import ru.octol1ttle.flightassistant.registries.events.ComputerRegisteredCallback;
+import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 
 public class HeadingController implements ITickableComputer, IAutopilotProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
@@ -20,10 +20,11 @@ public class HeadingController implements ITickableComputer, IAutopilotProvider 
     private final List<IHeadingController> controllers = new ArrayList<>();
 
     public HeadingController() {
-        ComputerRegisteredCallback.EVENT.register((computer -> {
+        AllowComputerRegisterCallback.EVENT.register((computer -> {
             if (computer instanceof IHeadingController controller) {
                 controllers.add(controller);
             }
+            return true;
         }));
     }
 

@@ -45,6 +45,9 @@ public class ComputerConfig {
     @SerialEntry
     public boolean preserveAltitudeInUnloadedChunk = true;
 
+    @SerialEntry
+    public boolean simulateEngineSpoolUp = true;
+
     public enum GlobalAutomationsMode implements NameableEnum {
         FULL,
         // TODO: LIMIT TO NO_OVERLAYS ON SERVERS

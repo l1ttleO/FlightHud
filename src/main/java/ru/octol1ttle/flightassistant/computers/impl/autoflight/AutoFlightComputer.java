@@ -19,10 +19,10 @@ public class AutoFlightComputer implements ITickableComputer, IAutopilotProvider
     private final FlightProtectionsComputer prot = ComputerRegistry.resolve(FlightProtectionsComputer.class);
 
     public boolean flightDirectorsEnabled = false;
-    public boolean autoFireworkEnabled = false;
+    public boolean autoThrustEnabled = false;
     public boolean autoPilotEnabled = false;
 
-    public boolean afrwkDisconnectionForced = false;
+    public boolean athrDisconnectionForced = false;
     public boolean apDisconnectionForced = false;
 
     public Integer selectedSpeed;
@@ -31,7 +31,7 @@ public class AutoFlightComputer implements ITickableComputer, IAutopilotProvider
 
     @Override
     public void tick() {
-        if (autoFireworkEnabled && data.isCurrentChunkLoaded && gpws.fireworkUseSafe && gpws.getGPWSLampColor() == FAConfig.indicator().frameColor) {
+        if (autoThrustEnabled && data.isCurrentChunkLoaded && gpws.fireworkUseSafe && gpws.getGPWSLampColor() == FAConfig.indicator().frameColor) {
             Integer targetSpeed = getTargetSpeed();
             Integer targetAltitude = getTargetAltitude();
             if (targetSpeed != null) {
@@ -73,9 +73,9 @@ public class AutoFlightComputer implements ITickableComputer, IAutopilotProvider
     }
 
     public void disconnectAutoFirework(boolean force) {
-        if (autoFireworkEnabled) {
-            autoFireworkEnabled = false;
-            afrwkDisconnectionForced = force;
+        if (autoThrustEnabled) {
+            autoThrustEnabled = false;
+            athrDisconnectionForced = force;
         }
     }
 

@@ -7,16 +7,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Hand;
-import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
+import ru.octol1ttle.flightassistant.computers.api.IThrustHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class FireworkController implements ITickableComputer, IAutopilotProvider {
+public class FireworkController implements ITickableComputer, IThrustHandler {
+    public static final float FIREWORK_SPEED = 33.62f;
+
     private final MinecraftClient mc;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
+    private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
 
     public int safeFireworkCount = Integer.MAX_VALUE;
     public boolean fireworkResponded = true;
@@ -52,6 +55,10 @@ public class FireworkController implements ITickableComputer, IAutopilotProvider
 
             i++;
         }
+
+        if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
+            activateFirework(false);
+        }
     }
 
     private int countSafeFireworks() {
@@ -68,7 +75,7 @@ public class FireworkController implements ITickableComputer, IAutopilotProvider
         return i;
     }
 
-    public void activateFirework(boolean force) {
+    private void activateFirework(boolean force) {
         if (!data.canAutomationsActivate() || lastUseTime > 0 && time.millis != null && time.millis - lastUseTime < 1000) {
             return;
         }

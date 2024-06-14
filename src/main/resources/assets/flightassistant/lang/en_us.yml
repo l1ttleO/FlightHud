@@ -15,7 +15,7 @@ config.flightassistant:
     not_flying_no_elytra: Not flying (no Elytra)
     not_flying_has_elytra: Not flying (with Elytra)
     flying: Flying
-    computer_settings: Flight protections
+    computer_settings: Flight automations
   hud:
     batching:
       .: Batched HUD rendering
@@ -181,6 +181,7 @@ alerts.flightassistant:
       flight_phase: F/PHASE SYS FAULT
       roll_ctl: AUTO ROLL CTL FAULT
       dabr_roll: DABR ROLL CTL FAULT
+      thrust_ctl: AUTO THR CTL FAULT
     hud:
       alert: ALERT DISPLAY FAULT
       altitude: ALT DISPLAY FAULT

@@ -66,12 +66,12 @@ public class FlightModeDisplay implements IHudDisplay {
         Text minimums = plan.formatMinimums();
 
         if (firework.noFireworks) {
-            fireworkMode.update(Text.translatable("mode.flightassistant.firework.none_in_hotbar"), autoflight.autoFireworkEnabled);
+            fireworkMode.update(Text.translatable("mode.flightassistant.firework.none_in_hotbar"), autoflight.autoThrustEnabled);
         } else if (firework.lastProtTrigger != null && time.millis - firework.lastProtTrigger < 2000) {
             fireworkMode.update(Text.translatable("mode.flightassistant.firework.protection"), true);
         } else if (minimums != null && plan.isOnApproach()) {
             fireworkMode.update(minimums, plan.isBelowMinimums());
-        } else if (autoflight.autoFireworkEnabled) {
+        } else if (autoflight.autoThrustEnabled) {
             if (targetSpeed != null) {
                 String type = autoflight.selectedSpeed != null ? ".selected" : ".managed";
                 fireworkMode.update(Text.translatable("mode.flightassistant.firework.speed" + type, targetSpeed));
@@ -150,7 +150,7 @@ public class FlightModeDisplay implements IHudDisplay {
         if (autoflight.flightDirectorsEnabled) {
             appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.flight_directors"));
         }
-        if (autoflight.autoFireworkEnabled) {
+        if (autoflight.autoThrustEnabled) {
             appendWithSeparation(automationStatus, Text.translatable("mode.flightassistant.auto.auto_firework"));
         }
         if (autoflight.autoPilotEnabled) {

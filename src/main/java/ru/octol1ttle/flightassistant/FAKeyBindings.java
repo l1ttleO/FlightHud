@@ -53,8 +53,8 @@ public class FAKeyBindings {
                 }
 
                 while (toggleAutoFirework.wasPressed()) {
-                    if (!autoflight.autoFireworkEnabled) {
-                        autoflight.autoFireworkEnabled = true;
+                    if (!autoflight.autoThrustEnabled) {
+                        autoflight.autoThrustEnabled = true;
                     } else {
                         autoflight.disconnectAutoFirework(false);
                     }

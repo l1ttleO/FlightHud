@@ -14,6 +14,7 @@ import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -24,7 +25,6 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     private static final int STATUS_SPEED_SAFE = -3;
     private static final int STATUS_NO_TERRAIN_AHEAD = -4;
     private static final int STATUS_UNKNOWN = -5;
-    private static final float FIREWORK_SPEED = 33.62f;
     private static final float TERRAIN_RAYCAST_AHEAD_SECONDS = 10.0f;
     private static final float MAX_SAFE_GROUND_SPEED = 17.5f;
     private static final float MAX_SAFE_SINK_RATE = 10.0f;
@@ -112,7 +112,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         if (data.isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
             return true;
         }
-        Vec3d end = data.position().add(Vec3d.fromPolar(data.pitch(), data.yaw()).multiply(FIREWORK_SPEED * TERRAIN_RAYCAST_AHEAD_SECONDS));
+        Vec3d end = data.position().add(Vec3d.fromPolar(data.pitch(), data.yaw()).multiply(FireworkController.FIREWORK_SPEED * TERRAIN_RAYCAST_AHEAD_SECONDS));
 
         BlockHitResult result = data.world().raycast(new RaycastContext(data.position(), end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, data.player()));
         if (result.getType() != HitResult.Type.BLOCK || result.getSide() == Direction.UP) {
@@ -121,7 +121,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
 
         double distance = result.getPos().subtract(data.position()).length();
 
-        return distance / FIREWORK_SPEED > PULL_UP_THRESHOLD;
+        return distance / FireworkController.FIREWORK_SPEED > PULL_UP_THRESHOLD;
     }
 
     private LandingClearanceStatus computeLandingClearanceStatus() {

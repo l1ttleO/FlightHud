@@ -181,6 +181,7 @@ alerts.flightassistant:
       flight_phase: ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА
       roll_ctl: ОТКАЗ АВТО УПР КРЕНОМ
       dabr_roll: ОТКАЗ УПР КРЕНОМ DABR
+      thrust_ctl: ОТКАЗ АВТО УПР ТЯГИ
     hud:
       alert: ОТКАЗ ИНДИК ПРЕДУПР
       altitude: ОТКАЗ ИНДИК ВЫС
