@@ -16,18 +16,19 @@ import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
-import ru.octol1ttle.flightassistant.registries.events.CustomComputerRegistrationCallback;
+import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
 public class ThrustController implements ITickableComputer, INormalLawProvider {
     private static final float MIN_TO_MAX_SPOOL_UP_TIME = 5.0f;
+    private static final List<IThrustController> controllers = new ArrayList<>();
+    private static IThrustHandler thrustHandler;
+    private static IThrustHandler fallback;
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    private final List<IThrustController> controllers = new ArrayList<>();
-    public IThrustHandler thrustHandler;
     public float currentThrust = 0.0f;
     public float targetThrust = 0.0f;
 
-    public ThrustController() {
-        CustomComputerRegistrationCallback.EVENT.register(() -> {
+    static {
+        RegisterCustomComputersCallback.EVENT.register(() -> {
             if (FabricLoader.getInstance().isModLoaded("do_a_barrel_roll")) {
                 ComputerRegistry.register(new DaBRThrustHandler());
             }
@@ -44,6 +45,8 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
                 thrustHandler = handler;
                 if (!(thrustHandler instanceof FireworkController)) {
                     FlightAssistant.LOGGER.info("Active thrust handler is %s".formatted(handler.getClass().getName()));
+                } else {
+                    fallback = handler;
                 }
             }
             return true;
@@ -60,6 +63,8 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
         } else {
             currentThrust = currentThrust + diff * time.deltaTime / MIN_TO_MAX_SPOOL_UP_TIME * Math.max(currentThrust, 0.1f);
         }
+
+        getThrustHandler().tickThrust();
     }
 
     private void updateTargetThrust() {
@@ -84,6 +89,10 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
             targetThrust = Math.max(targetThrust, input.target());
             lastPriority = input.priority();
         }
+    }
+
+    public IThrustHandler getThrustHandler() {
+        return thrustHandler.available() ? thrustHandler : fallback;
     }
 
     @Override

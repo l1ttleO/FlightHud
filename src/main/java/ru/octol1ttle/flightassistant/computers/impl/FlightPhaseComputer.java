@@ -10,67 +10,67 @@ public class FlightPhaseComputer implements ITickableComputer {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
-    public FlightPhase phase = FlightPhase.UNKNOWN;
+    public Phase phase = Phase.UNKNOWN;
 
     @SuppressWarnings("DataFlowIssue")
     @Override
     public void tick() {
         if (data.player().isOnGround()) {
-            phase = FlightPhase.ON_GROUND;
+            phase = Phase.ON_GROUND;
         }
 
         if (!data.isFlying()) {
             return;
         }
 
-        if (phase == FlightPhase.ON_GROUND) {
-            phase = FlightPhase.TAKEOFF;
+        if (phase == Phase.ON_GROUND) {
+            phase = Phase.TAKEOFF;
         }
 
-        if (phase == FlightPhase.TAKEOFF && data.heightAboveGround() <= 10.0f) {
+        if (phase == Phase.TAKEOFF && data.heightAboveGround() <= 15.0f) {
             return;
         }
 
         Integer cruiseAltitude = plan.getCruiseAltitude();
         Integer targetAltitude = autoflight.getTargetAltitude();
         if (cruiseAltitude == null || targetAltitude == null) {
-            phase = FlightPhase.UNKNOWN;
+            phase = Phase.UNKNOWN;
             return;
         }
 
         if (!isNearDestination()) {
             if (data.altitude() - targetAltitude <= 5.0f) {
-                phase = FlightPhase.CLIMB;
+                phase = Phase.CLIMB;
             } else {
-                phase = FlightPhase.DESCENT;
+                phase = Phase.DESCENT;
             }
 
             if (targetAltitude.equals(cruiseAltitude) && Math.abs(cruiseAltitude - data.altitude()) <= 5.0f) {
-                phase = FlightPhase.CRUISE;
+                phase = Phase.CRUISE;
             }
         }
 
-        if (phase == FlightPhase.GO_AROUND) {
+        if (phase == Phase.GO_AROUND) {
             if (plan.getDistanceToWaypoint() > 150.0f) {
-                phase = FlightPhase.APPROACH;
+                phase = Phase.APPROACH;
             }
         } else {
             if (plan.isOnApproach()) {
-                phase = FlightPhase.APPROACH;
+                phase = Phase.APPROACH;
             }
 
-            if (phase == FlightPhase.APPROACH && plan.autolandAllowed) {
-                phase = FlightPhase.LAND;
+            if (phase == Phase.APPROACH && plan.autolandAllowed) {
+                phase = Phase.LAND;
             }
         }
     }
 
     private boolean isAboutToLand() {
-        return phase == FlightPhase.APPROACH || phase == FlightPhase.LAND;
+        return phase == Phase.APPROACH || phase == Phase.LAND;
     }
 
     public boolean isNearDestination() {
-        return isAboutToLand() || phase == FlightPhase.GO_AROUND;
+        return isAboutToLand() || phase == Phase.GO_AROUND;
     }
 
     @Override
@@ -80,10 +80,10 @@ public class FlightPhaseComputer implements ITickableComputer {
 
     @Override
     public void reset() {
-        phase = FlightPhase.UNKNOWN;
+        phase = Phase.UNKNOWN;
     }
 
-    public enum FlightPhase {
+    public enum Phase {
         ON_GROUND("on_ground"),
         TAKEOFF("takeoff"),
         CLIMB("climb"),
@@ -96,11 +96,11 @@ public class FlightPhaseComputer implements ITickableComputer {
 
         public final Text text;
 
-        FlightPhase(Text text) {
+        Phase(Text text) {
             this.text = text;
         }
 
-        FlightPhase(String key) {
+        Phase(String key) {
             this(Text.translatable("status.flightassistant.phase." + key));
         }
     }

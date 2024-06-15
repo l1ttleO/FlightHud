@@ -18,16 +18,16 @@ import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
-import ru.octol1ttle.flightassistant.registries.events.CustomComputerRegistrationCallback;
+import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
 public class RollController implements ITickableComputer, INormalLawProvider {
-    private final List<IRollController> controllers = new ArrayList<>();
+    private static final List<IRollController> controllers = new ArrayList<>();
+    private static @Nullable IRollHandler rollHandler = null;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    private @Nullable IRollHandler rollHandler = null;
 
-    public RollController() {
-        CustomComputerRegistrationCallback.EVENT.register(() -> {
+    static {
+        RegisterCustomComputersCallback.EVENT.register(() -> {
             if (FabricLoader.getInstance().isModLoaded("do_a_barrel_roll")) {
                 ComputerRegistry.register(new DaBRRollHandler());
             }

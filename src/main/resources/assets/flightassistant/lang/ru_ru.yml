@@ -235,12 +235,13 @@ mode.flightassistant:
     descend:
       selected: СНИЖ %s
       managed: П. СНИЖ %s
-    alt_hold:
+    hold:
       selected: ВЫС %s
       managed: П. ВЫС %s
     land: ПОСАДКА %s
   lat:
-    current: ТЕКУЩ КУРС
+    takeoff: ВЗЛЕТ КРС %s
+    go_around: В.КРУГ КРС %s
     selected: КУРС %s
     managed: ПОЗ %s %s
     approach: ЗАХОД %s %s

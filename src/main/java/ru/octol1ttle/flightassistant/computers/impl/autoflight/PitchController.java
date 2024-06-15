@@ -20,12 +20,12 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
     public static final float ALTITUDE_PRESERVE_PITCH = 15.0f;
     public static final float GLIDE_PITCH = -2.2f;
     public static final float DESCEND_PITCH = -35.0f;
-    private final List<IPitchController> controllers = new ArrayList<>();
+    private static final List<IPitchController> controllers = new ArrayList<>();
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private final PitchLimitComputer limit = ComputerRegistry.resolve(PitchLimitComputer.class);
 
-    public PitchController() {
+    static {
         AllowComputerRegisterCallback.EVENT.register((computer -> {
             if (computer instanceof IPitchController controller) {
                 controllers.add(controller);

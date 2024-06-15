@@ -25,7 +25,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.StallComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.VoidLevelComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
-import ru.octol1ttle.flightassistant.registries.events.CustomComputerRegistrationCallback;
+import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
 public class ComputerHost {
     public static ComputerHost instance() {
@@ -36,7 +36,6 @@ public class ComputerHost {
         ComputerRegistry.register(new AirDataComputer(mc));
         ComputerRegistry.register(new TimeComputer(mc));
 
-        ComputerRegistry.register(new FireworkController(mc));
         ComputerRegistry.register(new PitchLimitComputer());
         ComputerRegistry.register(new FlightProtectionsComputer());
         ComputerRegistry.register(new ChunkStatusComputer());
@@ -54,9 +53,11 @@ public class ComputerHost {
         ComputerRegistry.register(new HeadingController());
         ComputerRegistry.register(new RollController());
 
+        ComputerRegistry.register(new FireworkController(mc));
+
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 
-        CustomComputerRegistrationCallback.EVENT.invoker().registerCustomComputers();
+        RegisterCustomComputersCallback.EVENT.invoker().registerCustomComputers();
     }
 
     public void tick() {

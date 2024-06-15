@@ -13,11 +13,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 
 public class PitchLimitComputer implements ITickableComputer, INormalLawProvider {
-    private final List<IPitchLimiter> limiters = new ArrayList<>();
+    private static final List<IPitchLimiter> limiters = new ArrayList<>();
     public float minimumSafePitch = -90.0f;
     public float maximumSafePitch = 90.0f;
 
-    public PitchLimitComputer() {
+    static {
         AllowComputerRegisterCallback.EVENT.register((computer -> {
             if (computer instanceof IPitchLimiter limiter) {
                 limiters.add(limiter);

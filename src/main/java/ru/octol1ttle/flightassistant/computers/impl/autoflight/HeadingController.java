@@ -15,11 +15,11 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 
 public class HeadingController implements ITickableComputer, IAutopilotProvider {
+    private static final List<IHeadingController> controllers = new ArrayList<>();
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    private final List<IHeadingController> controllers = new ArrayList<>();
 
-    public HeadingController() {
+    static {
         AllowComputerRegisterCallback.EVENT.register((computer -> {
             if (computer instanceof IHeadingController controller) {
                 controllers.add(controller);

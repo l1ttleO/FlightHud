@@ -55,12 +55,12 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
 
             i++;
         }
+    }
 
-
-        if (thrust.thrustHandler == this || !thrust.thrustHandler.canBeUsed()) {
-            if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
-                activateFirework(false);
-            }
+    @Override
+    public void tickThrust() {
+        if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
+            activateFirework(false);
         }
     }
 
@@ -140,8 +140,13 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
     }
 
     @Override
-    public boolean canBeUsed() {
+    public boolean available() {
         return true;
+    }
+
+    @Override
+    public boolean isFireworkLike() {
+        return false;
     }
 
     @Override

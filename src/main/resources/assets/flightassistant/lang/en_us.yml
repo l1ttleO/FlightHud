@@ -217,9 +217,13 @@ mode.flightassistant:
     relative: MINIM +%s
     not_set: NO MINIMS
   thrust:
-    toga:
-      auto: AUTO TOGA
-      manual: MAN TOGA
+    toga: TOGA
+    climb: THR CLB
+    climb_reduced: RED CLB
+    idle: THR IDLE
+    speed:
+      selected: SPD %s
+      managed: P. SPD %s
   firework:
     none_in_hotbar: NO FRWKS
     locked: A/FRWK ONLY
@@ -239,12 +243,13 @@ mode.flightassistant:
     descend:
       selected: DES %s
       managed: P. DES %s
-    alt_hold:
+    hold:
       selected: ALT %s
       managed: P. ALT %s
     land: LAND %s
   lat:
-    current: CUR HDG
+    takeoff: TO HDG %s
+    go_around: GA HDG %s
     selected: HDG %s
     managed: POS %s %s
     approach: APPR %s %s

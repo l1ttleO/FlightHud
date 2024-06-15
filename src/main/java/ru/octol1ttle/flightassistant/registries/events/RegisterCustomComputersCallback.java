@@ -4,11 +4,11 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
 @FunctionalInterface
-public interface CustomComputerRegistrationCallback {
-    Event<CustomComputerRegistrationCallback> EVENT = EventFactory.createArrayBacked(
-            CustomComputerRegistrationCallback.class,
+public interface RegisterCustomComputersCallback {
+    Event<RegisterCustomComputersCallback> EVENT = EventFactory.createArrayBacked(
+            RegisterCustomComputersCallback.class,
             (listeners) -> () -> {
-                for (CustomComputerRegistrationCallback event : listeners) {
+                for (RegisterCustomComputersCallback event : listeners) {
                     event.registerCustomComputers();
                 }
             }

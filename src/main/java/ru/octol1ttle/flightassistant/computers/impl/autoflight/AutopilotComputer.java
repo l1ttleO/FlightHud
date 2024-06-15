@@ -2,7 +2,6 @@ package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
@@ -17,45 +16,102 @@ import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
+import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer.Phase;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AutopilotComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController, IThrustController {
+    private static final float THRUST_CLIMB = 0.9f;
+    private static final float THRUST_CLIMB_REDUCED = 0.75f;
+
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
+
     public Text verticalMode;
     public Text lateralMode;
     public Text thrustMode;
+
     private Float targetPitch;
     private Float targetHeading;
     private Float targetThrust;
 
+    private Float togaHeading;
+
     @Override
     public void tick() {
-        if (phase.phase == FlightPhaseComputer.FlightPhase.TAKEOFF
-                || phase.phase == FlightPhaseComputer.FlightPhase.GO_AROUND && data.heightAboveGround() < 15.0f) {
+        if (phase.phase == Phase.TAKEOFF
+                || phase.phase == Phase.GO_AROUND && data.heightAboveGround() < 15.0f) {
+            if (togaHeading == null) {
+                togaHeading = data.heading();
+            }
+
             setTargetThrust(1.0f, Text.translatable("mode.flightassistant.thrust.toga"));
-            setTargetPitch(PitchController.CLIMB_PITCH, Text.translatable("mode.flightassistant.vert.climb.optimum"));
-            setTargetHeading(data.heading(), Text.translatable("mode.flightassistant.lat.current"));
+            setTargetPitch(55.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
+
+            String lat = phase.phase == Phase.TAKEOFF ? ".takeoff" : ".go_around";
+            setTargetHeading(togaHeading, Text.translatable("mode.flightassistant.lat" + lat, togaHeading.intValue()));
 
             return;
         }
 
+        togaHeading = null;
+        setTargetHeading(null, Text.empty());
         tickLateral();
 
+        Integer targetSpeed = autoflight.getTargetSpeed();
+        setTargetThrust(null, Text.empty());
+
+        setTargetPitch(null, Text.empty());
         Integer targetAltitude = autoflight.getTargetAltitude();
         if (targetAltitude == null) {
-            targetPitch = null;
-            targetThrust = null;
             return;
         }
 
-        boolean useThrustConservatively = thrust.thrustHandler instanceof FireworkController || !thrust.thrustHandler.canBeUsed();
-        // TODO
-        throw new NotImplementedException();
+        float diff = targetAltitude - data.altitude();
+
+        boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike(); // I wish I didn't have to account for this
+        float climbThrust = useReducedThrust ? THRUST_CLIMB_REDUCED : THRUST_CLIMB;
+        String thrustSuffix = useReducedThrust ? "_reduced" : "";
+
+        if (autoflight.selectedAltitude != null) {
+            float speedAdjustment = targetSpeed != null ? data.speed() - targetSpeed : 0.0f;
+            if (targetAltitude >= data.altitude()) {
+                setTargetThrust(climbThrust, Text.translatable("mode.flightassistant.thrust.climb" + thrustSuffix));
+                float pitch;
+                if (useReducedThrust) {
+                    pitch = 47.5f - 47.5f * (Math.max(20.0f - diff, 0.0f) / 15.0f) + 7.5f;
+                } else {
+                    pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                }
+                setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected"));
+            } else {
+                setTargetThrust(climbThrust, Text.translatable("mode.flightassistant.thrust.descend" + thrustSuffix));
+            }
+        }
+
+        if (targetAltitude > data.altitude()) {
+
+        }
+
+        // overwrite any thrust setting if we have a target speed
+        tickSpeed(targetSpeed);
+    }
+
+    private void tickSpeed(Integer targetSpeed) {
+        if (targetSpeed == null) {
+            return;
+        }
+
+        float diff = Math.abs(targetSpeed - data.speed());
+
+        float thr = targetSpeed > data.speed() ? THRUST_CLIMB : -0.5f;
+        if (thrust.getThrustHandler().isFireworkLike()) {
+            thr = targetSpeed / FireworkController.FIREWORK_SPEED;
+        }
+        setTargetThrust(thr * Math.min(diff * 0.1f, 1.0f), Text.translatable("mode.flightassistant.thrust.speed.selected", targetSpeed));
     }
 
     private void tickLateral() {
@@ -75,7 +131,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         Vector2d planPos = plan.getTargetPosition();
 
         float diff = targetAltitude - data.altitude();
-        boolean landing = phase.phase == FlightPhaseComputer.FlightPhase.LAND;
+        boolean landing = phase.phase == Phase.LAND;
         if (!landing && diff > -10.0f && diff < 5.0f) {
             return (PitchController.GLIDE_PITCH + PitchController.ALTITUDE_PRESERVE_PITCH) * 0.5f;
         }
@@ -188,16 +244,19 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
     @Override
     public String getId() {
-        return "autopilot_ctl";
+        return "autopilot";
     }
 
     @Override
     public void reset() {
-        targetPitch = null;
         verticalMode = null;
-        targetHeading = null;
         lateralMode = null;
+        thrustMode = null;
+
+        targetPitch = null;
+        targetHeading = null;
         targetThrust = null;
+        togaHeading = null;
 
         autoflight.disconnectAutoFirework(true);
         autoflight.disconnectAutopilot(true);
