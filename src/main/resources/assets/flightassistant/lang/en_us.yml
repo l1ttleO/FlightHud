@@ -217,6 +217,7 @@ mode.flightassistant:
     relative: MINIM +%s
     not_set: NO MINIMS
   thrust:
+    unavailable: THR UNAVAIL
     toga: TOGA
     climb: THR CLB
     climb_reduced: RED CLB
@@ -236,6 +237,7 @@ mode.flightassistant:
       selected: SPD %s
       managed: P. SPD %s
   vert:
+    glide: OPT GLD
     climb:
       optimum: OPT CLB
       selected: CLB %s

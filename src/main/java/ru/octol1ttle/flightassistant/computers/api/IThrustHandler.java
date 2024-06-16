@@ -11,7 +11,8 @@ public interface IThrustHandler extends IComputer {
     default void tickThrust() {
     }
 
-    boolean available();
+    boolean enabled();
 
+    boolean canBeUsed();
     boolean isFireworkLike();
 }

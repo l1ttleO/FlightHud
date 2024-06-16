@@ -140,13 +140,18 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
     }
 
     @Override
-    public boolean available() {
+    public boolean enabled() {
         return true;
     }
 
     @Override
+    public boolean canBeUsed() {
+        return !noFireworks;
+    }
+
+    @Override
     public boolean isFireworkLike() {
-        return false;
+        return true;
     }
 
     @Override

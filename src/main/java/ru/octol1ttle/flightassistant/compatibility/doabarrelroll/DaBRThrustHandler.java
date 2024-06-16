@@ -23,13 +23,18 @@ public class DaBRThrustHandler implements IThrustHandler {
     }
 
     @Override
-    public boolean available() {
+    public boolean enabled() {
         return ModConfig.INSTANCE.getEnableThrust();
     }
 
     @Override
-    public boolean isFireworkLike() {
+    public boolean canBeUsed() {
         return true;
+    }
+
+    @Override
+    public boolean isFireworkLike() {
+        return false;
     }
 
     @Override

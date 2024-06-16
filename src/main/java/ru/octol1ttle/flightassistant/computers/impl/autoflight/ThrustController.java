@@ -92,7 +92,7 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     }
 
     public IThrustHandler getThrustHandler() {
-        return thrustHandler.available() ? thrustHandler : fallback;
+        return thrustHandler.enabled() ? thrustHandler : fallback;
     }
 
     @Override

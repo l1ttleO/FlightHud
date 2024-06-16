@@ -1,10 +1,8 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
-import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
@@ -65,39 +63,74 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         setTargetThrust(null, Text.empty());
 
         setTargetPitch(null, Text.empty());
-        Integer targetAltitude = autoflight.getTargetAltitude();
-        if (targetAltitude == null) {
-            return;
-        }
-
-        float diff = targetAltitude - data.altitude();
-
-        boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike(); // I wish I didn't have to account for this
-        float climbThrust = useReducedThrust ? THRUST_CLIMB_REDUCED : THRUST_CLIMB;
-        String thrustSuffix = useReducedThrust ? "_reduced" : "";
-
-        if (autoflight.selectedAltitude != null) {
-            float speedAdjustment = targetSpeed != null ? data.speed() - targetSpeed : 0.0f;
-            if (targetAltitude >= data.altitude()) {
-                setTargetThrust(climbThrust, Text.translatable("mode.flightassistant.thrust.climb" + thrustSuffix));
-                float pitch;
-                if (useReducedThrust) {
-                    pitch = 47.5f - 47.5f * (Math.max(20.0f - diff, 0.0f) / 15.0f) + 7.5f;
+        if (!thrust.getThrustHandler().canBeUsed()) {
+            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.unavailable"));
+            setTargetPitch(PitchController.GLIDE_PITCH, Text.translatable("mode.flightassistant.vert.glide"));
+        } else {
+            Integer targetAltitude = autoflight.getTargetAltitude();
+            if (targetAltitude != null) {
+                float diff = Math.abs(targetAltitude - data.altitude());
+                float speedAdjustment = targetSpeed != null ? data.speed() - targetSpeed : 0.0f;
+                if (autoflight.selectedAltitude != null) {
+                    tickSelectedAltitude(diff, speedAdjustment);
                 } else {
-                    pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                    tickManagedAltitude(diff, speedAdjustment);
                 }
-                setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected"));
-            } else {
-                setTargetThrust(climbThrust, Text.translatable("mode.flightassistant.thrust.descend" + thrustSuffix));
             }
+
+            tickSpeed(targetSpeed);
         }
+    }
 
-        if (targetAltitude > data.altitude()) {
+    private void tickSelectedAltitude(float diff, float speedAdjustment) {
+        boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike(); // I wish I didn't have to account for this
 
+        if (diff > 0) {
+            float pitch;
+            if (useReducedThrust) {
+                setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
+                pitch = 47.5f - 47.5f * (Math.max(20.0f - Math.max(diff - 5, 0), 0.0f) / 20.0f) + 7.5f;
+            } else {
+                setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+                pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+            }
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
+        } else {
+            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
+            float pitch;
+            if (useReducedThrust) {
+                pitch = -25.0f + 25.0f * (Math.max(20.0f - Math.max(diff - 10, 0), 0.0f) / 20.0f) + 7.5f;
+            } else {
+                pitch = -35.0f + 35.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+            }
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
         }
+    }
 
-        // overwrite any thrust setting if we have a target speed
-        tickSpeed(targetSpeed);
+    private void tickManagedAltitude(float diff, float speedAdjustment) {
+        // TODO
+        boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike();
+
+        if (diff > 0) {
+            float pitch;
+            if (useReducedThrust) {
+                setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
+                pitch = 47.5f - 47.5f * (Math.max(20.0f - Math.max(diff - 5, 0), 0.0f) / 20.0f) + 7.5f;
+            } else {
+                setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+                pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+            }
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
+        } else {
+            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
+            float pitch;
+            if (useReducedThrust) {
+                pitch = -25.0f + 25.0f * (Math.max(20.0f - Math.max(diff - 10, 0), 0.0f) / 20.0f) + 7.5f;
+            } else {
+                pitch = -35.0f + 35.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+            }
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
+        }
     }
 
     private void tickSpeed(Integer targetSpeed) {
@@ -123,7 +156,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         }
     }
 
-    private Float computeTargetPitch() {
+    /*private Float computeTargetPitch() {
         Integer targetAltitude = autoflight.getTargetAltitude();
         if (targetAltitude == null) {
             return null;
@@ -181,7 +214,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         }
 
         return degrees;
-    }
+    }*/
 
     public Float getTargetPitch() {
         return targetPitch;

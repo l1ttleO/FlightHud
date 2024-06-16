@@ -216,18 +216,17 @@ mode.flightassistant:
     absolute: МИНИМ %s
     relative: МИНИМ +%s
     not_set: НЕТ МИНИМ
-  firework:
-    none_in_hotbar: НЕТ ФРВКОВ
-    locked: ТОЛЬКО А/ФРВК
-    manual: РУЧН ФРВК
-    no_spd_alt: УСТАН СКОР/ВЫС
-    protection: ФРВК ЗАЩИТА
-    idle: ФРВК СНИЖ
-    climb: ФРВК НАБОР
+  thrust:
+    unavailable: ТЯГА НЕДОСТУПНА
+    toga: ВЗЛЕТН ТЯГА
+    climb: ТЯГА НАБОР
+    climb_reduced: СНИЖЕН НАБОР
+    idle: МАЛАЯ ТЯГА
     speed:
       selected: СКОР %s
       managed: П. СКОР %s
   vert:
+    glide: ОПТ ПЛАНИР
     climb:
       optimum: ОПТ НАБОР
       selected: НАБОР %s
