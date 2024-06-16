@@ -14,21 +14,18 @@ import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FireworkController implements ITickableComputer, IThrustHandler {
-    public static final float FIREWORK_SPEED = 33.62f;
+    public static final float FIREWORK_SPEED = 33.5f;
 
     private final MinecraftClient mc;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
 
     public int safeFireworkCount = Integer.MAX_VALUE;
     public boolean fireworkResponded = true;
     public float lastUseTime = -1.0f;
     public float lastDiff = Float.MIN_VALUE;
-    public Float lastProtTrigger;
     public boolean noFireworks = false;
     public boolean activationInProgress = false;
-    public boolean lockManualFireworks = false;
 
     public FireworkController(MinecraftClient mc) {
         this.mc = mc;
@@ -58,9 +55,9 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
     }
 
     @Override
-    public void tickThrust() {
-        if (data.speed() / FIREWORK_SPEED < thrust.currentThrust) {
-            activateFirework(false);
+    public void tickThrust(float current) {
+        if (data.speed() / FIREWORK_SPEED < current) {
+            activateFirework();
         }
     }
 
@@ -78,20 +75,17 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
         return i;
     }
 
-    private void activateFirework(boolean force) {
+    private void activateFirework() {
         if (!data.canAutomationsActivate() || lastUseTime > 0 && time.millis != null && time.millis - lastUseTime < 1000) {
             return;
         }
-        if (force && time.millis != null) {
-            this.lastProtTrigger = time.millis;
-        }
 
         if (isFireworkSafe(data.player().getOffHandStack())) {
-            tryActivateFirework(Hand.OFF_HAND, force);
+            tryActivateFirework(Hand.OFF_HAND);
             return;
         }
         if (isFireworkSafe(data.player().getMainHandStack())) {
-            tryActivateFirework(Hand.MAIN_HAND, force);
+            tryActivateFirework(Hand.MAIN_HAND);
             return;
         }
 
@@ -112,11 +106,11 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
             noFireworks = true;
             return;
         }
-        tryActivateFirework(Hand.MAIN_HAND, force);
+        tryActivateFirework(Hand.MAIN_HAND);
     }
 
-    private void tryActivateFirework(Hand hand, boolean force) {
-        if (!force && !fireworkResponded) {
+    private void tryActivateFirework(Hand hand) {
+        if (!fireworkResponded) {
             return;
         }
         if (mc.interactionManager == null) {
@@ -167,6 +161,5 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
         lastDiff = Float.MIN_VALUE;
         noFireworks = false;
         activationInProgress = false;
-        lockManualFireworks = false;
     }
 }

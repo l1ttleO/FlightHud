@@ -27,7 +27,7 @@ public class AutoFlightController implements ITickableComputer, IAutopilotProvid
     public void tick() {
         if (prot.law != FlightProtectionsComputer.FlightControlLaw.NORMAL
                 || ComputerRegistry.anyFaulted(computer -> computer instanceof IAutopilotProvider)) {
-            disconnectAutoFirework(true);
+            disconnectAutoThrust(true);
             disconnectAutopilot(true);
         }
     }
@@ -51,7 +51,7 @@ public class AutoFlightController implements ITickableComputer, IAutopilotProvid
         }
     }
 
-    public void disconnectAutoFirework(boolean force) {
+    public void disconnectAutoThrust(boolean force) {
         if (autoThrustEnabled) {
             autoThrustEnabled = false;
             athrDisconnectionForced = force;
@@ -66,7 +66,7 @@ public class AutoFlightController implements ITickableComputer, IAutopilotProvid
     @Override
     public void reset() {
         flightDirectorsEnabled = false;
-        disconnectAutoFirework(true);
+        disconnectAutoThrust(true);
         disconnectAutopilot(true);
     }
 }

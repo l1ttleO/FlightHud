@@ -3,7 +3,10 @@ package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.compatibility.doabarrelroll.DaBRThrustHandler;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
@@ -19,13 +22,20 @@ import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCall
 import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
 public class ThrustController implements ITickableComputer, INormalLawProvider {
-    private static final float MIN_TO_MAX_SPOOL_UP_TIME = 5.0f;
     private static final List<IThrustController> controllers = new ArrayList<>();
+    private static final Random random = new Random();
+
     private static IThrustHandler thrustHandler;
     private static IThrustHandler fallback;
+
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-    public float currentThrust = 0.0f;
-    public float targetThrust = 0.0f;
+
+    private float currentThrust = 0.0f;
+    private float targetThrust = 0.0f;
+    private boolean currentReverse = false;
+    private boolean targetReverse = false;
+
+    private Float syncReverseAt = null;
 
     static {
         RegisterCustomComputersCallback.EVENT.register(() -> {
@@ -57,14 +67,31 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     public void tick() {
         updateTargetThrust();
 
-        float diff = targetThrust - currentThrust;
-        if (!FAConfig.computer().simulateEngineSpoolUp || Math.abs(diff) < 0.001f) {
+        if (!FAConfig.computer().simulateEngine) {
             currentThrust = targetThrust;
+            currentReverse = targetReverse;
         } else {
-            currentThrust = currentThrust + diff * time.deltaTime / MIN_TO_MAX_SPOOL_UP_TIME * Math.max(currentThrust, 0.1f);
+            if (targetThrust > currentThrust) {
+                currentThrust = Math.min(targetThrust, currentThrust + time.deltaTime * Math.max(currentThrust * 1.5f, 0.1f) / 3.0f);
+            } else {
+                float diff = currentThrust - targetThrust;
+                currentThrust = Math.max(targetThrust, currentThrust - diff * time.deltaTime / 1.5f);
+            }
+
+            if (currentReverse != targetReverse) {
+                if (syncReverseAt == null) {
+                    syncReverseAt = time.millis + random.nextFloat(750, 1500);
+                }
+
+                if (time.millis >= syncReverseAt) {
+                    currentReverse = targetReverse;
+                }
+            } else {
+                syncReverseAt = null;
+            }
         }
 
-        getThrustHandler().tickThrust();
+        getThrustHandler().tickThrust(getCurrentThrust());
     }
 
     private void updateTargetThrust() {
@@ -81,18 +108,42 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
         inputs.sort(Comparator.comparingInt(input -> input.priority().numerical));
 
         InputPriority lastPriority = null;
+        Float newTarget = null;
         for (ThrustControlInput input : inputs) {
             if (lastPriority != null && input.priority() != lastPriority) {
                 break;
             }
 
-            targetThrust = Math.max(targetThrust, input.target());
+            newTarget = Math.max(Objects.requireNonNullElse(newTarget, -1.0f), input.target());
             lastPriority = input.priority();
+        }
+
+        if (newTarget != null) {
+            setThrust(newTarget);
         }
     }
 
     public IThrustHandler getThrustHandler() {
         return thrustHandler.enabled() ? thrustHandler : fallback;
+    }
+
+    public float getCurrentThrust() {
+        return currentThrust * (currentReverse ? -1 : 1);
+    }
+
+    public float getTargetThrust() {
+        return targetThrust * (targetReverse ? -1 : 1);
+    }
+
+    /**
+     * Sets the target thrust.
+     *
+     * @param newTarget The new target, ranging from -1.0 to 1.0.
+     */
+    public void setThrust(float newTarget) {
+        newTarget = MathHelper.clamp(newTarget, -1.0f, 1.0f);
+        this.targetThrust = Math.abs(newTarget);
+        this.targetReverse = newTarget < 0.0f;
     }
 
     @Override
@@ -104,5 +155,8 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     public void reset() {
         currentThrust = 0.0f;
         targetThrust = 0.0f;
+        currentReverse = false;
+        targetReverse = false;
+        syncReverseAt = null;
     }
 }

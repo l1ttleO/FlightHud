@@ -53,6 +53,8 @@ public class IndicatorConfig {
     @SerialEntry
     public boolean showFireworkCount = true;
     @SerialEntry
+    public boolean showEnginePower = true;
+    @SerialEntry
     public boolean showDistanceToWaypoint = true;
     @SerialEntry
     public boolean showFlightPhase = true;
@@ -106,6 +108,7 @@ public class IndicatorConfig {
         this.showFireworkCount = false;
         this.showDistanceToWaypoint = false;
         this.showFlightPhase = false;
+        this.showEnginePower = false;
 
         return this;
     }

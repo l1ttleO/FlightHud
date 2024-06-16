@@ -10,7 +10,7 @@ public class FlightPhaseComputer implements ITickableComputer {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
-    public Phase phase = Phase.UNKNOWN;
+    private Phase phase = Phase.UNKNOWN;
 
     @SuppressWarnings("DataFlowIssue")
     @Override
@@ -63,6 +63,10 @@ public class FlightPhaseComputer implements ITickableComputer {
                 phase = Phase.LAND;
             }
         }
+    }
+
+    public Phase get() {
+        return this.phase;
     }
 
     private boolean isAboutToLand() {

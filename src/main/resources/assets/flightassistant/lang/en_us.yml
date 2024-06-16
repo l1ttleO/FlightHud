@@ -3,11 +3,14 @@ mod.flightassistant: Flight Assistant
 key.flightassistant:
   toggle_display_mode: Switch display mode
   toggle_flight_directors: Toggle flight directors
-  toggle_auto_firework: Toggle auto-firework
+  toggle_auto_thrust: Toggle auto-thrust
   toggle_auto_pilot: Toggle autopilot
   hide_alert: Hide first alert
   recall_alert: Recall last hidden alert
-  lock_manual_fireworks: Lock manual fireworks
+  set_idle: Set idle thrust
+  decrease_thrust: Decrease thrust
+  increase_thrust: Increase thrust
+  set_toga: Set TO/GA thrust
 
 config.flightassistant:
   category:
@@ -50,7 +53,7 @@ config.flightassistant:
       readout: Show heading readout
     automation:
       .: Automation
-      firework: Show firework mode
+      thrust: Show thrust mode
       vertical: Show vertical mode
       lateral: Show lateral mode
       status: Show automation status
@@ -58,6 +61,7 @@ config.flightassistant:
       .: Information
       alerts: Show alerts
       firework_count: Show firework count
+      engine_power: Show engine power
       waypoint_distance: Show distance to waypoint
       flight_phase: Show flight phase
     misc:
@@ -93,7 +97,7 @@ config.flightassistant:
       .: Stall
       warning: Stall warning mode
       protection: Stall protection mode
-      fireworks: Use fireworks for recovery
+      thrust: Allow thrust usage for recovery
     gpws:
       .: Ground Proximity Warning System
       sinkrate:
@@ -107,7 +111,7 @@ config.flightassistant:
     void_level:
       .: Void level
       protection: Void level protection mode
-      fireworks: Use fireworks for recovery
+      thrust: Allow thrust usage for recovery
     elytra_state:
       .: Elytra state
       close_underwater: Close Elytra when submerged in water
@@ -156,7 +160,7 @@ alerts.flightassistant:
     reached: REACHED VOID DAMAGE LEVEL
   autoflight:
     autopilot_off: AUTOPILOT OFF
-    auto_firework_off: AUTO-FIREWORK OFF
+    auto_thrust_off: AUTO-THRUST OFF
   firework:
     no_response: FRWK NO RESPONSE
     unsafe: FRWK EXPLOSIVE
@@ -200,6 +204,7 @@ alerts.flightassistant:
 
 status.flightassistant:
   firework_count: 'FRWK CNT: %s'
+  engine_power: 'ENG PWR: %s'
   waypoint_distance: 'WP/DIST: %s'
   phase:
     on_ground: ON GROUND
@@ -218,7 +223,12 @@ mode.flightassistant:
     not_set: NO MINIMS
   thrust:
     unavailable: THR UNAVAIL
-    toga: TOGA
+    manual:
+      .: MAN THR %s
+      reverse: MAN REV %s
+      idle: MAN IDLE
+      toga: MAN TOGA
+    toga: AUTO TOGA
     climb: THR CLB
     climb_reduced: RED CLB
     idle: THR IDLE
@@ -257,7 +267,7 @@ mode.flightassistant:
     approach: APPR %s %s
   auto:
     flight_directors: FD
-    auto_firework: A/FRWK
+    auto_thrust: A/THR
     autopilot: AP
 
 short.flightassistant:

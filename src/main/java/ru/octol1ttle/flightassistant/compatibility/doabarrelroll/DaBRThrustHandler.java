@@ -16,9 +16,10 @@ public class DaBRThrustHandler implements IThrustHandler {
     public DaBRThrustHandler() {
         ThrustEvents.MODIFY_THRUST_INPUT.register(v -> {
             if (Math.abs(v) > 0.001f) {
-                autoflight.disconnectAutoFirework(true);
+                autoflight.disconnectAutoThrust(true);
             }
-            return thrust.targetThrust += (float) (v * time.deltaTime * 0.5f);
+            thrust.setThrust((float) (thrust.getTargetThrust() + v * time.deltaTime * 0.5f));
+            return thrust.getCurrentThrust();
         }, 10);
     }
 

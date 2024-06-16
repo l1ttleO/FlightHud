@@ -84,7 +84,7 @@ public class FACallbacks {
 
             boolean unsafeFireworks = FAConfig.computer().lockUnsafeFireworks && !firework.isFireworkSafe(player.getStackInHand(hand));
 
-            if (!firework.activationInProgress && (unsafeFireworks || firework.lockManualFireworks || gpwsDanger)) {
+            if (!firework.activationInProgress && (unsafeFireworks || gpwsDanger)) {
                 return TypedActionResult.fail(stack);
             }
 

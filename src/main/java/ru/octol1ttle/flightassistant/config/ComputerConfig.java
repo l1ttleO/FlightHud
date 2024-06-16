@@ -18,8 +18,8 @@ public class ComputerConfig {
     public WarningMode stallWarning = WarningMode.SCREEN_AND_AUDIO;
     @SerialEntry
     public ProtectionMode stallProtection = ProtectionMode.HARD;
-    @SerialEntry
-    public boolean stallUseFireworks = true;
+    @SerialEntry("stallUseFireworks")
+    public boolean stallUseThrust = true;
 
     @SerialEntry
     public WarningMode sinkrateWarning = WarningMode.SCREEN_AND_AUDIO;
@@ -34,8 +34,8 @@ public class ComputerConfig {
 
     @SerialEntry
     public ProtectionMode voidProtection = ProtectionMode.HARD;
-    @SerialEntry
-    public boolean voidUseFireworks = true;
+    @SerialEntry("voidUseFireworks")
+    public boolean voidUseThrust = true;
 
     @SerialEntry
     public boolean closeElytraUnderwater = true;
@@ -46,7 +46,7 @@ public class ComputerConfig {
     public boolean preserveAltitudeInUnloadedChunk = true;
 
     @SerialEntry
-    public boolean simulateEngineSpoolUp = true;
+    public boolean simulateEngine = true;
 
     public enum GlobalAutomationsMode implements NameableEnum {
         FULL,

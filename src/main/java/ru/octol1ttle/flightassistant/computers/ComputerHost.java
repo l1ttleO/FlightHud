@@ -37,23 +37,25 @@ public class ComputerHost {
         ComputerRegistry.register(new TimeComputer(mc));
 
         ComputerRegistry.register(new PitchLimitComputer());
-        ComputerRegistry.register(new FlightProtectionsComputer());
-        ComputerRegistry.register(new ChunkStatusComputer());
-        ComputerRegistry.register(new StallComputer());
-        ComputerRegistry.register(new VoidLevelComputer());
-        ComputerRegistry.register(new FlightPlanner());
-        ComputerRegistry.register(new GroundProximityComputer());
-        ComputerRegistry.register(new ElytraStateController());
-
-        ComputerRegistry.register(new AutoFlightController());
-        ComputerRegistry.register(new FlightPhaseComputer());
         ComputerRegistry.register(new ThrustController());
-        ComputerRegistry.register(new AutopilotComputer());
         ComputerRegistry.register(new PitchController());
         ComputerRegistry.register(new HeadingController());
         ComputerRegistry.register(new RollController());
 
+        ComputerRegistry.register(new FlightProtectionsComputer());
+
+        ComputerRegistry.register(new FlightPlanner());
+        ComputerRegistry.register(new AutoFlightController());
+        ComputerRegistry.register(new FlightPhaseComputer());
+        ComputerRegistry.register(new AutopilotComputer());
+
         ComputerRegistry.register(new FireworkController(mc));
+
+        ComputerRegistry.register(new ChunkStatusComputer());
+        ComputerRegistry.register(new StallComputer());
+        ComputerRegistry.register(new VoidLevelComputer());
+        ComputerRegistry.register(new GroundProximityComputer());
+        ComputerRegistry.register(new ElytraStateController());
 
         ComputerRegistry.register(new AlertController(mc.getSoundManager()));
 

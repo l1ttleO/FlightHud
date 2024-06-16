@@ -12,10 +12,10 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightControl
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class AutoFireworkOffAlert extends BaseAlert implements IECAMAlert {
+public class AutoThrustOffAlert extends BaseAlert implements IECAMAlert {
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
 
-    public AutoFireworkOffAlert() {
+    public AutoThrustOffAlert() {
         this.hidden = true;
     }
 
@@ -31,7 +31,7 @@ public class AutoFireworkOffAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public int render(TextRenderer textRenderer, DrawContext context, int x, int y, boolean highlight) {
-        return DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.autoflight.auto_firework_off"), x, y,
+        return DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable("alerts.flightassistant.autoflight.auto_thrust_off"), x, y,
                 FAConfig.indicator().cautionColor,
                 highlight && autoflight.athrDisconnectionForced
         );

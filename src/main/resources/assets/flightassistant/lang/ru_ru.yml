@@ -3,11 +3,14 @@ mod.flightassistant: Flight Assistant
 key.flightassistant:
   toggle_display_mode: Переключить режим интерфейса
   toggle_flight_directors: Переключить указатели полёта
-  toggle_auto_firework: Переключить авто-фейерверк
+  toggle_auto_firework: Переключить авто-тягу
   toggle_auto_pilot: Переключить автопилот
   hide_alert: Скрыть первое предупреждение
   recall_alert: Показать последнее скрытое предупреждение
-  lock_manual_fireworks: Заблокировать ручные фейерверки
+  set_idle: Установить малую тягу
+  decrease_thrust: Снизить тягу
+  increase_thrust: Прибавить тягу
+  set_toga: Установить взлётную тягу
 
 config.flightassistant:
   category:
@@ -50,7 +53,7 @@ config.flightassistant:
       readout: Показывать значение курса
     automation:
       .: Автоматизация
-      firework: Показывать режим фейерверков
+      thrust: Показывать режим тяги
       vertical: Показывать вертикальный режим
       lateral: Показывать горизонтальный режим
       status: Показывать статус автоматизации
@@ -58,6 +61,7 @@ config.flightassistant:
       .: Информация
       alerts: Показывать предупреждения
       firework_count: Показывать счётчик фейерверков
+      engine_power: Показывать силу двигателя
       waypoint_distance: Показывать расстояние до точки назначения
       flight_phase: Показывать фазу полёта
     misc:
@@ -93,7 +97,7 @@ config.flightassistant:
       .: Сваливание
       warning: Режим предупреждения о сваливании
       protection: Режим защиты от сваливания
-      fireworks: Использовать фейерверки для восстановления
+      thrust: Разрешить использование тяги для защиты
     gpws:
       .: Система предупреждения о близости земли (GPWS)
       sinkrate:
@@ -107,7 +111,7 @@ config.flightassistant:
     void_level:
       .: Уровень пустоты
       protection: Режим защиты от пересечения уровня пустоты
-      fireworks: Использовать фейерверки для восстановления
+      thrust: Разрешить использование тяги для защиты
     elytra_state:
       .: Состояние элитр
       close_underwater: Закрывать элитры под водой
@@ -156,7 +160,7 @@ alerts.flightassistant:
     reached: ДОСТИГНУТА ВЫСОТА УРОНА ПУСТОТЫ
   autoflight:
     autopilot_off: АВТОПИЛОТ ВЫКЛ
-    auto_firework_off: АВТО-ФРВК ВЫКЛ
+    auto_thrust_off: АВТО-ТЯГА ВЫКЛ
   firework:
     no_response: ФРВК ОТКАЗ
     unsafe: ФРВК ВЗРЫВООПАСЕН
@@ -200,6 +204,7 @@ alerts.flightassistant:
 
 status.flightassistant:
   firework_count: 'КОЛ-ВО ФРВКОВ: %s'
+  engine_power: 'СИЛА ДВИГ-Я: %s'
   waypoint_distance: 'РАССТ: %s'
   phase:
     on_ground: НА ЗЕМЛЕ
@@ -246,7 +251,7 @@ mode.flightassistant:
     approach: ЗАХОД %s %s
   auto:
     flight_directors: УК
-    auto_firework: А/ФРВК
+    auto_firework: А/ТЯГА
     autopilot: АП
 
 short.flightassistant:

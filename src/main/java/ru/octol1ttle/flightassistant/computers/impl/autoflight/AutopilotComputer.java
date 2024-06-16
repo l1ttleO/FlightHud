@@ -1,8 +1,10 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
+import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IHeadingController;
@@ -40,8 +42,16 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
     @Override
     public void tick() {
-        if (phase.phase == Phase.TAKEOFF
-                || phase.phase == Phase.GO_AROUND && data.heightAboveGround() < 15.0f) {
+        setTargetThrust(null, Text.empty());
+        setTargetPitch(null, Text.empty());
+        setTargetHeading(null, Text.empty());
+
+        if (phase.get() == Phase.ON_GROUND) {
+            return;
+        }
+
+        if (phase.get() == Phase.TAKEOFF
+                || phase.get() == Phase.GO_AROUND && data.heightAboveGround() < 15.0f) {
             if (togaHeading == null) {
                 togaHeading = data.heading();
             }
@@ -49,87 +59,93 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             setTargetThrust(1.0f, Text.translatable("mode.flightassistant.thrust.toga"));
             setTargetPitch(55.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
 
-            String lat = phase.phase == Phase.TAKEOFF ? ".takeoff" : ".go_around";
+            String lat = phase.get() == Phase.GO_AROUND ? ".go_around" : ".takeoff";
             setTargetHeading(togaHeading, Text.translatable("mode.flightassistant.lat" + lat, togaHeading.intValue()));
 
             return;
         }
 
         togaHeading = null;
-        setTargetHeading(null, Text.empty());
         tickLateral();
 
         Integer targetSpeed = autoflight.getTargetSpeed();
-        setTargetThrust(null, Text.empty());
-
-        setTargetPitch(null, Text.empty());
         if (!thrust.getThrustHandler().canBeUsed()) {
             setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.unavailable"));
             setTargetPitch(PitchController.GLIDE_PITCH, Text.translatable("mode.flightassistant.vert.glide"));
         } else {
-            Integer targetAltitude = autoflight.getTargetAltitude();
-            if (targetAltitude != null) {
-                float diff = Math.abs(targetAltitude - data.altitude());
-                float speedAdjustment = targetSpeed != null ? data.speed() - targetSpeed : 0.0f;
-                if (autoflight.selectedAltitude != null) {
-                    tickSelectedAltitude(diff, speedAdjustment);
-                } else {
-                    tickManagedAltitude(diff, speedAdjustment);
-                }
-            }
-
+            tickVertical(targetSpeed);
             tickSpeed(targetSpeed);
+        }
+    }
+
+    private void tickVertical(Integer targetSpeed) {
+        Integer targetAltitude = autoflight.getTargetAltitude();
+        if (targetAltitude != null) {
+            float diff = targetAltitude - data.altitude();
+            float speedAdjustment = targetSpeed != null ? data.speed() - targetSpeed : 0.0f;
+            if (autoflight.selectedAltitude != null) {
+                tickSelectedAltitude(diff, speedAdjustment);
+            } else if (plan.getTargetPosition() != null) {
+                tickManagedAltitude(targetAltitude, speedAdjustment, plan.getTargetPosition());
+            }
         }
     }
 
     private void tickSelectedAltitude(float diff, float speedAdjustment) {
         boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike(); // I wish I didn't have to account for this
+        float abs = Math.abs(diff);
 
+        float pitch;
+        // TODO: cant level off on the first try
         if (diff > 0) {
-            float pitch;
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
-                pitch = 47.5f - 47.5f * (Math.max(20.0f - Math.max(diff - 5, 0), 0.0f) / 20.0f) + 7.5f;
+                pitch = 45.0f - 45.0f * (Math.max(40.0f - Math.max(abs - 5, 0), 0.0f) / 40.0f) + 10.0f;
             } else {
                 setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
-                pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                pitch = 45.0f - 45.0f * (Math.max(50.0f - abs, 0.0f) / 50.0f) + 5.0f + speedAdjustment;
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
         } else {
             setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
-            float pitch;
             if (useReducedThrust) {
-                pitch = -25.0f + 25.0f * (Math.max(20.0f - Math.max(diff - 10, 0), 0.0f) / 20.0f) + 7.5f;
+                pitch = -25.0f + 25.0f * (Math.max(40.0f - Math.max(abs - 10, 0), 0.0f) / 40.0f);
             } else {
-                pitch = -35.0f + 35.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                pitch = -35.0f + 35.0f * (Math.max(50.0f - abs, 0.0f) / 50.0f) + 5.0f + speedAdjustment;
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
         }
+
+        if (abs <= 5) {
+            setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.hold.selected", autoflight.selectedAltitude));
+        }
     }
 
-    private void tickManagedAltitude(float diff, float speedAdjustment) {
-        // TODO
+    private void tickManagedAltitude(Integer targetAltitude, float speedAdjustment, Vector2d pos) {
         boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike();
-
+        float diff = targetAltitude - data.altitude();
+        double distance = Vector2d.distance(data.position().x, data.position().z, pos.x, pos.y);
+        float degrees = FAMathHelper.toDegrees(MathHelper.atan2(diff, distance));
         if (diff > 0) {
             float pitch;
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
-                pitch = 47.5f - 47.5f * (Math.max(20.0f - Math.max(diff - 5, 0), 0.0f) / 20.0f) + 7.5f;
+                pitch = MathHelper.clamp(degrees, 7.5f, PitchController.CLIMB_PITCH);
             } else {
                 setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
-                pitch = 55.0f - 55.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                pitch = Math.min(degrees, PitchController.CLIMB_PITCH) + speedAdjustment;
             }
-            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.managed", targetAltitude));
         } else {
             setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
             float pitch;
             if (useReducedThrust) {
-                pitch = -25.0f + 25.0f * (Math.max(20.0f - Math.max(diff - 10, 0), 0.0f) / 20.0f) + 7.5f;
+                pitch = MathHelper.clamp(degrees, PitchController.DESCEND_PITCH, PitchController.GLIDE_PITCH);
             } else {
-                pitch = -35.0f + 35.0f * (Math.max(15.0f - diff, 0.0f) / 15.0f) + speedAdjustment;
+                pitch = MathHelper.clamp(degrees, PitchController.DESCEND_PITCH, 0.0f);
             }
-            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.managed", targetAltitude));
         }
     }
 
@@ -138,9 +154,9 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             return;
         }
 
-        float diff = Math.abs(targetSpeed - data.speed());
+        float diff = targetSpeed - data.speed();
 
-        float thr = targetSpeed > data.speed() ? THRUST_CLIMB : -0.5f;
+        float thr = THRUST_CLIMB;
         if (thrust.getThrustHandler().isFireworkLike()) {
             thr = targetSpeed / FireworkController.FIREWORK_SPEED;
         }
@@ -155,66 +171,6 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             setTargetHeading(plan.getManagedHeading(), Text.translatable("mode.flightassistant.lat.managed", (int) planPos.x, (int) planPos.y));
         }
     }
-
-    /*private Float computeTargetPitch() {
-        Integer targetAltitude = autoflight.getTargetAltitude();
-        if (targetAltitude == null) {
-            return null;
-        }
-        Vector2d planPos = plan.getTargetPosition();
-
-        float diff = targetAltitude - data.altitude();
-        boolean landing = phase.phase == Phase.LAND;
-        if (!landing && diff > -10.0f && diff < 5.0f) {
-            return (PitchController.GLIDE_PITCH + PitchController.ALTITUDE_PRESERVE_PITCH) * 0.5f;
-        }
-
-        if (data.altitude() < targetAltitude) {
-            return computeClimbPitch(diff, planPos);
-        }
-
-        if (planPos == null || autoflight.selectedAltitude != null) {
-            if (diff > -15.0f) {
-                return PitchController.GLIDE_PITCH;
-            }
-
-            return (PitchController.GLIDE_PITCH + PitchController.DESCEND_PITCH) * 0.5f;
-        }
-
-        float degrees = FAMathHelper.toDegrees(
-                MathHelper.atan2(
-                        diff,
-                        Vector2d.distance(data.position().x, data.position().z, planPos.x, planPos.y)
-                )
-        );
-        if (!landing && diff > -15.0f) {
-            return Math.max(PitchController.GLIDE_PITCH, degrees);
-        }
-
-        return degrees;
-    }
-
-    private float computeClimbPitch(float diff, Vector2d target) {
-        if (target == null || autoflight.selectedAltitude != null) {
-            if (diff <= 15.0f) {
-                return PitchController.ALTITUDE_PRESERVE_PITCH;
-            }
-
-            return (PitchController.ALTITUDE_PRESERVE_PITCH + PitchController.CLIMB_PITCH) * 0.5f;
-        }
-
-        float degrees = Math.max(5.0f, FAMathHelper.toDegrees(
-                MathHelper.atan2(
-                        diff,
-                        Vector2d.distance(data.position().x, data.position().z, target.x, target.y)
-                )
-        ));
-        if (diff <= 15.0f) {
-            return Math.min(PitchController.ALTITUDE_PRESERVE_PITCH, degrees);
-        }
-
-        return degrees;
-    }*/
 
     public Float getTargetPitch() {
         return targetPitch;
@@ -291,7 +247,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         targetThrust = null;
         togaHeading = null;
 
-        autoflight.disconnectAutoFirework(true);
+        autoflight.disconnectAutoThrust(true);
         autoflight.disconnectAutopilot(true);
     }
 }

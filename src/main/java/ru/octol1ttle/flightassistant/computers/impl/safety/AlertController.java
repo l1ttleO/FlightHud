@@ -8,7 +8,7 @@ import ru.octol1ttle.flightassistant.AlertSoundInstance;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
-import ru.octol1ttle.flightassistant.alerts.impl.autoflight.AutoFireworkOffAlert;
+import ru.octol1ttle.flightassistant.alerts.impl.autoflight.AutoThrustOffAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.autoflight.AutopilotOffAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.fault.ComputerFaultAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.fault.IndicatorFaultAlert;
@@ -45,7 +45,7 @@ public class AlertController implements ITickableComputer {
         AlertRegistry.register(new ProtectionsLostAlert());
         AlertRegistry.register(new UnloadedChunkAlert());
         AlertRegistry.register(new ComputerFaultAlert());
-        AlertRegistry.register(new AutoFireworkOffAlert());
+        AlertRegistry.register(new AutoThrustOffAlert());
         AlertRegistry.register(new MinimumsAlert());
         AlertRegistry.register(new ApproachingVoidDamageLevelAlert());
         AlertRegistry.register(new ElytraHealthLowAlert());

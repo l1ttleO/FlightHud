@@ -3,25 +3,23 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
+import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
+import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class StallComputer implements ITickableComputer, IPitchLimiter {
+public class StallComputer implements ITickableComputer, IPitchLimiter, IThrustController {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     public StallStatus status = StallStatus.UNKNOWN;
     public float maximumSafePitch = 90.0f;
 
     @Override
     public void tick() {
         status = computeStalling();
-        if (FAConfig.computer().stallUseFireworks && status == StallStatus.FULL_STALL) {
-            firework.activateFirework(true);
-        }
         maximumSafePitch = computeMaximumSafePitch();
     }
 
@@ -64,6 +62,14 @@ public class StallComputer implements ITickableComputer, IPitchLimiter {
     @Override
     public ComputerConfig.ProtectionMode getProtectionMode() {
         return FAConfig.computer().stallProtection;
+    }
+
+    @Override
+    public ThrustControlInput getThrustInput() {
+        if (!FAConfig.computer().stallUseThrust || status != StallStatus.FULL_STALL) {
+            return null;
+        }
+        return new ThrustControlInput(1.0f, InputPriority.HIGHEST);
     }
 
     @Override

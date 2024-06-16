@@ -2,17 +2,18 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.math.Direction;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
+import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.api.InputPriority;
+import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class VoidLevelComputer implements ITickableComputer, IPitchLimiter {
+public class VoidLevelComputer implements ITickableComputer, IPitchLimiter, IThrustController {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
     public VoidLevelStatus status = VoidLevelStatus.UNKNOWN;
     public float minimumSafePitch = -90.0f;
@@ -20,9 +21,6 @@ public class VoidLevelComputer implements ITickableComputer, IPitchLimiter {
     @Override
     public void tick() {
         status = computeStatus();
-        if (FAConfig.computer().voidUseFireworks && aboveVoid() && data.altitude() - data.voidLevel() < 12) {
-            firework.activateFirework(true);
-        }
         minimumSafePitch = computeMinimumSafePitch();
     }
 
@@ -76,6 +74,14 @@ public class VoidLevelComputer implements ITickableComputer, IPitchLimiter {
     @Override
     public boolean blockPitchChange(Direction direction) {
         return direction == Direction.DOWN && status == VoidLevelStatus.REACHED_DAMAGE_LEVEL;
+    }
+
+    @Override
+    public ThrustControlInput getThrustInput() {
+        if (!FAConfig.computer().voidUseThrust || !aboveVoid() || data.altitude() - data.voidLevel() >= 12) {
+            return null;
+        }
+        return new ThrustControlInput(1.0f, InputPriority.HIGH);
     }
 
     @Override

@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
+import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
@@ -18,6 +19,7 @@ public class StatusDisplay implements IHudDisplay {
     private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
+    private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
 
     public StatusDisplay(Dimensions dim) {
         this.dim = dim;
@@ -28,18 +30,34 @@ public class StatusDisplay implements IHudDisplay {
         int x = dim.rFrame - 5;
         int y = dim.tFrame + 5;
 
-        if (FAConfig.indicator().showFireworkCount) {
-            Color fireworkColor = FAConfig.indicator().statusColor;
-            if (firework.safeFireworkCount > 0) {
-                if (firework.safeFireworkCount <= 24) {
-                    fireworkColor = FAConfig.indicator().cautionColor;
+        if (thrust.getThrustHandler() instanceof FireworkController) {
+            if (FAConfig.indicator().showFireworkCount) {
+                Color fireworkColor = FAConfig.indicator().statusColor;
+                if (firework.safeFireworkCount > 0) {
+                    if (firework.safeFireworkCount <= 24) {
+                        fireworkColor = FAConfig.indicator().cautionColor;
+                    }
+                } else {
+                    fireworkColor = FAConfig.indicator().warningColor;
                 }
-            } else {
-                fireworkColor = FAConfig.indicator().warningColor;
+                DrawHelper.drawRightAlignedText(textRenderer, context,
+                        Text.translatable("status.flightassistant.firework_count", firework.safeFireworkCount),
+                        x, y += 10, fireworkColor
+                );
             }
+        } else if (FAConfig.indicator().showEnginePower) {
+            Color thrustColor = FAConfig.indicator().statusColor;
+            if (thrust.getCurrentThrust() < 0.0f) {
+                thrustColor = FAConfig.indicator().cautionColor;
+            } else if (thrust.getCurrentThrust() > 0.95f) {
+                thrustColor = FAConfig.indicator().warningColor;
+            }
+
+            String displayPower = String.format("%.1f", Math.abs(thrust.getCurrentThrust() * 100.0f)) + "%";
             DrawHelper.drawRightAlignedText(textRenderer, context,
-                    Text.translatable("status.flightassistant.firework_count", firework.safeFireworkCount),
-                    x, y += 10, fireworkColor);
+                    Text.translatable("status.flightassistant.engine_power", displayPower),
+                    x, y += 10, thrustColor
+            );
         }
 
         if (FAConfig.indicator().showDistanceToWaypoint) {
@@ -51,8 +69,8 @@ public class StatusDisplay implements IHudDisplay {
             }
         }
 
-        if (FAConfig.indicator().showFlightPhase && phase.phase != FlightPhaseComputer.Phase.UNKNOWN) {
-            DrawHelper.drawRightAlignedText(textRenderer, context, phase.phase.text, x, y + 10, FAConfig.indicator().statusColor);
+        if (FAConfig.indicator().showFlightPhase && phase.get() != FlightPhaseComputer.Phase.UNKNOWN) {
+            DrawHelper.drawRightAlignedText(textRenderer, context, phase.get().text, x, y + 10, FAConfig.indicator().statusColor);
         }
     }
 
