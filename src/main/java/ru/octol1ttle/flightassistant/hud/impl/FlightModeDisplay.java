@@ -58,7 +58,7 @@ public class FlightModeDisplay implements IHudDisplay {
     }
 
     private void renderFireworkMode(DrawContext context, TextRenderer textRenderer) {
-        if (autoflight.autoThrustEnabled) {
+        if (autoflight.autoThrustEnabled && !Text.empty().equals(autopilot.thrustMode)) {
             thrustMode.update(autopilot.thrustMode);
         } else {
             String displayThrust = String.format("%.1f", Math.abs(thrust.getTargetThrust() * 100.0f)) + "%";

@@ -181,7 +181,7 @@ alerts.flightassistant:
       elytra_state: ELYTRA SYS FAULT (PROT LOST)
       chunk_state: CHUNK SYS FAULT
       pitch_limit: PITCH LIMIT FAULT
-      autopilot_ctl: AUTOPILOT FAULT
+      autopilot: AUTOPILOT FAULT
       flight_phase: F/PHASE SYS FAULT
       roll_ctl: AUTO ROLL CTL FAULT
       dabr_roll: DABR ROLL CTL FAULT
@@ -235,17 +235,6 @@ mode.flightassistant:
     speed:
       selected: SPD %s
       managed: P. SPD %s
-  firework:
-    none_in_hotbar: NO FRWKS
-    locked: A/FRWK ONLY
-    manual: MAN FRWK
-    no_spd_alt: SET SPD/ALT
-    protection: FRWK PROT
-    idle: FRWK IDLE
-    climb: FRWK CLB
-    speed:
-      selected: SPD %s
-      managed: P. SPD %s
   vert:
     glide: OPT GLD
     climb:
@@ -258,6 +247,8 @@ mode.flightassistant:
     hold:
       selected: ALT %s
       managed: P. ALT %s
+      cruise: ALT CRZ %s
+    go_around: GA ALT
     land: LAND %s
   lat:
     takeoff: TO HDG %s

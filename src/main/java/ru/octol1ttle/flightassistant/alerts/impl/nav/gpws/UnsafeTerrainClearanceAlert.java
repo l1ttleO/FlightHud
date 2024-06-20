@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.alerts.api.ICenteredAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
+import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer.TerrainClearanceStatus;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -19,7 +20,7 @@ public class UnsafeTerrainClearanceAlert extends BaseAlert implements ICenteredA
 
     @Override
     public boolean isTriggered() {
-        return gpws.landingClearanceStatus == GroundProximityComputer.LandingClearanceStatus.TOO_LOW;
+        return gpws.terrainClearanceStatus == TerrainClearanceStatus.TOO_LOW;
     }
 
     @Override

@@ -17,6 +17,7 @@ import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer.Phase;
+import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -29,6 +30,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
+    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
     public Text verticalMode;
     public Text lateralMode;
@@ -47,17 +49,23 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         setTargetHeading(null, Text.empty());
 
         if (phase.get() == Phase.ON_GROUND) {
+            togaHeading = null;
             return;
         }
 
         if (phase.get() == Phase.TAKEOFF
-                || phase.get() == Phase.GO_AROUND && data.heightAboveGround() < 15.0f) {
+                || phase.get() == Phase.GO_AROUND) {
             if (togaHeading == null) {
                 togaHeading = data.heading();
             }
 
+            boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike();
             setTargetThrust(1.0f, Text.translatable("mode.flightassistant.thrust.toga"));
-            setTargetPitch(55.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
+            if (data.heightAboveGround() < 15.0f) {
+                setTargetPitch(useReducedThrust ? 55.0f : 35.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
+            } else {
+                setTargetPitch(useReducedThrust ? 10.0f : 5.0f, Text.translatable("mode.flightassistant.vert.go_around"));
+            }
 
             String lat = phase.get() == Phase.GO_AROUND ? ".go_around" : ".takeoff";
             setTargetHeading(togaHeading, Text.translatable("mode.flightassistant.lat" + lat, togaHeading.intValue()));
@@ -96,27 +104,50 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         float abs = Math.abs(diff);
 
         float pitch;
-        // TODO: cant level off on the first try
         if (diff > 0) {
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
-                pitch = 45.0f - 45.0f * (Math.max(40.0f - Math.max(abs - 5, 0), 0.0f) / 40.0f) + 10.0f;
+                pitch = 55.0f;
+                if (abs <= 200) {
+                    pitch -= 30.0f * MathHelper.clamp((200.0f - abs) / 100.0f, 0.0f, 1.0f);
+                }
+                if (abs <= 100) {
+                    pitch -= 15.0f * MathHelper.clamp((100.0f - abs) / 95.0f, 0.0f, 1.0f);
+                }
             } else {
                 setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
-                pitch = 45.0f - 45.0f * (Math.max(50.0f - abs, 0.0f) / 50.0f) + 5.0f + speedAdjustment;
+                pitch = 35.0f + speedAdjustment;
+                if (abs <= 200) {
+                    pitch -= 25.0f * MathHelper.clamp((200.0f - abs) / 100.0f, 0.0f, 1.0f);
+                }
+                if (abs <= 100) {
+                    pitch -= (5.0f + speedAdjustment) * MathHelper.clamp((100.0f - abs) / 100.0f, 0.0f, 1.0f);
+                }
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
         } else {
             setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
             if (useReducedThrust) {
-                pitch = -25.0f + 25.0f * (Math.max(40.0f - Math.max(abs - 10, 0), 0.0f) / 40.0f);
+                pitch = -35.0f;
+                if (abs <= 100) {
+                    pitch += 15.0f * MathHelper.clamp((100.0f - abs) / 50.0f, 0.0f, 1.0f);
+                }
+                if (abs <= 50) {
+                    pitch += 10.0f * MathHelper.clamp((50.0f - abs) / 40.0f, 0.0f, 1.0f);
+                }
             } else {
-                pitch = -35.0f + 35.0f * (Math.max(50.0f - abs, 0.0f) / 50.0f) + 5.0f + speedAdjustment;
+                pitch = -35.0f + speedAdjustment;
+                if (abs <= 100) {
+                    pitch += 20.0f * MathHelper.clamp((100.0f - abs) / 50.0f, 0.0f, 1.0f);
+                }
+                if (abs <= 50) {
+                    pitch += (20.0f + speedAdjustment) * MathHelper.clamp((50.0f - abs) / 50.0f, 0.0f, 1.0f);
+                }
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
         }
 
-        if (abs <= 5) {
+        if (abs <= 10.0f) {
             setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.hold.selected", autoflight.selectedAltitude));
         }
@@ -127,25 +158,32 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         float diff = targetAltitude - data.altitude();
         double distance = Vector2d.distance(data.position().x, data.position().z, pos.x, pos.y);
         float degrees = FAMathHelper.toDegrees(MathHelper.atan2(diff, distance));
+
+        float pitch;
         if (diff > 0) {
-            float pitch;
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
-                pitch = MathHelper.clamp(degrees, 7.5f, PitchController.CLIMB_PITCH);
+                pitch = MathHelper.clamp(degrees, 10.0f, PitchController.CLIMB_PITCH);
             } else {
                 setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
-                pitch = Math.min(degrees, PitchController.CLIMB_PITCH) + speedAdjustment;
+                pitch = MathHelper.clamp(degrees + speedAdjustment, 5.0f, 35.0f);
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.managed", targetAltitude));
         } else {
             setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
-            float pitch;
             if (useReducedThrust) {
                 pitch = MathHelper.clamp(degrees, PitchController.DESCEND_PITCH, PitchController.GLIDE_PITCH);
             } else {
-                pitch = MathHelper.clamp(degrees, PitchController.DESCEND_PITCH, 0.0f);
+                pitch = MathHelper.clamp(degrees + 5.0f + speedAdjustment, PitchController.DESCEND_PITCH, 5.0f);
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.managed", targetAltitude));
+        }
+
+        if (Math.abs(diff) <= 10.0f) {
+            setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+            setTargetPitch(pitch, targetAltitude.equals(plan.getCruiseAltitude())
+                    ? Text.translatable("mode.flightassistant.vert.hold.cruise", targetAltitude)
+                    : Text.translatable("mode.flightassistant.vert.hold.selected", targetAltitude));
         }
     }
 
@@ -156,11 +194,11 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
         float diff = targetSpeed - data.speed();
 
-        float thr = THRUST_CLIMB;
+        float thr = MathHelper.clamp(thrust.getTargetThrust() + diff * 0.01f * time.deltaTime, -0.1f, THRUST_CLIMB);
         if (thrust.getThrustHandler().isFireworkLike()) {
             thr = targetSpeed / FireworkController.FIREWORK_SPEED;
         }
-        setTargetThrust(thr * Math.min(diff * 0.1f, 1.0f), Text.translatable("mode.flightassistant.thrust.speed.selected", targetSpeed));
+        setTargetThrust(thr, Text.translatable("mode.flightassistant.thrust.speed.selected", targetSpeed));
     }
 
     private void tickLateral() {

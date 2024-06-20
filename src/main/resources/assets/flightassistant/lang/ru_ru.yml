@@ -181,7 +181,7 @@ alerts.flightassistant:
       elytra_state: ОТКАЗ УПР ЭЛИТРАМИ (ЗАЩИТЫ ПОТЕР)
       chunk_state: ОТКАЗ СОСТ ЧАНКОВ
       pitch_limit: ОТКАЗ ОГРАНИЧ ТАНГАЖА
-      autopilot_ctl: ОТКАЗ АВТОПИЛОТА
+      autopilot: ОТКАЗ АВТОПИЛОТА
       flight_phase: ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА
       roll_ctl: ОТКАЗ АВТО УПР КРЕНОМ
       dabr_roll: ОТКАЗ УПР КРЕНОМ DABR
@@ -223,7 +223,12 @@ mode.flightassistant:
     not_set: НЕТ МИНИМ
   thrust:
     unavailable: ТЯГА НЕДОСТУПНА
-    toga: ВЗЛЕТН ТЯГА
+    manual:
+      .: РУЧН ТЯГА %s
+      reverse: РУЧН РЕВ %s
+      idle: РУЧН МАЛАЯ
+      toga: РУЧН ВЗЛТ
+    toga: АВТО ВЗЛ.ТЯГА
     climb: ТЯГА НАБОР
     climb_reduced: СНИЖЕН НАБОР
     idle: МАЛАЯ ТЯГА
@@ -242,6 +247,7 @@ mode.flightassistant:
     hold:
       selected: ВЫС %s
       managed: П. ВЫС %s
+      cruise: КРЕЙС ВЫС %s
     land: ПОСАДКА %s
   lat:
     takeoff: ВЗЛЕТ КРС %s

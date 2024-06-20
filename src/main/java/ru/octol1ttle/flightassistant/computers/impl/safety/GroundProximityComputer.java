@@ -14,6 +14,8 @@ import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
+import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
+import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer.Phase;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -31,19 +33,22 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     private static final float CAUTION_THRESHOLD = 10.0f;
     private static final float PULL_UP_THRESHOLD = 5.0f;
     private static final float PITCH_CORRECT_THRESHOLD = 2.5f;
+
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final StallComputer stall = ComputerRegistry.resolve(StallComputer.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
+    private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
+
     public float descentImpactTime = STATUS_UNKNOWN;
     public float terrainImpactTime = STATUS_UNKNOWN;
-    public LandingClearanceStatus landingClearanceStatus = LandingClearanceStatus.UNKNOWN;
+    public TerrainClearanceStatus terrainClearanceStatus = TerrainClearanceStatus.UNKNOWN;
     public boolean fireworkUseSafe = true;
 
     @Override
     public void tick() {
         descentImpactTime = this.computeDescentImpactTime();
         terrainImpactTime = this.computeTerrainImpactTime();
-        landingClearanceStatus = this.computeLandingClearanceStatus();
+        terrainClearanceStatus = this.computeLandingClearanceStatus();
         fireworkUseSafe = this.computeFireworkUseSafe();
     }
 
@@ -124,25 +129,30 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         return distance / FireworkController.FIREWORK_SPEED > PULL_UP_THRESHOLD;
     }
 
-    private LandingClearanceStatus computeLandingClearanceStatus() {
+    private TerrainClearanceStatus computeLandingClearanceStatus() {
         if (!data.isFlying() || data.player().isTouchingWater()) {
-            return LandingClearanceStatus.UNKNOWN;
+            return TerrainClearanceStatus.UNKNOWN;
         }
+        if (plan.getDistanceToWaypoint() == null || phase.get() == Phase.TAKEOFF) {
+            return TerrainClearanceStatus.SILENCED;
+        }
+
         if (plan.landAltitude == null) {
-            return LandingClearanceStatus.NOT_LANDING;
+            return data.heightAboveGround() >= 10.0f ? TerrainClearanceStatus.SAFE : TerrainClearanceStatus.TOO_LOW;
+        }
+
+        float remaining = data.altitude() - plan.landAltitude;
+        if (remaining < 0.0f) {
+            return TerrainClearanceStatus.TOO_LOW;
         }
 
         Double distance = plan.getDistanceToWaypoint();
-        if (distance == null) {
-            throw new AssertionError();
+        float minimumHeight = Math.min(data.heightAboveGround(), remaining);
+        if (!plan.isBelowMinimums() && data.velocity.y > -3.0f || distance / minimumHeight < AirDataComputer.OPTIMUM_GLIDE_RATIO) {
+            return TerrainClearanceStatus.SAFE;
         }
 
-        float minimumHeight = Math.min(data.heightAboveGround(), Math.abs(data.altitude() - plan.landAltitude));
-        if (data.velocity.y > -3.0f || distance / minimumHeight < AirDataComputer.OPTIMUM_GLIDE_RATIO) {
-            return LandingClearanceStatus.SAFE;
-        }
-
-        return LandingClearanceStatus.TOO_LOW;
+        return TerrainClearanceStatus.TOO_LOW;
     }
 
     private boolean positiveLessOrEquals(float time, float lessOrEquals) {
@@ -192,14 +202,14 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     public void reset() {
         descentImpactTime = STATUS_UNKNOWN;
         terrainImpactTime = STATUS_UNKNOWN;
-        landingClearanceStatus = LandingClearanceStatus.UNKNOWN;
+        terrainClearanceStatus = TerrainClearanceStatus.UNKNOWN;
         fireworkUseSafe = true;
     }
 
-    public enum LandingClearanceStatus {
+    public enum TerrainClearanceStatus {
         TOO_LOW,
         SAFE,
-        NOT_LANDING,
+        SILENCED,
         UNKNOWN
     }
 }

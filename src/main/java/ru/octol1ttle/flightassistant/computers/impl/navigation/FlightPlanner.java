@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import ru.octol1ttle.flightassistant.FAMathHelper;
-import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
@@ -56,7 +55,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
             return false;
         }
 
-        Vec3d landPos = data.findGround(new BlockPos.Mutable(target.x, data.world().getTopY(), target.y));
+        Vec3d landPos = data.findGround(new Vec3d(target.x, data.world().getTopY(), target.y));
         if (landPos == null) {
             return false;
         }

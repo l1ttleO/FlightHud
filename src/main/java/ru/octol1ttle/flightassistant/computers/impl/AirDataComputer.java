@@ -114,7 +114,7 @@ public class AirDataComputer implements ITickableComputer {
         if (!isCurrentChunkLoaded) {
             return groundLevel; // last known cache
         }
-        Vec3d ground = findGround(player().getBlockPos().mutableCopy());
+        Vec3d ground = findGround(position());
         return ground == null ? voidLevel() : (float) ground.getY();
     }
 
@@ -123,14 +123,14 @@ public class AirDataComputer implements ITickableComputer {
         return !block.isAir();
     }
 
-    public Vec3d findGround(BlockPos.Mutable from) {
+    public Vec3d findGround(Vec3d from) {
         if (!isChunkLoadedAt(from)) {
             return null;
         }
 
         BlockHitResult result = world().raycast(new RaycastContext(
-                position().offset(Direction.UP, 0.5),
-                position().withAxis(Direction.Axis.Y, voidLevel()),
+                from.offset(Direction.UP, 0.5),
+                from.withAxis(Direction.Axis.Y, voidLevel()),
                 RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.ANY,
                 player()
@@ -197,13 +197,12 @@ public class AirDataComputer implements ITickableComputer {
         return player().getWorld();
     }
 
-    public boolean isChunkLoadedAt(BlockPos pos){
+    public boolean isChunkLoadedAt(Vec3d pos) {
         return world().getChunkManager().isChunkLoaded(ChunkSectionPos.getSectionCoord(pos.getX()), ChunkSectionPos.getSectionCoord(pos.getZ()));
     }
 
-    private boolean isCurrentChunkLoaded(){
-        BlockPos pos = player().getBlockPos();
-        return isChunkLoadedAt(pos);
+    private boolean isCurrentChunkLoaded() {
+        return isChunkLoadedAt(position());
     }
 
     public static float validate(float f, float bounds) {
