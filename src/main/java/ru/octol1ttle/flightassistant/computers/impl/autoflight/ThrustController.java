@@ -146,6 +146,7 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
         this.targetReverse = newTarget < 0.0f;
     }
 
+
     @Override
     public String getId() {
         return "thrust_ctl";

@@ -22,8 +22,13 @@ import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AutopilotComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController, IThrustController {
+    private static final float THRUST_TOGA = 1.0f;
     private static final float THRUST_CLIMB = 0.9f;
     private static final float THRUST_CLIMB_REDUCED = 0.75f;
+    private static final float THRUST_APPROACH = 0.75f;
+    private static final float THRUST_APPROACH_REDUCED = 0.25f;
+    private static final float THRUST_IDLE = 0.0f;
+    private static final float THRUST_LAND = -0.2f;
 
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
@@ -42,11 +47,21 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
     private Float togaHeading;
 
+    public boolean autolandInProgress;
+
     @Override
     public void tick() {
         setTargetThrust(null, Text.empty());
         setTargetPitch(null, Text.empty());
         setTargetHeading(null, Text.empty());
+
+        if (phase.get() != Phase.APPROACH && phase.get() != Phase.LAND) {
+            autolandInProgress = false;
+        }
+
+        if (plan.autolandAllowed) {
+            autolandInProgress = true;
+        }
 
         if (phase.get() == Phase.ON_GROUND) {
             togaHeading = null;
@@ -60,7 +75,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             }
 
             boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike();
-            setTargetThrust(1.0f, Text.translatable("mode.flightassistant.thrust.toga"));
+            setTargetThrust(THRUST_TOGA, Text.translatable("mode.flightassistant.thrust.toga"));
             if (data.heightAboveGround() < 15.0f) {
                 setTargetPitch(useReducedThrust ? 55.0f : 35.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
             } else {
@@ -78,7 +93,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
         Integer targetSpeed = autoflight.getTargetSpeed();
         if (!thrust.getThrustHandler().canBeUsed()) {
-            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.unavailable"));
+            setTargetThrust(THRUST_IDLE, Text.translatable("mode.flightassistant.thrust.unavailable"));
             setTargetPitch(PitchController.GLIDE_PITCH, Text.translatable("mode.flightassistant.vert.glide"));
         } else {
             tickVertical(targetSpeed);
@@ -126,7 +141,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.selected", autoflight.selectedAltitude));
         } else {
-            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
+            setTargetThrust(THRUST_IDLE, Text.translatable("mode.flightassistant.thrust.idle"));
             if (useReducedThrust) {
                 pitch = -35.0f;
                 if (abs <= 100) {
@@ -160,7 +175,12 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         float degrees = FAMathHelper.toDegrees(MathHelper.atan2(diff, distance));
 
         float pitch;
-        if (diff > 0) {
+
+        if (autolandInProgress) {
+            pitch = degrees;
+            setTargetThrust(THRUST_LAND, Text.translatable("mode.flightassistant.thrust.land"));
+            setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.land", targetAltitude));
+        } else if (diff > 0) {
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
                 pitch = MathHelper.clamp(degrees, 10.0f, PitchController.CLIMB_PITCH);
@@ -170,7 +190,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             }
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.climb.managed", targetAltitude));
         } else {
-            setTargetThrust(0.0f, Text.translatable("mode.flightassistant.thrust.idle"));
+            setTargetThrust(THRUST_IDLE, Text.translatable("mode.flightassistant.thrust.idle"));
             if (useReducedThrust) {
                 pitch = MathHelper.clamp(degrees, PitchController.DESCEND_PITCH, PitchController.GLIDE_PITCH);
             } else {
@@ -179,11 +199,23 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.managed", targetAltitude));
         }
 
-        if (Math.abs(diff) <= 10.0f) {
-            setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+        if (phase.get() == Phase.APPROACH) {
+            if (useReducedThrust) {
+                setTargetThrust(THRUST_APPROACH_REDUCED, Text.translatable("mode.flightassistant.thrust.approach_reduced"));
+            } else {
+                setTargetThrust(THRUST_APPROACH, Text.translatable("mode.flightassistant.thrust.approach"));
+            }
+        }
+
+        if (!plan.isOnApproach() && Math.abs(diff) <= 10.0f) {
+            if (useReducedThrust) {
+                setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
+            } else {
+                setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
+            }
             setTargetPitch(pitch, targetAltitude.equals(plan.getCruiseAltitude())
                     ? Text.translatable("mode.flightassistant.vert.hold.cruise", targetAltitude)
-                    : Text.translatable("mode.flightassistant.vert.hold.selected", targetAltitude));
+                    : Text.translatable("mode.flightassistant.vert.hold.managed", targetAltitude));
         }
     }
 
@@ -206,7 +238,10 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         if (autoflight.selectedHeading != null) {
             setTargetHeading(Float.valueOf(autoflight.selectedHeading), Text.translatable("mode.flightassistant.lat.selected", autoflight.selectedHeading));
         } else if (planPos != null) {
-            setTargetHeading(plan.getManagedHeading(), Text.translatable("mode.flightassistant.lat.managed", (int) planPos.x, (int) planPos.y));
+            setTargetHeading(plan.getManagedHeading(), Text.translatable(
+                    phase.get() == Phase.APPROACH ? "mode.flightassistant.lat.approach" : "mode.flightassistant.lat.managed",
+                    (int) planPos.x, (int) planPos.y
+            ));
         }
     }
 
@@ -284,6 +319,8 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
         targetHeading = null;
         targetThrust = null;
         togaHeading = null;
+
+        autolandInProgress = false;
 
         autoflight.disconnectAutoThrust(true);
         autoflight.disconnectAutopilot(true);

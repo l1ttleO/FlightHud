@@ -222,7 +222,7 @@ mode.flightassistant:
     relative: МИНИМ +%s
     not_set: НЕТ МИНИМ
   thrust:
-    unavailable: ТЯГА НЕДОСТУПНА
+    unavailable: НЕТ ТЯГИ
     manual:
       .: РУЧН ТЯГА %s
       reverse: РУЧН РЕВ %s
@@ -235,6 +235,9 @@ mode.flightassistant:
     speed:
       selected: СКОР %s
       managed: П. СКОР %s
+    land: ПОСАДОЧН.ТЯГА
+    approach: ТЯГА ЗАХОД
+    approach_reduced: СНИЖЕН ЗАХОД
   vert:
     glide: ОПТ ПЛАНИР
     climb:
@@ -259,6 +262,7 @@ mode.flightassistant:
     flight_directors: УК
     auto_firework: А/ТЯГА
     autopilot: АП
+    no_autoland: АВТОПОСАДК.ВЫКЛ
 
 short.flightassistant:
   north: С

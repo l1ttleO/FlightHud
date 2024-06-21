@@ -11,6 +11,7 @@ import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
+import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
@@ -21,6 +22,7 @@ public class FlightModeDisplay implements IHudDisplay {
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final AutopilotComputer autopilot = ComputerRegistry.resolve(AutopilotComputer.class);
     private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
+    private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     private final FlightMode thrustMode;
     private final FlightMode verticalMode;
@@ -84,8 +86,11 @@ public class FlightModeDisplay implements IHudDisplay {
             return;
         }
 
-        verticalMode.update(autopilot.verticalMode);
-
+        if (autopilot.autolandInProgress && !plan.autolandAllowed) {
+            verticalMode.update(Text.translatable("mode.flightassistant.auto.no_autoland"), true);
+        } else {
+            verticalMode.update(autopilot.verticalMode);
+        }
         int x = MathHelper.floor(dim.lFrame + dim.wFrame * (2 / 5.0f));
         int y = dim.bFrame - 10;
         verticalMode.render(context, textRenderer, x, y);
@@ -97,7 +102,11 @@ public class FlightModeDisplay implements IHudDisplay {
             return;
         }
 
-        lateralMode.update(autopilot.lateralMode);
+        if (autopilot.autolandInProgress && !plan.autolandAllowed) {
+            lateralMode.update(Text.translatable("mode.flightassistant.auto.no_autoland"), true);
+        } else {
+            lateralMode.update(autopilot.lateralMode);
+        }
 
         int x = MathHelper.floor(dim.lFrame + dim.wFrame * (3 / 5.0f));
         int y = dim.bFrame - 10;

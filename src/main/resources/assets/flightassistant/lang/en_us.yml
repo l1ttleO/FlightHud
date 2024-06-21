@@ -222,7 +222,7 @@ mode.flightassistant:
     relative: MINIM +%s
     not_set: NO MINIMS
   thrust:
-    unavailable: THR UNAVAIL
+    unavailable: NO THR
     manual:
       .: MAN THR %s
       reverse: MAN REV %s
@@ -235,6 +235,9 @@ mode.flightassistant:
     speed:
       selected: SPD %s
       managed: P. SPD %s
+    land: THR LAND
+    approach: THR APPR
+    approach_reduced: RED APPR
   vert:
     glide: OPT GLD
     climb:
@@ -260,6 +263,7 @@ mode.flightassistant:
     flight_directors: FD
     auto_thrust: A/THR
     autopilot: AP
+    no_autoland: NO AUTOLAND
 
 short.flightassistant:
   north: N
