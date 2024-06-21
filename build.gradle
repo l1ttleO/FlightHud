@@ -100,10 +100,12 @@ jar {
 }
 
 publishMods {
+    dryRun = true
+
     file = remapJar.archiveFile
     version = project.version
     changelog = getRootProject().file("CHANGELOG.md").text
-    type = STABLE
+    type = ALPHA
     modLoaders.add("fabric")
 
     def min = property('publish_target_min')
