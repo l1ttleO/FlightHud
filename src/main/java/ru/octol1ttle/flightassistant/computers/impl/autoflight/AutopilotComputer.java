@@ -199,7 +199,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.managed", targetAltitude));
         }
 
-        if (phase.get() == Phase.APPROACH) {
+        if (!autolandInProgress && phase.get() == Phase.APPROACH) {
             if (useReducedThrust) {
                 setTargetThrust(THRUST_APPROACH_REDUCED, Text.translatable("mode.flightassistant.thrust.approach_reduced"));
             } else {
