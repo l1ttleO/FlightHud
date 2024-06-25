@@ -13,7 +13,6 @@ import ru.octol1ttle.flightassistant.computers.api.IRollController;
 import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
-import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer.Phase;
@@ -22,13 +21,12 @@ import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class AutopilotComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController, IThrustController {
-    private static final float THRUST_TOGA = 1.0f;
     private static final float THRUST_CLIMB = 0.9f;
     private static final float THRUST_CLIMB_REDUCED = 0.75f;
     private static final float THRUST_APPROACH = 0.75f;
     private static final float THRUST_APPROACH_REDUCED = 0.25f;
     private static final float THRUST_IDLE = 0.0f;
-    private static final float THRUST_LAND = -0.2f;
+    private static final float THRUST_LAND = -0.15f;
 
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
@@ -75,7 +73,6 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             }
 
             boolean useReducedThrust = thrust.getThrustHandler().isFireworkLike();
-            setTargetThrust(THRUST_TOGA, Text.translatable("mode.flightassistant.thrust.toga"));
             if (data.heightAboveGround() < 15.0f) {
                 setTargetPitch(useReducedThrust ? 55.0f : 35.0f, Text.translatable("mode.flightassistant.vert.climb.optimum"));
             } else {
@@ -226,7 +223,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
 
         float diff = targetSpeed - data.speed();
 
-        float thr = MathHelper.clamp(thrust.getTargetThrust() + diff * 0.01f * time.deltaTime, -0.1f, THRUST_CLIMB);
+        float thr = MathHelper.clamp(thrust.getThrust() + diff * 0.01f * time.deltaTime, -0.1f, THRUST_CLIMB);
         if (thrust.getThrustHandler().isFireworkLike()) {
             thr = targetSpeed / FireworkController.FIREWORK_SPEED;
         }
@@ -296,12 +293,12 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
     }
 
     @Override
-    public ThrustControlInput getThrustInput() {
+    public ControlInput getThrustInput() {
         if (!autoflight.autoThrustEnabled || targetThrust == null) {
             return null;
         }
 
-        return new ThrustControlInput(targetThrust, InputPriority.NORMAL);
+        return new ControlInput(targetThrust, 1.0f, InputPriority.NORMAL);
     }
 
     @Override

@@ -3,39 +3,29 @@ package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.compatibility.doabarrelroll.DaBRThrustHandler;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
 import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.IThrustHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
-import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
-import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
 public class ThrustController implements ITickableComputer, INormalLawProvider {
     private static final List<IThrustController> controllers = new ArrayList<>();
-    private static final Random random = new Random();
 
     private static IThrustHandler thrustHandler;
     private static IThrustHandler fallback;
 
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-
-    private float currentThrust = 0.0f;
-    private float targetThrust = 0.0f;
-    private boolean currentReverse = false;
-    private boolean targetReverse = false;
-
-    private Float syncReverseAt = null;
+    private float thrust = 0.0f;
 
     static {
         RegisterCustomComputersCallback.EVENT.register(() -> {
@@ -66,41 +56,16 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     @Override
     public void tick() {
         updateTargetThrust();
-
-        if (!FAConfig.computer().simulateEngine) {
-            currentThrust = targetThrust;
-            currentReverse = targetReverse;
-        } else {
-            if (targetThrust > currentThrust) {
-                currentThrust = Math.min(targetThrust, currentThrust + time.deltaTime * Math.max(currentThrust * 1.5f, 0.1f) / 3.0f);
-            } else {
-                float diff = currentThrust - targetThrust;
-                currentThrust = Math.max(targetThrust, currentThrust - diff * time.deltaTime / 1.5f);
-            }
-
-            if (currentReverse != targetReverse) {
-                if (syncReverseAt == null) {
-                    syncReverseAt = time.millis + random.nextFloat(750, 1500);
-                }
-
-                if (time.millis >= syncReverseAt) {
-                    currentReverse = targetReverse;
-                }
-            } else {
-                syncReverseAt = null;
-            }
-        }
-
-        getThrustHandler().tickThrust(getCurrentThrust());
+        getThrustHandler().tickThrust(getThrust());
     }
 
     private void updateTargetThrust() {
-        List<ThrustControlInput> inputs = new ArrayList<>();
+        List<ControlInput> inputs = new ArrayList<>();
         for (IThrustController controller : controllers) {
             if (ComputerRegistry.isFaulted(controller.getClass())) {
                 continue;
             }
-            ThrustControlInput input = controller.getThrustInput();
+            ControlInput input = controller.getThrustInput();
             if (input != null) {
                 inputs.add(input);
             }
@@ -108,18 +73,29 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
         inputs.sort(Comparator.comparingInt(input -> input.priority().numerical));
 
         InputPriority lastPriority = null;
-        Float newTarget = null;
-        for (ThrustControlInput input : inputs) {
+        for (ControlInput input : inputs) {
             if (lastPriority != null && input.priority() != lastPriority) {
                 break;
             }
 
-            newTarget = Math.max(Objects.requireNonNullElse(newTarget, -1.0f), input.target());
+            smoothSetThrust(input.target(), MathHelper.clamp(time.deltaTime * input.deltaTimeMultiplier(), 0.001f, 1.0f));
             lastPriority = input.priority();
         }
+    }
 
-        if (newTarget != null) {
-            setThrust(newTarget);
+    /**
+     * Smoothly changes the player's thrust to the specified thrust using the delta
+     *
+     * @param targetThrust Target thrust
+     * @param delta        Delta time, in seconds
+     */
+    public void smoothSetThrust(float targetThrust, float delta) {
+        float difference = targetThrust - thrust;
+
+        if (Math.abs(difference) < 0.001f) {
+            setThrust(targetThrust);
+        } else {
+            addThrust(difference * delta);
         }
     }
 
@@ -127,25 +103,27 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
         return thrustHandler.enabled() ? thrustHandler : fallback;
     }
 
-    public float getCurrentThrust() {
-        return currentThrust * (currentReverse ? -1 : 1);
-    }
-
-    public float getTargetThrust() {
-        return targetThrust * (targetReverse ? -1 : 1);
+    public float getThrust() {
+        return thrust;
     }
 
     /**
-     * Sets the target thrust.
+     * Sets the thrust.
      *
-     * @param newTarget The new target, ranging from -1.0 to 1.0.
+     * @param newThrust The new thrust value, ranging from -1.0 to 1.0. Will be clamped if outside the range.
      */
-    public void setThrust(float newTarget) {
-        newTarget = MathHelper.clamp(newTarget, -1.0f, 1.0f);
-        this.targetThrust = Math.abs(newTarget);
-        this.targetReverse = newTarget < 0.0f;
+    public void setThrust(float newThrust) {
+        newThrust = MathHelper.clamp(newThrust, -1.0f, 1.0f);
+        this.thrust = newThrust;
     }
 
+    public void addThrust(float deltaThrust) {
+        setThrust(thrust + deltaThrust);
+    }
+
+    public void addThrustTick(float multiplier) {
+        addThrust(multiplier * time.deltaTime * 0.75f);
+    }
 
     @Override
     public String getId() {
@@ -154,10 +132,6 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
 
     @Override
     public void reset() {
-        currentThrust = 0.0f;
-        targetThrust = 0.0f;
-        currentReverse = false;
-        targetReverse = false;
-        syncReverseAt = null;
+        thrust = 0.0f;
     }
 }

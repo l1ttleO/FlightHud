@@ -45,17 +45,17 @@ public class StatusDisplay implements IHudDisplay {
                         x, y += 10, fireworkColor
                 );
             }
-        } else if (FAConfig.indicator().showEnginePower) {
+        } else if (FAConfig.indicator().showThrustSetting) {
             Color thrustColor = FAConfig.indicator().statusColor;
-            if (thrust.getCurrentThrust() < 0.0f) {
+            if (thrust.getThrust() < 0.0f) {
                 thrustColor = FAConfig.indicator().cautionColor;
-            } else if (thrust.getCurrentThrust() > 0.95f) {
+            } else if (thrust.getThrust() > 0.99f) {
                 thrustColor = FAConfig.indicator().warningColor;
             }
 
-            String displayPower = String.format("%.1f", Math.abs(thrust.getCurrentThrust() * 100.0f)) + "%";
+            String displayThrust = String.format("%.1f", thrust.getThrust() * 100.0f) + "%";
             DrawHelper.drawRightAlignedText(textRenderer, context,
-                    Text.translatable("status.flightassistant.engine_power", displayPower),
+                    Text.translatable("status.flightassistant.thrust_setting", displayThrust),
                     x, y += 10, thrustColor
             );
         }

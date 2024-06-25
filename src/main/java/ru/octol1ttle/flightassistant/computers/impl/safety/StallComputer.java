@@ -2,11 +2,11 @@ package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
-import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -65,11 +65,11 @@ public class StallComputer implements ITickableComputer, IPitchLimiter, IThrustC
     }
 
     @Override
-    public ThrustControlInput getThrustInput() {
+    public ControlInput getThrustInput() {
         if (!FAConfig.computer().stallUseThrust || status != StallStatus.FULL_STALL) {
             return null;
         }
-        return new ThrustControlInput(1.0f, InputPriority.HIGHEST);
+        return new ControlInput(1.0f, 1.0f, InputPriority.HIGHEST);
     }
 
     @Override

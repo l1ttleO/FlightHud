@@ -1,11 +1,11 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
 import net.minecraft.util.math.Direction;
+import ru.octol1ttle.flightassistant.computers.api.ControlInput;
 import ru.octol1ttle.flightassistant.computers.api.IPitchLimiter;
 import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
-import ru.octol1ttle.flightassistant.computers.api.ThrustControlInput;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.PitchController;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
@@ -77,11 +77,11 @@ public class VoidLevelComputer implements ITickableComputer, IPitchLimiter, IThr
     }
 
     @Override
-    public ThrustControlInput getThrustInput() {
+    public ControlInput getThrustInput() {
         if (!FAConfig.computer().voidUseThrust || !aboveVoid() || data.altitude() - data.voidLevel() >= 12) {
             return null;
         }
-        return new ThrustControlInput(1.0f, InputPriority.HIGH);
+        return new ControlInput(1.0f, 1.0f, InputPriority.HIGH);
     }
 
     @Override

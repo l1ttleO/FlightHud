@@ -61,7 +61,7 @@ config.flightassistant:
       .: Information
       alerts: Show alerts
       firework_count: Show firework count
-      engine_power: Show engine power
+      thrust_setting: Show thrust setting
       waypoint_distance: Show distance to waypoint
       flight_phase: Show flight phase
     misc:
@@ -204,7 +204,7 @@ alerts.flightassistant:
 
 status.flightassistant:
   firework_count: 'FRWK CNT: %s'
-  engine_power: 'ENG PWR: %s'
+  thrust_setting: 'THR: %s'
   waypoint_distance: 'WP/DIST: %s'
   phase:
     on_ground: ON GROUND
@@ -238,6 +238,7 @@ mode.flightassistant:
     land: THR LAND
     approach: THR APPR
     approach_reduced: RED APPR
+    set_toga: SET TOGA THR
   vert:
     glide: OPT GLD
     climb:

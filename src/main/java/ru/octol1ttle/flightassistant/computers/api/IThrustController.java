@@ -1,10 +1,13 @@
 package ru.octol1ttle.flightassistant.computers.api;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface IThrustController extends IComputer {
     /**
-     * Gets the target thrust that this controller wants
+     * Gets the target roll that this controller wants
      *
-     * @return a {@link ThrustControlInput} with {@link ThrustControlInput#target()} being the target thrust
+     * @return a {@link ControlInput} with {@link ControlInput#target()} being the target roll
      */
-    ThrustControlInput getThrustInput();
+    @Nullable
+    ControlInput getThrustInput();
 }

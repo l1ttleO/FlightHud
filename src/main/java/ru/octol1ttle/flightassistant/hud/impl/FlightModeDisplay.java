@@ -46,7 +46,7 @@ public class FlightModeDisplay implements IHudDisplay {
         }
 
         if (FAConfig.indicator().showFireworkMode) {
-            renderFireworkMode(context, textRenderer);
+            renderThrustMode(context, textRenderer);
         }
         if (FAConfig.indicator().showVerticalMode) {
             renderVerticalMode(context, textRenderer);
@@ -59,21 +59,13 @@ public class FlightModeDisplay implements IHudDisplay {
         }
     }
 
-    private void renderFireworkMode(DrawContext context, TextRenderer textRenderer) {
-        if (autoflight.autoThrustEnabled && !Text.empty().equals(autopilot.thrustMode)) {
-            thrustMode.update(autopilot.thrustMode);
-        } else {
-            String displayThrust = String.format("%.1f", Math.abs(thrust.getTargetThrust() * 100.0f)) + "%";
-            if (thrust.getTargetThrust() < 0.0f) {
-                thrustMode.update(Text.translatable("mode.flightassistant.thrust.manual.reverse", displayThrust));
-            } else if (thrust.getTargetThrust() < 0.01f) {
-                thrustMode.update(Text.translatable("mode.flightassistant.thrust.manual.idle"));
-            } else if (thrust.getTargetThrust() > 0.99f) {
-                thrustMode.update(Text.translatable("mode.flightassistant.thrust.manual.toga"));
-            } else {
-                thrustMode.update(Text.translatable("mode.flightassistant.thrust.manual", displayThrust));
-            }
+    private void renderThrustMode(DrawContext context, TextRenderer textRenderer) {
+        if (!autoflight.autoThrustEnabled || Text.empty().equals(autopilot.thrustMode)) {
+            thrustMode.update(Text.empty());
+            return;
         }
+
+        thrustMode.update(autopilot.thrustMode);
 
         int x = MathHelper.floor(dim.lFrame + dim.wFrame * (1 / 5.0f));
         int y = dim.bFrame - 10;
@@ -81,7 +73,7 @@ public class FlightModeDisplay implements IHudDisplay {
     }
 
     private void renderVerticalMode(DrawContext context, TextRenderer textRenderer) {
-        if (!autoflight.flightDirectorsEnabled && !autoflight.autoPilotEnabled) {
+        if (!autoflight.flightDirectorsEnabled && !autoflight.autoPilotEnabled || Text.empty().equals(autopilot.verticalMode)) {
             verticalMode.update(Text.empty());
             return;
         }
@@ -97,13 +89,13 @@ public class FlightModeDisplay implements IHudDisplay {
     }
 
     private void renderLateralMode(DrawContext context, TextRenderer textRenderer) {
-        if (!autoflight.flightDirectorsEnabled && !autoflight.autoPilotEnabled) {
+        if (!autoflight.flightDirectorsEnabled && !autoflight.autoPilotEnabled || Text.empty().equals(autopilot.lateralMode)) {
             lateralMode.update(Text.empty());
             return;
         }
 
         if (autopilot.autolandInProgress && !plan.autolandAllowed) {
-            lateralMode.update(Text.translatable("mode.flightassistant.auto.no_autoland"), true);
+            lateralMode.update(Text.translatable("mode.flightassistant.thrust.set_toga"), true);
         } else {
             lateralMode.update(autopilot.lateralMode);
         }

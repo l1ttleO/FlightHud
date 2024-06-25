@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
@@ -86,16 +85,13 @@ public class FAKeyBindings {
                     disconnectAutoThrust = true;
                 }
 
-                if (!ComputerRegistry.isFaulted(TimeComputer.class)) {
-                    TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
-                    while (decreaseThrust.wasPressed()) {
-                        thrust.setThrust(thrust.getTargetThrust() - time.deltaTime * 0.5f);
-                        disconnectAutoThrust = true;
-                    }
-                    while (increaseThrust.wasPressed()) {
-                        thrust.setThrust(thrust.getTargetThrust() + time.deltaTime * 0.5f);
-                        disconnectAutoThrust = true;
-                    }
+                while (decreaseThrust.wasPressed()) {
+                    thrust.addThrustTick(-1.0f);
+                    disconnectAutoThrust = true;
+                }
+                while (increaseThrust.wasPressed()) {
+                    thrust.addThrustTick(1.0f);
+                    disconnectAutoThrust = true;
                 }
             }
 
