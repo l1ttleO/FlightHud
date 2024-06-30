@@ -5,6 +5,8 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 
+// TODO: using this SUCKS
+// TODO: this should probably have timer support
 public class TimeComputer implements ITickableComputer {
     private static final int HIGHLIGHT_SWITCH_THRESHOLD = 500;
     private final MinecraftClient mc;

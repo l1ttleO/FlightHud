@@ -206,6 +206,7 @@ status.flightassistant:
   firework_count: 'КОЛ-ВО ФРВКОВ: %s'
   engine_power: 'СИЛА ДВИГ-Я: %s'
   waypoint_distance: 'РАССТ: %s'
+  waypoint_time: 'ВРЕМЯ: %s:%s'
   phase:
     on_ground: НА ЗЕМЛЕ
     takeoff: ВЗЛЕТ

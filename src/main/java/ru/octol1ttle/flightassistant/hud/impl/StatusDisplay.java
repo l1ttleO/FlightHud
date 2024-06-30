@@ -1,6 +1,7 @@
 package ru.octol1ttle.flightassistant.hud.impl;
 
 import java.awt.Color;
+import java.time.Duration;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
@@ -53,19 +54,28 @@ public class StatusDisplay implements IHudDisplay {
                 thrustColor = FAConfig.indicator().warningColor;
             }
 
-            String displayThrust = String.format("%.1f", thrust.getThrust() * 100.0f) + "%";
+            String displayThrust = "%.1f%%".formatted(thrust.getThrust() * 100.0f);
             DrawHelper.drawRightAlignedText(textRenderer, context,
                     Text.translatable("status.flightassistant.thrust_setting", displayThrust),
                     x, y += 10, thrustColor
             );
         }
 
-        if (FAConfig.indicator().showDistanceToWaypoint) {
-            Double distance = plan.getDistanceToWaypoint();
-            if (distance != null) {
+        Double distance = plan.getDistanceToWaypoint();
+        if (distance != null) {
+            if (FAConfig.indicator().showDistanceToWaypoint) {
                 DrawHelper.drawRightAlignedText(textRenderer, context,
                         Text.translatable("status.flightassistant.waypoint_distance", distance.intValue()),
-                        x, y += 10, FAConfig.indicator().statusColor);
+                        x, y += 10, FAConfig.indicator().statusColor
+                );
+            }
+
+            Duration time = plan.getTimeToWaypoint();
+            if (FAConfig.indicator().showTimeToWaypoint && time != null) {
+                DrawHelper.drawRightAlignedText(textRenderer, context,
+                        Text.translatable("status.flightassistant.waypoint_time", time.toMinutesPart(), "%02d".formatted(time.toSecondsPart())),
+                        x, y += 10, FAConfig.indicator().statusColor
+                );
             }
         }
 

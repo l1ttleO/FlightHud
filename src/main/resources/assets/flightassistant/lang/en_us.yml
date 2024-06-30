@@ -206,6 +206,7 @@ status.flightassistant:
   firework_count: 'FRWK CNT: %s'
   thrust_setting: 'THR: %s'
   waypoint_distance: 'WP/DIST: %s'
+  waypoint_time: 'WP/TIME: %s:%s'
   phase:
     on_ground: ON GROUND
     takeoff: TAKEOFF
