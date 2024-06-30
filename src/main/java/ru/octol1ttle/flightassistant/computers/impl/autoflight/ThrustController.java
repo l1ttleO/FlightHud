@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.computers.api.IThrustController;
 import ru.octol1ttle.flightassistant.computers.api.IThrustHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
+import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
@@ -24,6 +25,7 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     private static IThrustHandler thrustHandler;
     private static IThrustHandler fallback;
 
+    private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private float thrust = 0.0f;
 
@@ -55,11 +57,15 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
 
     @Override
     public void tick() {
-        updateTargetThrust();
+        if (!data.canAutomationsActivate()) {
+            return;
+        }
+
+        tickControllers();
         getThrustHandler().tickThrust(getThrust());
     }
 
-    private void updateTargetThrust() {
+    private void tickControllers() {
         List<ControlInput> inputs = new ArrayList<>();
         for (IThrustController controller : controllers) {
             if (ComputerRegistry.isFaulted(controller.getClass())) {
