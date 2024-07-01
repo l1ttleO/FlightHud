@@ -80,6 +80,7 @@ config.flightassistant:
       full: Always enabled (BANNABLE ON SERVERS)
       no_overlays: Only when no screen overlays
       disabled: Disabled
+    consider_invulnerability: Disable alerts and protections when invulnerable
     warning:
       screen_and_audio: Screen & Audio
       audio_only: Audio Only

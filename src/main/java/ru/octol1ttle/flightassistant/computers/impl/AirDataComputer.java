@@ -72,12 +72,18 @@ public class AirDataComputer implements ITickableComputer {
     }
 
     public boolean isInvulnerableTo(DamageSource source) {
+        if (!FAConfig.computer().considerInvulnerability) {
+            return false;
+        }
         return player().isInvulnerableTo(source)
                 || player().getAbilities().invulnerable && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)
                 || player().getAbilities().allowFlying && source.isIn(DamageTypeTags.IS_FALL);
     }
 
     public boolean isInvulnerable() {
+        if (!FAConfig.computer().considerInvulnerability) {
+            return false;
+        }
         return player().isInvulnerable() || player().getAbilities().invulnerable;
     }
 

@@ -262,6 +262,12 @@ public class FAModMenuImpl implements ModMenuApi {
                         .controller(opt -> EnumControllerBuilder.create(opt).enumClass(ComputerConfig.GlobalAutomationsMode.class))
                         .build()
                 )
+                .option(Option.<Boolean>createBuilder()
+                        .name(Text.translatable("config.flightassistant.computers.consider_invulnerability"))
+                        .binding(defaults.considerInvulnerability, () -> config.considerInvulnerability, o -> config.considerInvulnerability = o)
+                        .controller(TickBoxControllerBuilder::create)
+                        .build()
+                )
 
                 .option(LabelOption.create(Text.translatable("config.flightassistant.computers.firework")))
                 .option(Option.<Boolean>createBuilder()

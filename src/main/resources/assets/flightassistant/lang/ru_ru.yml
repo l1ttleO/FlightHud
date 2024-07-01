@@ -80,6 +80,7 @@ config.flightassistant:
       full: Всегда включены (МОЖЕТ БЫТЬ ЗАПРЕЩЕНО НА СЕРВЕРАХ)
       no_overlays: Только при отсутствии оверлеев
       disabled: Выключены
+    consider_invulnerability: Выключать предупреждения и защиты во время неуязвимости
     warning:
       screen_and_audio: Экран и звук
       audio_only: Только звук

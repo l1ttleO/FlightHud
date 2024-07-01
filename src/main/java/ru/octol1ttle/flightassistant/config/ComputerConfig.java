@@ -46,7 +46,7 @@ public class ComputerConfig {
     public boolean preserveAltitudeInUnloadedChunk = true;
 
     @SerialEntry
-    public boolean simulateEngine = true;
+    public boolean considerInvulnerability = true;
 
     public enum GlobalAutomationsMode implements NameableEnum {
         FULL,
