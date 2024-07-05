@@ -21,7 +21,7 @@ public class FlightAssistant implements ClientModInitializer {
     public void onInitializeClient() {
         FAConfig.setup();
         FAKeyBindings.setup();
-        FACallbacks.setup();
+        FACallbackListener.setup(new FACallbackListener());
     }
 
     public static void onClientStarted(MinecraftClient mc) {
