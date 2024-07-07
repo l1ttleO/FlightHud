@@ -63,6 +63,7 @@ config.flightassistant:
       firework_count: Показывать счётчик фейерверков
       engine_power: Показывать силу двигателя
       waypoint_distance: Показывать расстояние до точки назначения
+      waypoint_time: Показывать время до точки назначения
       flight_phase: Показывать фазу полёта
     misc:
       .: Прочее

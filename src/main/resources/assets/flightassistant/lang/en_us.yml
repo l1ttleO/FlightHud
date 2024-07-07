@@ -63,6 +63,7 @@ config.flightassistant:
       firework_count: Show firework count
       thrust_setting: Show thrust setting
       waypoint_distance: Show distance to waypoint
+      waypoint_time: Show time to waypoint
       flight_phase: Show flight phase
     misc:
       .: Miscellaneous
