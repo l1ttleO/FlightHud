@@ -8,6 +8,7 @@ import java.util.Optional;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -43,10 +44,17 @@ import ru.octol1ttle.flightassistant.util.events.FireworkBoostCallback;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
-public class FACallbackListener implements ClientCommandRegistrationCallback, ClientLifecycleEvents.ClientStarted, WorldRenderEvents.Start, AlternateHudRendererCallback, ChangeLookDirectionEvents.Pitch, UseItemCallback, FireworkBoostCallback {
+public class FACallbackListener implements ClientCommandRegistrationCallback, ClientLifecycleEvents.ClientStarted, ClientTickEvents.EndTick, WorldRenderEvents.Start, AlternateHudRendererCallback, ChangeLookDirectionEvents.Pitch, UseItemCallback, FireworkBoostCallback {
+    private final FAKeyBindings keyBindings;
+
+    public FACallbackListener(FAKeyBindings keyBindings) {
+        this.keyBindings = keyBindings;
+    }
+
     public static void setup(FACallbackListener listener) {
         ClientCommandRegistrationCallback.EVENT.register(listener);
         ClientLifecycleEvents.CLIENT_STARTED.register(listener);
+        ClientTickEvents.END_CLIENT_TICK.register(listener);
         WorldRenderEvents.START.register(listener);
         AlternateHudRendererCallback.EVENT.register(listener);
         ChangeLookDirectionEvents.PITCH.register(listener);
@@ -71,6 +79,11 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
     @Override
     public void onClientStarted(MinecraftClient client) {
         FlightAssistant.onClientStarted(client);
+    }
+
+    @Override
+    public void onEndTick(MinecraftClient client) {
+        keyBindings.tick();
     }
 
     @Override

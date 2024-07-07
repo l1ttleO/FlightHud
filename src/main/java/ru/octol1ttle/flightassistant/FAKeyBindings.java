@@ -1,6 +1,7 @@
 package ru.octol1ttle.flightassistant;
 
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import java.util.ArrayList;
+import java.util.List;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -11,117 +12,106 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.AlertController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class FAKeyBindings {
-    private static KeyBinding toggleFlightDirectors;
-    private static KeyBinding toggleAutoThrust;
-    private static KeyBinding toggleAutoPilot;
+    private final List<KeyBinding> keyBindings = new ArrayList<>();
+    
+    private final KeyBinding toggleFlightDirectors;
+    private final KeyBinding toggleAutoThrust;
+    private final KeyBinding toggleAutoPilot;
 
-    private static KeyBinding hideAlert;
-    private static KeyBinding recallAlert;
+    private final KeyBinding hideAlert;
+    private final KeyBinding recallAlert;
 
-    private static KeyBinding setIdle;
-    private static KeyBinding decreaseThrust;
-    private static KeyBinding increaseThrust;
-    private static KeyBinding setToga;
+    private final KeyBinding setIdle;
+    private final KeyBinding decreaseThrust;
+    private final KeyBinding increaseThrust;
+    private final KeyBinding setToga;
 
-    public static void setup() {
-        toggleFlightDirectors = new KeyBinding("key.flightassistant.toggle_flight_directors", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_KP_1, "mod.flightassistant");
-        toggleAutoThrust = new KeyBinding("key.flightassistant.toggle_auto_thrust", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_KP_2, "mod.flightassistant");
-        toggleAutoPilot = new KeyBinding("key.flightassistant.toggle_auto_pilot", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_KP_3, "mod.flightassistant");
+    public FAKeyBindings() {
+        toggleFlightDirectors = addKeyBinding("key.flightassistant.toggle_flight_directors", GLFW.GLFW_KEY_KP_1);
+        toggleAutoThrust = addKeyBinding("key.flightassistant.toggle_auto_thrust", GLFW.GLFW_KEY_KP_2);
+        toggleAutoPilot = addKeyBinding("key.flightassistant.toggle_auto_pilot", GLFW.GLFW_KEY_KP_3);
 
-        hideAlert = new KeyBinding("key.flightassistant.hide_alert", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_KP_0, "mod.flightassistant");
-        recallAlert = new KeyBinding("key.flightassistant.recall_alert", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_KP_DECIMAL, "mod.flightassistant");
+        hideAlert = addKeyBinding("key.flightassistant.hide_alert", GLFW.GLFW_KEY_KP_0);
+        recallAlert = addKeyBinding("key.flightassistant.recall_alert", GLFW.GLFW_KEY_KP_DECIMAL);
 
-        setIdle = new KeyBinding("key.flightassistant.set_idle", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_LEFT, "mod.flightassistant"
-        );
-        decreaseThrust = new KeyBinding("key.flightassistant.decrease_thrust", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_DOWN, "mod.flightassistant"
-        );
-        increaseThrust = new KeyBinding("key.flightassistant.increase_thrust", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_UP, "mod.flightassistant"
-        );
-        setToga = new KeyBinding("key.flightassistant.set_toga", InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_RIGHT, "mod.flightassistant"
-        );
+        setIdle = addKeyBinding("key.flightassistant.set_idle", GLFW.GLFW_KEY_LEFT);
+        decreaseThrust = addKeyBinding("key.flightassistant.decrease_thrust", GLFW.GLFW_KEY_DOWN);
+        increaseThrust = addKeyBinding("key.flightassistant.increase_thrust", GLFW.GLFW_KEY_UP);
+        setToga = addKeyBinding("key.flightassistant.set_toga", GLFW.GLFW_KEY_RIGHT);
+    }
+    
+    private KeyBinding addKeyBinding(String translationKey, int code) {
+        KeyBinding keyBinding = new KeyBinding(translationKey, InputUtil.Type.KEYSYM, code, "mod.flightassistant");
+        keyBindings.add(keyBinding);
+        return keyBinding;
+    }
 
-        KeyBindingHelper.registerKeyBinding(toggleFlightDirectors);
-        KeyBindingHelper.registerKeyBinding(toggleAutoThrust);
-        KeyBindingHelper.registerKeyBinding(toggleAutoPilot);
+    public void registerAll() {
+        for (KeyBinding keyBinding : keyBindings) {
+            KeyBindingHelper.registerKeyBinding(keyBinding);
+        }
+    }
 
-        KeyBindingHelper.registerKeyBinding(hideAlert);
-        KeyBindingHelper.registerKeyBinding(recallAlert);
+    public void tick() {
+        if (!ComputerRegistry.isFaulted(AlertController.class)) {
+            AlertController alert = ComputerRegistry.resolve(AlertController.class);
+            while (hideAlert.wasPressed()) {
+                alert.hide();
+            }
+            while (recallAlert.wasPressed()) {
+                alert.recall();
+            }
+        }
 
-        KeyBindingHelper.registerKeyBinding(setIdle);
-        KeyBindingHelper.registerKeyBinding(decreaseThrust);
-        KeyBindingHelper.registerKeyBinding(increaseThrust);
-        KeyBindingHelper.registerKeyBinding(setToga);
+        boolean disconnectAutoThrust = false;
+        if (!ComputerRegistry.isFaulted(ThrustController.class)) {
+            ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
 
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (!ComputerRegistry.isFaulted(AlertController.class)) {
-                AlertController alert = ComputerRegistry.resolve(AlertController.class);
-                while (hideAlert.wasPressed()) {
-                    alert.hide();
-                }
-                while (recallAlert.wasPressed()) {
-                    alert.recall();
+            while (setIdle.wasPressed()) {
+                thrust.setThrust(0.0f);
+                disconnectAutoThrust = true;
+            }
+            while (setToga.wasPressed()) {
+                thrust.setThrust(1.0f);
+                disconnectAutoThrust = true;
+            }
+
+            while (decreaseThrust.wasPressed()) {
+                thrust.addThrustTick(-1.0f);
+                disconnectAutoThrust = true;
+            }
+            while (increaseThrust.wasPressed()) {
+                thrust.addThrustTick(1.0f);
+                disconnectAutoThrust = true;
+            }
+        }
+
+        if (!ComputerRegistry.isFaulted(AutoFlightController.class)) {
+            AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
+
+            if (disconnectAutoThrust) {
+                autoflight.disconnectAutoThrust(true);
+            }
+
+            while (toggleFlightDirectors.wasPressed()) {
+                autoflight.flightDirectorsEnabled = !autoflight.flightDirectorsEnabled;
+            }
+
+            while (toggleAutoThrust.wasPressed()) {
+                if (!autoflight.autoThrustEnabled) {
+                    autoflight.autoThrustEnabled = true;
+                } else {
+                    autoflight.disconnectAutoThrust(false);
                 }
             }
 
-            boolean disconnectAutoThrust = false;
-            if (!ComputerRegistry.isFaulted(ThrustController.class)) {
-                ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
-
-                while (setIdle.wasPressed()) {
-                    thrust.setThrust(0.0f);
-                    disconnectAutoThrust = true;
-                }
-                while (setToga.wasPressed()) {
-                    thrust.setThrust(1.0f);
-                    disconnectAutoThrust = true;
-                }
-
-                while (decreaseThrust.wasPressed()) {
-                    thrust.addThrustTick(-1.0f);
-                    disconnectAutoThrust = true;
-                }
-                while (increaseThrust.wasPressed()) {
-                    thrust.addThrustTick(1.0f);
-                    disconnectAutoThrust = true;
+            while (toggleAutoPilot.wasPressed()) {
+                if (!autoflight.autoPilotEnabled) {
+                    autoflight.autoPilotEnabled = true;
+                } else {
+                    autoflight.disconnectAutopilot(false);
                 }
             }
-
-            if (!ComputerRegistry.isFaulted(AutoFlightController.class)) {
-                AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
-
-                if (disconnectAutoThrust) {
-                    autoflight.disconnectAutoThrust(true);
-                }
-
-                while (toggleFlightDirectors.wasPressed()) {
-                    autoflight.flightDirectorsEnabled = !autoflight.flightDirectorsEnabled;
-                }
-
-                while (toggleAutoThrust.wasPressed()) {
-                    if (!autoflight.autoThrustEnabled) {
-                        autoflight.autoThrustEnabled = true;
-                    } else {
-                        autoflight.disconnectAutoThrust(false);
-                    }
-                }
-
-                while (toggleAutoPilot.wasPressed()) {
-                    if (!autoflight.autoPilotEnabled) {
-                        autoflight.autoPilotEnabled = true;
-                    } else {
-                        autoflight.disconnectAutopilot(false);
-                    }
-                }
-            }
-        });
+        }
     }
 }
