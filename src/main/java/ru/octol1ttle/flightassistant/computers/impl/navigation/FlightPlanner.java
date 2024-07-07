@@ -34,13 +34,13 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
 
     @Override
     public void tick() {
-        autolandAllowed = false;
-        landAltitude = null;
         if (targetWaypoint != null && !this.contains(targetWaypoint)) {
             nextWaypoint();
         }
 
         if (targetWaypoint == null) {
+            autolandAllowed = false;
+            landAltitude = null;
             averageGroundSpeed = null;
             return;
         }
@@ -57,6 +57,9 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
         if (targetWaypoint instanceof LandingWaypoint) {
             autolandAllowed = tickLanding(target);
             return;
+        } else {
+            landAltitude = null;
+            autolandAllowed = false;
         }
 
         float altitude = targetWaypoint.targetAltitude() != null ? targetWaypoint.targetAltitude() : data.altitude();
@@ -66,20 +69,20 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
     }
 
     private boolean tickLanding(Vector2d target) {
-        double distance = Vector2d.distance(target.x, target.y, data.position().x, data.position().z);
-        if (distance <= 10.0 && data.heightAboveGround() <= 3.0f) {
-            nextWaypoint();
-            return false;
-        }
-
         Vec3d landPos = data.findGround(new Vec3d(target.x, data.world().getTopY(), target.y));
         if (landPos == null) {
             return false;
         }
         landAltitude = MathHelper.ceil(landPos.getY());
 
+        if (data.player().isOnGround()) {
+            nextWaypoint();
+            return false;
+        }
+
+        double distance = Vector2d.distance(target.x, target.y, data.position().x, data.position().z);
         float minimumHeight = Math.min(data.heightAboveGround(), Math.abs(data.altitude() - landAltitude));
-        if (distance / minimumHeight >= AirDataComputer.OPTIMUM_GLIDE_RATIO) {
+        if (!autolandAllowed && distance / minimumHeight >= AirDataComputer.OPTIMUM_GLIDE_RATIO) {
             return false;
         }
 
