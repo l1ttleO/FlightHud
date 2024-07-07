@@ -75,10 +75,10 @@ public class ComputerHost {
 
             try {
                 if (!(computer instanceof AlertController) && random.nextInt(10_000_000) == 0) {
-                    throw new IllegalStateException();
+                    throw new RuntimeException();
                 }
                 tickable.tick();
-            } catch (AssertionError e) { // TODO: stop using AssertionErrors
+            } catch (IllegalStateException e) {
                 ComputerRegistry.markFaulted(computer, e, "Invalid data encountered by computer");
             } catch (Throwable t) {
                 ComputerRegistry.markFaulted(computer, t, "Exception ticking computer");

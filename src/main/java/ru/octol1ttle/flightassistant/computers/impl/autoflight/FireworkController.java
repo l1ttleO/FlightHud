@@ -114,7 +114,7 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
             return;
         }
         if (mc.interactionManager == null) {
-            throw new AssertionError();
+            throw new IllegalStateException("mc.interactionManager is null");
         }
 
         activationInProgress = true;

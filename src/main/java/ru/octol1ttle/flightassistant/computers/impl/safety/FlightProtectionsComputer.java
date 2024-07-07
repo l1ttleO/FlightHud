@@ -19,7 +19,7 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
     @Override
     public void tick() {
         if (ComputerRegistry.anyFaulted(computer -> computer instanceof INormalLawProvider)) {
-            throw new AssertionError("Normal law provider faulted; entering alternate law");
+            throw new IllegalStateException("Normal law provider faulted; entering alternate law");
         }
 
         law = FlightControlLaw.NORMAL;

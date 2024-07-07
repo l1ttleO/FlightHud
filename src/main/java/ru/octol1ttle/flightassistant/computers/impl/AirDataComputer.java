@@ -150,7 +150,7 @@ public class AirDataComputer implements ITickableComputer {
 
     public @NotNull ClientPlayerEntity player() {
         if (mc.player == null) {
-            throw new AssertionError();
+            throw new IllegalStateException("Attempted to get client player when they do not exist");
         }
         return mc.player;
     }
@@ -217,7 +217,7 @@ public class AirDataComputer implements ITickableComputer {
 
     public static float validate(float f, float min, float max) {
         if (f < min || f > max) {
-            throw new AssertionError(f);
+            throw new IllegalArgumentException("Float value out of bounds: expected values from %s to %s (inclusive), got %s".formatted(min, max, f));
         }
 
         return f;
@@ -244,7 +244,7 @@ public class AirDataComputer implements ITickableComputer {
 
         public ElytraHealth(ItemStack stack) {
             if (!Items.ELYTRA.equals(stack.getItem())) {
-                throw new AssertionError();
+                throw new IllegalStateException("Attempted to initialize ElytraHealth, but the ItemStack does not contain an Elytra");
             }
             this.stack = stack;
         }

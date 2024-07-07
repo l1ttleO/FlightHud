@@ -47,7 +47,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
 
         groundSpeeds.add(data.velocity.horizontalLength());
         if (time.millis - lastAverageGroundSpeedUpdateTime > 5000.0f) {
-            averageGroundSpeed = groundSpeeds.stream().mapToDouble(d -> d).average().orElseThrow(AssertionError::new);
+            averageGroundSpeed = groundSpeeds.stream().mapToDouble(d -> d).average().orElseThrow(IllegalStateException::new);
             groundSpeeds.clear();
             lastAverageGroundSpeedUpdateTime = time.millis;
         }
@@ -178,7 +178,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
 
     public @Nullable Waypoint getPreviousWaypoint() {
         if (targetWaypoint == null) {
-            throw new AssertionError();
+            throw new IllegalStateException("Attempted to get the previous waypoint when the current waypoint is null");
         }
         int index = this.indexOf(targetWaypoint) - 1;
         if (!waypointExistsAt(index)) {
