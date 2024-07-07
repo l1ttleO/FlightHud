@@ -23,7 +23,7 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 public class AutopilotComputer implements ITickableComputer, IAutopilotProvider, IPitchController, IHeadingController, IRollController, IThrustController {
     private static final float THRUST_CLIMB = 0.9f;
     private static final float THRUST_CLIMB_REDUCED = 0.75f;
-    private static final float THRUST_APPROACH = 0.75f;
+    private static final float THRUST_APPROACH = 0.5f;
     private static final float THRUST_APPROACH_REDUCED = 0.25f;
     private static final float THRUST_IDLE = 0.0f;
     private static final float THRUST_LAND = -0.15f;
