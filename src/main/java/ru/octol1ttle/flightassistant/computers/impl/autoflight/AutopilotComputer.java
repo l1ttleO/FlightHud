@@ -159,7 +159,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.descend.selected", autoflight.selectedAltitude));
         }
 
-        if (abs <= 10.0f) {
+        if (abs <= 5.0f) {
             setTargetThrust(THRUST_CLIMB, Text.translatable("mode.flightassistant.thrust.climb"));
             setTargetPitch(pitch, Text.translatable("mode.flightassistant.vert.hold.selected", autoflight.selectedAltitude));
         }
@@ -204,7 +204,7 @@ public class AutopilotComputer implements ITickableComputer, IAutopilotProvider,
             }
         }
 
-        if (!plan.isOnApproach() && Math.abs(diff) <= 10.0f) {
+        if (!plan.isOnApproach() && Math.abs(diff) <= 5.0f) {
             if (useReducedThrust) {
                 setTargetThrust(THRUST_CLIMB_REDUCED, Text.translatable("mode.flightassistant.thrust.climb_reduced"));
             } else {
