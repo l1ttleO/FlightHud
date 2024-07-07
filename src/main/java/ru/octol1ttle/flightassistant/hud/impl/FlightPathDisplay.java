@@ -45,22 +45,13 @@ public class FlightPathDisplay implements IHudDisplay {
             return;
         }
 
-        int l = x - 3;
-        int r = x + 3;
-        int t = y - 3;
-        int b = y + 3;
+        int left = x - 3;
+        int right = x + 3;
+        int top = y - 3;
+        int bottom = y + 3;
 
         Color color = gpws.getGPWSLampColor();
-        // TODO: move to DrawHelper
-        DrawHelper.drawVerticalLine(context, l, t, b, color);
-        DrawHelper.drawVerticalLine(context, r, t, b, color);
-
-        DrawHelper.drawHorizontalLine(context, l, r, t, color);
-        DrawHelper.drawHorizontalLine(context, l, r, b, color);
-
-        DrawHelper.drawVerticalLine(context, x, t - 5, t, color);
-        DrawHelper.drawHorizontalLine(context, l - 4, l, y, color);
-        DrawHelper.drawHorizontalLine(context, r, r + 4, y, color);
+        DrawHelper.drawAircraftIcon(context, left, right, top, bottom, x, y, color);
     }
 
     @Override

@@ -85,4 +85,16 @@ public abstract class DrawHelper {
             context.drawHorizontalLine(dx1, dx2, y, color.getRGB());
         }
     }
+
+    public static void drawAircraftIcon(DrawContext context, int left, int right, int top, int bottom, int x, int y, Color color) {
+        drawVerticalLine(context, left, top, bottom, color);
+        drawVerticalLine(context, right, top, bottom, color);
+
+        drawHorizontalLine(context, left, right, top, color);
+        drawHorizontalLine(context, left, right, bottom, color);
+
+        drawVerticalLine(context, x, top - 5, top, color);
+        drawHorizontalLine(context, left - 4, left, y, color);
+        drawHorizontalLine(context, right, right + 4, y, color);
+    }
 }
