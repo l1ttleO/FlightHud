@@ -49,14 +49,13 @@ public class FlightPhaseComputer implements ITickableComputer {
             return Phase.DESCENT;
         }
 
-        Double distance = plan.getDistanceToWaypoint();
-        assert distance != null;
         if (phase == Phase.GO_AROUND) {
-            if (distance >= 100.0f) {
+            Double distance = plan.getDistanceToWaypoint();
+            if (distance != null && distance > 150.0f && thrust.getThrust() < 0.99f) {
                 return Phase.APPROACH;
             }
         } else {
-            if (distance < 100.0f && thrust.getThrust() >= 0.99f) {
+            if (thrust.getThrust() >= 0.99f) {
                 return Phase.GO_AROUND;
             }
 
