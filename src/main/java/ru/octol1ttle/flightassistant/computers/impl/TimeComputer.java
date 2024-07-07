@@ -51,8 +51,8 @@ public class TimeComputer implements ITickableComputer {
     }
 
     @Override
-    public String getId() {
-        return "time_prvd";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.time_prvd";
     }
 
     @Override

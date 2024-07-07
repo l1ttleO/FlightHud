@@ -1,13 +1,14 @@
 package ru.octol1ttle.flightassistant.computers.impl;
 
 import net.minecraft.text.Text;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class FlightPhaseComputer implements ITickableComputer {
+public class FlightPhaseComputer implements ITickableComputer, IAutopilotProvider {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
@@ -70,8 +71,8 @@ public class FlightPhaseComputer implements ITickableComputer {
     }
 
     @Override
-    public String getId() {
-        return "flight_phase";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.flight_phase";
     }
 
     @Override

@@ -132,8 +132,8 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     }
 
     @Override
-    public String getId() {
-        return "thrust_ctl";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.thrust_ctl";
     }
 
     @Override

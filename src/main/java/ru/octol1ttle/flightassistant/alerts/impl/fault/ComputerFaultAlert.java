@@ -2,6 +2,7 @@ package ru.octol1ttle.flightassistant.alerts.impl.fault;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.DrawHelper;
@@ -30,14 +31,19 @@ public class ComputerFaultAlert extends BaseAlert implements IECAMAlert {
 
         for (IComputer computer : ComputerRegistry.getComputers()) {
             if (computer instanceof ITickableComputer tickable && ComputerRegistry.isFaulted(computer.getClass())) {
-                i += DrawHelper.drawHighlightedText(textRenderer, context,
-                        /* TODO:
-                            let computers define their own Texts corresponding to their faults
-                         */
-                        Text.translatable("alerts.flightassistant.fault.computers." + tickable.getId()), x, y,
-                        FAConfig.indicator().cautionColor, highlight
-                );
-                y += 10;
+                for (int j = 0; j < Integer.MAX_VALUE; j++) {
+                    String key = "%s.%d".formatted(tickable.getFaultTextBaseKey(), j);
+                    if (!I18n.hasTranslation(key)) {
+                        break;
+                    }
+                    if (j == 0) {
+                        i += DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable(key), x, y, FAConfig.indicator().cautionColor, highlight);
+                    } else {
+                        i += DrawHelper.drawHighlightedText(textRenderer, context, Text.translatable(key), x, y, FAConfig.indicator().advisoryColor, false);
+                    }
+
+                    y += 10;
+                }
             }
         }
 

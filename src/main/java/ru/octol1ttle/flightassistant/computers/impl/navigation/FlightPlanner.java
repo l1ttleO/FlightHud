@@ -246,7 +246,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
     }
 
     @Override
-    public String getId() {
-        return "flt_plan";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.flt_plan";
     }
 }

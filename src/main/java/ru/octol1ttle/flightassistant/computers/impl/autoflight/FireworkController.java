@@ -149,8 +149,8 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
     }
 
     @Override
-    public String getId() {
-        return "frwk_ctl";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.frwk_ctl";
     }
 
     @Override

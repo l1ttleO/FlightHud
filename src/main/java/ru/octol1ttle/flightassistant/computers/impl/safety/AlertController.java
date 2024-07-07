@@ -21,7 +21,6 @@ import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.ExcessiveDescentAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.ExcessiveTerrainClosureAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.nav.gpws.UnsafeTerrainClearanceAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.other.ElytraHealthLowAlert;
-import ru.octol1ttle.flightassistant.alerts.impl.other.ProtectionsLostAlert;
 import ru.octol1ttle.flightassistant.alerts.impl.other.StallAlert;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -42,7 +41,6 @@ public class AlertController implements ITickableComputer {
         AlertRegistry.register(new ExcessiveTerrainClosureAlert());
         AlertRegistry.register(new UnsafeTerrainClearanceAlert());
         AlertRegistry.register(new AutopilotOffAlert());
-        AlertRegistry.register(new ProtectionsLostAlert());
         AlertRegistry.register(new UnloadedChunkAlert());
         AlertRegistry.register(new ComputerFaultAlert());
         AlertRegistry.register(new AutoThrustOffAlert());
@@ -138,8 +136,8 @@ public class AlertController implements ITickableComputer {
     }
 
     @Override
-    public String getId() {
-        return "alert_mgr";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.alert_mgr";
     }
 
     @Override

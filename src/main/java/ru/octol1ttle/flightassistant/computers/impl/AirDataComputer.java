@@ -224,8 +224,8 @@ public class AirDataComputer implements ITickableComputer {
     }
 
     @Override
-    public String getId() {
-        return "air_data";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.air_data";
     }
 
     @Override

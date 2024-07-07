@@ -90,8 +90,8 @@ public class VoidLevelComputer implements ITickableComputer, IPitchLimiter, IThr
     }
 
     @Override
-    public String getId() {
-        return "void_level";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.void_level";
     }
 
     @Override

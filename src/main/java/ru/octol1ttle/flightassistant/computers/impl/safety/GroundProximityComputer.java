@@ -194,8 +194,8 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     @Override
-    public String getId() {
-        return "gpws";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.gpws";
     }
 
     @Override

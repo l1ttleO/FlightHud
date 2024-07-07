@@ -48,8 +48,8 @@ public class ElytraStateController implements ITickableComputer {
     }
 
     @Override
-    public String getId() {
-        return "elytra_state";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.elytra_state";
     }
 
     @Override

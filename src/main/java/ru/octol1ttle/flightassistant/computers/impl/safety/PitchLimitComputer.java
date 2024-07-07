@@ -74,8 +74,8 @@ public class PitchLimitComputer implements ITickableComputer, INormalLawProvider
     }
 
     @Override
-    public String getId() {
-        return "pitch_limit";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.pitch_limit";
     }
 
     @Override

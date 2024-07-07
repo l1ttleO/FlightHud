@@ -19,8 +19,7 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
     @Override
     public void tick() {
         if (ComputerRegistry.anyFaulted(computer -> computer instanceof INormalLawProvider)) {
-            law = FlightControlLaw.ALTERNATE;
-            return;
+            throw new AssertionError("Normal law provider faulted; entering alternate law");
         }
 
         law = FlightControlLaw.NORMAL;
@@ -40,8 +39,8 @@ public class FlightProtectionsComputer implements ITickableComputer, IPitchContr
     }
 
     @Override
-    public String getId() {
-        return "flight_prot";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.flight_prot";
     }
 
     @Override

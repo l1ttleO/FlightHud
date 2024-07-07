@@ -59,8 +59,8 @@ public class AutoFlightController implements ITickableComputer, IAutopilotProvid
     }
 
     @Override
-    public String getId() {
-        return "auto_flt";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.auto_flt";
     }
 
     @Override

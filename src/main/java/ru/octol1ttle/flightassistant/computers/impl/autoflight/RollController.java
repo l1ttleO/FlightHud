@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.octol1ttle.flightassistant.FlightAssistant;
 import ru.octol1ttle.flightassistant.compatibility.doabarrelroll.DaBRRollHandler;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IRollController;
 import ru.octol1ttle.flightassistant.computers.api.IRollHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
@@ -20,7 +20,7 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 import ru.octol1ttle.flightassistant.registries.events.RegisterCustomComputersCallback;
 
-public class RollController implements ITickableComputer, INormalLawProvider {
+public class RollController implements ITickableComputer, IAutopilotProvider {
     private static final List<IRollController> controllers = new ArrayList<>();
     private static @Nullable IRollHandler rollHandler = null;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
@@ -106,8 +106,8 @@ public class RollController implements ITickableComputer, INormalLawProvider {
     }
 
     @Override
-    public String getId() {
-        return "roll_ctl";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.roll_ctl";
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.computers;
 
+import java.util.Random;
 import net.minecraft.client.MinecraftClient;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.FlightAssistant;
@@ -31,6 +32,7 @@ public class ComputerHost {
     public static ComputerHost instance() {
         return FlightAssistant.getComputerHost();
     }
+    private static final Random random = new Random();
 
     public ComputerHost(@NotNull MinecraftClient mc) {
         ComputerRegistry.register(new AirDataComputer(mc));
@@ -72,6 +74,9 @@ public class ComputerHost {
             }
 
             try {
+                if (!(computer instanceof AlertController) && random.nextInt(10_000_000) == 0) {
+                    throw new IllegalStateException();
+                }
                 tickable.tick();
             } catch (AssertionError e) { // TODO: stop using AssertionErrors
                 ComputerRegistry.markFaulted(computer, e, "Invalid data encountered by computer");

@@ -73,8 +73,8 @@ public class StallComputer implements ITickableComputer, IPitchLimiter, IThrustC
     }
 
     @Override
-    public String getId() {
-        return "stall_det";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.stall_det";
     }
 
     @Override

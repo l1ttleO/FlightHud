@@ -76,8 +76,8 @@ public class HeadingController implements ITickableComputer, IAutopilotProvider 
     }
 
     @Override
-    public String getId() {
-        return "heading_ctl";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.heading_ctl";
     }
 
     @Override

@@ -168,26 +168,73 @@ alerts.flightassistant:
     unsafe: FRWK EXPLOSIVE
   fault:
     computers:
-      air_data: ADC FAULT (INSTRUMENTS LOST)
-      time_prvd: TIME PRVD FAULT
-      auto_flt: AUTO FLT SYS FAULT
-      frwk_ctl: AUTO FRWK CTL FAULT (PROT LOST)
-      pitch_ctl: AUTO PITCH CTL FAULT
-      flt_plan: F/PLAN FAULT
       alert_mgr: ALERT SYS FAULT (ALL ALERTS LOST)
-      gpws: GPWS FAULT
-      stall_det: STALL DET FAULT
-      void_level: VOID LVL SYS FAULT
-      heading_ctl: AUTO HDG CTL FAULT
-      flight_prot: F/CTL ALTN LAW (PROT LOST)
-      elytra_state: ELYTRA SYS FAULT (PROT LOST)
-      chunk_state: CHUNK SYS FAULT
-      pitch_limit: PITCH LIMIT FAULT
-      autopilot: AUTOPILOT FAULT
-      flight_phase: F/PHASE SYS FAULT
-      roll_ctl: AUTO ROLL CTL FAULT
-      dabr_roll: DABR ROLL CTL FAULT
-      thrust_ctl: AUTO THR CTL FAULT
+      air_data:
+        '0': AIR DATA FAULT
+        '1': ' GPWS LOST'
+        '2': ' STALL WARN LOST'
+        '3': ' ROLL UNRELIABLE'
+        '4': ' SPD UNRELIABLE'
+        '5': ' R/ALT UNRELIABLE'
+      time_prvd:
+        '0': TIME SYS FAULT
+      auto_flt:
+        '0': AUTO FLT SYS FAULT
+        '1': ' FLT DIR LOST'
+        '2': ' A/THR LOST'
+        '3': ' AP LOST'
+      frwk_ctl:
+        '0': AUTO FRWK CTL FAULT (PROT LOST)
+        '1': ' FRWK CNT UNRELIABLE'
+      pitch_ctl:
+        '0': AUTO PITCH CTL FAULT
+        '1': ' PITCH RECOVERY ASSIST LOST'
+        '2': ' AUTOPILOT LOST'
+      flt_plan:
+        '0': FLT PLAN FAULT
+        '1': ' A/FLT MANAGED MODES LOST'
+        '2': ' -A/FLT SELECTED MODES: USE'
+      gpws:
+        '0': GPWS FAULT
+        '1': ' TERR WARNS LOST'
+        '2': ' MANEUVER WITH CARE'
+        '3': ' MAN LANDINGS ONLY'
+      stall_det:
+        '0': STALL DET LOST
+        '1': ' STALL WARNS LOST'
+        '2': ' MANEUVER WITH CARE'
+      void_level:
+        '0': VOID LVL SYS FAULT
+        '1': ' VOID LVL WARNS LOST'
+      heading_ctl:
+        '0': AUTO HDG CTL FAULT
+        '1': ' AUTOPILOT LOST'
+      flight_prot:
+        '0': F/CTL ALTN LAW (PROT LOST)
+        '1': ' MANEUVER WITH CARE'
+      elytra_state:
+        '0': ELYTRA SYS FAULT (PROT LOST)
+        '1': ' MAN ELYTRA OPEN ONLY'
+      chunk_state:
+        '0': CHUNK STATE FAULT
+        '1': ' UNLOADED CHUNK WARN LOST'
+      pitch_limit:
+        '0': PITCH LIMIT FAULT
+        '1': ' STALL PROT LOST'
+      autopilot:
+        '0': AUTOPILOT FAULT
+      flight_phase:
+        '0': F/PHASE SYS FAULT
+        '1': ' AUTOPILOT LOST'
+      roll_ctl:
+        '0': AUTO ROLL CTL FAULT
+        '1': ' AUTOPILOT LOST'
+      dabr_roll:
+        '0': DABR ROLL CTL FAULT
+        '1': ' AUTOPILOT LOST'
+      thrust_ctl:
+        '0': AUTO THR CTL FAULT
+        '1': ' AUTOPILOT LOST'
     hud:
       alert: ALERT DISPLAY FAULT
       altitude: ALT DISPLAY FAULT

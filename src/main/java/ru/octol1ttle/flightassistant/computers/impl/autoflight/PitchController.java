@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ControlInput;
-import ru.octol1ttle.flightassistant.computers.api.INormalLawProvider;
+import ru.octol1ttle.flightassistant.computers.api.IAutopilotProvider;
 import ru.octol1ttle.flightassistant.computers.api.IPitchController;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.computers.api.InputPriority;
@@ -15,7 +15,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.registries.events.AllowComputerRegisterCallback;
 
-public class PitchController implements ITickableComputer, INormalLawProvider {
+public class PitchController implements ITickableComputer, IAutopilotProvider {
     public static final float CLIMB_PITCH = 55.0f;
     public static final float ALTITUDE_PRESERVE_PITCH = 15.0f;
     public static final float GLIDE_PITCH = -2.2f;
@@ -90,8 +90,8 @@ public class PitchController implements ITickableComputer, INormalLawProvider {
     }
 
     @Override
-    public String getId() {
-        return "pitch_ctl";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.pitch_ctl";
     }
 
     @Override

@@ -49,8 +49,8 @@ public class ChunkStatusComputer implements ITickableComputer, IPitchController 
     }
 
     @Override
-    public String getId() {
-        return "chunk_state";
+    public String getFaultTextBaseKey() {
+        return "alerts.flightassistant.fault.computers.chunk_state";
     }
 
     @Override

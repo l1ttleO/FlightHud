@@ -1,4 +1,4 @@
 package ru.octol1ttle.flightassistant.computers.api;
 
-public interface IAutopilotProvider extends IComputer {
+public interface IAutopilotProvider extends INormalLawProvider {
 }
