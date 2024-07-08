@@ -50,7 +50,6 @@ public class ComputerConfig {
 
     public enum GlobalAutomationsMode implements NameableEnum {
         FULL,
-        // TODO: LIMIT TO NO_OVERLAYS ON SERVERS
         NO_OVERLAYS,
         DISABLED;
 

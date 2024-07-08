@@ -29,7 +29,7 @@ public class ElytraHealthDisplay implements IHudDisplay {
         if (FAConfig.indicator().showElytraHealth && data.elytraHealth != null) {
             Color color;
             float percentage = data.elytraHealth.getInUnits(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE);
-            if (percentage <= 5.0f) { // TODO: configurable
+            if (percentage <= 5.0f) {
                 color = FAConfig.indicator().warningColor;
             } else {
                 color = percentage <= 10.0f ? FAConfig.indicator().cautionColor : FAConfig.indicator().frameColor;
