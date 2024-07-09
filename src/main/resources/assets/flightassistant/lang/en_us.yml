@@ -235,6 +235,7 @@ alerts.flightassistant:
       thrust_ctl:
         '0': AUTO THR CTL FAULT
         '1': ' AUTOPILOT LOST'
+        '2': ' MAN THR USE ONLY'
     hud:
       alert: ALERT DISPLAY FAULT
       altitude: ALT DISPLAY FAULT

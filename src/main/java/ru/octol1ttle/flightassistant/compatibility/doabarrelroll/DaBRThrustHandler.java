@@ -8,19 +8,24 @@ import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightControl
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
-public class DaBRThrustHandler implements IThrustHandler {
+public class DaBRThrustHandler implements IThrustHandler, ThrustEvents.ModifyThrustInputEvent {
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
-    private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
     public DaBRThrustHandler() {
-        ThrustEvents.MODIFY_THRUST_INPUT.register(v -> {
-            if (Math.abs(v) > 0.001) {
-                autoflight.disconnectAutoThrust(true);
-            }
-            thrust.addThrustTick((float) v);
-            return thrust.getThrust();
-        }, 10);
+        ThrustEvents.MODIFY_THRUST_INPUT.register(this, 10);
+    }
+
+    @Override
+    public double modify(double v) {
+        if (ComputerRegistry.isFaulted(ThrustController.class) || ComputerRegistry.isFaulted(TimeComputer.class)) {
+            return v;
+        }
+        if (Math.abs(v) > 0.001) {
+            autoflight.disconnectAutoThrust(true);
+        }
+        thrust.addThrustTick((float) v);
+        return thrust.getThrust();
     }
 
     @Override
