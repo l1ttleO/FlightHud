@@ -74,9 +74,10 @@ public class ComputerHost {
             }
 
             try {
-                if (!(computer instanceof AlertController) && random.nextInt(10_000_000) == 0) {
+                // TODO: random failures config setting
+                /*if (!(computer instanceof AlertController) && random.nextInt(10_000_000) == 0) {
                     throw new RuntimeException();
-                }
+                }*/
                 tickable.tick();
             } catch (IllegalStateException e) {
                 ComputerRegistry.markFaulted(computer, e, "Invalid data encountered by computer");

@@ -4,7 +4,7 @@ plugins {
     id 'me.modmuss50.mod-publish-plugin' version '0.5.1'
 }
 
-version = "${project.mod_version}-alpha.2+mc${project.minecraft_version}"
+version = "${project.mod_version}+mc${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -105,14 +105,14 @@ publishMods {
     file = remapJar.archiveFile
     version = project.version
     changelog = getRootProject().file("CHANGELOG.md").text
-    type = ALPHA
+    type = STABLE
     modLoaders.add("fabric")
 
     def min = property('publish_target_min')
     def max = property('publish_target_max')
 
     def minecraftVersion = min == max ? min : "${min}-${max}"
-    displayName = "FlightAssistant ${property('mod_version')} [ALPHA 2] (MC ${minecraftVersion})"
+    displayName = "FlightAssistant ${property('mod_version')} (MC ${minecraftVersion})"
 
     if (providers.gradleProperty('modrinthToken').present) {
         modrinth {
