@@ -4,7 +4,6 @@ import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
@@ -14,7 +13,6 @@ import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class HeadingDisplay implements IHudDisplay {
-
     private final Dimensions dim;
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
@@ -30,8 +28,7 @@ public class HeadingDisplay implements IHudDisplay {
         int top = dim.tFrame - 10;
 
         int yText = top - 7;
-        int northOffset = MathHelper.floor(data.heading() * dim.degreesPerPixel);
-        int xNorth = dim.xMid - northOffset;
+        float xNorth = dim.xMid - data.heading() * dim.degreesPerPixel;
 
         if (FAConfig.indicator().showHeadingReadout) {
             Color color = getHeadingColor(data.heading());
@@ -43,7 +40,7 @@ public class HeadingDisplay implements IHudDisplay {
             DrawHelper.drawMiddleAlignedText(textRenderer, context, DrawHelper.asText("^"), dim.xMid, top + 10, FAConfig.indicator().frameColor);
 
             for (int i = -540; i < 540; i++) {
-                int x = (i * dim.degreesPerPixel) + xNorth;
+                int x = Math.round(i * dim.degreesPerPixel + xNorth);
                 if (x < left) {
                     continue;
                 }

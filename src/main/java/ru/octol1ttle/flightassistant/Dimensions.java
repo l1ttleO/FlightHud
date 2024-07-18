@@ -8,7 +8,7 @@ public class Dimensions {
 
     public int hScreen;
     public int wScreen;
-    public int degreesPerPixel;
+    public float degreesPerPixel;
     public int xMid;
     public int yMid;
 
@@ -23,7 +23,7 @@ public class Dimensions {
         hScreen = MathHelper.floor(context.getScaledWindowHeight() / FAConfig.hud().hudScale);
         wScreen = MathHelper.floor(context.getScaledWindowWidth() / FAConfig.hud().hudScale);
 
-        degreesPerPixel = MathHelper.floor(hScreen / fov);
+        degreesPerPixel = (float) (hScreen / fov);
         xMid = wScreen / 2;
         yMid = hScreen / 2;
 

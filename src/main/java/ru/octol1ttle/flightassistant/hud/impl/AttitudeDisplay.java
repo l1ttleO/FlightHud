@@ -4,7 +4,6 @@ import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
@@ -34,7 +33,7 @@ public class AttitudeDisplay implements IHudDisplay {
 
         pitchData.update(dim);
 
-        int yHorizon = MathHelper.floor(dim.yMid + data.pitch() * dim.degreesPerPixel);
+        float yHorizon = dim.yMid + data.pitch() * dim.degreesPerPixel;
 
         int xMid = dim.xMid;
         int yMid = dim.yMid;
@@ -63,20 +62,20 @@ public class AttitudeDisplay implements IHudDisplay {
                 ? FAConfig.indicator().warningColor : FAConfig.indicator().frameColor;
     }
 
-    private void drawLadder(TextRenderer textRenderer, DrawContext context, int yHorizon) {
+    private void drawLadder(TextRenderer textRenderer, DrawContext context, float yHorizon) {
         for (int i = DEGREES_PER_BAR; i <= 90; i += DEGREES_PER_BAR) {
-            int offset = dim.degreesPerPixel * i;
+            int offset = Math.round(dim.degreesPerPixel * i);
             drawDegreeBar(textRenderer, context, -i, yHorizon + offset);
             drawDegreeBar(textRenderer, context, i, yHorizon - offset);
         }
     }
 
-    private void drawReferenceMark(DrawContext context, float degrees, int yHorizon, Color color) {
+    private void drawReferenceMark(DrawContext context, float degrees, float yHorizon, Color color) {
         if (degrees == 0) {
             return;
         }
 
-        int y = MathHelper.floor((-degrees * dim.degreesPerPixel) + yHorizon);
+        int y = Math.round(-degrees * dim.degreesPerPixel + yHorizon);
 
         if (outOfFrame(y)) {
             return;
@@ -88,6 +87,10 @@ public class AttitudeDisplay implements IHudDisplay {
 
         DrawHelper.drawHorizontalLineDashed(context, l1, pitchData.l2, y, 3, color);
         DrawHelper.drawHorizontalLineDashed(context, pitchData.r1, r2, y, 3, color);
+    }
+
+    private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree, float y) {
+        drawDegreeBar(textRenderer, context,degree, Math.round(y));
     }
 
     private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree, int y) {
@@ -114,10 +117,10 @@ public class AttitudeDisplay implements IHudDisplay {
                 y - fontVerticalOffset, color);
     }
 
-    private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, int yHorizon, Color color) {
+    private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, float yHorizon, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f <= 90; f += 10) {
-            int y = MathHelper.floor((-f * dim.degreesPerPixel) + yHorizon);
+            int y = Math.round(-f * dim.degreesPerPixel + yHorizon);
 
             if (outOfFrame(y)) {
                 continue;
@@ -133,10 +136,10 @@ public class AttitudeDisplay implements IHudDisplay {
         }
     }
 
-    private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, int yHorizon, Color color) {
+    private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, float yHorizon, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f >= -90; f -= 10) {
-            int y = MathHelper.floor((-f * dim.degreesPerPixel) + yHorizon);
+            int y = Math.round(-f * dim.degreesPerPixel + yHorizon);
 
             if (outOfFrame(y)) {
                 continue;
