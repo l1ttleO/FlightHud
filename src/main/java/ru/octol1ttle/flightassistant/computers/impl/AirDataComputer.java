@@ -35,6 +35,7 @@ public class AirDataComputer implements ITickableComputer {
     public static final float OPTIMUM_GLIDE_RATIO = 10.0f;
     private final MinecraftClient mc;
     public Vec3d velocity = Vec3d.ZERO;
+    public Vec3d forwardVelocity = velocity;
     public float roll;
     public float flightPitch;
     public float flightYaw;
@@ -49,6 +50,7 @@ public class AirDataComputer implements ITickableComputer {
     @Override
     public void tick() {
         velocity = player().getVelocity().multiply(TICKS_PER_SECOND);
+        forwardVelocity = computeForwardVelocity();
         roll = computeRoll(RenderSystem.getInverseViewRotationMatrix().invert());
         isCurrentChunkLoaded = isCurrentChunkLoaded();
         groundLevel = computeGroundLevel();
@@ -85,6 +87,11 @@ public class AirDataComputer implements ITickableComputer {
             return false;
         }
         return player().isInvulnerable() || player().getAbilities().invulnerable;
+    }
+
+    private Vec3d computeForwardVelocity() {
+        Vec3d lookVelocity = velocity.multiply(player().getRotationVec(1));
+        return new Vec3d(Math.max(0.0, lookVelocity.x), Math.max(0.0, lookVelocity.y), Math.max(0.0, lookVelocity.z));
     }
 
     private float computeRoll(Matrix3f matrix) {

@@ -46,7 +46,7 @@ public class StallComputer implements ITickableComputer, IPitchLimiter, IThrustC
         if (!data.isFlying() || status == StallStatus.UNKNOWN || status == StallStatus.PLAYER_INVULNERABLE) {
             return 90.0f;
         }
-        return MathHelper.clamp(data.flightPitch + 90.0f, 0.0f, 90.0f);
+        return (float) MathHelper.clamp(data.forwardVelocity.length() * 3.0f, 0.0f, 90.0f);
     }
 
     @Override
