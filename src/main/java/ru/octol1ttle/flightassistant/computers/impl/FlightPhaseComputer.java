@@ -21,6 +21,7 @@ public class FlightPhaseComputer implements ITickableComputer, IAutopilotProvide
         phase = computePhase();
     }
 
+    // TODO: use multiple waypoints to calculate phase cuz this shit sucks
     private Phase computePhase() {
         if (data.player().isOnGround() || !data.isFlying()) {
             return Phase.ON_GROUND;

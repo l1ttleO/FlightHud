@@ -41,8 +41,7 @@ public class AltitudeDisplay implements IHudDisplay {
 
         int blocksPerPixel = 1;
 
-        int floorOffset = Math.round(data.altitude() * blocksPerPixel);
-        int yFloor = dim.yMid - floorOffset;
+        float yFloor = dim.yMid - data.altitude() * blocksPerPixel;
         int xAltText = right + 5;
 
         int groundLevel = MathHelper.ceil(data.groundLevel);
@@ -56,7 +55,7 @@ public class AltitudeDisplay implements IHudDisplay {
 
         if (FAConfig.indicator().showAltitudeScale) {
             for (int i = -130; i < 1300; i++) {
-                int y = (dim.hScreen - i * blocksPerPixel) - yFloor;
+                int y = Math.round(dim.hScreen - i * blocksPerPixel - yFloor);
                 if (y > (bottom - 5) || i < groundLevel) {
                     continue;
                 }
