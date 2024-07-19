@@ -13,4 +13,5 @@ public interface IThrustHandler extends IComputer {
 
     boolean canBeUsed();
     boolean isFireworkLike();
+    boolean supportsReverseThrust();
 }

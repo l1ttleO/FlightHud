@@ -116,10 +116,11 @@ public class ThrustController implements ITickableComputer, INormalLawProvider {
     /**
      * Sets the thrust.
      *
-     * @param newThrust The new thrust value, ranging from -1.0 to 1.0. Will be clamped if outside the range.
+     * @param newThrust The new thrust value, ranging from -1.0 to 1.0, or from 0.0 to 1.0 if the thrust handler does not support reverse thrust. Will be clamped if outside the range.
      */
     public void setThrust(float newThrust) {
-        newThrust = MathHelper.clamp(newThrust, -1.0f, 1.0f);
+        float min = getThrustHandler().supportsReverseThrust() ? -1.0f : 0.0f;
+        newThrust = MathHelper.clamp(newThrust, min, 1.0f);
         this.thrust = newThrust;
     }
 

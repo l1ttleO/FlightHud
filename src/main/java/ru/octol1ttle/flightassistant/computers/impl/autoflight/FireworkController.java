@@ -149,6 +149,11 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
     }
 
     @Override
+    public boolean supportsReverseThrust() {
+        return false;
+    }
+
+    @Override
     public String getFaultTextBaseKey() {
         return "alerts.flightassistant.fault.computers.frwk_ctl";
     }

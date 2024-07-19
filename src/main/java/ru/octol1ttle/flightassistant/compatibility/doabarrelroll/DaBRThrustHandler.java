@@ -44,6 +44,11 @@ public class DaBRThrustHandler implements IThrustHandler, ThrustEvents.ModifyThr
     }
 
     @Override
+    public boolean supportsReverseThrust() {
+        return true;
+    }
+
+    @Override
     public void reset() {
     }
 }
