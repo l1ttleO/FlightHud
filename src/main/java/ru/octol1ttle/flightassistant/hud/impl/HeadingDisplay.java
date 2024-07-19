@@ -90,11 +90,6 @@ public class HeadingDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.heading"), dim.xMid - 8, dim.tFrame - 17, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "heading";
-    }
-
     private Text headingToDirection(int degrees) {
         return switch (degrees) {
             case 0, 360 -> Text.translatable("short.flightassistant.north");

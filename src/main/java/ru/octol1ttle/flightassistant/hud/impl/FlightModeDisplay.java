@@ -10,7 +10,6 @@ import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.computers.impl.TimeComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutoFlightController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.AutopilotComputer;
-import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
 import ru.octol1ttle.flightassistant.computers.impl.navigation.FlightPlanner;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
@@ -21,7 +20,6 @@ public class FlightModeDisplay implements IHudDisplay {
     private final TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
     private final AutoFlightController autoflight = ComputerRegistry.resolve(AutoFlightController.class);
     private final AutopilotComputer autopilot = ComputerRegistry.resolve(AutopilotComputer.class);
-    private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
 
     private final FlightMode thrustMode;
@@ -139,8 +137,4 @@ public class FlightModeDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.flight_mode"), dim.lFrame + dim.wFrame / 5, dim.bFrame - 10, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "flight_mode";
-    }
 }

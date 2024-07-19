@@ -41,8 +41,4 @@ public class LocationDisplay implements IHudDisplay {
                 dim.lFrame + 15, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "location";
-    }
 }

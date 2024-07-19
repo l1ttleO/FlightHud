@@ -48,8 +48,4 @@ public class ElytraHealthDisplay implements IHudDisplay {
                 FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "elytra_health";
-    }
 }

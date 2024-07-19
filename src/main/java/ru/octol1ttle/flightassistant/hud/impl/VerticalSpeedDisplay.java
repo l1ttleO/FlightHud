@@ -40,9 +40,4 @@ public class VerticalSpeedDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.vertical_speed", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "vertical_speed";
-    }
 }
-

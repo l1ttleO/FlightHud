@@ -7,6 +7,4 @@ public interface IHudDisplay {
     void render(DrawContext context, TextRenderer textRenderer);
 
     void renderFaulted(DrawContext context, TextRenderer textRenderer);
-
-    String getId();
 }

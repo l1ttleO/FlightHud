@@ -58,8 +58,4 @@ public class FlightDirectorsDisplay implements IHudDisplay {
         DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("mode.flightassistant.auto.flight_directors"), dim.xMid, dim.yMid - 20, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "flt_dir";
-    }
 }

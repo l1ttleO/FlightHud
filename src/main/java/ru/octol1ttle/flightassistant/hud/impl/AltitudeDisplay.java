@@ -128,8 +128,4 @@ public class AltitudeDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.altitude"), dim.rFrame + 7, dim.yMid - 3, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "altitude";
-    }
 }

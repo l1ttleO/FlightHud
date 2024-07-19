@@ -95,8 +95,4 @@ public class StatusDisplay implements IHudDisplay {
                 dim.rFrame - 5, dim.tFrame + 15, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "status";
-    }
 }

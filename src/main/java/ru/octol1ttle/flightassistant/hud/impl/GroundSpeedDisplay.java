@@ -40,8 +40,4 @@ public class GroundSpeedDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.ground_speed", ""), x, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "ground_speed";
-    }
 }

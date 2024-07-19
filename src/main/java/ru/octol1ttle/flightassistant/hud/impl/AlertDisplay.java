@@ -58,8 +58,4 @@ public class AlertDisplay implements IHudDisplay {
                 FAConfig.indicator().warningColor, time.highlight);
     }
 
-    @Override
-    public String getId() {
-        return "alert";
-    }
 }

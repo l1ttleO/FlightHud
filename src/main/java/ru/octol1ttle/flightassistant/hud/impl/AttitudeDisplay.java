@@ -157,11 +157,6 @@ public class AttitudeDisplay implements IHudDisplay {
         DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("short.flightassistant.attitude"), dim.xMid, dim.yMid - 10, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "attitude";
-    }
-
     private static class AttitudeIndicatorData {
         public int width;
         public int margin;

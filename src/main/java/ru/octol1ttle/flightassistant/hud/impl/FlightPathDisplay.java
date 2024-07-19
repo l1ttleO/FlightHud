@@ -59,8 +59,4 @@ public class FlightPathDisplay implements IHudDisplay {
         DrawHelper.drawMiddleAlignedText(textRenderer, context, Text.translatable("short.flightassistant.flight_path"), dim.xMid, dim.yMid + 10, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "flight_path";
-    }
 }

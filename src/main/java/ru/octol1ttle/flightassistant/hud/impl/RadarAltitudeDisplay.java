@@ -60,8 +60,4 @@ public class RadarAltitudeDisplay implements IHudDisplay {
         DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.radar"), dim.rFrame - 3, dim.bFrame, FAConfig.indicator().warningColor);
     }
 
-    @Override
-    public String getId() {
-        return "radar";
-    }
 }
