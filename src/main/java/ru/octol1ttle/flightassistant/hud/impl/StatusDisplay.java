@@ -7,6 +7,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.computers.api.IThrustHandler;
 import ru.octol1ttle.flightassistant.computers.impl.FlightPhaseComputer;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.FireworkController;
 import ru.octol1ttle.flightassistant.computers.impl.autoflight.ThrustController;
@@ -17,7 +18,6 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class StatusDisplay implements IHudDisplay {
     private final Dimensions dim;
-    private final FireworkController firework = ComputerRegistry.resolve(FireworkController.class);
     private final FlightPlanner plan = ComputerRegistry.resolve(FlightPlanner.class);
     private final FlightPhaseComputer phase = ComputerRegistry.resolve(FlightPhaseComputer.class);
     private final ThrustController thrust = ComputerRegistry.resolve(ThrustController.class);
@@ -31,7 +31,8 @@ public class StatusDisplay implements IHudDisplay {
         int x = dim.rFrame - 5;
         int y = dim.tFrame + 5;
 
-        if (thrust.getThrustHandler() instanceof FireworkController) {
+        IThrustHandler thrustHandler = thrust.getThrustHandler();
+        if (thrustHandler instanceof FireworkController firework) {
             if (FAConfig.indicator().showFireworkCount) {
                 Color fireworkColor = FAConfig.indicator().statusColor;
                 if (firework.safeFireworkCount > 0) {
@@ -46,15 +47,18 @@ public class StatusDisplay implements IHudDisplay {
                         x, y += 10, fireworkColor
                 );
             }
-        } else if (FAConfig.indicator().showThrustSetting) {
+        }
+
+        float currentThrust = thrust.getThrust();
+        if (FAConfig.indicator().showThrustSetting && (!thrustHandler.isFireworkLike() || Math.abs(currentThrust) > 0.001f)) {
             Color thrustColor = FAConfig.indicator().statusColor;
-            if (thrust.getThrust() < 0.0f) {
+            if (currentThrust < 0.0f) {
                 thrustColor = FAConfig.indicator().cautionColor;
-            } else if (thrust.getThrust() > 0.99f) {
+            } else if (currentThrust > 0.99f) {
                 thrustColor = FAConfig.indicator().warningColor;
             }
 
-            String displayThrust = "%.1f%%".formatted(thrust.getThrust() * 100.0f);
+            String displayThrust = "%.1f%%".formatted(currentThrust * 100.0f);
             DrawHelper.drawRightAlignedText(textRenderer, context,
                     Text.translatable("status.flightassistant.thrust_setting", displayThrust),
                     x, y += 10, thrustColor
