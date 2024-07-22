@@ -66,13 +66,13 @@ dependencies {
 	// Required: Fabric API for callbacks
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}+${project.minecraft_version}"
 	// Required: YACL for config storage and screen
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}+${project.minecraft_version}"
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-fabric"
 	// Optional: Mod Menu to access the YACL config screen
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
     // Optional: ImmediatelyFast for batching support to increase rendering performance
 	modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+${project.minecraft_version}-fabric"
     // Optional: Do a Barrel Roll to control roll via RollController
-    modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}+${project.minecraft_version}-fabric"
+    modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}-fabric"
 }
 
 processResources {
@@ -89,7 +89,7 @@ yamlang {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+    it.options.release = 21
 }
 
 java {
@@ -98,8 +98,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {

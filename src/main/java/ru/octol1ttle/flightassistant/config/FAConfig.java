@@ -66,7 +66,7 @@ public class FAConfig {
         }
 
         if (!client.player.getAbilities().allowFlying) {
-            for (ItemStack stack : client.player.getItemsEquipped()) {
+            for (ItemStack stack : client.player.getEquippedItems()) {
                 if (Items.ELYTRA.equals(stack.getItem())) {
                     return INDICATORS_STORAGE_HANDLER.instance().notFlyingHasElytra;
                 }

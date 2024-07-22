@@ -1,6 +1,5 @@
 package ru.octol1ttle.flightassistant.computers.impl;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -20,13 +19,14 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 import ru.octol1ttle.flightassistant.DrawHelper;
 import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.IndicatorConfig;
+import ru.octol1ttle.flightassistant.util.events.RollMatrixCallback;
 
 import static net.minecraft.SharedConstants.TICKS_PER_SECOND;
 
@@ -44,13 +44,13 @@ public class AirDataComputer implements ITickableComputer {
 
     public AirDataComputer(MinecraftClient mc) {
         this.mc = mc;
+        RollMatrixCallback.EVENT.register(matrix4f -> roll = computeRoll(matrix4f));
     }
 
     @Override
     public void tick() {
         velocity = player().getVelocity().multiply(TICKS_PER_SECOND);
         forwardVelocity = computeForwardVelocity();
-        roll = computeRoll(RenderSystem.getInverseViewRotationMatrix().invert());
         isCurrentChunkLoaded = isCurrentChunkLoaded();
         groundLevel = computeGroundLevel();
         flightPitch = computeFlightPitch(velocity, pitch());
@@ -93,7 +93,7 @@ public class AirDataComputer implements ITickableComputer {
         return new Vec3d(Math.max(0.0, lookVelocity.x), Math.max(0.0, lookVelocity.y), Math.max(0.0, lookVelocity.z));
     }
 
-    private float computeRoll(Matrix3f matrix) {
+    private float computeRoll(Matrix4f matrix) {
         return validate(FAMathHelper.toDegrees(Math.atan2(-matrix.m10(), matrix.m11())), -180.0f, 180.0f);
     }
 

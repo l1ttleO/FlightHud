@@ -1,11 +1,11 @@
 package ru.octol1ttle.flightassistant.computers.impl.autoflight;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Hand;
 import ru.octol1ttle.flightassistant.computers.api.IThrustHandler;
 import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
@@ -129,8 +129,12 @@ public class FireworkController implements ITickableComputer, IThrustHandler {
         if (data.isInvulnerable()) {
             return true;
         }
-        NbtCompound nbtCompound = stack.getSubNbt("Fireworks");
-        return nbtCompound == null || nbtCompound.getList("Explosions", NbtElement.COMPOUND_TYPE).isEmpty();
+
+        FireworksComponent component = stack.getComponents().get(DataComponentTypes.FIREWORKS);
+        if (component == null) {
+            throw new IllegalStateException();
+        }
+        return component.explosions().isEmpty();
     }
 
     @Override
