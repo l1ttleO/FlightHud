@@ -281,14 +281,14 @@ mode.flightassistant:
       toga: MAN TOGA
     toga: AUTO TOGA
     climb: THR CLB
-    climb_reduced: RED CLB
+    climb_firework: FRWK CLB
     idle: THR IDLE
     speed:
       selected: SPD %s
       managed: P. SPD %s
     land: THR LAND
     approach: THR APPR
-    approach_reduced: RED APPR
+    approach_firework: FRWK APPR
     set_toga: SET TOGA THR
   vert:
     glide: OPT GLD

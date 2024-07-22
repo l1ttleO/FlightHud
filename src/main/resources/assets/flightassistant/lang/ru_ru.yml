@@ -281,14 +281,15 @@ mode.flightassistant:
       toga: РУЧН ВЗЛТ
     toga: АВТО ВЗЛ.ТЯГА
     climb: ТЯГА НАБОР
-    climb_reduced: СНИЖЕН НАБОР
+    climb_firework: ФРВК НАБОР
     idle: МАЛАЯ ТЯГА
     speed:
       selected: СКОР %s
       managed: П. СКОР %s
     land: ПОСАДОЧН.ТЯГА
     approach: ТЯГА ЗАХОД
-    approach_reduced: СНИЖЕН ЗАХОД
+    approach_firework: ФРВК ЗАХОД
+    set_toga: НУЖНА МАКС ТЯГА
   vert:
     glide: ОПТ ПЛАНИР
     climb:
@@ -302,6 +303,7 @@ mode.flightassistant:
       selected: ВЫС %s
       managed: П. ВЫС %s
       cruise: КРЕЙС ВЫС %s
+    go_around: В.КРУГ ВЫС
     land: ПОСАДКА %s
   lat:
     takeoff: ВЗЛЕТ КРС %s
