@@ -90,7 +90,7 @@ public class AirDataComputer implements ITickableComputer {
     }
 
     private Vec3d computeForwardVelocity() {
-        Vec3d lookVelocity = velocity.multiply(player().getRotationVec(1));
+        Vec3d lookVelocity = velocity.multiply(player().getRotationVector());
         return new Vec3d(Math.max(0.0, lookVelocity.x), Math.max(0.0, lookVelocity.y), Math.max(0.0, lookVelocity.z));
     }
 

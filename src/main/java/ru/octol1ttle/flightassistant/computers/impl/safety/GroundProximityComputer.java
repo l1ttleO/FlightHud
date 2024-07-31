@@ -117,7 +117,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
         if (data.isInvulnerableTo(data.player().getDamageSources().flyIntoWall())) {
             return true;
         }
-        Vec3d end = data.position().add(Vec3d.fromPolar(data.pitch(), data.yaw()).multiply(FireworkController.FIREWORK_SPEED * TERRAIN_RAYCAST_AHEAD_SECONDS));
+        Vec3d end = data.position().add(data.player().getRotationVector().multiply(FireworkController.FIREWORK_SPEED * TERRAIN_RAYCAST_AHEAD_SECONDS));
 
         BlockHitResult result = data.world().raycast(new RaycastContext(data.position(), end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, data.player()));
         if (result.getType() != HitResult.Type.BLOCK || result.getSide() == Direction.UP) {
