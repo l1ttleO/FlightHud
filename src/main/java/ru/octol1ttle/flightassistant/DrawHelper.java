@@ -17,6 +17,15 @@ public abstract class DrawHelper {
         return Text.literal(key.formatted(args));
     }
 
+    public static Vec3d getScreenSpace(Vec3d delta) {
+        Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(delta));
+        if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
+            return null;
+        }
+
+        return vec;
+    }
+
     public static Integer getScreenSpaceX(float pitch, float yaw) {
         Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
         if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
