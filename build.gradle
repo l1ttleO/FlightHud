@@ -44,6 +44,15 @@ repositories {
         name = 'Sonatype OSS Maven' // required by DaBR
         url = 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven {
+        name = 'Ladysnake Mods' // required by Renderer
+        url = 'https://maven.ladysnake.org/releases'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroup 'org.ladysnake'
+            includeGroupByRegex 'dev\\.onyxstudios.*'
+        }
+    }
 }
 
 dependencies {
@@ -54,6 +63,8 @@ dependencies {
 
 	// Embedded: Alternate HudRendererCallback to fix HUD not rendering behind chat
 	include(modImplementation "com.github.shadowhunt22:alternate-hudrenderercallback:${project.ahrc_version}")
+    // Embedded: Renderer for worldspace->screenspace conversions
+    include(modImplementation "com.github.0x3C50:Renderer:${project.renderer_version}")
 	// Required: Fabric API for callbacks
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}+${project.minecraft_version}"
 	// Required: YACL for config storage and screen

@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.shadowhunter22.api.client.renderer.v1.AlternateHudRendererCallback;
 import java.util.Optional;
+import me.x150.renderer.event.RenderEvents;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -53,6 +54,7 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
 
     public static void setup(FACallbackListener listener) {
         ClientCommandRegistrationCallback.EVENT.register(listener);
+        RenderEvents.
         ClientLifecycleEvents.CLIENT_STARTED.register(listener);
         ClientTickEvents.END_CLIENT_TICK.register(listener);
         WorldRenderEvents.START.register(listener);

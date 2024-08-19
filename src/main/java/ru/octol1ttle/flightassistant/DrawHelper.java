@@ -1,10 +1,13 @@
 package ru.octol1ttle.flightassistant;
 
 import java.awt.Color;
+import me.x150.renderer.util.RendererUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
 
 public abstract class DrawHelper {
@@ -12,6 +15,15 @@ public abstract class DrawHelper {
 
     public static MutableText asText(String key, Object... args) {
         return Text.literal(key.formatted(args));
+    }
+
+    public static Integer getScreenSpaceY(Vec3d playerPosition, float pitch, float yaw) {
+        Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
+        if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
+            return null;
+        }
+
+        return FAMathHelper.round(vec.y);
     }
 
     public static void fill(DrawContext context, int x1, int y1, int x2, int y2, Color color) {

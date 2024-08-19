@@ -8,6 +8,7 @@ public class Dimensions {
 
     public int hScreen;
     public int wScreen;
+    @Deprecated(since = "2.3.2")
     public float degreesPerPixel;
     public int xMid;
     public int yMid;
