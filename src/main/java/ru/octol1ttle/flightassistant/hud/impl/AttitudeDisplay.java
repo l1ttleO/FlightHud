@@ -68,7 +68,7 @@ public class AttitudeDisplay implements IHudDisplay {
     }
 
     private void drawReferenceMark(DrawContext context, float degrees, Color color) {
-        Integer y = DrawHelper.getScreenSpaceY(data.position(), degrees, data.yaw());
+        Integer y = DrawHelper.getScreenSpaceY(degrees, data.yaw());
         if (outOfFrame(y)) {
             return;
         }
@@ -82,7 +82,7 @@ public class AttitudeDisplay implements IHudDisplay {
     }
 
     private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree) {
-        Integer y = DrawHelper.getScreenSpaceY(data.position(), degree, data.yaw());
+        Integer y = DrawHelper.getScreenSpaceY(degree, data.yaw());
         if (outOfFrame(y)) {
             return;
         }
@@ -109,7 +109,7 @@ public class AttitudeDisplay implements IHudDisplay {
     private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f <= 90; f += 10) {
-            Integer y = DrawHelper.getScreenSpaceY(data.position(), f, data.yaw());
+            Integer y = DrawHelper.getScreenSpaceY(f, data.yaw());
             if (outOfFrame(y)) {
                 continue;
             }
@@ -128,7 +128,7 @@ public class AttitudeDisplay implements IHudDisplay {
     private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f >= -90; f -= 10) {
-            Integer y = DrawHelper.getScreenSpaceY(data.position(), f, data.yaw());
+            Integer y = DrawHelper.getScreenSpaceY(f, data.yaw());
             if (outOfFrame(y)) {
                 continue;
             }

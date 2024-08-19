@@ -54,7 +54,6 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
 
     public static void setup(FACallbackListener listener) {
         ClientCommandRegistrationCallback.EVENT.register(listener);
-        RenderEvents.
         ClientLifecycleEvents.CLIENT_STARTED.register(listener);
         ClientTickEvents.END_CLIENT_TICK.register(listener);
         WorldRenderEvents.START.register(listener);

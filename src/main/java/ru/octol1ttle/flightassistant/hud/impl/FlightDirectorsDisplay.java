@@ -34,22 +34,19 @@ public class FlightDirectorsDisplay implements IHudDisplay {
         }
 
         if (autopilot.getTargetPitch() != null) {
-            float deltaPitch = autopilot.getTargetPitch() - data.pitch();
-            int fdY = MathHelper.clamp(Math.round(dim.yMid - deltaPitch * dim.degreesPerPixel), dim.tFrame + 10, dim.bFrame - 20);
-            DrawHelper.drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
+            Integer y = DrawHelper.getScreenSpaceY(autopilot.getTargetPitch(), data.yaw());
+            if (y != null) {
+                int fdY = MathHelper.clamp(y, dim.tFrame + 10, dim.bFrame - 20);
+                DrawHelper.drawHorizontalLine(context, dim.xMid - dim.wFrame / 10, dim.xMid + dim.wFrame / 10, fdY, FAConfig.indicator().advisoryColor);
+            }
         }
 
         if (autopilot.getTargetHeading() != null) {
-            float deltaHeading = autopilot.getTargetHeading() - data.heading();
-            if (deltaHeading < -180.0f) {
-                deltaHeading += 360.0f;
+            Integer x = DrawHelper.getScreenSpaceX(data.pitch(), autopilot.getTargetHeading() - 180.0f);
+            if (x != null) {
+                int fdX = MathHelper.clamp(x, dim.lFrame + 10, dim.rFrame - 10);
+                DrawHelper.drawVerticalLine(context, fdX, dim.yMid - dim.hFrame / 7, dim.yMid + dim.hFrame / 7, FAConfig.indicator().advisoryColor);
             }
-            if (deltaHeading > 180.0f) {
-                deltaHeading -= 360.0f;
-            }
-
-            int fdX = MathHelper.clamp(Math.round(dim.xMid + deltaHeading * dim.degreesPerPixel), dim.lFrame + 10, dim.rFrame - 10);
-            DrawHelper.drawVerticalLine(context, fdX, dim.yMid - dim.hFrame / 7, dim.yMid + dim.hFrame / 7, FAConfig.indicator().advisoryColor);
         }
     }
 
