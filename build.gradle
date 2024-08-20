@@ -62,7 +62,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.floader_version}"
 
 	// Embedded: Alternate HudRendererCallback to fix HUD not rendering behind chat
-	include(modImplementation "com.github.shadowhunt22:alternate-hudrenderercallback:${project.ahrc_version}")
+    //include(modImplementation "com.github.shadowhunt22:alternate-hudrenderercallback:${project.ahrc_version}")
 	// Required: Fabric API for callbacks
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}+${project.minecraft_version}"
 	// Required: YACL for config storage and screen
@@ -72,7 +72,7 @@ dependencies {
     // Optional: ImmediatelyFast for batching support to increase rendering performance
 	modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+${project.minecraft_version}-fabric"
     // Optional: Do a Barrel Roll to control roll via RollController
-    modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}-fabric"
+    modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}+${project.minecraft_version}-fabric"
 }
 
 processResources {

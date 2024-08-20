@@ -52,7 +52,7 @@ public class FlightAssistant implements ClientModInitializer {
     }
 
     public static Identifier id(String path) {
-        return new Identifier(FlightAssistant.MODID, path);
+        return Identifier.of(FlightAssistant.MODID, path);
     }
 
     public static boolean isHUDBatched() {

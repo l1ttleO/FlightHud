@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.shadowhunter22.api.client.renderer.v1.AlternateHudRendererCallback;
 import java.util.Optional;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -43,6 +42,7 @@ import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
+import ru.octol1ttle.flightassistant.util.events.AlternateHudRendererCallback;
 import ru.octol1ttle.flightassistant.util.events.ChangeLookDirectionEvents;
 import ru.octol1ttle.flightassistant.util.events.FireworkBoostCallback;
 

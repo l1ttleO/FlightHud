@@ -7,7 +7,8 @@
     "EntityMixin",
     "FireworkRocketEntityMixin",
     "GameRendererInvoker",
-    "GameRendererMixin"
+    "GameRendererMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
