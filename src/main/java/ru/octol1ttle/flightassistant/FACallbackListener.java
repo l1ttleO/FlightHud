@@ -27,7 +27,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Pair;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
+import org.joml.Matrix4f;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.commands.SelectCommand;
@@ -91,9 +93,14 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
     @Override
     public void onStart(WorldRenderContext context) {
         ComputerHost.instance().tick();
+
         ScreenSpaceRendering.lastProjMat.set(RenderSystem.getProjectionMatrix());
         ScreenSpaceRendering.lastModMat.set(RenderSystem.getModelViewMatrix());
-        ScreenSpaceRendering.lastWorldSpaceMatrix.set(context.matrixStack().peek().getPositionMatrix());
+
+        Matrix4f worldSpaceNoRoll = new Matrix4f();
+        worldSpaceNoRoll.rotate(RotationAxis.POSITIVE_X.rotationDegrees(context.camera().getPitch()));
+        worldSpaceNoRoll.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(context.camera().getYaw() + 180.0F));
+        ScreenSpaceRendering.lastWorldSpaceMatrix.set(worldSpaceNoRoll);
     }
 
     @Override

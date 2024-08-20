@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.util;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Camera;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -40,23 +39,18 @@ public class ScreenSpaceRendering {
      * }
      * </pre>
      *
-     * @param pos The world space coordinates to translate
+     * @param deltaPos The world space coordinates to translate, relative to the camera's current position
      * @return The (x, y, d) coordinates
      * @throws NullPointerException If {@code pos} is null
      */
     @Contract(value = "_ -> new", pure = true)
-    public static Vec3d fromWorldSpace(@NotNull Vec3d pos) {
-        Camera camera = client.getEntityRenderDispatcher().camera;
+    public static Vec3d fromWorldSpace(@NotNull Vec3d deltaPos) {
         int displayHeight = client.getWindow().getHeight();
         int[] viewport = new int[4];
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewport);
         Vector3f target = new Vector3f();
 
-        double deltaX = pos.x - camera.getPos().x;
-        double deltaY = pos.y - camera.getPos().y;
-        double deltaZ = pos.z - camera.getPos().z;
-
-        Vector4f transformedCoordinates = new Vector4f((float) deltaX, (float) deltaY, (float) deltaZ, 1.f).mul(
+        Vector4f transformedCoordinates = new Vector4f((float) deltaPos.x, (float) deltaPos.y, (float) deltaPos.z, 1.f).mul(
                 lastWorldSpaceMatrix);
 
         Matrix4f matrixProj = new Matrix4f(lastProjMat);

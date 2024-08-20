@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant;
 
 import java.awt.Color;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
@@ -18,7 +17,7 @@ public abstract class DrawHelper {
     }
 
     public static Vec3d getScreenSpace(Vec3d delta) {
-        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(delta));
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(delta);
         if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
@@ -27,7 +26,7 @@ public abstract class DrawHelper {
     }
 
     public static Integer getScreenSpaceX(float pitch, float yaw) {
-        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(Vec3d.fromPolar(-pitch, yaw));
         if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
@@ -36,7 +35,7 @@ public abstract class DrawHelper {
     }
 
     public static Integer getScreenSpaceY(float pitch, float yaw) {
-        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(Vec3d.fromPolar(-pitch, yaw));
         if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
