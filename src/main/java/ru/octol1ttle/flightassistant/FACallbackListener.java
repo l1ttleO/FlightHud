@@ -1,11 +1,11 @@
 package ru.octol1ttle.flightassistant;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.shadowhunter22.api.client.renderer.v1.AlternateHudRendererCallback;
 import java.util.Optional;
-import me.x150.renderer.event.RenderEvents;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -40,6 +40,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
+import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
 import ru.octol1ttle.flightassistant.util.events.ChangeLookDirectionEvents;
 import ru.octol1ttle.flightassistant.util.events.FireworkBoostCallback;
 
@@ -90,6 +91,9 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
     @Override
     public void onStart(WorldRenderContext context) {
         ComputerHost.instance().tick();
+        ScreenSpaceRendering.lastProjMat.set(RenderSystem.getProjectionMatrix());
+        ScreenSpaceRendering.lastModMat.set(RenderSystem.getModelViewMatrix());
+        ScreenSpaceRendering.lastWorldSpaceMatrix.set(context.matrixStack().peek().getPositionMatrix());
     }
 
     @Override

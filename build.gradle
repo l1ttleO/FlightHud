@@ -63,8 +63,6 @@ dependencies {
 
 	// Embedded: Alternate HudRendererCallback to fix HUD not rendering behind chat
 	include(modImplementation "com.github.shadowhunt22:alternate-hudrenderercallback:${project.ahrc_version}")
-    // Embedded: Renderer for worldspace->screenspace conversions
-    include(modImplementation "com.github.0x3C50:Renderer:${project.renderer_version}")
 	// Required: Fabric API for callbacks
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}+${project.minecraft_version}"
 	// Required: YACL for config storage and screen

@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant;
 
 import java.awt.Color;
-import me.x150.renderer.util.RendererUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -9,6 +8,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
+import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
 
 public abstract class DrawHelper {
     private static final int SINGLE_LINE_DRAWN = 1;
@@ -18,8 +18,8 @@ public abstract class DrawHelper {
     }
 
     public static Vec3d getScreenSpace(Vec3d delta) {
-        Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(delta));
-        if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(delta));
+        if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
 
@@ -27,8 +27,8 @@ public abstract class DrawHelper {
     }
 
     public static Integer getScreenSpaceX(float pitch, float yaw) {
-        Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
-        if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
+        if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
 
@@ -36,8 +36,8 @@ public abstract class DrawHelper {
     }
 
     public static Integer getScreenSpaceY(float pitch, float yaw) {
-        Vec3d vec = RendererUtils.worldSpaceToScreenSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
-        if (!RendererUtils.screenSpaceCoordinateIsVisible(vec)) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(MinecraftClient.getInstance().getEntityRenderDispatcher().camera.getPos().add(Vec3d.fromPolar(-pitch, yaw)));
+        if (!ScreenSpaceRendering.isVisible(vec)) {
             return null;
         }
 
