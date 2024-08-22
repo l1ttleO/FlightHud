@@ -3,5 +3,5 @@ or [GitHub](https://github.com/Octol1ttle/FlightAssistant) to discuss this relea
 
 ## Fixes
 
-* Fixed an issue that caused the game to crash when launching in a production environment
-* Fixed an issue that caused the attitude display to behave incorrectly when rolling
+* Fixed an issue that caused huge amounts of packets to be sent to the server when "Open Elytra Automatically" was
+  enabled, potentially triggering anti-cheat software
