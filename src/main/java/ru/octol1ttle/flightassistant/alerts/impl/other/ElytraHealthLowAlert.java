@@ -5,9 +5,9 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import ru.octol1ttle.flightassistant.DrawHelper;
-import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.alerts.api.BaseAlert;
 import ru.octol1ttle.flightassistant.alerts.api.IECAMAlert;
+import ru.octol1ttle.flightassistant.alerts.impl.AlertSoundData;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.IndicatorConfig;
@@ -18,7 +18,7 @@ public class ElytraHealthLowAlert extends BaseAlert implements IECAMAlert {
 
     @Override
     public boolean isTriggered() {
-        return data.elytraHealth != null && data.elytraHealth.getInUnits(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE) <= 5.0f;
+        return data.elytraData != null && data.elytraData.getHealth(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE) <= 5.0f;
     }
 
     @Override

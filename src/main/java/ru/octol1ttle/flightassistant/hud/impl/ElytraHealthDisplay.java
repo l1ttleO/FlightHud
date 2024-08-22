@@ -26,9 +26,9 @@ public class ElytraHealthDisplay implements IHudDisplay {
         int x = dim.xMid;
         int y = dim.bFrame;
 
-        if (FAConfig.indicator().showElytraHealth && data.elytraHealth != null) {
+        if (FAConfig.indicator().showElytraHealth && data.elytraData != null) {
             Color color;
-            float percentage = data.elytraHealth.getInUnits(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE);
+            float percentage = data.elytraData.getHealth(IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE);
             if (percentage <= 5.0f) {
                 color = FAConfig.indicator().warningColor;
             } else {
@@ -37,7 +37,7 @@ public class ElytraHealthDisplay implements IHudDisplay {
             DrawHelper.drawBorder(context, x - 3, y - 2, 30, color);
             DrawHelper.drawText(textRenderer, context, Text.translatable("short.flightassistant.elytra"), x - 10, y, color);
 
-            DrawHelper.drawText(textRenderer, context, data.elytraHealth.format(FAConfig.indicator().elytraHealthUnits), x, y, color);
+            DrawHelper.drawText(textRenderer, context, data.elytraData.formatHealth(FAConfig.indicator().elytraHealthUnits), x, y, color);
         }
     }
 
