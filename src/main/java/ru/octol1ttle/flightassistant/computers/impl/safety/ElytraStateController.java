@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.computers.impl.safety;
 
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.MinecraftVersion;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import ru.octol1ttle.flightassistant.MinecraftProtocolVersions;
@@ -10,15 +11,21 @@ import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
 
 public class ElytraStateController implements ITickableComputer {
     private final AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
-    private boolean syncedState;
-    private boolean changesPending;
+    private TriState syncedState;
 
     @Override
     public void tick() {
-        if (syncedState != data.isFlying() || data.player().isOnGround()) {
-            changesPending = false;
+        if (data.player().isOnGround()) {
+            syncedState = TriState.DEFAULT;
+            return;
         }
-        if (!isAvailable() || changesPending || !data.canAutomationsActivate(false)) {
+        if (syncedState != TriState.DEFAULT) {
+            if (syncedState.get() != data.isFlying()) {
+                syncedState = TriState.DEFAULT;
+            }
+            return;
+        }
+        if (!isAvailable() || !data.canAutomationsActivate(false)) {
             return;
         }
 
@@ -28,7 +35,7 @@ public class ElytraStateController implements ITickableComputer {
         }
 
         boolean flying = data.isFlying() || data.player().getAbilities().allowFlying;
-        boolean hasUsableElytra = data.elytraHealth != null && data.elytraHealth.isUsable();
+        boolean hasUsableElytra = data.elytraData != null && data.elytraData.isUsable();
         boolean notLookingToClutch = data.pitch() > -70.0f;
         boolean unsafeFallDistance = data.fallDistance() > 3.0f;
         if (FAConfig.computer().openElytraAutomatically && unsafeFallDistance && !flying && hasUsableElytra && notLookingToClutch) {
@@ -38,9 +45,8 @@ public class ElytraStateController implements ITickableComputer {
     }
 
     private void sendSwitchState() {
-        syncedState = data.isFlying();
+        syncedState = TriState.of(data.isFlying());
         data.player().networkHandler.sendPacket(new ClientCommandC2SPacket(data.player(), ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-        changesPending = true;
     }
 
     public static boolean isAvailable() {
@@ -54,7 +60,6 @@ public class ElytraStateController implements ITickableComputer {
 
     @Override
     public void reset() {
-        syncedState = false;
-        changesPending = false;
+        syncedState = TriState.DEFAULT;
     }
 }

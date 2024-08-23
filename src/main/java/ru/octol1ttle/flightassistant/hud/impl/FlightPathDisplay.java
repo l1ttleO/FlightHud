@@ -4,9 +4,10 @@ import java.awt.Color;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import ru.octol1ttle.flightassistant.Dimensions;
 import ru.octol1ttle.flightassistant.DrawHelper;
+import ru.octol1ttle.flightassistant.FAMathHelper;
 import ru.octol1ttle.flightassistant.computers.impl.AirDataComputer;
 import ru.octol1ttle.flightassistant.computers.impl.safety.GroundProximityComputer;
 import ru.octol1ttle.flightassistant.config.FAConfig;
@@ -28,19 +29,13 @@ public class FlightPathDisplay implements IHudDisplay {
             return;
         }
 
-        float deltaPitch = data.pitch() - data.flightPitch;
-        float deltaHeading = data.flightHeading() - data.heading();
-
-        if (deltaHeading < -180) {
-            deltaHeading += 360;
+        Vec3d vec = DrawHelper.getScreenSpace(data.velocity);
+        if (vec == null) {
+            return;
         }
 
-        int y = dim.yMid;
-        int x = dim.xMid;
-
-        y += MathHelper.floor(deltaPitch * dim.degreesPerPixel);
-        x += MathHelper.floor(deltaHeading * dim.degreesPerPixel);
-
+        int x = FAMathHelper.round(vec.x);
+        int y = FAMathHelper.round(vec.y);
         if (y < dim.tFrame || y > dim.bFrame || x < dim.lFrame || x > dim.rFrame) {
             return;
         }

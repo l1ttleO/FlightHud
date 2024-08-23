@@ -5,13 +5,42 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
+import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
 
 public abstract class DrawHelper {
     private static final int SINGLE_LINE_DRAWN = 1;
 
     public static MutableText asText(String key, Object... args) {
         return Text.literal(key.formatted(args));
+    }
+
+    public static Vec3d getScreenSpace(Vec3d delta) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(delta);
+        if (!ScreenSpaceRendering.isVisible(vec)) {
+            return null;
+        }
+
+        return vec;
+    }
+
+    public static Integer getScreenSpaceX(float pitch, float yaw) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(Vec3d.fromPolar(-pitch, yaw));
+        if (!ScreenSpaceRendering.isVisible(vec)) {
+            return null;
+        }
+
+        return FAMathHelper.round(vec.x);
+    }
+
+    public static Integer getScreenSpaceY(float pitch, float yaw) {
+        Vec3d vec = ScreenSpaceRendering.fromWorldSpace(Vec3d.fromPolar(-pitch, yaw));
+        if (!ScreenSpaceRendering.isVisible(vec)) {
+            return null;
+        }
+
+        return FAMathHelper.round(vec.y);
     }
 
     public static void fill(DrawContext context, int x1, int y1, int x2, int y2, Color color) {

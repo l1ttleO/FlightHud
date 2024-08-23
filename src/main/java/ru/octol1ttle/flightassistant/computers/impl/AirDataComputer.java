@@ -1,6 +1,5 @@
 package ru.octol1ttle.flightassistant.computers.impl;
 
-import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -40,7 +39,7 @@ public class AirDataComputer implements ITickableComputer {
     public float flightPitch;
     public float flightYaw;
     public float groundLevel;
-    public @Nullable ElytraHealth elytraHealth = null;
+    public @Nullable AirDataComputer.ElytraData elytraData = null;
     public boolean isCurrentChunkLoaded;
 
     public AirDataComputer(MinecraftClient mc) {
@@ -56,7 +55,7 @@ public class AirDataComputer implements ITickableComputer {
         groundLevel = computeGroundLevel();
         flightPitch = computeFlightPitch(velocity, pitch());
         flightYaw = computeFlightYaw(velocity, yaw());
-        elytraHealth = computeElytraHealth();
+        elytraData = computeElytraData();
     }
 
     public boolean canAutomationsActivate() {
@@ -113,10 +112,15 @@ public class AirDataComputer implements ITickableComputer {
         return validate(FAMathHelper.toDegrees(Math.atan2(-velocity.x, velocity.z)), 180.0f);
     }
 
-    private ElytraHealth computeElytraHealth() {
-        for (ItemStack stack : Iterables.concat(player().getArmorItems(), player().getHandItems())) {
+    private ElytraData computeElytraData() {
+        for (ItemStack stack : player().getArmorItems()) {
             if (Items.ELYTRA.equals(stack.getItem())) {
-                return new ElytraHealth(stack.copy());
+                return new ElytraData(stack.copy(), true);
+            }
+        }
+        for (ItemStack stack : player().getHandItems()) {
+            if (Items.ELYTRA.equals(stack.getItem())) {
+                return new ElytraData(stack.copy(), false);
             }
         }
 
@@ -242,21 +246,23 @@ public class AirDataComputer implements ITickableComputer {
         flightYaw = 0.0f;
         roll = 0.0f;
         groundLevel = 0;
-        elytraHealth = null;
+        elytraData = null;
         isCurrentChunkLoaded = true;
     }
 
-    public static class ElytraHealth {
+    public static class ElytraData {
         private final ItemStack stack;
+        private final boolean canFallFly;
 
-        public ElytraHealth(ItemStack stack) {
+        public ElytraData(ItemStack stack, boolean canFallFly) {
             if (!Items.ELYTRA.equals(stack.getItem())) {
-                throw new IllegalStateException("Attempted to initialize ElytraHealth, but the ItemStack does not contain an Elytra");
+                throw new IllegalStateException("Attempted to initialize ElytraData, but the ItemStack does not contain an Elytra");
             }
             this.stack = stack;
+            this.canFallFly = canFallFly;
         }
 
-        public float getInUnits(IndicatorConfig.ElytraHealthDisplayUnits units) {
+        public float getHealth(IndicatorConfig.ElytraHealthDisplayUnits units) {
             float remaining = (stack.getMaxDamage() - 1) - stack.getDamage();
             return switch (units) {
                 case REMAINING_DURABILITY -> validate(remaining, 0.0f, stack.getMaxDamage());
@@ -264,12 +270,12 @@ public class AirDataComputer implements ITickableComputer {
             };
         }
 
-        public Text format(IndicatorConfig.ElytraHealthDisplayUnits units) {
+        public Text formatHealth(IndicatorConfig.ElytraHealthDisplayUnits units) {
             if (!stack.isDamageable()) {
                 return Text.translatable("short.flightassistant.infinite");
             }
 
-            MutableText text = DrawHelper.asText("%s", MathHelper.ceil(getInUnits(units)));
+            MutableText text = DrawHelper.asText("%s", MathHelper.ceil(getHealth(units)));
             if (units == IndicatorConfig.ElytraHealthDisplayUnits.PERCENTAGE) {
                 text.append("%");
             }
@@ -278,7 +284,7 @@ public class AirDataComputer implements ITickableComputer {
         }
 
         public boolean isUsable() {
-            return stack.getMaxDamage() - stack.getDamage() > 1;
+            return canFallFly && stack.getMaxDamage() - stack.getDamage() > 1;
         }
     }
 }

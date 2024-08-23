@@ -44,6 +44,15 @@ repositories {
         name = 'Sonatype OSS Maven' // required by DaBR
         url = 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven {
+        name = 'Ladysnake Mods' // required by Renderer
+        url = 'https://maven.ladysnake.org/releases'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroup 'org.ladysnake'
+            includeGroupByRegex 'dev\\.onyxstudios.*'
+        }
+    }
 }
 
 dependencies {

@@ -33,8 +33,6 @@ public class AttitudeDisplay implements IHudDisplay {
 
         pitchData.update(dim);
 
-        float yHorizon = dim.yMid + data.pitch() * dim.degreesPerPixel;
-
         int xMid = dim.xMid;
         int yMid = dim.yMid;
 
@@ -43,16 +41,16 @@ public class AttitudeDisplay implements IHudDisplay {
         context.getMatrices().multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(data.roll));
         context.getMatrices().translate(-xMid, -yMid, 0);
 
-        drawLadder(textRenderer, context, yHorizon);
+        drawLadder(textRenderer, context);
 
-        drawPushArrows(textRenderer, context, limit.maximumSafePitch, yHorizon, FAConfig.indicator().warningColor);
-        drawReferenceMark(context, PitchController.CLIMB_PITCH, yHorizon, getPitchColor(PitchController.CLIMB_PITCH));
-        drawReferenceMark(context, PitchController.GLIDE_PITCH, yHorizon, getPitchColor(PitchController.GLIDE_PITCH));
-        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, Math.min(limit.maximumSafePitch, limit.minimumSafePitch)), yHorizon, FAConfig.indicator().warningColor);
+        drawPushArrows(textRenderer, context, limit.maximumSafePitch, FAConfig.indicator().warningColor);
+        drawReferenceMark(context, PitchController.CLIMB_PITCH, getPitchColor(PitchController.CLIMB_PITCH));
+        drawReferenceMark(context, PitchController.GLIDE_PITCH, getPitchColor(PitchController.GLIDE_PITCH));
+        drawPullArrows(textRenderer, context, Math.max(PitchController.DESCEND_PITCH, Math.min(limit.maximumSafePitch, limit.minimumSafePitch)), FAConfig.indicator().warningColor);
 
         pitchData.l1 -= pitchData.margin;
         pitchData.r2 += pitchData.margin;
-        drawDegreeBar(textRenderer, context, 0, yHorizon);
+        drawDegreeBar(textRenderer, context, 0);
 
         context.getMatrices().pop();
     }
@@ -62,21 +60,15 @@ public class AttitudeDisplay implements IHudDisplay {
                 ? FAConfig.indicator().warningColor : FAConfig.indicator().frameColor;
     }
 
-    private void drawLadder(TextRenderer textRenderer, DrawContext context, float yHorizon) {
+    private void drawLadder(TextRenderer textRenderer, DrawContext context) {
         for (int i = DEGREES_PER_BAR; i <= 90; i += DEGREES_PER_BAR) {
-            int offset = Math.round(dim.degreesPerPixel * i);
-            drawDegreeBar(textRenderer, context, -i, yHorizon + offset);
-            drawDegreeBar(textRenderer, context, i, yHorizon - offset);
+            drawDegreeBar(textRenderer, context, -i);
+            drawDegreeBar(textRenderer, context, i);
         }
     }
 
-    private void drawReferenceMark(DrawContext context, float degrees, float yHorizon, Color color) {
-        if (degrees == 0) {
-            return;
-        }
-
-        int y = Math.round(-degrees * dim.degreesPerPixel + yHorizon);
-
+    private void drawReferenceMark(DrawContext context, float degrees, Color color) {
+        Integer y = DrawHelper.getScreenSpaceY(degrees, data.yaw());
         if (outOfFrame(y)) {
             return;
         }
@@ -89,11 +81,8 @@ public class AttitudeDisplay implements IHudDisplay {
         DrawHelper.drawHorizontalLineDashed(context, pitchData.r1, r2, y, 3, color);
     }
 
-    private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree, float y) {
-        drawDegreeBar(textRenderer, context,degree, Math.round(y));
-    }
-
-    private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree, int y) {
+    private void drawDegreeBar(TextRenderer textRenderer, DrawContext context, float degree) {
+        Integer y = DrawHelper.getScreenSpaceY(degree, data.yaw());
         if (outOfFrame(y)) {
             return;
         }
@@ -117,14 +106,14 @@ public class AttitudeDisplay implements IHudDisplay {
                 y - fontVerticalOffset, color);
     }
 
-    private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, float yHorizon, Color color) {
+    private void drawPushArrows(TextRenderer textRenderer, DrawContext context, float degrees, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f <= 90; f += 10) {
-            int y = Math.round(-f * dim.degreesPerPixel + yHorizon);
-
+            Integer y = DrawHelper.getScreenSpaceY(f, data.yaw());
             if (outOfFrame(y)) {
                 continue;
             }
+
             context.getMatrices().push();
             context.getMatrices().translate(dim.xMid, y, 0); // Rotate around the middle of the arrow
             context.getMatrices().multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f)); // Flip upside down
@@ -136,20 +125,20 @@ public class AttitudeDisplay implements IHudDisplay {
         }
     }
 
-    private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, float yHorizon, Color color) {
+    private void drawPullArrows(TextRenderer textRenderer, DrawContext context, float degrees, Color color) {
         Text text = DrawHelper.asText("^");
         for (float f = degrees; f >= -90; f -= 10) {
-            int y = Math.round(-f * dim.degreesPerPixel + yHorizon);
-
+            Integer y = DrawHelper.getScreenSpaceY(f, data.yaw());
             if (outOfFrame(y)) {
                 continue;
             }
+
             DrawHelper.drawMiddleAlignedText(textRenderer, context, text, dim.xMid, y, color);
         }
     }
 
-    private boolean outOfFrame(int y) {
-        return y < dim.tFrame || y > dim.bFrame - 20;
+    private boolean outOfFrame(Integer y) {
+        return y == null || y < dim.tFrame || y > dim.bFrame - 20;
     }
 
     @Override

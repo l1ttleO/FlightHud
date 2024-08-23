@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -26,7 +27,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Pair;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
+import org.joml.Matrix4f;
 import ru.octol1ttle.flightassistant.commands.FlightPlanCommand;
 import ru.octol1ttle.flightassistant.commands.ResetCommand;
 import ru.octol1ttle.flightassistant.commands.SelectCommand;
@@ -39,6 +42,7 @@ import ru.octol1ttle.flightassistant.computers.impl.safety.PitchLimitComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.registries.ComputerRegistry;
+import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
 import ru.octol1ttle.flightassistant.util.events.ChangeLookDirectionEvents;
 import ru.octol1ttle.flightassistant.util.events.FireworkBoostCallback;
 
@@ -89,6 +93,14 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
     @Override
     public void onStart(WorldRenderContext context) {
         ComputerHost.instance().tick();
+
+        ScreenSpaceRendering.lastProjMat.set(RenderSystem.getProjectionMatrix());
+        ScreenSpaceRendering.lastModMat.set(RenderSystem.getModelViewMatrix());
+
+        Matrix4f worldSpaceNoRoll = new Matrix4f();
+        worldSpaceNoRoll.rotate(RotationAxis.POSITIVE_X.rotationDegrees(context.camera().getPitch()));
+        worldSpaceNoRoll.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(context.camera().getYaw() + 180.0F));
+        ScreenSpaceRendering.lastWorldSpaceMatrix.set(worldSpaceNoRoll);
     }
 
     @Override
