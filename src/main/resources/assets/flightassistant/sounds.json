@@ -1,47 +1,12 @@
 {
-  "autopilot_disconnect": {
+  "master_caution": {
     "sounds": [
-      "flightassistant:autopilot_disconnect"
+      "flightassistant:master_caution"
     ]
   },
-  "caution": {
+  "master_warning": {
     "sounds": [
-      "flightassistant:caution"
-    ]
-  },
-  "minimums": {
-    "sounds": [
-      "flightassistant:minimums"
-    ]
-  },
-  "pull_up": {
-    "sounds": [
-      "flightassistant:pull_up"
-    ]
-  },
-  "sink_rate": {
-    "sounds": [
-      "flightassistant:sink_rate"
-    ]
-  },
-  "stall": {
-    "sounds": [
-      "flightassistant:stall"
-    ]
-  },
-  "terrain": {
-    "sounds": [
-      "flightassistant:terrain"
-    ]
-  },
-  "too_low_terrain": {
-    "sounds": [
-      "flightassistant:too_low_terrain"
-    ]
-  },
-  "warning": {
-    "sounds": [
-      "flightassistant:warning"
+      "flightassistant:master_warning"
     ]
   }
 }

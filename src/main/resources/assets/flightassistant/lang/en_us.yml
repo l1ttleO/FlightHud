@@ -1,340 +1,87 @@
-mod.flightassistant: Flight Assistant
-
-key.flightassistant:
-  toggle_display_mode: Switch display mode
-  toggle_flight_directors: Toggle flight directors
-  toggle_auto_thrust: Toggle auto-thrust
-  toggle_auto_pilot: Toggle autopilot
-  hide_alert: Hide first alert
-  recall_alert: Recall last hidden alert
-  set_idle: Set idle thrust
-  decrease_thrust: Decrease thrust
-  increase_thrust: Increase thrust
-  set_toga: Set TO/GA thrust
+alerts.flightassistant:
+  fault:
+    hud:
+      .: HUD
+      flightassistant:altitude: ALT DSPL FAULT
+      flightassistant:attitude: ATT DSPL FAULT
+      flightassistant:coordinates: COORD DSPL FAULT
+      flightassistant:elytra_durability: E/DURA DSPL FAULT
+      flightassistant:flight_path: F/PATH DSPL FAULT
+      flightassistant:radar_altitude: R/ALT DSPL FAULT
+      flightassistant:speed: SPD DSPL FAULT
+      flightassistant:velocity_components: VEL/CPMN DSPL FAULT
+    computer:
+      .: COMP
+      flightassistant:air_data: AIR DATA FAULT
+      flightassistant:alert: ALERT FAULT
+      flightassistant:elytra_status: ELYTRA STS FAULT
+  elytra:
+    .: ELYTRA
+    low_durability: LOW DURABILITY
+    critical_durability: CRIT DURABILITY
 
 config.flightassistant:
-  category:
-    hud_settings: HUD settings
-    not_flying_no_elytra: Not flying (no Elytra)
-    not_flying_has_elytra: Not flying (with Elytra)
+  categories:
+    global: Global options
+    no_elytra: Not flying (no elytra)
+    has_elytra: Not flying (with elytra)
     flying: Flying
-    computer_settings: Flight automations
-  hud:
-    batching:
-      .: Batched HUD rendering
-      no_batching: No batching
-      per_component: Batch per component
-      single_batch: Single batch
-    scale: HUD scale
-    frame_width: HUD frame width
-    frame_height: HUD frame height
-  indicators:
-    color:
-      .: Colors
-      frame: HUD frame color
-      status: Status color
-      advisory: Advisory color
-      caution: Caution color
-      warning: Warning color
-    speed:
-      .: Speed
-      scale: Show speed scale
-      readout: Show speed readout
-      ground_readout: Show ground speed readout
-      vertical_readout: Show vertical speed readout
-    altitude:
-      .: Altitude
-      scale: Show altitude scale
-      readout: Show altitude readout
-      ground: Show height above ground
-    heading:
-      .: Heading
-      scale: Show heading scale
-      readout: Show heading readout
-    automation:
-      .: Automation
-      thrust: Show thrust mode
-      vertical: Show vertical mode
-      lateral: Show lateral mode
-      status: Show automation status
-    info:
-      .: Information
-      alerts: Show alerts
-      firework_count: Show firework count
-      thrust_setting: Show thrust setting
-      waypoint_distance: Show distance to waypoint
-      waypoint_time: Show time to waypoint
-      flight_phase: Show flight phase
-    misc:
-      .: Miscellaneous
-      attitude: Show attitude
-      flight_path: Show flight path vector icon
-      coordinates: Show coordinates
-      elytra_health: Show Elytra health
-      elytra_health_units:
-        .: Elytra health units
-        percentage: Percentage
-        remaining_durability: Remaining durability
-  computers:
+  options:
     global:
-      .: Global automations mode
-      full: Always enabled (BANNABLE ON SERVERS)
-      no_overlays: Only when no screen overlays
-      disabled: Disabled
-    consider_invulnerability: Disable alerts and protections when invulnerable
-    warning:
-      screen_and_audio: Screen & Audio
-      audio_only: Audio Only
-      screen_only: Screen Only
-      disabled: Disabled
-    protection:
-      hard: Hard
-      soft: Soft
-      disabled: Disabled
-    firework:
-      .: Fireworks
-      lock_unsafe: Lock unsafe fireworks
-      lock_gpws: Lock fireworks when facing terrain
-    stall:
-      .: Stall
-      warning: Stall warning mode
-      protection: Stall protection mode
-      thrust: Allow thrust usage for recovery
-    gpws:
-      .: Ground Proximity Warning System
-      sinkrate:
-        warning: Sinkrate warning mode
-        protection: Sinkrate protection mode
-      terrain:
-        warning: Terrain warning mode
-        protection: Terrain protection mode
-      landing:
-        warning: Landing clearance warning mode
-    void_level:
-      .: Void level
-      protection: Void level protection mode
-      thrust: Allow thrust usage for recovery
-    elytra_state:
-      .: Elytra state
-      close_underwater: Close Elytra when submerged in water
-      open_automatically: Open Elytra automatically
-    chunk_state:
-      .: Chunk state
-      preserve_altitude: Automatically preserve altitude in unloaded chunks
-
-commands.flightassistant:
-  no_such_waypoint: There is no waypoint at that index
-  nothing_to_clear: There are no waypoints to clear
-  first_wp_cannot_be_landing: The first waypoint cannot be a landing waypoint
-  cannot_execute_from_landing: The flight plan cannot be executed starting from a landing waypoint
-  waypoint:
-    created: Created waypoint at index %s (now %s waypoints in total)
-    removed: Removed waypoint at index %s (now %s waypoints in total)
-    inserted: Inserted waypoint at index %s (now %s waypoints in total)
-    replaced: Replaced waypoint at index %s (now %s waypoints in total)
-  flight_plan:
-    cleared: Cleared all waypoints starting from index %s (now %s waypoints in total)
-    executed: Executed flight plan starting from waypoint at index %s (%s waypoints in total)
-    saved: Saved flight plan with %s waypoints as "%s"
-    loaded: Loaded flight plan with %s waypoints from "%s"
-    not_found: There is no plan with that name
-    not_supported: This plan cannot be loaded in the current version of Minecraft
-    load_error: There was an error loading this plan
-    empty: The flight plan is empty!
-  total_waypoints: There are %s waypoints in total
-  waypoint_info:
-    .: 'Index %s: | X: %s | Z: %s | Altitude: %s | Speed %s'
-    land: 'Index %s: | X: %s | Z: %s | Minimums: %s'
-    not_set: '-'
-
-alerts.flightassistant:
-  gpws:
-    pull_up: PULL UP
-    sink_rate: SINK RATE
-    terrain_ahead: TERRAIN AHEAD
-    too_low_terrain: TOO LOW - TERRAIN
-    reached_minimums: REACHED MINIMUMS
-  stall: STALL
-  unloaded_chunk: UNLOADED CHUNK
-  elytra_health_low: ELYTRA HEALTH LOW
-  void_damage_level:
-    approaching: APPROACHING VOID DAMAGE LEVEL
-    reached: REACHED VOID DAMAGE LEVEL
-  autoflight:
-    autopilot_off: AUTOPILOT OFF
-    auto_thrust_off: AUTO-THRUST OFF
-  firework:
-    no_response: FRWK NO RESPONSE
-    unsafe: FRWK EXPLOSIVE
-  fault:
-    computers:
-      alert_mgr: ALERT SYS FAULT (ALL ALERTS LOST)
-      air_data:
-        '0': AIR DATA FAULT
-        '1': ' GPWS LOST'
-        '2': ' STALL WARN LOST'
-        '3': ' ROLL UNRELIABLE'
-        '4': ' SPD UNRELIABLE'
-        '5': ' R/ALT UNRELIABLE'
-      time_prvd:
-        '0': TIME SYS FAULT
-      auto_flt:
-        '0': AUTO FLT SYS FAULT
-        '1': ' FLT DIR LOST'
-        '2': ' A/THR LOST'
-        '3': ' AP LOST'
-      frwk_ctl:
-        '0': AUTO FRWK CTL FAULT (PROT LOST)
-        '1': ' FRWK CNT UNRELIABLE'
-      pitch_ctl:
-        '0': AUTO PITCH CTL FAULT
-        '1': ' PITCH RECOVERY ASSIST LOST'
-        '2': ' AUTOPILOT LOST'
-      flt_plan:
-        '0': FLT PLAN FAULT
-        '1': ' A/FLT MANAGED MODES LOST'
-        '2': ' -A/FLT SELECTED MODES: USE'
-      gpws:
-        '0': GPWS FAULT
-        '1': ' TERR WARNS LOST'
-        '2': ' MANEUVER WITH CARE'
-        '3': ' MAN LANDINGS ONLY'
-      stall_det:
-        '0': STALL DET LOST
-        '1': ' STALL WARNS LOST'
-        '2': ' MANEUVER WITH CARE'
-      void_level:
-        '0': VOID LVL SYS FAULT
-        '1': ' VOID LVL WARNS LOST'
-      heading_ctl:
-        '0': AUTO HDG CTL FAULT
-        '1': ' AUTOPILOT LOST'
-      flight_prot:
-        '0': F/CTL ALTN LAW (PROT LOST)
-        '1': ' MANEUVER WITH CARE'
-      elytra_state:
-        '0': ELYTRA SYS FAULT (PROT LOST)
-        '1': ' MAN ELYTRA OPEN ONLY'
-      chunk_state:
-        '0': CHUNK STATE FAULT
-        '1': ' UNLOADED CHUNK WARN LOST'
-      pitch_limit:
-        '0': PITCH LIMIT FAULT
-        '1': ' STALL PROT LOST'
-      autopilot:
-        '0': AUTOPILOT FAULT
-      flight_phase:
-        '0': F/PHASE SYS FAULT
-        '1': ' AUTOPILOT LOST'
-      roll_ctl:
-        '0': AUTO ROLL CTL FAULT
-        '1': ' AUTOPILOT LOST'
-      dabr_roll:
-        '0': DABR ROLL CTL FAULT
-        '1': ' AUTOPILOT LOST'
-      thrust_ctl:
-        '0': AUTO THR CTL FAULT
-        '1': ' AUTOPILOT LOST'
-        '2': ' MAN THR USE ONLY'
-    hud:
-      alert: ALERT DISPLAY FAULT
-      altitude: ALT DISPLAY FAULT
-      elytra_health: E/HLTH DISPLAY FAULT
-      flight_mode: F/MODE DISPLAY FAULT
-      flight_path: F/PATH DISPLAY FAULT
-      heading: HDG DISPLAY FAULT
-      location: LOC DISPLAY FAULT
-      attitude: ATT DISPLAY FAULT
-      speed: SPD DISPLAY FAULT
-      status: STATUS DISPLAY FAULT
-      flt_dir: FLT DIR FAULT
-      radar_altitude: R/ALT DISPLAY FAULT
-      ground_speed: G/SPD DISPLAY FAULT
-      vertical_speed: V/SPD DISPLAY FAULT
-
-status.flightassistant:
-  firework_count: 'FRWK CNT: %s'
-  thrust_setting: 'THR: %s'
-  waypoint_distance: 'WP/DIST: %s'
-  waypoint_time: 'WP/TIME: %s:%s'
-  phase:
-    on_ground: ON GROUND
-    takeoff: TAKEOFF
-    climb: CLIMB
-    cruise: CRUISE
-    descent: DESCENT
-    approach: APPROACH
-    land: LAND
-    go_around: GO AROUND
-
-mode.flightassistant:
-  minimums:
-    absolute: MINIM %s
-    relative: MINIM +%s
-    not_set: NO MINIMS
-  thrust:
-    unavailable: NO THR
-    manual:
-      .: MAN THR %s
-      reverse: MAN REV %s
-      idle: MAN IDLE
-      toga: MAN TOGA
-    toga: AUTO TOGA
-    climb: THR CLB
-    climb_firework: FRWK CLB
-    idle: THR IDLE
-    speed:
-      selected: SPD %s
-      managed: P. SPD %s
-    land: THR LAND
-    approach: THR APPR
-    approach_firework: FRWK APPR
-    set_toga: SET TOGA THR
-  vert:
-    glide: OPT GLD
-    climb:
-      optimum: OPT CLB
-      selected: CLB %s
-      managed: P. CLB %s
-    descend:
-      selected: DES %s
-      managed: P. DES %s
-    hold:
-      selected: ALT %s
-      managed: P. ALT %s
-      cruise: ALT CRZ %s
-    go_around: GA ALT
-    land: LAND %s
-  lat:
-    takeoff: TO HDG %s
-    go_around: GA HDG %s
-    selected: HDG %s
-    managed: POS %s %s
-    approach: APPR %s %s
-  auto:
-    flight_directors: FD
-    auto_thrust: A/THR
-    autopilot: AP
-    no_autoland: NO AUTOLAND
+      mod_enabled: Enable FlightAssistant
+      hud_enabled: Enable HUD
+    display:
+      frame:
+        .: Frame
+        width: Frame width
+        height: Frame height
+      colors:
+        .: Colors
+        primary: Primary color
+        warning: Warning color
+      attitude:
+        .: Attitude display
+        enabled: Show attitude
+        degree_step: Line degree step
+        horizon_outside_frame: Draw horizon outside frame
+        pitch_outside_frame: Draw pitch lines outside frame
+        show_heading: Show heading on horizon line
+        heading_step: Heading degree step
+      speed:
+        .: Speed display
+        show_reading: Show speed reading
+        show_scale: Show speed scale
+      altitude:
+        .: Altitude display
+        show_reading: Show altitude reading
+        show_scale: Show altitude scale
+      flight_path_vector:
+        .: Flight path vector display
+        show: Show flight path vector
+        size: Flight path vector size
+      elytra_durability:
+        .: Elytra durability display
+        show: Show elytra durability
+        units:
+          .: Elytra durability units
+          raw: Raw
+          percentage: Percentage
+          time: Time (approximate)
+      alerts:
+        .: Alerts display
+        show: Show alerts
 
 short.flightassistant:
-  north: N
-  east: E
-  south: S
-  west: W
-  ground_level: G
-  void_level: V
-  elytra: E
-  ground_speed: G/S%s
-  vertical_speed: V/S%s
+  alert: ALERT
   altitude: ALT
-  elytra_health: E/HLTH
-  infinite: INF
-  flight_mode: F/MODE
-  flight_path: F/PATH
-  heading: HDG
-  location: LOC
   attitude: ATT
+  elytra: E
+  elytra_durability: E/DURA
+  flight_path: F/PTH
+  ground: GRND
+  ground_speed: 'G/S%s'
+  infinite: INFN
+  radar_altitude: R/ALT
   speed: SPD
-  status: STS
-  radar: R/ALT
+  vertical_speed: 'V/S%s'
+  void: VOID

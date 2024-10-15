@@ -1,10 +1,13 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
-    id 'me.fallenbreath.yamlang' version '1.3.1'
-    id 'me.modmuss50.mod-publish-plugin' version '0.5.1'
+    id 'fabric-loom' version '1.8-SNAPSHOT'
+    id 'maven-publish'
+    id "org.jetbrains.kotlin.jvm" version "2.0.20"
+    id 'me.fallenbreath.yamlang' version '1.4.0'
 }
 
-version = "${project.mod_version}+mc${project.minecraft_version}"
+version = project.mod_version
 group = project.maven_group
 
 base {
@@ -17,40 +20,23 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-	maven {
-		name = 'JitPack' // required by Alternate HudRendererCallback
-		url = 'https://jitpack.io/'
-	}
-	maven {
-		name = 'Xander Maven' // required by YACL
-		url = 'https://maven.isxander.dev/releases/'
-	}
-	maven {
-		name = 'TerraformersMC Maven' // required by ModMenu
-		url = 'https://maven.terraformersmc.com/releases/'
-	}
-	maven {
-		name = 'Modrinth' // required by IF
-		url = 'https://api.modrinth.com/maven/'
-		content {
-			includeGroup 'maven.modrinth'
-		}
-	}
     maven {
-        name = 'Enjarai Maven' // required by DaBR
-        url = 'https://maven.enjarai.dev/releases'
+        name = 'Xander Maven' // required by YACL
+        url = 'https://maven.isxander.dev/releases/'
     }
     maven {
-        name = 'Sonatype OSS Maven' // required by DaBR
-        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+        name = 'TerraformersMC Maven' // required by ModMenu
+        url = 'https://maven.terraformersmc.com/'
     }
-    maven {
-        name = 'Ladysnake Mods' // required by Renderer
-        url = 'https://maven.ladysnake.org/releases'
-        content {
-            includeGroup 'io.github.ladysnake'
-            includeGroup 'org.ladysnake'
-            includeGroupByRegex 'dev\\.onyxstudios.*'
+}
+
+loom {
+    splitEnvironmentSourceSets()
+
+    mods {
+        "flightassistant" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
         }
     }
 }
@@ -59,20 +45,16 @@ dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.floader_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Embedded: Alternate HudRendererCallback to fix HUD not rendering behind chat
-	include(modImplementation "com.github.shadowhunt22:alternate-hudrenderercallback:${project.ahrc_version}")
-	// Required: Fabric API for callbacks
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fapi_version}+${project.minecraft_version}"
-	// Required: YACL for config storage and screen
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}+${project.minecraft_version}"
-	// Optional: Mod Menu to access the YACL config screen
-	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
-    // Optional: ImmediatelyFast for batching support to increase rendering performance
-	modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+${project.minecraft_version}-fabric"
-    // Optional: Do a Barrel Roll to control roll via RollController
-    modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}+${project.minecraft_version}-fabric"
+    // Required: Fabric API for callbacks and event API
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
+    // Required: Fabric Language Kotlin for Kotlin support
+    modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+    // Required: YACL for config storage and screen
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.minecraft_version}-fabric"
+    // Optional: Mod Menu to access the YACL config screen
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -83,13 +65,14 @@ processResources {
 	}
 }
 
-yamlang {
-    targetSourceSets = [sourceSets.main]
-    inputDir = 'assets/flightassistant/lang'
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
 }
 
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+tasks.withType(KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = 21
+    }
 }
 
 java {
@@ -98,8 +81,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -108,92 +91,7 @@ jar {
 	}
 }
 
-publishMods {
-    dryRun = true
-
-    file = remapJar.archiveFile
-    version = project.version
-    changelog = getRootProject().file("CHANGELOG.md").text
-    type = STABLE
-    modLoaders.add("fabric")
-
-    def min = property('publish_target_min')
-    def max = property('publish_target_max')
-
-    def minecraftVersion = min == max ? min : "${min}-${max}"
-    displayName = "FlightAssistant ${property('mod_version')} (MC ${minecraftVersion})"
-
-    if (providers.gradleProperty('modrinthToken').present) {
-        modrinth {
-            projectId = property('mod_modrinth')
-            accessToken = providers.gradleProperty('modrinthToken').get()
-
-            if (min == max) {
-                minecraftVersions.add(min)
-            } else {
-                minecraftVersionRange {
-                    start = min
-                    end = max
-                }
-            }
-
-            requires {
-                slug = "fabric-api"
-            }
-            requires {
-                slug = "yacl"
-            }
-            optional {
-                slug = "modmenu"
-            }
-            optional {
-                slug = "immediatelyfast"
-            }
-            optional {
-                slug = "do-a-barrel-roll"
-            }
-        }
-    }
-
-    if (providers.gradleProperty('curseforgeToken').present) {
-        curseforge {
-            projectId = property('mod_curseforge')
-            accessToken = providers.gradleProperty('curseforgeToken').get()
-
-            if (min == max) {
-                minecraftVersions.add(min)
-            } else {
-                minecraftVersionRange {
-                    start = min
-                    end = max
-                }
-            }
-
-            requires {
-                slug = "fabric-api"
-            }
-            requires {
-                slug = "yacl"
-            }
-            optional {
-                slug = "modmenu"
-            }
-            optional {
-                slug = "immediatelyfast"
-            }
-            optional {
-                slug = "do-a-barrel-roll"
-            }
-        }
-    }
-
-    if (providers.gradleProperty('githubToken').present) {
-        github {
-            repository = property('mod_github')
-            accessToken = providers.gradleProperty('githubToken').get()
-
-            commitish = property('git_branch')
-            tagName = project.version
-        }
-    }
+yamlang {
+    targetSourceSets = [sourceSets.main]
+    inputDir = 'assets/flightassistant/lang'
 }

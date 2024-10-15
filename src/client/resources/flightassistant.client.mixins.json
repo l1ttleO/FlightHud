@@ -2,7 +2,7 @@
   "required": true,
   "package": "ru.octol1ttle.flightassistant.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
+  "client": [
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,340 +1,87 @@
-mod.flightassistant: Flight Assistant
-
-key.flightassistant:
-  toggle_display_mode: Переключить режим интерфейса
-  toggle_flight_directors: Переключить указатели полёта
-  toggle_auto_thrust: Переключить авто-тягу
-  toggle_auto_pilot: Переключить автопилот
-  hide_alert: Скрыть первое предупреждение
-  recall_alert: Показать последнее скрытое предупреждение
-  set_idle: Установить малую тягу
-  decrease_thrust: Снизить тягу
-  increase_thrust: Прибавить тягу
-  set_toga: Установить взлётную тягу
+alerts.flightassistant:
+  fault:
+    hud:
+      .: HUD
+      flightassistant:altitude: ОТКАЗ ИНД ВЫС
+      flightassistant:attitude: ОТКАЗ ИНД ОРИЕНТ
+      flightassistant:coordinates: ОТКАЗ ИНД КООРД
+      flightassistant:elytra_durability: ОТКАЗ ИНД ПРЧН/ЭЛ
+      flightassistant:flight_path: ОТКАЗ ИНД ВЕКТ/П
+      flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
+      flightassistant:speed: ОТКАЗ ИНД СКОР
+      flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
+    computer:
+      .: КОМП
+      flightassistant:air_data: ОТКАЗ ДАНН ПОЛЕТ
+      flightassistant:alert: ОТКАЗ ПРЕДУПР
+      flightassistant:elytra_status: ОТКАЗ СТС ЭЛИТР
+  elytra:
+    .: ЭЛИТРЫ
+    low_durability: НИЗК ПРОЧНОСТЬ
+    critical_durability: КРИТ ПРОЧНОСТЬ
 
 config.flightassistant:
-  category:
-    hud_settings: Настройки HUD
-    not_flying_no_elytra: На земле (без элитр)
-    not_flying_has_elytra: На земле (с элитрами)
+  categories:
+    global: Глобальный настройки
+    no_elytra: На земле (без элитр)
+    has_elytra: На земле (с элитрами)
     flying: В полёте
-    computer_settings: Защиты полёта
-  hud:
-    batching:
-      .: Группированная отрисовка HUD
-      no_batching: Не группировать
-      per_component: Группировать по компонентам
-      single_batch: Группировать всё целиком
-    scale: Масштаб HUD
-    frame_width: Ширина рамки HUD
-    frame_height: Высота рамки HUD
-  indicators:
-    color:
-      .: Цвета
-      frame: Цвет рамки HUD
-      status: Цвет информирующих элементов
-      advisory: Цвет указывающих элементов
-      caution: Цвет предупреждений
-      warning: Цвет опасности
-    speed:
-      .: Скорость
-      scale: Показывать шкалу скорости
-      readout: Показывать значение скорости
-      ground_readout: Показывать значение горизонтальной скорости
-      vertical_readout: Показывать значение вертикальной скорости
-    altitude:
-      .: Высота
-      scale: Показывать шкалу высоты
-      readout: Показывать значение высоты
-      ground: Показывать высоту над землёй
-    heading:
-      .: Курс
-      scale: Показывать шкалу курса
-      readout: Показывать значение курса
-    automation:
-      .: Автоматизация
-      thrust: Показывать режим тяги
-      vertical: Показывать вертикальный режим
-      lateral: Показывать горизонтальный режим
-      status: Показывать статус автоматизации
-    info:
-      .: Информация
-      alerts: Показывать предупреждения
-      firework_count: Показывать счётчик фейерверков
-      thrust_setting: Показывать заданную тягу
-      waypoint_distance: Показывать расстояние до точки назначения
-      waypoint_time: Показывать время до точки назначения
-      flight_phase: Показывать фазу полёта
-    misc:
-      .: Прочее
-      attitude: Показывать индикатор ориентации
-      flight_path: Показывать иконку пути полёта
-      coordinates: Показывать координаты
-      elytra_health: Показывать здоровье элитр
-      elytra_health_units:
-        .: Единицы здоровья элитр
-        percentage: Проценты
-        remaining_durability: Оставшаяся прочность
-  computers:
+  options:
     global:
-      .: Глобальный режим автоматизаций
-      full: Всегда включены (МОЖЕТ БЫТЬ ЗАПРЕЩЕНО НА СЕРВЕРАХ)
-      no_overlays: Только при отсутствии оверлеев
-      disabled: Выключены
-    consider_invulnerability: Выключать предупреждения и защиты во время неуязвимости
-    warning:
-      screen_and_audio: Экран и звук
-      audio_only: Только звук
-      screen_only: Только экран
-      disabled: Выключено
-    protection:
-      hard: Строгая
-      soft: Мягкая
-      disabled: Выключена
-    firework:
-      .: Фейерверки
-      lock_unsafe: Блокировать опасные фейерверки
-      lock_gpws: Блокировать фейерверки при взгляде на землю
-    stall:
-      .: Сваливание
-      warning: Режим предупреждения о сваливании
-      protection: Режим защиты от сваливания
-      thrust: Разрешить использование тяги для защиты
-    gpws:
-      .: Система предупреждения о близости земли (GPWS)
-      sinkrate:
-        warning: Режим предупреждения о быстром снижении
-        protection: Режим защиты от быстрого снижения
-      terrain:
-        warning: Режим предупреждения о приближении к земле
-        protection: Режим защиты от приближения к земле
-      landing:
-        warning: Режим предупреждения о близости с землёй при посадке
-    void_level:
-      .: Уровень пустоты
-      protection: Режим защиты от пересечения уровня пустоты
-      thrust: Разрешить использование тяги для защиты
-    elytra_state:
-      .: Состояние элитр
-      close_underwater: Закрывать элитры под водой
-      open_automatically: Автоматически раскрывать элитры
-    chunk_state:
-      .: Состояние чанков
-      preserve_altitude: Автоматически сохранять высоту в незагруженных чанках
-
-commands.flightassistant:
-  no_such_waypoint: На указанной позиции нет точки назначения
-  nothing_to_clear: Нет точек назначения для очищения
-  first_wp_cannot_be_landing: Первая точка назначения не может быть посадочной
-  cannot_execute_from_landing: План полёта не может быть выполнен, начиная с посадочной точки назначения
-  waypoint:
-    created: Создана точка назначения с позицией %s (теперь всего %s точек назначения)
-    removed: Удалена точка назначения с позицией %s (теперь всего %s точек назначения)
-    inserted: Добавлена точка назначения на позицию %s (теперь всего %s точек назначения)
-    replaced: Заменена точка назначения на позиции %s (теперь всего %s точек назначения)
-  flight_plan:
-    cleared: Очищены все точки назначения, начиная с позиции %s (теперь всего %s точек назначения)
-    executed: Выполнен план полёта, начиная с точки назначения на позиции %s (всего %s точек назначения)
-    saved: Сохранён план полёта с %s точками назначения как "%s"
-    loaded: Загружен план полёта с %s точками назначения из "%s"
-    not_found: Не найден план полёта с таким именем
-    not_supported: Этот план полёта не может быть загружен на текущей версии Minecraft
-    load_error: Произошла ошибка при загрузке этого плана полёта
-    empty: План полёта пуст!
-  total_waypoints: Всего %s точек назначения
-  waypoint_info:
-    .: 'Позиция: %s | X: %s | Z: %s | Высота: %s | Скорость %s'
-    land: 'Позиция %s: | X: %s | Z: %s | Мин. высота снижения: %s'
-    not_set: '-'
-
-alerts.flightassistant:
-  gpws:
-    pull_up: ТЯНИ ВВЕРХ
-    sink_rate: СКОР. СНИЖЕНИЯ
-    terrain_ahead: ЗЕМЛЯ ВПЕРЕДИ
-    too_low_terrain: СЛИШКОМ НИЗКО - ЗЕМЛЯ
-    reached_minimums: ДОСТИГН МИНИМ ВЫС СНИЖ
-  stall: СВАЛИВАНИЕ
-  unloaded_chunk: ЧАНК НЕ ЗАГРУЖЕН
-  elytra_health_low: ЗДОРОВЬЕ ЭЛИТР НИЗК.
-  void_damage_level:
-    approaching: ПРИБЛИЖЕНИЕ К ВЫСОТЕ УРОНА ПУСТОТЫ
-    reached: ДОСТИГНУТА ВЫСОТА УРОНА ПУСТОТЫ
-  autoflight:
-    autopilot_off: АВТОПИЛОТ ВЫКЛ
-    auto_thrust_off: АВТО-ТЯГА ВЫКЛ
-  firework:
-    no_response: ФРВК ОТКАЗ
-    unsafe: ФРВК ВЗРЫВООПАСЕН
-  fault:
-    computers:
-      alert_mgr: ОТКАЗ СИСТ ПРЕДУПР (ВСЕ ПРЕДУПР ПОТЕР)
-      air_data:
-        '0': ОТКАЗ ДАННЫХ ПОЛЕТА
-        '1': ' GPWS ПОТЕР'
-        '2': ' ПРЕДУПР О СВАЛИВ ПОТЕР'
-        '3': ' КРЕН НЕВЕРН'
-        '4': ' СКОР НЕВЕРН'
-        '5': ' Р/ВЫС НЕВЕРН'
-      time_prvd:
-        '0': ОТКАЗ СИСТ ВРЕМЕНИ
-      auto_flt:
-        '0': ОТКАЗ СИСТ А/ПОЛЕТА
-        '1': ' УКАЗ ПОЛЕТА ПОТЕР'
-        '2': ' А/ТЯГА ПОТЕР'
-        '3': ' АВТОПИЛОТ ПОТЕР'
-      frwk_ctl:
-        '0': ОТКАЗ АВТО УПР ФРВК (ЗАЩИТЫ ПОТЕР)
-        '1': ' СЧЕТ ФРВК НЕВЕРН'
-      pitch_ctl:
-        '0': ОТКАЗ АВТО УПР ТАНГАЖОМ
-        '1': ' ПОМОЩЬ В ВОССТ ПОТЕР'
-        '2': ' АВТОПИЛОТ ПОТЕР'
-      flt_plan:
-        '0': ОТКАЗ СИСТ ПЛАНА ПОЛЕТА
-        '1': ' РЕЖИМЫ ПЛАНА ПОТЕР'
-        '2': ' -РУЧНОЙ ВЫБОР РЕЖИМОВ: ИСПОЛЬЗУЙ'
-      gpws:
-        '0': ОТКАЗ GPWS
-        '1': ' ПРЕДУПР О ЗЕМЛЕ ПОТЕР'
-        '2': ' МАНЕВРИРУЙ С ОСТОРОЖНОСТЬЮ'
-        '3': ' ТОЛЬКО РУЧНЫЕ ПОСАДКИ'
-      stall_det:
-        '0': ОТКАЗ СИСТ ОБНАРУЖ СВАЛИВ
-        '1': ' ПРЕДУПР О СВАЛИВ ПОТЕР'
-        '2': ' МАНЕВРИРУЙ С ОСТОРОЖНОСТЬЮ'
-      void_level:
-        '0': ОТКАЗ СИСТ УРОВНЯ ПУСТОТЫ
-        '1': ' ПРЕДУПР ОБ УРОВНЕ ПУСТОТЫ ПОТЕР'
-      heading_ctl:
-        '0': ОТКАЗ АВТО УПР КУРСОМ
-        '1': ' АВТОПИЛОТ ПОТЕР'
-      flight_prot:
-        '0': 'УПР ПОЛЕТОМ: АЛЬТН РЕЖИМ (ЗАЩИТЫ ПОТЕР)'
-        '1': ' МАНЕВРИРУЙ С ОСТОРОЖНОСТЬЮ'
-      elytra_state:
-        '0': ОТКАЗ СИСТ УПР ЭЛИТРАМИ
-        '1': ' ТОЛЬКО РУЧНОЕ РАСКРЫТИЕ ЭЛИТР'
-      chunk_state:
-        '0': ОТКАЗ СИСТ ЧАНКОВ
-        '1': ' ПОТЕР ПРЕДУПР: ЧАНК НЕ ЗАГРУЖЕН'
-      pitch_limit:
-        '0': ОТКАЗ ОГРАНИЧ ТАНГАЖА
-        '1': ' ЗАЩИТА ОТ СВАЛИВ ПОТЕР'
-      autopilot:
-        '0': ОТКАЗ АВТОПИЛОТА
-      flight_phase:
-        '0': ОТКАЗ СИСТ ФАЗЫ ПОЛЕТА
-        '1': ' АВТОПИЛОТ ПОТЕР'
-      roll_ctl:
-        '0': ОТКАЗ АВТО УПР КРЕНОМ
-        '1': ' АВТОПИЛОТ ПОТЕР'
-      dabr_roll:
-        '0': ОТКАЗ УПР КРЕНОМ DABR
-        '1': ' АВТОПИЛОТ ПОТЕР'
-      thrust_ctl:
-        '0': ОТКАЗ АВТО УПР ТЯГОЙ
-        '1': ' АВТОПИЛОТ ПОТЕР'
-        '2': ' ТОЛЬКО РУЧН ИСПОЛЬЗ ТЯГИ'
-    hud:
-      alert: ОТКАЗ ИНДИК ПРЕДУПР
-      altitude: ОТКАЗ ИНДИК ВЫС
-      elytra_health: ОТКАЗ ИНДИК ЗДОР ЭЛ
-      flight_mode: ОТКАЗ ИНДИК РЕЖИМА
-      flight_path: ОТКАЗ ИНДИК ВЕКТОРА
-      heading: ОТКАЗ ИНДИК КУРСА
-      location: ОТКАЗ ИНДИК КООРД
-      attitude: ОТКАЗ ИНДИК ОРИЕНТ
-      speed: ОТКАЗ ИНДИК СКОР
-      status: ОТКАЗ ИНДИК СТАТУСА
-      flt_dir: ОТКАЗ УКАЗАТ ПОЛЕТА
-      radar_altitude: ОТКАЗ ИНДИК РАДИОВЫС
-      ground_speed: ОТКАЗ ИНДИК ГОРИЗ СКОР
-      vertical_speed: ОТКАЗ ИНДИК ВЕРТ СКОР
-
-status.flightassistant:
-  firework_count: 'КОЛ-ВО ФРВКОВ: %s'
-  thrust_setting: 'ТЯГА: %s'
-  waypoint_distance: 'РАССТ: %s'
-  waypoint_time: 'ВРЕМЯ: %s:%s'
-  phase:
-    on_ground: НА ЗЕМЛЕ
-    takeoff: ВЗЛЕТ
-    climb: НАБОР
-    cruise: КРЕЙСЕР
-    descent: СНИЖЕНИЕ
-    approach: ЗАХОД
-    land: ПОСАДКА
-    go_around: ВТОРОЙ КРУГ
-
-mode.flightassistant:
-  minimums:
-    absolute: МИНИМ %s
-    relative: МИНИМ +%s
-    not_set: НЕТ МИНИМ
-  thrust:
-    unavailable: НЕТ ТЯГИ
-    manual:
-      .: РУЧН ТЯГА %s
-      reverse: РУЧН РЕВ %s
-      idle: РУЧН МАЛАЯ
-      toga: РУЧН ВЗЛТ
-    toga: АВТО ВЗЛ.ТЯГА
-    climb: ТЯГА НАБОР
-    climb_firework: ФРВК НАБОР
-    idle: МАЛАЯ ТЯГА
-    speed:
-      selected: СКОР %s
-      managed: П. СКОР %s
-    land: ПОСАДОЧН.ТЯГА
-    approach: ТЯГА ЗАХОД
-    approach_firework: ФРВК ЗАХОД
-    set_toga: НУЖНА МАКС ТЯГА
-  vert:
-    glide: ОПТ ПЛАНИР
-    climb:
-      optimum: ОПТ НАБОР
-      selected: НАБОР %s
-      managed: П. НАБОР %s
-    descend:
-      selected: СНИЖ %s
-      managed: П. СНИЖ %s
-    hold:
-      selected: ВЫС %s
-      managed: П. ВЫС %s
-      cruise: КРЕЙС ВЫС %s
-    go_around: В.КРУГ ВЫС
-    land: ПОСАДКА %s
-  lat:
-    takeoff: ВЗЛЕТ КРС %s
-    go_around: В.КРУГ КРС %s
-    selected: КУРС %s
-    managed: ПОЗ %s %s
-    approach: ЗАХОД %s %s
-  auto:
-    flight_directors: УК
-    auto_thrust: А/ТЯГА
-    autopilot: АП
-    no_autoland: АВТОПОСАДК.ВЫКЛ
+      mod_enabled: Включить FlightAssistant
+      hud_enabled: Включить HUD (интерфейс)
+    display:
+      colors:
+        .: Colors
+        primary: Основной цвет
+        warning: Цвет предупреждения
+      attitude:
+        .: Индикатор ориентации
+        enabled: Отображать ориентацию
+        horizon_width: Длина линии горизонта
+        line_width: Длина обычных линий
+        degree_step: Шаг градусных линий
+        show_heading: Отображать курс на линии горизонта
+        heading_step: Шаг линий курса
+      speed:
+        .: Индикатор скорости
+        show_reading: Отображать значение скорости
+        show_scale: Отображать шкалу скорости
+        scale_height: Высота шкалы скорости
+        horizontal_pos: Горизонтальная позиция
+      altitude:
+        .: Индикатор высоты
+        show_reading: Отображать значение высоты
+        show_scale: Отображать шкалу высоты
+        scale_height: Высота шкалы высоты
+        horizontal_pos: Горизонтальная позиция
+      flight_path_vector:
+        .: Индикатор вектора пути полёта
+        show: Отображать вектор пути полёта
+        size: Размер вектора пути полёта
+      elytra_durability:
+        .: Индикатор прочности элитр
+        show: Отображать прочности элитр
+        units:
+          .: Единицы измерения прочности
+          raw: Сырые
+          percentage: Проценты
+          time: Время (примерное)
+      alerts:
+        .: Индикатор предупреждений
+        show: Отображать предупреждения
 
 short.flightassistant:
-  north: С
-  east: В
-  south: Ю
-  west: З
-  ground_level: З
-  void_level: П
-  elytra: Э
-  ground_speed: Г/С%s
-  vertical_speed: В/С%s
+  alert: ПРЕДУПР
   altitude: ВЫС
-  elytra_health: ЗДОР ЭЛ
-  infinite: БЕСК
-  flight_mode: РЕЖИМ
-  flight_path: ВЕКТОР
-  heading: КУРС
-  location: КООРД
   attitude: ОРИЕНТ
+  elytra: Э
+  elytra_durability: ПРЧН/ЭЛ
+  flight_path: ПУТЬ/П
+  ground: ЗЕМЛ
+  ground_speed: 'Г/С%s'
+  infinite: БЕСК
+  radar_altitude: Р/ВЫС
   speed: СКОР
-  status: СТС
-  radar: Р/ВЫС
+  vertical_speed: 'В/С%s'
+  void: ПУСТ

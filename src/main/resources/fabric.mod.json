@@ -2,51 +2,48 @@
   "schemaVersion": 1,
   "id": "flightassistant",
   "version": "${version}",
-  "name": "Flight Assistant",
-  "description": "FlightAssistant is an assistant that will assist you in your flights.",
+  "name": "FlightAssistant",
+  "description": "FlightAssistant brings your Elytra flying experience to the next level, all client-side!",
   "authors": [
-    "Octol1ttle",
-    "ToroCraft"
+    "Octol1ttle"
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/flightassistant",
     "sources": "https://github.com/Octol1ttle/FlightAssistant",
     "issues": "https://github.com/Octol1ttle/FlightAssistant/issues"
   },
-  "custom": {
-    "modmenu": {
-      "links": {
-        "modmenu.discord": "https://discord.gg/5kcBCvnbTp"
-      }
-    }
-  },
-  "license": "GPL3",
+  "license": "LGPL-3.0-only",
   "icon": "assets/flightassistant/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "ru.octol1ttle.flightassistant.FlightAssistant"
+      {
+        "value": "ru.octol1ttle.flightassistant.FlightAssistant",
+        "adapter": "kotlin"
+      }
     ],
     "modmenu": [
-      "ru.octol1ttle.flightassistant.FAModMenuImpl"
+      {
+        "value": "ru.octol1ttle.flightassistant.config.FAModMenuIntegration",
+        "adapter": "kotlin"
+      }
     ]
   },
   "mixins": [
-    "flightassistant.mixins.json"
+    {
+      "config": "flightassistant.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
-    "fabricloader": ">=0.15.3",
+    "fabricloader": ">=0.16.3",
+    "minecraft": "^1.21",
+    "java": ">=21",
     "fabric-api": "*",
-    "minecraft": ">=1.20.0 <1.20.5",
-    "java": ">=17",
+    "fabric-language-kotlin": "*",
     "yet_another_config_lib_v3": "*"
   },
   "recommends": {
-    "immediatelyfast": ">=1.2.0",
-    "modmenu": "*",
-    "do_a_barrel_roll": "*"
-  },
-  "breaks": {
-    "immediatelyfast": "<1.2.0"
+    "modmenu": "*"
   }
 }
