@@ -85,15 +85,6 @@ fun DrawContext.drawText(text: Text, x: Int, y: Int, color: Int) {
     drawText(textRenderer, text, x, y, color, false)
 }
 
-fun DrawContext.drawHighlightedText(text: Text, x: Int, y: Int, highlight: Boolean, color: Int) {
-    if (highlight) {
-        fill(x - 2, y - 1, x + getTextWidth(text) + 1, y + 8, color)
-        drawText(text, x, y, getContrasting(color))
-    } else {
-        drawText(text, x, y, color);
-    }
-}
-
 private fun getContrasting(original: Int): Int {
     val red: Int = original shr 16 and 255
     val green: Int = original shr 8 and 255

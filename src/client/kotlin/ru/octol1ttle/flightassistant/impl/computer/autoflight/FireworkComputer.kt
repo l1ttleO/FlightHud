@@ -1,0 +1,85 @@
+package ru.octol1ttle.flightassistant.impl.computer.autoflight
+
+import net.minecraft.client.MinecraftClient
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.entity.player.*
+import net.minecraft.item.*
+import net.minecraft.util.*
+import ru.octol1ttle.flightassistant.FlightAssistant
+import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
+import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.*
+
+class FireworkComputer(val mc: MinecraftClient) : Computer(), ThrustSource {
+    override val priority: ThrustSource.Priority
+        get() = ThrustSource.Priority.LOW
+    override val supportsReverse: Boolean
+        get() = false
+
+    private var safeFireworkCount: Int = 0
+    private var safeFireworkSlot: Int? = 0
+
+    private var lastActivationTime: Int = 0
+
+    override fun subscribeToEvents() {
+        ThrustSourceRegistrationCallback.EVENT.register { it.accept(this) }
+    }
+
+    override fun tick(computers: ComputerAccess) {
+        safeFireworkCount = 0
+        safeFireworkSlot = null
+        for (slot: Int in 0..<PlayerInventory.getHotbarSize()) {
+            val stack: ItemStack = computers.data.player.inventory.getStack(slot)
+            if (isFireworkAndSafe(stack)) {
+                safeFireworkCount += stack.count
+                if (safeFireworkSlot == null) {
+                    safeFireworkSlot = slot
+                }
+            }
+        }
+    }
+
+    private fun isFireworkAndSafe(stack: ItemStack): Boolean {
+        return stack.item is FireworkRocketItem && hasNoExplosions(stack)
+    }
+
+    private fun hasNoExplosions(stack: ItemStack): Boolean {
+        return stack.get(DataComponentTypes.FIREWORKS)?.explosions?.isEmpty() ?: true
+    }
+
+    private fun tryActivateFirework(computers: ComputerAccess) {
+        if (FATickCounter.totalTicks < lastActivationTime + 5) {
+            return
+        }
+
+        val player: PlayerEntity = computers.data.player
+        if (isFireworkAndSafe(player.mainHandStack)) {
+            useFirework(player, Hand.MAIN_HAND)
+        } else if (isFireworkAndSafe(player.offHandStack)) {
+            useFirework(player, Hand.OFF_HAND)
+        } else if (safeFireworkSlot != null) {
+            player.inventory.selectedSlot = safeFireworkSlot!!
+            useFirework(player, Hand.MAIN_HAND)
+        }
+    }
+
+    private fun useFirework(player: PlayerEntity, hand: Hand) {
+        mc.interactionManager!!.interactItem(player, hand)
+        lastActivationTime = FATickCounter.totalTicks
+    }
+
+    override fun isAvailable(): Boolean {
+        return safeFireworkCount > 0
+    }
+
+    override fun tickThrust(computers: ComputerAccess, currentThrust: Float) {
+        if (currentThrust > computers.data.velocity.length() * 20 / 33.5f) {
+            tryActivateFirework(computers)
+        }
+    }
+
+    companion object {
+        val ID: Identifier = FlightAssistant.computerId("firework")
+    }
+}

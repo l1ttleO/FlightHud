@@ -7,29 +7,16 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
 
 class ElytraDurabilityLowAlert : Alert() {
-    override val priority: AlertPriority
-        get() = AlertPriority.MASTER_CAUTION
+    override val data: AlertData
+        get() = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         val remainingFlightTime: Int = computers.elytra.getRemainingFlightTime(computers.data.player) ?: return false
-        return remainingFlightTime in 60..<120
+        return remainingFlightTime in 30..<90
     }
 
-    override fun render(
-        drawContext: DrawContext,
-        computers: ComputerAccess,
-        firstLineX: Int,
-        x: Int,
-        y: Int,
-        soundPlaying: Boolean
-    ): Int {
-        drawContext.drawHighlightedText(
-            Text.translatable("alerts.flightassistant.elytra.low_durability"),
-            firstLineX,
-            y,
-            true,
-            cautionColor
-        )
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+        drawContext.drawText(Text.translatable("alerts.flightassistant.elytra.low_durability"), firstLineX, y, cautionColor)
         return 1
     }
 }

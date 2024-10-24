@@ -8,16 +8,14 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
+import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
 internal object ComputerHost : ComputerAccess {
     private val computers: MutableMap<Identifier, Computer> = HashMap()
 
     fun isFaulted(identifier: Identifier): Boolean {
         return get(identifier).faulted
-    }
-
-    fun identifiers(): Set<Identifier> {
-        return computers.keys
     }
 
     private fun register(identifier: Identifier, computer: Computer) {
@@ -30,8 +28,14 @@ internal object ComputerHost : ComputerAccess {
 
     private fun registerBuiltin() {
         register(AirDataComputer.ID, AirDataComputer(mc))
-        register(AlertComputer.ID, AlertComputer(mc.soundManager))
+
         register(ElytraStatusComputer.ID, ElytraStatusComputer())
+        register(VoidProximityComputer.ID, VoidProximityComputer())
+        register(FireworkComputer.ID, FireworkComputer(mc))
+        register(ThrustComputer.ID, ThrustComputer())
+        register(PitchComputer.ID, PitchComputer())
+
+        register(AlertComputer.ID, AlertComputer(mc.soundManager))
     }
 
     internal fun sendRegistrationEvent() {
@@ -68,7 +72,7 @@ internal object ComputerHost : ComputerAccess {
 
         FATickCounter.tick(mc.player!!, tickCounter)
 
-        mc.profiler.push("flightassistant:computers")
+        mc.profiler.push("flightassistant")
         for ((id: Identifier, computer: Computer) in computers) {
             mc.profiler.push(id.toString())
             if (!computer.faulted) {

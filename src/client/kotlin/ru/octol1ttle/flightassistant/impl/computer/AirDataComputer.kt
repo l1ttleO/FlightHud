@@ -14,33 +14,34 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
 
 class AirDataComputer(private val mc: MinecraftClient) : Computer() {
-    lateinit var player: ClientPlayerEntity
-
+    val player: ClientPlayerEntity
+        get() = checkNotNull(mc.player)
     val world: World
         get() = player.world
+
     var position: Vec3d = Vec3d.ZERO
         private set
-    var voidLevel: Int = -64
-        private set
+    val altitude: Double
+        get() = position.y
+    val voidLevel: Int
+        get() = world.bottomY - 64
     var groundLevel: Double? = 0.0
         private set
     var velocity: Vec3d = Vec3d.ZERO
         private set
     var forwardVelocity: Vec3d = Vec3d.ZERO
         private set
-    var pitch: Float = 0.0f
-        private set
-    var yaw: Float = 0.0f
-        private set
-    var heading: Float = 0.0f
-        private set
+    val pitch: Float
+        get() = -player.pitch
+    val yaw: Float
+        get() = wrapDegrees(player.yaw)
+    val heading: Float
+        get() = yaw + 180.0f
     var roll: Float = 0.0f
         private set
 
     override fun tick(computers: ComputerAccess) {
-        player = checkNotNull(mc.player)
         position = player.getLerpedPos(tickDelta)
-        voidLevel = world.bottomY - 64
         groundLevel = computeGroundLevel()
         velocity = player.lerpVelocity(tickDelta)
         val rotationVelocity: Vec3d = velocity.multiply(player.rotationVector)
@@ -49,14 +50,11 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
             rotationVelocity.y.coerceAtLeast(rotationVelocity.y * 0.01),
             rotationVelocity.z.coerceAtLeast(rotationVelocity.z * 0.1)
         )
-        pitch = -player.pitch
-        yaw = wrapDegrees(player.yaw)
-        heading = yaw + 180.0f
         roll = degrees(atan2(-RenderMatrices.worldSpaceMatrix.m10(), RenderMatrices.worldSpaceMatrix.m11()))
     }
 
     private fun computeGroundLevel(): Double? {
-        val minY: Double = voidLevel.toDouble().coerceAtLeast(position.y - 1000)
+        val minY: Double = voidLevel.toDouble().coerceAtLeast(altitude - 1000)
         val result: BlockHitResult = world.raycast(
             RaycastContext(
                 position,
@@ -73,6 +71,6 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("air_data")
+        val ID: Identifier = FlightAssistant.computerId("air_data")
     }
 }

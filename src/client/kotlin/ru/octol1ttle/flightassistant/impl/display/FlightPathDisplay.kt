@@ -56,6 +56,6 @@ class FlightPathDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("flight_path")
+        val ID: Identifier = FlightAssistant.displayId("flight_path")
     }
 }

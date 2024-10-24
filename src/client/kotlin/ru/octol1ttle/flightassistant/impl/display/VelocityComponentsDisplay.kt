@@ -56,6 +56,6 @@ class VelocityComponentsDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("velocity_components")
+        val ID: Identifier = FlightAssistant.displayId("velocity_components")
     }
 }

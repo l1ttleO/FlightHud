@@ -33,7 +33,7 @@ class AltitudeDisplay : Display() {
         matrices.push()
         val (x: Int, y: Int) = scaleMatrix(READING_MATRIX_SCALE, trueX, trueY)
 
-        val altitude: Double = computers.data.position.y
+        val altitude: Double = computers.data.altitude
         val text: String = altitude.roundToInt().toString()
 
         val width: Int = getTextWidth(text) + 5
@@ -47,7 +47,7 @@ class AltitudeDisplay : Display() {
     }
 
     private fun DrawContext.renderAltitudeScale(x: Int, y: Int, computers: ComputerAccess) {
-        val altitude: Double = computers.data.position.y
+        val altitude: Double = computers.data.altitude
 
         val minY: Int = HudFrame.top
         val maxY: Int =
@@ -57,14 +57,18 @@ class AltitudeDisplay : Display() {
 
         enableScissor(0, minY, scaledWindowWidth, maxY + 1)
 
+        val scissorMaxY: Int = (if (FAConfig.display.showAltitudeReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt()
         enableScissor(
             0,
             minY,
             scaledWindowWidth,
-            (if (FAConfig.display.showAltitudeReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt() + 1
+            scissorMaxY + 1
         )
         drawHorizontalLine(x, x + 30, y, primaryColor)
         drawHorizontalLine(x, x + 35, minY, primaryColor)
+        if (maxY < scissorMaxY) {
+            drawHorizontalLine(x, x + 35, maxY, primaryColor)
+        }
         val altitudeRoundedUp: Int = MathHelper.roundUpToMultiple(altitude.toInt(), 5)
         for (i: Int in altitudeRoundedUp..altitudeRoundedUp + 1000 step 5) {
             if (!drawAltitudeLine(x, y, i, altitude)) {
@@ -79,7 +83,7 @@ class AltitudeDisplay : Display() {
             scaledWindowWidth,
             maxY + 1
         )
-        drawHorizontalLine(x + 35, x, maxY, primaryColor)
+        drawHorizontalLine(x, x + 35, maxY, primaryColor)
         val altitudeRoundedDown: Int = MathHelper.roundDownToMultiple(altitude, 5)
         for (i: Int in altitudeRoundedDown downTo (altitudeRoundedDown - 1000).coerceAtLeast(computers.data.world.bottomY) step 5) {
             if (!drawAltitudeLine(x, y, i, altitude)) {
@@ -112,6 +116,6 @@ class AltitudeDisplay : Display() {
 
     companion object {
         private const val READING_MATRIX_SCALE: Float = 1.5f
-        val ID: Identifier = FlightAssistant.id("altitude")
+        val ID: Identifier = FlightAssistant.displayId("altitude")
     }
 }

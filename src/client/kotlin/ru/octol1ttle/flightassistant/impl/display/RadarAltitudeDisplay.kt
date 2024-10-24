@@ -9,15 +9,16 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
 class RadarAltitudeDisplay : Display() {
     override fun enabled(): Boolean {
-        return FAConfig.display.showAltitudeReading || FAConfig.display.showAltitudeScale
+        return FAConfig.display.showRadarAltitude
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
         val groundLevel: Double? = computers.data.groundLevel
-        if (groundLevel != null && groundLevel > computers.data.position.y) {
+        if (groundLevel != null && groundLevel > computers.data.altitude) {
             renderFaulted(drawContext)
             return
         }
@@ -31,13 +32,16 @@ class RadarAltitudeDisplay : Display() {
             val color: Int
             if (groundLevel != null) {
                 altType = Text.translatable("short.flightassistant.ground")
-                altString = (computers.data.position.y - groundLevel).roundToInt().toString()
+                altString = (computers.data.altitude - groundLevel).roundToInt().toString()
                 color = primaryColor
             } else {
                 altType = Text.translatable("short.flightassistant.void")
-                val altValue: Int = (computers.data.position.y - computers.data.voidLevel).roundToInt()
-                altString = altValue.toString()
-                color = if (altValue <= 0) warningColor else cautionColor
+                altString = (computers.data.altitude - computers.data.voidLevel).roundToInt().toString()
+                color = when (computers.voidProximity.status) {
+                    VoidProximityComputer.Status.REACHED_DAMAGE_ALTITUDE -> warningColor
+                    VoidProximityComputer.Status.APPROACHING_DAMAGE_ALTITUDE -> cautionColor
+                    else -> primaryColor
+                }
             }
             val xOffset: Int = getTextWidth(altType) + 1
 
@@ -59,6 +63,6 @@ class RadarAltitudeDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("radar_altitude")
+        val ID: Identifier = FlightAssistant.displayId("radar_altitude")
     }
 }

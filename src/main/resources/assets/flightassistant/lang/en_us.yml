@@ -10,15 +10,17 @@ alerts.flightassistant:
       flightassistant:radar_altitude: R/ALT DSPL FAULT
       flightassistant:speed: SPD DSPL FAULT
       flightassistant:velocity_components: VEL/CPMN DSPL FAULT
-    computer:
-      .: COMP
-      flightassistant:air_data: AIR DATA FAULT
-      flightassistant:alert: ALERT FAULT
-      flightassistant:elytra_status: ELYTRA STS FAULT
   elytra:
     .: ELYTRA
+    fault: STS SYS FAULT
     low_durability: LOW DURABILITY
     critical_durability: CRIT DURABILITY
+  navigation:
+    .: NAV
+    air_data_fault: AIR DATA FAULT
+    void_proximity_vault: VOID PROX FAULT
+    approaching_void_damage_altitude: APPR.ING VOID DMG ALT
+    reached_void_damage_altitude: REACHED VOID DMG ALT
 
 config.flightassistant:
   categories:

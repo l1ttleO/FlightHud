@@ -25,8 +25,8 @@ class ElytraDurabilityDisplay : Display() {
 
             val remainingFlightTime: Int = computers.elytra.getRemainingFlightTime(computers.data.player)!!
             val color: Int = when {
-                remainingFlightTime < 60 -> warningColor
-                remainingFlightTime < 120 -> cautionColor
+                remainingFlightTime < 30 -> warningColor
+                remainingFlightTime < 90 -> cautionColor
                 else -> primaryColor
             }
 
@@ -48,6 +48,6 @@ class ElytraDurabilityDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("elytra_durability")
+        val ID: Identifier = FlightAssistant.displayId("elytra_durability")
     }
 }

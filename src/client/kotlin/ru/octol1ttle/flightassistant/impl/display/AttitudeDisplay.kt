@@ -140,6 +140,6 @@ class AttitudeDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("attitude")
+        val ID: Identifier = FlightAssistant.displayId("attitude")
     }
 }

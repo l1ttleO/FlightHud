@@ -10,15 +10,18 @@ alerts.flightassistant:
       flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
       flightassistant:speed: ОТКАЗ ИНД СКОР
       flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
-    computer:
-      .: КОМП
-      flightassistant:air_data: ОТКАЗ ДАНН ПОЛЕТ
-      flightassistant:alert: ОТКАЗ ПРЕДУПР
-      flightassistant:elytra_status: ОТКАЗ СТС ЭЛИТР
   elytra:
     .: ЭЛИТРЫ
+    fault: ОТКАЗ СИСТ СТС
     low_durability: НИЗК ПРОЧНОСТЬ
     critical_durability: КРИТ ПРОЧНОСТЬ
+  navigation:
+    .: НАВИГАЦ
+    air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
+    void_proximity_vault: ОТКАЗ БЛИЗ ПУСТ
+    # если вам не нравится мой перевод обращайтесь к контрибьютору mctaylors <cantsendmails@mctaylors.ru>
+    approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
+    reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ
 
 config.flightassistant:
   categories:

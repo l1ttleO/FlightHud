@@ -9,28 +9,15 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class DisplayFaultAlert(val identifier: Identifier) : Alert() {
-    override val priority: AlertPriority
-        get() = AlertPriority.MASTER_CAUTION
+    override val data: AlertData
+        get() = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return HudDisplayHost.isFaulted(identifier)
     }
 
-    override fun render(
-        drawContext: DrawContext,
-        computers: ComputerAccess,
-        firstLineX: Int,
-        x: Int,
-        y: Int,
-        soundPlaying: Boolean
-    ): Int {
-        drawContext.drawHighlightedText(
-            Text.translatable("alerts.flightassistant.fault.hud.$identifier"),
-            firstLineX,
-            y,
-            soundPlaying,
-            cautionColor
-        )
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+        drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, y, cautionColor)
         return 1
     }
 }

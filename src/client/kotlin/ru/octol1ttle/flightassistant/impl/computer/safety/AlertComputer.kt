@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.computer
+package ru.octol1ttle.flightassistant.impl.computer.safety
 
 import net.minecraft.client.sound.SoundManager
 import net.minecraft.text.Text
@@ -7,12 +7,15 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
+import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
+import ru.octol1ttle.flightassistant.impl.alert.navigation.*
+import ru.octol1ttle.flightassistant.impl.computer.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
-class AlertComputer(val soundManager: SoundManager) : Computer() {
+class AlertComputer(private val soundManager: SoundManager) : Computer() {
     val categories: ArrayList<AlertCategory> = ArrayList()
 
     override fun invokeEvents() {
@@ -22,17 +25,21 @@ class AlertComputer(val soundManager: SoundManager) : Computer() {
 
     private fun registerBuiltin() {
         register(
-            AlertCategory(Text.translatable("alerts.flightassistant.fault.computer"))
-                .addAll(ComputerHost.identifiers().map { ComputerFaultAlert(it) })
-        )
-        register(
             AlertCategory(Text.translatable("alerts.flightassistant.fault.hud"))
                 .addAll(HudDisplayHost.identifiers().map { DisplayFaultAlert(it) })
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.elytra"))
-                .add(ElytraDurabilityCriticalAlert())
+                .add(ComputerFaultAlert(ElytraStatusComputer.ID, Text.translatable("alerts.flightassistant.elytra.fault")))
                 .add(ElytraDurabilityLowAlert())
+                .add(ElytraDurabilityCriticalAlert())
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
+                .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault")))
+                .add(ComputerFaultAlert(VoidProximityComputer.ID, Text.translatable("alerts.flightassistant.navigation.void_proximity_fault")))
+                .add(ApproachingVoidDamageAltitudeAlert())
+                .add(ReachedVoidDamageAltitudeAlert())
         )
     }
 
@@ -49,7 +56,7 @@ class AlertComputer(val soundManager: SoundManager) : Computer() {
             category.updateActiveAlerts(computers, soundManager)
         }
 
-        categories.sortBy { it.getHighestPriority()?.priorityValue }
+        categories.sortBy { it.getHighestPriority()?.priority }
 
         var interrupt = false
         for (category: AlertCategory in categories) {
@@ -62,7 +69,7 @@ class AlertComputer(val soundManager: SoundManager) : Computer() {
                 }
 
                 if (alert.soundInstance == null) {
-                    alert.soundInstance = AlertSoundInstance(alert.priority.soundEvent)
+                    alert.soundInstance = AlertSoundInstance(alert.data)
                     soundManager.play(alert.soundInstance)
                 }
                 if (soundManager.isPlaying(alert.soundInstance)) {
@@ -73,6 +80,6 @@ class AlertComputer(val soundManager: SoundManager) : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("alert")
+        val ID: Identifier = FlightAssistant.computerId("alert")
     }
 }

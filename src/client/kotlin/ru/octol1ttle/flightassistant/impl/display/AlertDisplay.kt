@@ -31,10 +31,9 @@ class AlertDisplay : Display() {
                     (category.getHighestPriority() ?: continue).colorSupplier.invoke()
                 )
                 copy.append(" ")
+
                 for (alert: Alert in category.activeAlerts) {
-                    val soundPlaying: Boolean =
-                        alert.soundInstance == null || computers.alert.soundManager.isPlaying(alert.soundInstance)
-                    y += fontHeight * alert.render(this, computers, x + getTextWidth(copy), x, y, soundPlaying)
+                    y += fontHeight * alert.render(this, computers, x + getTextWidth(copy), x, y)
                 }
                 y += 3
             }
@@ -51,6 +50,6 @@ class AlertDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("alert")
+        val ID: Identifier = FlightAssistant.displayId("alert")
     }
 }

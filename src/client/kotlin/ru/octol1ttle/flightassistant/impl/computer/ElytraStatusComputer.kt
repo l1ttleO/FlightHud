@@ -20,13 +20,13 @@ class ElytraStatusComputer : Computer() {
         val player: PlayerEntity = computers.data.player
 
         for (stack in player.armorItems) {
-            if (stack.item is ElytraItem) { // TODO: replace with isGliding check when next mc comes out :fire:
+            if (stack.item is ElytraItem) { // TODO: update to 1.21.3 and replace with isGliding check
                 activeElytra = stack
                 return
             }
         }
         for (stack in player.handItems) {
-            if (stack.item is ElytraItem) { // TODO: replace with isGliding check when next mc comes out :fire:
+            if (stack.item is ElytraItem) {
                 activeElytra = stack
                 return
             }
@@ -67,7 +67,7 @@ class ElytraStatusComputer : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("elytra_status")
+        val ID: Identifier = FlightAssistant.computerId("elytra_status")
     }
 
     enum class DurabilityUnits : NameableEnum {
