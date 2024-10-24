@@ -5,10 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import ru.octol1ttle.flightassistant.Dimensions;
-import ru.octol1ttle.flightassistant.FlightAssistant;
-import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
 import ru.octol1ttle.flightassistant.config.FAConfig;
-import ru.octol1ttle.flightassistant.config.HUDConfig;
 import ru.octol1ttle.flightassistant.hud.api.IHudDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.AlertDisplay;
 import ru.octol1ttle.flightassistant.hud.impl.AltitudeDisplay;
@@ -57,17 +54,13 @@ public class HudDisplayHost {
         dim.update(context, renderer.invokeGetFov(mc.gameRenderer.getCamera(), tickDelta, true));
 
         float hudScale = FAConfig.hud().hudScale;
-        boolean batchAll = FlightAssistant.canUseBatching() && FAConfig.hud().batchedRendering == HUDConfig.BatchedRendering.SINGLE_BATCH;
 
         context.getMatrices().push();
         context.getMatrices().scale(hudScale, hudScale, hudScale);
-        HUDBatching.tryBeginIf(batchAll);
 
         for (Map.Entry<Identifier, IHudDisplay> entry : HudDisplayRegistry.getDisplays()) {
             Identifier id = entry.getKey();
             IHudDisplay display = entry.getValue();
-            boolean perComponent = FlightAssistant.canUseBatching() && FAConfig.hud().batchedRendering == HUDConfig.BatchedRendering.PER_COMPONENT;
-            HUDBatching.tryBeginIf(perComponent);
             try {
                 if (!HudDisplayRegistry.isFaulted(id)) {
                     display.render(context, mc.textRenderer);
@@ -77,10 +70,8 @@ public class HudDisplayHost {
             } catch (Throwable t) {
                 HudDisplayRegistry.markFaulted(id, t, "Exception rendering display with ID: %s".formatted(id));
             }
-            HUDBatching.tryEndIf(perComponent);
         }
 
-        HUDBatching.tryEndIf(batchAll);
         context.getMatrices().pop();
     }
 }

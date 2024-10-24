@@ -164,7 +164,7 @@ public class GroundProximityComputer implements ITickableComputer, IPitchLimiter
     }
 
     private BlockPos findHighest(BlockPos.Mutable at) {
-        while (at.getY() < data.world().getTopY()) {
+        while (at.getY() < data.world().getTopYInclusive()) {
             if (!data.isGround(at.move(Direction.UP))) {
                 return at;
             }

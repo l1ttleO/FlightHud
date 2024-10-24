@@ -6,7 +6,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
-import ru.octol1ttle.flightassistant.compatibility.immediatelyfast.HUDBatching;
 import ru.octol1ttle.flightassistant.util.ScreenSpaceRendering;
 
 public abstract class DrawHelper {
@@ -61,14 +60,15 @@ public abstract class DrawHelper {
     }
 
     public static int drawHighlightedText(TextRenderer textRenderer, DrawContext context, Text text, int x, int y, Color color, boolean highlight) {
-        HUDBatching.tryEnd();
         if (highlight) {
             DrawHelper.fill(context, x - 2, y - 1, x + textRenderer.getWidth(text) + 1, y + 8, color);
+            context.getMatrices().translate(0, 0, 100);
             DrawHelper.drawText(textRenderer, context, text, x, y, getContrasting(color));
+            context.getMatrices().translate(0, 0, -100);
         } else {
             DrawHelper.drawText(textRenderer, context, text, x, y, color);
         }
-        HUDBatching.tryBegin();
+
         return SINGLE_LINE_DRAWN;
     }
 

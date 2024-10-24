@@ -61,7 +61,7 @@ public class FAConfig {
             throw new IllegalStateException("Attempted to retrieve indicator settings when there is no player");
         }
 
-        if (client.player.isFallFlying()) {
+        if (client.player.isGliding()) {
             return INDICATORS_STORAGE_HANDLER.instance().flying;
         }
 

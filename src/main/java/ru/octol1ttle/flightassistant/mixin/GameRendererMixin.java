@@ -21,7 +21,7 @@ public class GameRendererMixin {
                     remap = false
             )
     )
-    public void updateRoll(RenderTickCounter tickCounter, CallbackInfo ci, @Local(ordinal = 1) Matrix4f matrix4f2) {
-        RollMatrixCallback.EVENT.invoker().onMatrixUpdate(matrix4f2);
+    public void updateRoll(RenderTickCounter tickCounter, CallbackInfo ci, @Local(ordinal = 2) Matrix4f matrix4f3) {
+        RollMatrixCallback.EVENT.invoker().onMatrixUpdate(matrix4f3);
     }
 }

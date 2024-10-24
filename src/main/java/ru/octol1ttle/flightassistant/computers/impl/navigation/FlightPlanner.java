@@ -69,7 +69,7 @@ public class FlightPlanner extends ArrayList<Waypoint> implements ITickableCompu
     }
 
     private boolean tickLanding(Vector2d target) {
-        Vec3d landPos = data.findGround(new Vec3d(target.x, data.world().getTopY(), target.y));
+        Vec3d landPos = data.findGround(new Vec3d(target.x, data.world().getTopYInclusive(), target.y));
         if (landPos == null) {
             return false;
         }

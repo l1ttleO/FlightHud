@@ -22,9 +22,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Pair;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
@@ -137,7 +137,7 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
     }
 
     @Override
-    public TypedActionResult<ItemStack> interact(PlayerEntity player, World world, Hand hand) {
+    public ActionResult interact(PlayerEntity player, World world, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         AirDataComputer data = ComputerRegistry.resolve(AirDataComputer.class);
         GroundProximityComputer gpws = ComputerRegistry.resolve(GroundProximityComputer.class);
@@ -145,10 +145,10 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
         TimeComputer time = ComputerRegistry.resolve(TimeComputer.class);
 
         if (!world.isClient() || ComputerRegistry.isFaulted(FireworkController.class)) {
-            return TypedActionResult.pass(stack);
+            return ActionResult.PASS;
         }
         if (!data.isFlying() || !(stack.getItem() instanceof FireworkRocketItem)) {
-            return TypedActionResult.pass(stack);
+            return ActionResult.PASS;
         }
 
         boolean gpwsLocksFireworks = FAConfig.computer().lockFireworksFacingTerrain;
@@ -157,7 +157,7 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
         boolean unsafeFireworks = FAConfig.computer().lockUnsafeFireworks && !firework.isFireworkSafe(player.getStackInHand(hand));
 
         if (!firework.activationInProgress && (unsafeFireworks || gpwsDanger)) {
-            return TypedActionResult.fail(stack);
+            return ActionResult.FAIL;
         }
 
         if (firework.fireworkResponded) {
@@ -168,7 +168,7 @@ public class FACallbackListener implements ClientCommandRegistrationCallback, Cl
             firework.fireworkResponded = false;
         }
 
-        return TypedActionResult.pass(stack);
+        return ActionResult.PASS;
     }
 
     @Override

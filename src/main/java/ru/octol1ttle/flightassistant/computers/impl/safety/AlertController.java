@@ -87,7 +87,7 @@ public class AlertController implements ITickableComputer {
 
             boolean soundChanged = false;
             if (alert.soundInstance != null) {
-                soundChanged = data.sound() == null || !data.sound().getId().equals(alert.soundInstance.getId());
+                soundChanged = data.sound() == null || !data.sound().id().equals(alert.soundInstance.getId());
                 if (soundChanged || interrupt || alert.hidden) {
                     manager.stop(alert.soundInstance);
                     alert.soundInstance = null;

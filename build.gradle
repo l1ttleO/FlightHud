@@ -70,7 +70,7 @@ dependencies {
 	// Optional: Mod Menu to access the YACL config screen
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
     // Optional: ImmediatelyFast for batching support to increase rendering performance
-	modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+${project.minecraft_version}-fabric"
+    //modApi "maven.modrinth:immediatelyfast:${project.immediatelyfast_version}+1.21.3-fabric"
     // Optional: Do a Barrel Roll to control roll via RollController
     modApi "nl.enjarai:do-a-barrel-roll:${project.dabr_version}+${project.minecraft_version}-fabric"
 }

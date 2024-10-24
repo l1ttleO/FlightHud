@@ -26,6 +26,7 @@ import ru.octol1ttle.flightassistant.computers.api.ITickableComputer;
 import ru.octol1ttle.flightassistant.config.ComputerConfig;
 import ru.octol1ttle.flightassistant.config.FAConfig;
 import ru.octol1ttle.flightassistant.config.IndicatorConfig;
+import ru.octol1ttle.flightassistant.mixin.EntityInvoker;
 import ru.octol1ttle.flightassistant.util.events.RollMatrixCallback;
 
 import static net.minecraft.SharedConstants.TICKS_PER_SECOND;
@@ -76,7 +77,7 @@ public class AirDataComputer implements ITickableComputer {
         if (!FAConfig.computer().considerInvulnerability) {
             return false;
         }
-        return player().isInvulnerableTo(source)
+        return ((EntityInvoker) player()).invokeIsAlwaysInvulnerableTo(source)
                 || player().getAbilities().invulnerable && !source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)
                 || player().getAbilities().allowFlying && source.isIn(DamageTypeTags.IS_FALL);
     }
@@ -167,7 +168,7 @@ public class AirDataComputer implements ITickableComputer {
     }
 
     public boolean isFlying() {
-        return player().isFallFlying();
+        return player().isGliding();
     }
 
     public Vec3d position() {

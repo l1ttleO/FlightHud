@@ -46,16 +46,6 @@ public class FAModMenuImpl implements ModMenuApi {
         return ConfigCategory.createBuilder()
                 .name(name)
 
-                .option(Option.<HUDConfig.BatchedRendering>createBuilder()
-                        .name(Text.translatable("config.flightassistant.hud.batching"))
-                        .available(FlightAssistant.canUseBatching())
-                        .binding(defaults.batchedRendering, () -> FlightAssistant.canUseBatching()
-                                        ? config.batchedRendering
-                                        : HUDConfig.BatchedRendering.NO_BATCHING
-                                , o -> config.batchedRendering = o)
-                        .controller(opt -> EnumControllerBuilder.create(opt).enumClass(HUDConfig.BatchedRendering.class))
-                        .build()
-                )
                 .option(Option.<Float>createBuilder()
                         .name(Text.translatable("config.flightassistant.hud.scale"))
                         .binding(defaults.hudScale, () -> config.hudScale, o -> config.hudScale = o)
