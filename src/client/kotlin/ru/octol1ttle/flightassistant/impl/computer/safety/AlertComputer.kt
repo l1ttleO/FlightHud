@@ -7,6 +7,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
@@ -69,7 +70,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 }
 
                 if (alert.soundInstance == null) {
-                    alert.soundInstance = AlertSoundInstance(alert.data)
+                    alert.soundInstance = AlertSoundInstance(computers.data.player, alert.data)
                     soundManager.play(alert.soundInstance)
                 }
                 if (soundManager.isPlaying(alert.soundInstance)) {

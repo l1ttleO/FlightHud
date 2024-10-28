@@ -40,6 +40,7 @@ config.flightassistant:
       colors:
         .: Colors
         primary: Primary color
+        caution: Caution color
         warning: Warning color
       attitude:
         .: Attitude display
@@ -69,14 +70,23 @@ config.flightassistant:
           raw: Raw
           percentage: Percentage
           time: Time (approximate)
-      alerts:
-        .: Alerts display
-        show: Show alerts
+      misc:
+        .: Miscellaneous
+        alerts: Show alerts
+        automation_modes: Show automation modes
+
+mode.flightassistant:
+  thrust:
+    maximum: THR MAX
+  pitch:
+    void_protection: VOID PROT
+    void_escape: VOID ESC
 
 short.flightassistant:
   alert: ALERT
   altitude: ALT
   attitude: ATT
+  automation_mode: AUTO/MODE
   elytra: E
   elytra_durability: E/DURA
   flight_path: F/PTH

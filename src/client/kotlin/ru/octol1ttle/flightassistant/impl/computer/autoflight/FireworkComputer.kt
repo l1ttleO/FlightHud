@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 
-class FireworkComputer(val mc: MinecraftClient) : Computer(), ThrustSource {
+class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {
     override val priority: ThrustSource.Priority
         get() = ThrustSource.Priority.LOW
     override val supportsReverse: Boolean
@@ -74,7 +74,7 @@ class FireworkComputer(val mc: MinecraftClient) : Computer(), ThrustSource {
     }
 
     override fun tickThrust(computers: ComputerAccess, currentThrust: Float) {
-        if (currentThrust > computers.data.velocity.length() * 20 / 33.5f) {
+        if (currentThrust > computers.data.forwardVelocity.length() * 20.0f / 30.0f) {
             tryActivateFirework(computers)
         }
     }

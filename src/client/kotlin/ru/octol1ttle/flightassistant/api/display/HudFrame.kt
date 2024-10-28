@@ -7,7 +7,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 
 object HudFrame {
     private val window: Window = mc.window
-    private var width: Float = 0.0f
+    var width: Float = 0.0f
     private var height: Float = 0.0f
     var top: Int = 0
     var bottom: Int = 0

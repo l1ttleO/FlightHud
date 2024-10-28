@@ -2,10 +2,12 @@ package ru.octol1ttle.flightassistant.impl.alert
 
 import kotlin.math.max
 import net.minecraft.client.sound.*
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 
-class AlertSoundInstance(val data: AlertData) : AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()), TickableSoundInstance {
+class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
+    AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()), TickableSoundInstance {
     private var age: Int = 0
 
     init {
@@ -19,7 +21,7 @@ class AlertSoundInstance(val data: AlertData) : AbstractSoundInstance(data.sound
     }
 
     override fun isDone(): Boolean {
-        return false
+        return player.isDead || !player.isFallFlying
     }
 
     override fun tick() {

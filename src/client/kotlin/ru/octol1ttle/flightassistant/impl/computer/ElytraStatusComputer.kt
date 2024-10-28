@@ -2,7 +2,7 @@ package ru.octol1ttle.flightassistant.impl.computer
 
 import dev.isxander.yacl3.api.NameableEnum
 import java.time.Duration
-import kotlin.math.round
+import kotlin.math.*
 import net.minecraft.enchantment.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.*
@@ -45,7 +45,7 @@ class ElytraStatusComputer : Computer() {
 
         return when (units) {
             DurabilityUnits.RAW -> Text.literal((active.maxDamage - active.damage).toString())
-            DurabilityUnits.PERCENTAGE -> Text.literal("${round((active.maxDamage - active.damage - 1) * 100 / active.maxDamage.toFloat()).toInt()}%")
+            DurabilityUnits.PERCENTAGE -> Text.literal("${round((active.maxDamage - active.damage - 1) * 100 / active.maxDamage.toFloat()).roundToInt()}%")
             DurabilityUnits.TIME -> {
                 val duration: Duration = Duration.ofSeconds(getRemainingFlightTime(player)!!.toLong())
                 val seconds: String = if (unbreakingLevel > 0) "XX" else String.format("%02d", duration.toSecondsPart())

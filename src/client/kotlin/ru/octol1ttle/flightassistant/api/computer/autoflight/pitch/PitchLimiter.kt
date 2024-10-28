@@ -13,7 +13,7 @@ interface PitchLimiter {
         return null
     }
 
-    fun blockPitchChange(computers: ComputerAccess, direction: Direction): Boolean {
-        return false
+    fun blockPitchChange(computers: ComputerAccess, direction: Direction): ControlInput.Priority? {
+        return null
     }
 }

@@ -21,11 +21,12 @@ class VelocityComponentsDisplay : Display() {
             var y: Int = HudFrame.bottom - 10
 
             if (FAConfig.display.showVerticalSpeed) {
+                val verticalSpeed: Double = computers.data.velocity.y * 20
                 drawText(
                     Text.translatable(
                         "short.flightassistant.vertical_speed",
-                        ": ${(computers.data.velocity.y * 20).roundToInt()}"
-                    ), x, y, primaryColor
+                        ": ${verticalSpeed.roundToInt()}"
+                    ), x, y, if (verticalSpeed <= -10) warningColor else primaryColor
                 )
                 y -= fontHeight
             }

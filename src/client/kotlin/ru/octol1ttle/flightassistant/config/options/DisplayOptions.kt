@@ -63,6 +63,9 @@ class DisplayOptions {
     @SerialEntry
     var showAlerts: Boolean = true
 
+    @SerialEntry
+    var showAutomationModes: Boolean = true
+
     internal fun setMinimal(): DisplayOptions {
         this.showAttitude = false
         this.showSpeedReading = false
@@ -87,6 +90,7 @@ class DisplayOptions {
         this.showGroundSpeed = false
         this.showVerticalSpeed = false
         this.showAlerts = false
+        this.showAutomationModes = false
         return this
     }
 }

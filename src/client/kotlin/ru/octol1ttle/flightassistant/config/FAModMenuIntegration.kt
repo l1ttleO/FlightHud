@@ -178,10 +178,15 @@ object FAModMenuIntegration : ModMenuApi {
                 controller(enumSwitch(ElytraStatusComputer.DurabilityUnits::class.java))
             }
 
-            rootOptions.registerLabel("alerts", Text.translatable("config.flightassistant.options.display.alerts"))
-            rootOptions.register<Boolean>("alerts.show") {
+            rootOptions.registerLabel("misc", Text.translatable("config.flightassistant.options.display.misc"))
+            rootOptions.register<Boolean>("misc.alerts") {
                 setDisplayName()
                 binding(current::showAlerts, defaults.showAlerts)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("misc.automation_modes") {
+                setDisplayName()
+                binding(current::showAutomationModes, defaults.showAutomationModes)
                 controller(tickBox())
             }
         }

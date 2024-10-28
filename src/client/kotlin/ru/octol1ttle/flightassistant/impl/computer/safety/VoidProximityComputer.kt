@@ -27,7 +27,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
             val heightAboveDamageAltitude: Double = computers.data.altitude - computers.data.voidLevel
             if (heightAboveDamageAltitude > 16.0) {
                 Status.CLEAR_OF_DAMAGE_ALTITUDE
-            } else if (status != Status.REACHED_DAMAGE_ALTITUDE && heightAboveDamageAltitude >= 1.0) {
+            } else if (status != Status.REACHED_DAMAGE_ALTITUDE && heightAboveDamageAltitude > 1.0) {
                 Status.APPROACHING_DAMAGE_ALTITUDE
             } else {
                 Status.REACHED_DAMAGE_ALTITUDE
@@ -35,8 +35,17 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
         }
     }
 
-    override fun getMinimumPitch(computers: ComputerAccess): ControlInput {
-        return ControlInput((-90.0f + (computers.data.world.bottomY - computers.data.altitude) / 64.0f * 105.0f).toFloat(), ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.pitch.void_protection"))
+    override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
+        if (status != Status.ABOVE_GROUND) {
+            return ControlInput(
+                (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
+                    .coerceIn(-35.0f..55.0f),
+                ControlInput.Priority.HIGH,
+                Text.translatable("mode.flightassistant.pitch.void_protection")
+            )
+        }
+
+        return null
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {

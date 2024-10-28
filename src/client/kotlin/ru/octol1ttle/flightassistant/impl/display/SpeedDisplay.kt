@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class SpeedDisplay : Display() {
@@ -33,25 +34,32 @@ class SpeedDisplay : Display() {
         val (x: Int, y: Int) = scaleMatrix(READING_MATRIX_SCALE, trueX, trueY)
 
         val speed: Double = computers.data.forwardVelocity.length() * 20
+        val color: Int =
+            if (speed <= 0.0) warningColor
+            else primaryColor
 
-        val text: String = speed.roundToInt().toString()
-        val width: Int = getTextWidth(text) + 4
-        val halfHeight = 6
-        drawBorder(x - width, y - halfHeight, width + 1, halfHeight * 2 - 1, primaryColor)
+        if (speed > 0 || totalTicks % 20 >= 10) {
+            val text: String = speed.roundToInt().toString()
+            val width: Int = getTextWidth(text) + 4
+            val halfHeight = 6
+            val textY: Int = y - 4
 
-        val textY: Int = y - 4
-        drawRightAlignedText(text, x - 1, textY, primaryColor)
-
+            drawBorder(x - width, y - halfHeight, width + 1, halfHeight * 2 - 1, color)
+            drawRightAlignedText(text, x - 1, textY, color)
+        }
         matrices.pop()
     }
 
     private fun DrawContext.renderSpeedScale(x: Int, y: Int, computers: ComputerAccess) {
         val speed: Double = computers.data.forwardVelocity.length() * 20
+        val color: Int =
+            if (speed <= 0.0) warningColor
+            else primaryColor
 
         val minY: Int = HudFrame.top
         val maxY: Int = (y + fontHeight * (speed + 1)).toInt().coerceIn(minY - 1..HudFrame.bottom)
 
-        drawVerticalLine(x, minY, maxY, primaryColor)
+        drawVerticalLine(x, minY, maxY, color)
 
         enableScissor(0, minY, scaledWindowWidth, maxY + 1)
 
@@ -61,10 +69,10 @@ class SpeedDisplay : Display() {
             scaledWindowWidth,
             (if (FAConfig.display.showSpeedReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt() + 1
         )
-        drawHorizontalLine(x - 20, x, y, primaryColor)
-        drawHorizontalLine(x - 35, x, minY, primaryColor)
+        drawHorizontalLine(x - 20, x, y, color)
+        drawHorizontalLine(x - 35, x, minY, color)
         for (i: Int in speed.toInt()..speed.toInt() + 100) {
-            if (!drawSpeedLine(x, y, i, speed)) {
+            if (!drawSpeedLine(x, y, i, speed, color)) {
                 break
             }
         }
@@ -76,9 +84,9 @@ class SpeedDisplay : Display() {
             scaledWindowWidth,
             maxY + 1
         )
-        drawHorizontalLine(x - 35, x, maxY, primaryColor)
+        drawHorizontalLine(x - 35, x, maxY, color)
         for (i: Int in speed.roundToInt() downTo 0) {
-            if (!drawSpeedLine(x, y, i, speed)) {
+            if (!drawSpeedLine(x, y, i, speed, color)) {
                 break
             }
         }
@@ -87,14 +95,14 @@ class SpeedDisplay : Display() {
         disableScissor()
     }
 
-    private fun DrawContext.drawSpeedLine(x: Int, y: Int, speed: Int, currentSpeed: Double): Boolean {
+    private fun DrawContext.drawSpeedLine(x: Int, y: Int, speed: Int, currentSpeed: Double, color: Int): Boolean {
         val textY: Int = (y + fontHeight * (currentSpeed - speed)).toInt()
         if (textY < HudFrame.top - 100 || textY > HudFrame.bottom + 100) {
             return false
         }
-        drawHorizontalLine(x - 5, x, textY, primaryColor)
+        drawHorizontalLine(x - 5, x, textY, color)
         if (speed % 5 == 0) {
-            drawRightAlignedText(speed.toString(), x - 6, textY - 3, primaryColor)
+            drawRightAlignedText(speed.toString(), x - 6, textY - 3, color)
         }
 
         return true

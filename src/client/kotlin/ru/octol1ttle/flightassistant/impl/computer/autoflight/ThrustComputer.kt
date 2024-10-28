@@ -8,12 +8,13 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.*
+import ru.octol1ttle.flightassistant.api.util.data
 
 class ThrustComputer : Computer() {
     private val sources: ArrayList<ThrustSource> = ArrayList()
     private val controllers: ArrayList<ThrustController> = ArrayList()
     private var manualThrust: Float = 0.0f
-    private var currentThrustMode: Text? = null
+    var currentThrustMode: Text? = null
     var anyActive: Boolean = false
 
     override fun invokeEvents() {
@@ -22,6 +23,10 @@ class ThrustComputer : Computer() {
     }
 
     override fun tick(computers: ComputerAccess) {
+        if (!computers.data.flying) {
+            return
+        }
+
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
         if (thrustSource == null) {
             anyActive = false
@@ -32,9 +37,12 @@ class ThrustComputer : Computer() {
         val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
             thrustSource.tickThrust(computers, manualThrust)
-            if (manualThrust != 0.0f) {
-                currentThrustMode = Text.translatable("mode.flightassistant.thrust.manual", manualThrust.roundToInt())
-            }
+            currentThrustMode =
+                if (manualThrust != 0.0f) Text.translatable(
+                    "mode.flightassistant.thrust.manual",
+                    manualThrust.roundToInt()
+                )
+                else null
             return
         }
 

@@ -16,9 +16,11 @@ class AttitudeDisplay : Display() {
         return FAConfig.display.showAttitude
     }
 
+    // TODO: display minimum/maximum pitch
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
         with(drawContext) {
             matrices.push()
+            matrices.translate(0.0, 0.0, -200.0)
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
             if (!FAConfig.display.drawHorizonOutsideFrame) {

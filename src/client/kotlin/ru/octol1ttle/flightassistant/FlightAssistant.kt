@@ -46,7 +46,7 @@ object FlightAssistant : ClientModInitializer {
 
             RenderMatrices.ready = true
         }
-        HudRenderCallback.EVENT.register(HudDisplayHost::render)
+        HudRenderCallback.EVENT.register { drawContext, _ -> HudDisplayHost.render(drawContext) }
     }
 
     internal fun id(path: String): Identifier {

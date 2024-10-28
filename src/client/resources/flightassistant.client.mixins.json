@@ -3,6 +3,7 @@
   "package": "ru.octol1ttle.flightassistant.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "ClientShouldTickInvoker"
   ],
   "injectors": {
     "defaultRequire": 1

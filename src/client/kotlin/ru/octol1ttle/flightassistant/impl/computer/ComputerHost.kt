@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
+import ru.octol1ttle.flightassistant.mixin.ClientShouldTickInvoker
 
 internal object ComputerHost : ComputerAccess {
     private val computers: MutableMap<Identifier, Computer> = HashMap()
@@ -66,11 +67,11 @@ internal object ComputerHost : ComputerAccess {
     }
 
     internal fun tick(tickCounter: RenderTickCounter) {
-        if (!FAConfig.global.modEnabled) {
+        val paused: Boolean = mc.isPaused || !(mc as ClientShouldTickInvoker).invokeShouldTick()
+        FATickCounter.tick(mc.player!!, tickCounter, paused)
+        if (paused || !FAConfig.global.modEnabled) {
             return
         }
-
-        FATickCounter.tick(mc.player!!, tickCounter)
 
         mc.profiler.push("flightassistant")
         for ((id: Identifier, computer: Computer) in computers) {

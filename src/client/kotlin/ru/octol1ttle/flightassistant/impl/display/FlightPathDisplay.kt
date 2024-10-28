@@ -25,6 +25,7 @@ class FlightPathDisplay : Display() {
             }
 
             matrices.push()
+            matrices.translate(0.0, 0.0, -100.0)
             val (x: Int, y: Int) = scaleMatrix(FAConfig.display.flightPathVectorSize, trueX, trueY)
 
             val bodySideSize = 3

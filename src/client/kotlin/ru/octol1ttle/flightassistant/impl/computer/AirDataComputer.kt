@@ -16,6 +16,8 @@ import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
 class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     val player: ClientPlayerEntity
         get() = checkNotNull(mc.player)
+    val flying: Boolean
+        get() = player.isFallFlying
     val world: World
         get() = player.world
 
@@ -44,12 +46,11 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         position = player.getLerpedPos(tickDelta)
         groundLevel = computeGroundLevel()
         velocity = player.lerpVelocity(tickDelta)
-        val rotationVelocity: Vec3d = velocity.multiply(player.rotationVector)
-        forwardVelocity = Vec3d(
-            rotationVelocity.x.coerceAtLeast(rotationVelocity.x * 0.1),
-            rotationVelocity.y.coerceAtLeast(rotationVelocity.y * 0.01),
-            rotationVelocity.z.coerceAtLeast(rotationVelocity.z * 0.1)
-        )
+
+        val normalizedRotation: Vec3d = player.rotationVector.normalize()
+        val normalizedVelocity: Vec3d = velocity.normalize()
+        forwardVelocity = velocity.multiply(normalizedRotation.dotProduct(normalizedVelocity).coerceAtLeast(0.0))
+
         roll = degrees(atan2(-RenderMatrices.worldSpaceMatrix.m10(), RenderMatrices.worldSpaceMatrix.m11()))
     }
 

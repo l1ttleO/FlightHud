@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.display
 
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.RenderTickCounter
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
@@ -31,10 +30,11 @@ internal object HudDisplayHost {
         displays[identifier] = display
     }
 
-    internal fun registerBuiltin() {
+    private fun registerBuiltin() {
         register(AlertDisplay.ID, AlertDisplay())
         register(AltitudeDisplay.ID, AltitudeDisplay())
         register(AttitudeDisplay.ID, AttitudeDisplay())
+        register(AutomationModesDisplay.ID, AutomationModesDisplay())
         register(CoordinatesDisplay.ID, CoordinatesDisplay())
         register(ElytraDurabilityDisplay.ID, ElytraDurabilityDisplay())
         register(FlightPathDisplay.ID, FlightPathDisplay())
@@ -63,15 +63,13 @@ internal object HudDisplayHost {
         )
     }
 
-    internal fun render(drawContext: DrawContext, tickCounter: RenderTickCounter) {
+    internal fun render(drawContext: DrawContext) {
         if (!FAConfig.hudEnabled) {
             return
         }
 
         HudFrame.update()
         updateViewport()
-
-        val tickDelta: Float = tickCounter.getTickDelta(true)
 
         mc.profiler.push("flightassistant:displays")
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.enabled() }) {
