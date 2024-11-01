@@ -3,7 +3,8 @@
   "package": "ru.octol1ttle.flightassistant.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ClientShouldTickInvoker"
+    "ClientShouldTickInvoker",
+    "EntityChangeLookDirectionMixin"
   ],
   "injectors": {
     "defaultRequire": 1

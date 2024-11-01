@@ -5,6 +5,7 @@ import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
 class ReachedVoidDamageAltitudeAlert : Alert() {
@@ -12,7 +13,7 @@ class ReachedVoidDamageAltitudeAlert : Alert() {
         get() = AlertData.MASTER_WARNING
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
-        return computers.voidProximity.status == VoidProximityComputer.Status.REACHED_DAMAGE_ALTITUDE
+        return FAConfig.safety.voidAlertMode.warning() && computers.voidProximity.status == VoidProximityComputer.Status.REACHED_DAMAGE_ALTITUDE
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {

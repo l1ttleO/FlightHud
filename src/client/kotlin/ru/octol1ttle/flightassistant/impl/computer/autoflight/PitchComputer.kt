@@ -1,5 +1,7 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
+import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -8,8 +10,10 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
+import ru.octol1ttle.flightassistant.api.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
 class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
@@ -20,6 +24,7 @@ class PitchComputer : Computer(), PitchController {
 
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
+        ChangeLookDirectionEvents.PITCH.register(this::onPitchChange)
     }
 
     override fun invokeEvents() {
@@ -27,11 +32,8 @@ class PitchComputer : Computer(), PitchController {
         PitchControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    // TODO: allow users to configure every protection/automation
-    // TODO: don't run automations in overlays by default
-    // TODO: make blockPitchInput actually work lmao
     override fun tick(computers: ComputerAccess) {
-        if (!computers.data.flying) {
+        if (!computers.data.automationsAllowed()) {
             return
         }
 
@@ -68,6 +70,29 @@ class PitchComputer : Computer(), PitchController {
         currentPitchMode = finalInput.text
     }
 
+    private fun onPitchChange(entity: Entity, pitchDelta: Float): Float? {
+        if (entity is ClientPlayerEntity) {
+            val newPitch: Float = -entity.pitch - pitchDelta
+            val min: ControlInput? = minimumPitch
+            val max: ControlInput? = maximumPitch
+            if (min != null && newPitch < min.target) {
+                return 0.0f
+            }
+            if (max != null && newPitch > max.target) {
+                return 0.0f
+            }
+            if (limiters.any { limiter ->
+                    limiter.blockPitchChange(
+                        ComputerHost,
+                        if (pitchDelta < 0) Direction.UP else Direction.DOWN
+                    ) != null
+                }) {
+                return 0.0f
+            }
+        }
+        return null
+    }
+
     private fun updateSafePitches(computers: ComputerAccess) {
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
         minimumPitch =
@@ -82,10 +107,6 @@ class PitchComputer : Computer(), PitchController {
             else null
     }
 
-    private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float) {
-        player.pitch -= (target - current) * FATickCounter.timePassed
-    }
-
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
         if (maximumPitch != null && computers.data.pitch > maximumPitch!!.target) {
             val (target: Float, priority: ControlInput.Priority, text: Text?) = maximumPitch!!
@@ -96,6 +117,10 @@ class PitchComputer : Computer(), PitchController {
         }
 
         return null
+    }
+
+    private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float) {
+        player.pitch -= (target - current) * FATickCounter.timePassed
     }
 
     companion object {

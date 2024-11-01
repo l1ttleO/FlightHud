@@ -23,7 +23,7 @@ class ThrustComputer : Computer() {
     }
 
     override fun tick(computers: ComputerAccess) {
-        if (!computers.data.flying) {
+        if (!computers.data.automationsAllowed()) {
             return
         }
 

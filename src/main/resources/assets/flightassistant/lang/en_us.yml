@@ -10,6 +10,16 @@ alerts.flightassistant:
       flightassistant:radar_altitude: R/ALT DSPL FAULT
       flightassistant:speed: SPD DSPL FAULT
       flightassistant:velocity_components: VEL/CPMN DSPL FAULT
+  autoflight:
+    .: AUTO FLT
+    pitch_fault: PITCH CTL FAULT
+    thrust_fault: THR CTL FAULT
+  firework:
+    .: FRWK
+    fault: SYS FAULT
+  flight_controls:
+    .: F/CTL
+    pitch_fault: PITCH LIMIT FAULT
   elytra:
     .: ELYTRA
     fault: STS SYS FAULT
@@ -28,10 +38,13 @@ config.flightassistant:
     no_elytra: Not flying (no elytra)
     has_elytra: Not flying (with elytra)
     flying: Flying
+    safety: Alerts & flight protections
   options:
     global:
       mod_enabled: Enable FlightAssistant
       hud_enabled: Enable HUD
+      safety_enabled: Enable safety features (alerts and protections)
+      automations_allowed_in_overlays: Allow automations (autopilot & flight protections) to run in GUIs (inventory & pause screen)
     display:
       frame:
         .: Frame
@@ -74,6 +87,21 @@ config.flightassistant:
         .: Miscellaneous
         alerts: Show alerts
         automation_modes: Show automation modes
+    safety:
+      alert_mode:
+        warning_and_caution: Warning & caution
+        warning: Warning only
+        caution: Caution only
+        disabled: Disabled
+      elytra_durability:
+        .: Elytra durability
+        alert_mode: Elytra durability alert mode
+      void:
+        .: Void damage altitude
+        alert_mode: Void damage altitude alert mode
+        limit_pitch: Limit pitch above the void
+        auto_thrust: Automatically use thrust to escape the void
+        auto_pitch: Automatically raise pitch to escape the void
 
 mode.flightassistant:
   thrust:

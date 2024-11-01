@@ -14,6 +14,7 @@ import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAler
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
 import ru.octol1ttle.flightassistant.impl.computer.*
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class AlertComputer(private val soundManager: SoundManager) : Computer() {
@@ -28,6 +29,39 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.fault.hud"))
                 .addAll(HudDisplayHost.identifiers().map { DisplayFaultAlert(it) })
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
+                .add(
+                    ComputerFaultAlert(
+                        PitchComputer.ID,
+                        Text.translatable("alerts.flightassistant.autoflight.pitch_fault")
+                    )
+                )
+                .add(
+                    ComputerFaultAlert(
+                        ThrustComputer.ID,
+                        Text.translatable("alerts.flightassistant.autoflight.thrust_fault")
+                    )
+                )
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.firework"))
+                .add(
+                    ComputerFaultAlert(
+                        FireworkComputer.ID,
+                        Text.translatable("alerts.flightassistant.firework.fault")
+                    )
+                )
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.flight_controls"))
+                .add(
+                    ComputerFaultAlert(
+                        PitchComputer.ID,
+                        Text.translatable("alerts.flightassistant.flight_controls.pitch_fault")
+                    )
+                )
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.elytra"))

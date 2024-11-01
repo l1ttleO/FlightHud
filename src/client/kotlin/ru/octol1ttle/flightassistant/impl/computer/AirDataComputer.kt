@@ -12,6 +12,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
+import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     val player: ClientPlayerEntity
@@ -52,6 +53,10 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         forwardVelocity = velocity.multiply(normalizedRotation.dotProduct(normalizedVelocity).coerceAtLeast(0.0))
 
         roll = degrees(atan2(-RenderMatrices.worldSpaceMatrix.m10(), RenderMatrices.worldSpaceMatrix.m11()))
+    }
+
+    fun automationsAllowed(): Boolean {
+        return flying && (FAConfig.global.automationsAllowedInOverlays || (mc.currentScreen == null && mc.overlay == null))
     }
 
     private fun computeGroundLevel(): Double? {

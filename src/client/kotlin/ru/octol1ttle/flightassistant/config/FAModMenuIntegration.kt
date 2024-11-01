@@ -37,6 +37,12 @@ object FAModMenuIntegration : ModMenuApi {
                 )
             }
 
+            val safety: ConfigCategory by registerSafetyOptions(
+                Text.translatable("config.flightassistant.categories.safety"),
+                FAConfig.safety,
+                SafetyOptions()
+            )
+
             save { FAConfig.save() }
         }.generateScreen(parent)
     }
@@ -54,6 +60,18 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Boolean>("hud_enabled") {
                 setGlobalName()
                 binding(current::hudEnabled, defaults.hudEnabled)
+                controller(tickBox())
+            }
+
+            rootOptions.register<Boolean>("safety_enabled") {
+                setGlobalName()
+                binding(current::safetyEnabled, defaults.safetyEnabled)
+                controller(tickBox())
+            }
+
+            rootOptions.register<Boolean>("automations_allowed_in_overlays") {
+                setGlobalName()
+                binding(current::automationsAllowedInOverlays, defaults.automationsAllowedInOverlays)
                 controller(tickBox())
             }
         }
@@ -84,6 +102,11 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Color>("colors.primary") {
                 setDisplayName()
                 binding(current::primaryColor, defaults.primaryColor)
+                controller(colorPicker())
+            }
+            rootOptions.register<Color>("colors.caution") {
+                setDisplayName()
+                binding(current::cautionColor, defaults.cautionColor)
                 controller(colorPicker())
             }
             rootOptions.register<Color>("colors.warning") {
@@ -192,11 +215,60 @@ object FAModMenuIntegration : ModMenuApi {
         }
     }
 
+    private fun RootDsl.registerSafetyOptions(
+        title: Text,
+        current: SafetyOptions,
+        defaults: SafetyOptions
+    ): RegisterableActionDelegateProvider<CategoryDsl, ConfigCategory> {
+        return categories.registering {
+            name(title)
+
+            rootOptions.registerLabel(
+                "elytra_durability",
+                Text.translatable("config.flightassistant.options.safety.elytra_durability")
+            )
+            rootOptions.register<SafetyOptions.AlertMode>("elytra_durability.alert_mode") {
+                setSafetyName()
+                binding(current::elytraDurabilityAlertMode, defaults.elytraDurabilityAlertMode)
+                controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+
+            rootOptions.registerLabel(
+                "void",
+                Text.translatable("config.flightassistant.options.safety.void.alert_mode")
+            )
+            rootOptions.register<SafetyOptions.AlertMode>("void.alert_mode") {
+                setSafetyName()
+                binding(current::elytraDurabilityAlertMode, defaults.elytraDurabilityAlertMode)
+                controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+            rootOptions.register<Boolean>("void.limit_pitch") {
+                setSafetyName()
+                binding(current::voidLimitPitch, defaults.voidLimitPitch)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("void.auto_thrust") {
+                setSafetyName()
+                binding(current::voidAutoThrust, defaults.voidAutoThrust)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("void.auto_pitch") {
+                setSafetyName()
+                binding(current::voidAutoPitch, defaults.voidAutoPitch)
+                controller(tickBox())
+            }
+        }
+    }
+
     private fun OptionDsl<*>.setGlobalName() {
         name(Text.translatable("config.flightassistant.options.global.${this.optionId}"))
     }
 
     private fun OptionDsl<*>.setDisplayName() {
         name(Text.translatable("config.flightassistant.options.display.${this.optionId}"))
+    }
+
+    private fun OptionDsl<*>.setSafetyName() {
+        name(Text.translatable("config.flightassistant.options.safety.${this.optionId}"))
     }
 }

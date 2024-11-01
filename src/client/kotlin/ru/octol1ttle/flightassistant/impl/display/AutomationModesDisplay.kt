@@ -28,7 +28,7 @@ class AutomationModesDisplay : Display() {
             val x: Int = centerXI
             val y: Int = HudFrame.top - 9
 
-            drawText(Text.translatable("short.flightassistant.automation_mode"), x, y, warningColor)
+            drawMiddleAlignedText(Text.translatable("short.flightassistant.automation_mode"), x, y, warningColor)
         }
     }
 

@@ -10,6 +10,16 @@ alerts.flightassistant:
       flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
       flightassistant:speed: ОТКАЗ ИНД СКОР
       flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
+  autoflight:
+    .: АВТО ПОЛЕТ
+    pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
+    thrust_fault: ОТКАЗ УПР ТЯГОЙ
+  firework:
+    .: ФРВК
+    fault: ОТКАЗ СИСТ
+  flight_controls:
+    .: УПР/ПОЛЕТ
+    pitch_fault: ОТКАЗ ОГРАН УГЛА НАКЛ
   elytra:
     .: ЭЛИТРЫ
     fault: ОТКАЗ СИСТ СТС
@@ -19,7 +29,6 @@ alerts.flightassistant:
     .: НАВИГАЦ
     air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
     void_proximity_vault: ОТКАЗ БЛИЗ ПУСТ
-    # если вам не нравится мой перевод обращайтесь к контрибьютору mctaylors <cantsendmails@mctaylors.ru>
     approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
     reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ
 
@@ -29,18 +38,26 @@ config.flightassistant:
     no_elytra: На земле (без элитр)
     has_elytra: На земле (с элитрами)
     flying: В полёте
+    safety: Предупреждения и системы безопасности
   options:
     global:
       mod_enabled: Включить FlightAssistant
       hud_enabled: Включить HUD (интерфейс)
+      safety_enabled: Включить системы безопасности (предупреждения и системы безопасности)
+      automations_allowed_in_overlays: Разрешить автоматизации (автопилот и системы безопасности) работать на фоне (в инвентаре и на паузе)
     display:
+      frame:
+        .: Рамка
+        width: Ширина рамки
+        height: Высота рамки
       colors:
-        .: Colors
+        .: Цвета
         primary: Основной цвет
-        warning: Цвет предупреждения
+        caution: Цвет предупреждения
+        warning: Цвет опасности
       attitude:
-        .: Индикатор ориентации
-        enabled: Отображать ориентацию
+        .: Авиагоризонт
+        enabled: Отображать авиагоризонт
         horizon_width: Длина линии горизонта
         line_width: Длина обычных линий
         degree_step: Шаг градусных линий
@@ -50,14 +67,10 @@ config.flightassistant:
         .: Индикатор скорости
         show_reading: Отображать значение скорости
         show_scale: Отображать шкалу скорости
-        scale_height: Высота шкалы скорости
-        horizontal_pos: Горизонтальная позиция
       altitude:
         .: Индикатор высоты
         show_reading: Отображать значение высоты
         show_scale: Отображать шкалу высоты
-        scale_height: Высота шкалы высоты
-        horizontal_pos: Горизонтальная позиция
       flight_path_vector:
         .: Индикатор вектора пути полёта
         show: Отображать вектор пути полёта
@@ -70,14 +83,38 @@ config.flightassistant:
           raw: Сырые
           percentage: Проценты
           time: Время (примерное)
-      alerts:
-        .: Индикатор предупреждений
-        show: Отображать предупреждения
+      misc:
+        .: Разное
+        alerts: Отображать предупреждения
+        automation_modes: Отображать режимы автоматизации
+    safety:
+      alert_mode:
+        warning_and_caution: Опасности и предупреждения
+        warning: Только опасности
+        caution: Только предупреждения
+        disabled: Отключены
+      elytra_durability:
+        .: Прочность элитр
+        alert_mode: Режим предупреждения прочности элитр
+      void:
+        .: Высота урона от пустоты
+        alert_mode: Режим предупреждений высоты урона от пустоты
+        limit_pitch: Ограничение угла наклона над пустотой
+        auto_thrust: Автоматически использовать тягу чтобы избежать пустоты
+        auto_pitch: Автоматически повышать угол наклона чтобы избежать пустоты
+
+mode.flightassistant:
+  thrust:
+    maximum: МАКС ТЯГА
+  pitch:
+    void_protection: ПУСТ ЗАЩ
+    void_escape: ПУСТ ВЫХОД
 
 short.flightassistant:
   alert: ПРЕДУПР
   altitude: ВЫС
   attitude: ОРИЕНТ
+  automation_mode: АВТО/РЕЖИМ
   elytra: Э
   elytra_durability: ПРЧН/ЭЛ
   flight_path: ПУТЬ/П

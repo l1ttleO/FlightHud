@@ -9,9 +9,7 @@ import net.minecraft.item.Items
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.FlightAssistant.id
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.config.options.DisplayOptions
-import ru.octol1ttle.flightassistant.config.options.DisplayOptionsStorage
-import ru.octol1ttle.flightassistant.config.options.GlobalOptions
+import ru.octol1ttle.flightassistant.config.options.*
 
 object FAConfig {
     private val GLOBAL_HANDLER: ConfigClassHandler<GlobalOptions> =
@@ -38,8 +36,21 @@ object FAConfig {
             }
             .build()
 
+    private val SAFETY_HANDLER: ConfigClassHandler<SafetyOptions> =
+        ConfigClassHandler.createBuilder(SafetyOptions::class.java)
+            .id(id("safety"))
+            .serializer {
+                GsonConfigSerializerBuilder.create(it)
+                    .setPath(YACLPlatform.getConfigDir().resolve("${FlightAssistant.MOD_ID}/safety.json5"))
+                    .appendGsonBuilder(GsonBuilder::setPrettyPrinting) // not needed, pretty print by default
+                    .setJson5(true)
+                    .build()
+            }
+            .build()
+
     internal val global: GlobalOptions = GLOBAL_HANDLER.instance()
     internal val hudEnabled: Boolean get() = global.modEnabled && global.hudEnabled
+    internal val safetyEnabled: Boolean get() = global.modEnabled && global.safetyEnabled
     internal val displaysStorage: DisplayOptionsStorage = DISPLAY_HANDLER.instance()
 
     val display: DisplayOptions
@@ -56,6 +67,9 @@ object FAConfig {
 
             return displaysStorage.notFlyingNoElytra
         }
+
+    val safety: SafetyOptions
+        get() = if (safetyEnabled) SAFETY_HANDLER.instance() else SafetyOptions.DISABLED
 
     fun load() {
         GLOBAL_HANDLER.load()

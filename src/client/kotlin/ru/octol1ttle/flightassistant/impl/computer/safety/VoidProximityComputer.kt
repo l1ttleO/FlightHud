@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustContro
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.config.FAConfig
 
 class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustController {
     var status: Status = Status.ABOVE_GROUND
@@ -36,7 +37,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
-        if (status != Status.ABOVE_GROUND) {
+        if (FAConfig.safety.voidLimitPitch && status != Status.ABOVE_GROUND) {
             return ControlInput(
                 (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
                     .coerceIn(-35.0f..55.0f),
@@ -49,7 +50,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
-        if (status == Status.REACHED_DAMAGE_ALTITUDE) {
+        if (FAConfig.safety.voidAutoPitch && status == Status.REACHED_DAMAGE_ALTITUDE) {
             return ControlInput(55.0f /* TODO: get optimum climb pitch from thrust source*/, ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.pitch.void_escape"))
         }
 
@@ -57,7 +58,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
-        if (status == Status.REACHED_DAMAGE_ALTITUDE) {
+        if (FAConfig.safety.voidAutoThrust && status == Status.REACHED_DAMAGE_ALTITUDE) {
             return ControlInput(1.0f, ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.thrust.maximum"))
         }
 

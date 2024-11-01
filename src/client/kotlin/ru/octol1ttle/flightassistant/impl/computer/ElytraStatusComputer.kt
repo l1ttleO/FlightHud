@@ -72,19 +72,16 @@ class ElytraStatusComputer : Computer() {
 
     enum class DurabilityUnits : NameableEnum {
         RAW {
-            override fun getDisplayName(): Text {
-                return Text.translatable("config.flightassistant.options.display.elytra_durability.units.raw")
-            }
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.raw")
         },
         PERCENTAGE {
-            override fun getDisplayName(): Text {
-                return Text.translatable("config.flightassistant.options.display.elytra_durability.units.percentage")
-            }
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.percentage")
         },
         TIME {
-            override fun getDisplayName(): Text {
-                return Text.translatable("config.flightassistant.options.display.elytra_durability.units.time")
-            }
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.time")
         };
     }
 }
