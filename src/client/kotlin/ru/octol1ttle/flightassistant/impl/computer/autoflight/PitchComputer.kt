@@ -18,8 +18,8 @@ import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
     private val controllers: ArrayList<PitchController> = ArrayList()
-    private var minimumPitch: ControlInput? = null
-    private var maximumPitch: ControlInput? = null
+    var minimumPitch: ControlInput? = null
+    var maximumPitch: ControlInput? = null
     var currentPitchMode: Text? = null
 
     override fun subscribeToEvents() {
@@ -49,11 +49,8 @@ class PitchComputer : Computer(), PitchController {
         val finalInput: ControlInput? = inputs.filter {
             it.priority.value == inputs[0].priority.value
                     && !limiters.any { limiter ->
-                !it.priority.isHigherOrSame(
-                    limiter.blockPitchChange(
-                        computers,
-                        if (it.target > pitch) Direction.UP else Direction.DOWN
-                    )
+                it.priority != ControlInput.Priority.SUGGESTION && !it.priority.isHigherOrSame(
+                    limiter.blockPitchChange(computers, if (it.target > pitch) Direction.UP else Direction.DOWN)
                 )
             }
                     && (it.priority.isHigherOrSame(minimumPitch?.priority) || it.target >= (minimumPitch?.target
@@ -70,22 +67,23 @@ class PitchComputer : Computer(), PitchController {
         currentPitchMode = finalInput.text
     }
 
-    private fun onPitchChange(entity: Entity, pitchDelta: Float): Float? {
+    private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {
         if (entity is ClientPlayerEntity) {
-            val newPitch: Float = -entity.pitch - pitchDelta
+            val pitchDelta: Float = -mcPitchDelta
+
+            val oldPitch: Float = -entity.pitch
+            val newPitch: Float = oldPitch + pitchDelta
+
             val min: ControlInput? = minimumPitch
             val max: ControlInput? = maximumPitch
-            if (min != null && newPitch < min.target) {
-                return 0.0f
+            if (min != null && pitchDelta < 0.0f && newPitch < min.target) {
+                return -(min.target - oldPitch).coerceAtMost(0.0f)
             }
-            if (max != null && newPitch > max.target) {
-                return 0.0f
+            if (max != null && pitchDelta > 0.0f && newPitch > max.target) {
+                return -(max.target - oldPitch).coerceAtLeast(0.0f)
             }
             if (limiters.any { limiter ->
-                    limiter.blockPitchChange(
-                        ComputerHost,
-                        if (pitchDelta < 0) Direction.UP else Direction.DOWN
-                    ) != null
+                    limiter.blockPitchChange(ComputerHost, if (pitchDelta > 0) Direction.UP else Direction.DOWN) != null
                 }) {
                 return 0.0f
             }
@@ -124,6 +122,6 @@ class PitchComputer : Computer(), PitchController {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("pitch")
+        val ID: Identifier = FlightAssistant.id("pitch")
     }
 }

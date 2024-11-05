@@ -9,14 +9,14 @@ class SafetyOptions {
     var elytraDurabilityAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
 
     @SerialEntry
-    var voidAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
+    var stallAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
 
+    @SerialEntry
+    var voidAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
     @SerialEntry
     var voidLimitPitch: Boolean = true
-
     @SerialEntry
     var voidAutoThrust: Boolean = true
-
     @SerialEntry
     var voidAutoPitch: Boolean = true
 

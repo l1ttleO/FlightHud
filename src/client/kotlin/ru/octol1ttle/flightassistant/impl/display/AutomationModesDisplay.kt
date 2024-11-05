@@ -33,7 +33,7 @@ class AutomationModesDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("automation_mode")
+        val ID: Identifier = FlightAssistant.id("automation_mode")
         const val TOTAL_MODES: Float = 5.0f
     }
 

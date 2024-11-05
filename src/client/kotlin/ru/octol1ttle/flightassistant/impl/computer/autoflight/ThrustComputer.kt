@@ -15,7 +15,7 @@ class ThrustComputer : Computer() {
     private val controllers: ArrayList<ThrustController> = ArrayList()
     private var manualThrust: Float = 0.0f
     var currentThrustMode: Text? = null
-    var anyActive: Boolean = false
+    var needsManualThrust: Boolean = false
 
     override fun invokeEvents() {
         ThrustSourceRegistrationCallback.EVENT.invoker().register(sources::add)
@@ -26,17 +26,13 @@ class ThrustComputer : Computer() {
         if (!computers.data.automationsAllowed()) {
             return
         }
+        needsManualThrust = false
 
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
-        if (thrustSource == null) {
-            anyActive = false
-            return
-        }
-        anyActive = true
 
         val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
-            thrustSource.tickThrust(computers, manualThrust)
+            thrustSource?.tickThrust(computers, manualThrust)
             currentThrustMode =
                 if (manualThrust != 0.0f) Text.translatable(
                     "mode.flightassistant.thrust.manual",
@@ -46,13 +42,20 @@ class ThrustComputer : Computer() {
             return
         }
 
+        if (thrustSource == null) {
+            needsManualThrust = true
+            return
+        }
+
         val finalInput: ControlInput = inputs.filter { it.priority.value == inputs[0].priority.value }.maxBy { it.target }
 
-        thrustSource.tickThrust(computers, finalInput.target)
-        currentThrustMode = finalInput.text
+        if (finalInput.priority != ControlInput.Priority.SUGGESTION) {
+            thrustSource.tickThrust(computers, finalInput.target)
+            currentThrustMode = finalInput.text
+        }
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("thrust")
+        val ID: Identifier = FlightAssistant.id("thrust")
     }
 }

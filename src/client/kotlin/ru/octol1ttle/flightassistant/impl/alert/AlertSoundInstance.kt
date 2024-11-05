@@ -14,6 +14,7 @@ class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
         this.relative = true
         this.attenuationType = SoundInstance.AttenuationType.NONE
         this.repeat = data.repeat != AlertData.RepeatType.NO_REPEAT
+        TeleportCom
     }
 
     override fun canPlay(): Boolean {

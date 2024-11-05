@@ -63,6 +63,6 @@ class RadarAltitudeDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("radar_altitude")
+        val ID: Identifier = FlightAssistant.id("radar_altitude")
     }
 }

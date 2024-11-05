@@ -68,6 +68,6 @@ class CoordinatesDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("coordinates")
+        val ID: Identifier = FlightAssistant.id("coordinates")
     }
 }

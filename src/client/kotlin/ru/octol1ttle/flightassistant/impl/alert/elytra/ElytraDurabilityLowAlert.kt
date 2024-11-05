@@ -7,7 +7,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class ElytraDurabilityLowAlert : Alert() {
+class ElytraDurabilityLowAlert : Alert(), ECAMAlert {
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 

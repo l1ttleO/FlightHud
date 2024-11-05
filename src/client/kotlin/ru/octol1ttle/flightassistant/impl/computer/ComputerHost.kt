@@ -30,11 +30,12 @@ internal object ComputerHost : ComputerAccess {
     private fun registerBuiltin() {
         register(AirDataComputer.ID, AirDataComputer(mc))
 
-        register(ElytraStatusComputer.ID, ElytraStatusComputer())
+        register(StallComputer.ID, StallComputer())
         register(VoidProximityComputer.ID, VoidProximityComputer())
-        register(FireworkComputer.ID, FireworkComputer(mc))
-        register(ThrustComputer.ID, ThrustComputer())
+        register(ElytraStatusComputer.ID, ElytraStatusComputer())
         register(PitchComputer.ID, PitchComputer())
+        register(ThrustComputer.ID, ThrustComputer())
+        register(FireworkComputer.ID, FireworkComputer(mc))
 
         register(AlertComputer.ID, AlertComputer(mc.soundManager))
     }

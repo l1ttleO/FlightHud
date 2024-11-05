@@ -7,59 +7,117 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.*
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
+
 
 class AttitudeDisplay : Display() {
     override fun enabled(): Boolean {
         return FAConfig.display.showAttitude
     }
 
-    // TODO: display minimum/maximum pitch
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
         with(drawContext) {
             matrices.push()
-            matrices.translate(0.0, 0.0, -200.0)
+            matrices.translate(0, 0, -200)
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
-            if (!FAConfig.display.drawHorizonOutsideFrame) {
-                HudFrame.scissor(this)
-            }
-            getScreenSpaceY(0.0f)?.let {
-                val leftXEnd: Int = (centerX - halfWidth * 0.025).toInt()
-                drawHorizontalLine(0, leftXEnd, it, primaryColor)
-
-                val rightXStart: Int = (centerX + halfWidth * 0.025).toInt()
-                drawHorizontalLine(rightXStart, scaledWindowWidth, it, primaryColor)
-
-                if (FAConfig.display.showHorizonHeading) {
-                    drawHeading(computers, it)
-                }
-            }
-            if (!FAConfig.display.drawHorizonOutsideFrame) {
-                disableScissor()
-            }
-
-            val step: Int = FAConfig.display.attitudeDegreeStep
-
-            if (!FAConfig.display.drawPitchOutsideFrame) {
-                HudFrame.scissor(this)
-            }
-            val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.pitch.toInt(), step)
-            for (i: Int in nextUp..90 step step) {
-                drawPitchBar(i, (getScreenSpaceY(i.toFloat()) ?: break))
-            }
-
-            val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.pitch.toDouble(), step)
-            for (i: Int in nextDown downTo -90 step step) {
-                drawPitchBar(i, (getScreenSpaceY(i.toFloat()) ?: break))
-            }
-            if (!FAConfig.display.drawPitchOutsideFrame) {
-                disableScissor()
-            }
+            renderHorizon(computers)
+            renderPitchBars(computers)
+            renderPitchLimits(computers)
 
             matrices.pop()
+        }
+    }
+
+    private fun DrawContext.renderHorizon(computers: ComputerAccess) {
+        if (!FAConfig.display.drawHorizonOutsideFrame) {
+            HudFrame.scissor(this)
+        }
+
+        getScreenSpaceY(0.0f)?.let {
+            val leftXEnd: Int = (centerX - halfWidth * 0.025).toInt()
+            drawHorizontalLine(0, leftXEnd, it, primaryColor)
+
+            val rightXStart: Int = (centerX + halfWidth * 0.025).toInt()
+            drawHorizontalLine(rightXStart, scaledWindowWidth, it, primaryColor)
+
+            if (FAConfig.display.showHorizonHeading) {
+                drawHeading(computers, it)
+            }
+        }
+
+        if (!FAConfig.display.drawHorizonOutsideFrame) {
+            disableScissor()
+        }
+    }
+
+    private fun DrawContext.renderPitchBars(computers: ComputerAccess) {
+        val step: Int = FAConfig.display.attitudeDegreeStep
+        if (!FAConfig.display.drawPitchOutsideFrame) {
+            HudFrame.scissor(this)
+        }
+        val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.pitch.toInt(), step)
+        for (i: Int in nextUp..90 step step) {
+            drawPitchBar(computers, i, (getScreenSpaceY(i.toFloat()) ?: break))
+        }
+
+        val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.pitch.toDouble(), step)
+        for (i: Int in nextDown downTo -90 step step) {
+            drawPitchBar(computers, i, (getScreenSpaceY(i.toFloat()) ?: break))
+        }
+        if (!FAConfig.display.drawPitchOutsideFrame) {
+            disableScissor()
+        }
+    }
+
+    private fun DrawContext.renderPitchLimits(computers: ComputerAccess) {
+        val step: Int = FAConfig.display.attitudeDegreeStep / 2
+        if (!FAConfig.display.drawPitchOutsideFrame) {
+            HudFrame.scissor(this)
+        }
+        val arrowText: Text = Text.literal("^")
+
+        val maxInput: ControlInput? = computers.pitch.maximumPitch
+        var max: Float = maxInput?.target ?: 90.0f
+        while (max <= 90) {
+            val y: Int = getScreenSpaceY(max) ?: break
+            matrices.push()
+
+            matrices.translate(centerXI, y, 0) // Rotate around the middle of the arrow
+            matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(180.0f)) // Flip upside down
+            drawMiddleAlignedText(
+                arrowText,
+                -1,
+                0,
+                if (maxInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
+            )
+
+            matrices.pop()
+            max += step
+        }
+
+        val minInput: ControlInput? = computers.pitch.minimumPitch
+        var min: Float = minInput?.target ?: -90.0f
+        while (min >= -90) {
+            val y: Int = getScreenSpaceY(min) ?: break
+            matrices.push()
+
+            drawMiddleAlignedText(
+                arrowText,
+                centerXI,
+                y,
+                if (minInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
+            )
+
+            matrices.pop()
+            min -= step
+        }
+
+        if (!FAConfig.display.drawPitchOutsideFrame) {
+            disableScissor()
         }
     }
 
@@ -102,32 +160,29 @@ class AttitudeDisplay : Display() {
         }
     }
 
-    private fun DrawContext.drawPitchBar(pitch: Int, y: Int) {
+    private fun DrawContext.drawPitchBar(computers: ComputerAccess, pitch: Int, y: Int) {
         if (pitch == 0) return
+        val min: ControlInput? = computers.pitch.minimumPitch
+        val max: ControlInput? = computers.pitch.maximumPitch
+        val color: Int =
+            if (max != null && pitch >= max.target)
+                if (max.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
+            else if (min != null && pitch <= min.target)
+                if (min.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
+            else
+                primaryColor
 
         val leftXEnd: Int = (centerX - halfWidth * 0.05).toInt()
         val leftXStart: Int = (leftXEnd - halfWidth * 0.075).toInt()
-        drawRightAlignedText(pitch.toString(), leftXStart - 2, if (pitch > 0) y else y - 4, primaryColor)
-        drawVerticalLine(leftXStart, y, y + 5 * pitch.sign, primaryColor)
-        drawHorizontalLineDashed(
-            leftXStart,
-            leftXEnd,
-            y,
-            if (pitch < 0) 3 else 1,
-            primaryColor
-        )
+        drawRightAlignedText(pitch.toString(), leftXStart - 2, if (pitch > 0) y else y - 4, color)
+        drawVerticalLine(leftXStart, y, y + 5 * pitch.sign, color)
+        drawHorizontalLineDashed(leftXStart, leftXEnd, y, if (pitch < 0) 3 else 1, color)
 
         val rightXStart: Int = (centerX + halfWidth * 0.05).toInt()
         val rightXEnd: Int = (rightXStart + halfWidth * 0.075).toInt()
-        drawHorizontalLineDashed(
-            rightXStart,
-            rightXEnd,
-            y,
-            if (pitch < 0) 3 else 1,
-            primaryColor
-        )
-        drawVerticalLine(rightXEnd, y, y + 5 * pitch.sign, primaryColor)
-        drawText(pitch.toString(), rightXEnd + 4, if (pitch > 0) y else y - 4, primaryColor)
+        drawHorizontalLineDashed(rightXStart, rightXEnd, y, if (pitch < 0) 3 else 1, color)
+        drawVerticalLine(rightXEnd, y, y + 5 * pitch.sign, color)
+        drawText(pitch.toString(), rightXEnd + 4, if (pitch > 0) y else y - 4, color)
     }
 
     override fun renderFaulted(drawContext: DrawContext) {
@@ -142,6 +197,6 @@ class AttitudeDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("attitude")
+        val ID: Identifier = FlightAssistant.id("attitude")
     }
 }

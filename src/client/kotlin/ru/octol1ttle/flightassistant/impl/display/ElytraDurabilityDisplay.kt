@@ -48,6 +48,6 @@ class ElytraDurabilityDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("elytra_durability")
+        val ID: Identifier = FlightAssistant.id("elytra_durability")
     }
 }

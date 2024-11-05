@@ -10,10 +10,13 @@ alerts.flightassistant:
       flightassistant:radar_altitude: R/ALT DSPL FAULT
       flightassistant:speed: SPD DSPL FAULT
       flightassistant:velocity_components: VEL/CPMN DSPL FAULT
+  stall:
+    .: STALL
   autoflight:
     .: AUTO FLT
     pitch_fault: PITCH CTL FAULT
     thrust_fault: THR CTL FAULT
+    no_thrust_source: NO THR SRC AVAIL
   firework:
     .: FRWK
     fault: SYS FAULT
@@ -28,6 +31,7 @@ alerts.flightassistant:
   navigation:
     .: NAV
     air_data_fault: AIR DATA FAULT
+    stall_fault: STALL DETECT FAULT
     void_proximity_vault: VOID PROX FAULT
     approaching_void_damage_altitude: APPR.ING VOID DMG ALT
     reached_void_damage_altitude: REACHED VOID DMG ALT
@@ -96,6 +100,9 @@ config.flightassistant:
       elytra_durability:
         .: Elytra durability
         alert_mode: Elytra durability alert mode
+      stall:
+        .: Stall
+        alert_mode: Stall alert mode
       void:
         .: Void damage altitude
         alert_mode: Void damage altitude alert mode

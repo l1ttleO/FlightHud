@@ -77,6 +77,6 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("air_data")
+        val ID: Identifier = FlightAssistant.id("air_data")
     }
 }

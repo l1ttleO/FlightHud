@@ -3,11 +3,12 @@ package ru.octol1ttle.flightassistant.api.util
 import java.awt.Color
 import net.minecraft.client.font.TextRenderer
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-private val textRenderer: TextRenderer = mc.textRenderer
+internal val textRenderer: TextRenderer = mc.textRenderer
 
 val fontHeight: Int
     get() = textRenderer.fontHeight
@@ -37,6 +38,14 @@ val warningColor: Int
     get() = FAConfig.display.warningColor.rgb
 
 fun DrawContext.scaleMatrix(scale: Float, trueX: Int, trueY: Int): Pair<Int, Int> {
+    matrices.scale(scale, scale, 1.0f)
+
+    val x: Int = (trueX / scale).toInt()
+    val y: Int = (trueY / scale).toInt()
+    return Pair(x, y)
+}
+
+fun DrawContext.scaleMatrix(scale: Float, trueX: Float, trueY: Float): Pair<Int, Int> {
     matrices.scale(scale, scale, 1.0f)
 
     val x: Int = (trueX / scale).toInt()
@@ -99,4 +108,23 @@ fun DrawContext.drawRightAlignedText(text: Text, x: Int, y: Int, color: Int) {
 
 fun DrawContext.drawMiddleAlignedText(text: Text, x: Int, y: Int, color: Int) {
     drawText(textRenderer, text, x - getTextWidth(text) / 2 + 1, y, color, false)
+}
+
+fun DrawContext.drawHighlightedCenteredText(text: Text, x: Int, y: Int, color: Int, highlight: Boolean) {
+    matrices.push()
+
+    if (highlight) {
+        val halfWidth: Int = getTextWidth(text) / 2
+        fill(x - halfWidth - 1, y - 1, x + halfWidth + 2, y + 8, color)
+        matrices.translate(0, 0, 100)
+        drawMiddleAlignedText(text, x, y, getContrasting(color))
+    } else {
+        drawMiddleAlignedText(text, x, y, color)
+    }
+
+    matrices.pop()
+}
+
+fun MatrixStack.translate(x: Int, y: Int, z: Int) {
+    translate(x.toFloat(), y.toFloat(), z.toFloat())
 }

@@ -8,7 +8,11 @@ data class ControlInput(val target: Float, val priority: Priority, val text: Tex
         HIGH(1),
         NORMAL(2),
         LOW(3),
-        LOWEST(4);
+
+        /**
+         * Indicates that this control input is only a suggestion and shouldn't be used to control the player camera
+         */
+        SUGGESTION(4);
 
         fun isHigherOrSame(other: Priority?): Boolean {
             if (other == null) {

@@ -22,6 +22,7 @@ class AlertDisplay : Display() {
             val x: Int = HudFrame.left + 10
             var y: Int = HudFrame.top + 5
 
+            var renderedCentered = false
             for (category: AlertCategory in computers.alert.categories) {
                 val copy: MutableText = category.categoryText.copy()
                 drawText(
@@ -33,7 +34,15 @@ class AlertDisplay : Display() {
                 copy.append(" ")
 
                 for (alert: Alert in category.activeAlerts) {
-                    y += fontHeight * alert.render(this, computers, x + getTextWidth(copy), x, y)
+                    if (!renderedCentered && alert is CenteredAlert) {
+                        alert.render(this, computers, centerYI + 8)
+                        renderedCentered = true
+                        y += fontHeight
+                    }
+
+                    if (alert is ECAMAlert) {
+                        y += fontHeight * alert.render(this, computers, x + getTextWidth(copy), x, y)
+                    }
                 }
                 y += 3
             }
@@ -50,6 +59,6 @@ class AlertDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("alert")
+        val ID: Identifier = FlightAssistant.id("alert")
     }
 }

@@ -37,11 +37,11 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
-        if (FAConfig.safety.voidLimitPitch && status != Status.ABOVE_GROUND) {
+        if (status != Status.ABOVE_GROUND) {
             return ControlInput(
                 (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
                     .coerceIn(-35.0f..55.0f),
-                ControlInput.Priority.HIGH,
+                if (FAConfig.safety.voidLimitPitch) ControlInput.Priority.HIGH else ControlInput.Priority.SUGGESTION,
                 Text.translatable("mode.flightassistant.pitch.void_protection")
             )
         }
@@ -58,8 +58,12 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
-        if (FAConfig.safety.voidAutoThrust && status == Status.REACHED_DAMAGE_ALTITUDE) {
-            return ControlInput(1.0f, ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.thrust.maximum"))
+        if (FAConfig.safety.voidAutoThrust && status < Status.CLEAR_OF_DAMAGE_ALTITUDE) {
+            return ControlInput(
+                1.0f,
+                if (status == Status.REACHED_DAMAGE_ALTITUDE) ControlInput.Priority.HIGH else ControlInput.Priority.SUGGESTION,
+                Text.translatable("mode.flightassistant.thrust.maximum")
+            )
         }
 
         return null
@@ -73,6 +77,6 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("void_proximity")
+        val ID: Identifier = FlightAssistant.id("void_proximity")
     }
 }

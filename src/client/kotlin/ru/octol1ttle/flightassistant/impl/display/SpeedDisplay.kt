@@ -119,6 +119,6 @@ class SpeedDisplay : Display() {
 
     companion object {
         private const val READING_MATRIX_SCALE: Float = 1.5f
-        val ID: Identifier = FlightAssistant.displayId("speed")
+        val ID: Identifier = FlightAssistant.id("speed")
     }
 }

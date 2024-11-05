@@ -67,7 +67,7 @@ class ElytraStatusComputer : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("elytra_status")
+        val ID: Identifier = FlightAssistant.id("elytra_status")
     }
 
     enum class DurabilityUnits : NameableEnum {

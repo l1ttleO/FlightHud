@@ -90,12 +90,12 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Float>("frame.width") {
                 setDisplayName()
                 binding(current::frameWidth, defaults.frameWidth)
-                controller(slider(0f..1f, 0.05f, percentageFormatter))
+                controller(slider(0.2f..0.8f, 0.05f, percentageFormatter))
             }
             rootOptions.register<Float>("frame.height") {
                 setDisplayName()
                 binding(current::frameHeight, defaults.frameHeight)
-                controller(slider(0f..1f, 0.05f, percentageFormatter))
+                controller(slider(0.2f..0.8f, 0.05f, percentageFormatter))
             }
 
             rootOptions.registerLabel("colors", Text.translatable("config.flightassistant.options.display.colors"))
@@ -234,8 +234,18 @@ object FAModMenuIntegration : ModMenuApi {
             }
 
             rootOptions.registerLabel(
+                "stall",
+                Text.translatable("config.flightassistant.options.safety.stall")
+            )
+            rootOptions.register<SafetyOptions.AlertMode>("stall.alert_mode") {
+                setSafetyName()
+                binding(current::stallAlertMode, defaults.stallAlertMode)
+                controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+
+            rootOptions.registerLabel(
                 "void",
-                Text.translatable("config.flightassistant.options.safety.void.alert_mode")
+                Text.translatable("config.flightassistant.options.safety.void")
             )
             rootOptions.register<SafetyOptions.AlertMode>("void.alert_mode") {
                 setSafetyName()

@@ -116,6 +116,6 @@ class AltitudeDisplay : Display() {
 
     companion object {
         private const val READING_MATRIX_SCALE: Float = 1.5f
-        val ID: Identifier = FlightAssistant.displayId("altitude")
+        val ID: Identifier = FlightAssistant.id("altitude")
     }
 }

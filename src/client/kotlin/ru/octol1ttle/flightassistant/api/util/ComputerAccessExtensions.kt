@@ -25,3 +25,6 @@ val ComputerAccess.firework: FireworkComputer
 
 val ComputerAccess.pitch: PitchComputer
     get() = get(PitchComputer.ID) as PitchComputer
+
+val ComputerAccess.stall: StallComputer
+    get() = get(StallComputer.ID) as StallComputer

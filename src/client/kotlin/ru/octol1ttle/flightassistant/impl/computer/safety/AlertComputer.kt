@@ -9,10 +9,12 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
+import ru.octol1ttle.flightassistant.impl.alert.autoflight.NoThrustSourceAlert
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
+import ru.octol1ttle.flightassistant.impl.alert.stall.*
 import ru.octol1ttle.flightassistant.impl.computer.*
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
@@ -31,6 +33,11 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .addAll(HudDisplayHost.identifiers().map { DisplayFaultAlert(it) })
         )
         register(
+            AlertCategory(Text.translatable("alerts.flightassistant.stall"))
+                .add(ApproachingStallAlert())
+                .add(FullStallAlert())
+        )
+        register(
             AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
                 .add(
                     ComputerFaultAlert(
@@ -44,6 +51,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                         Text.translatable("alerts.flightassistant.autoflight.thrust_fault")
                     )
                 )
+                .add(NoThrustSourceAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.firework"))
@@ -72,6 +80,12 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
                 .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault")))
+                .add(
+                    ComputerFaultAlert(
+                        StallComputer.ID,
+                        Text.translatable("alerts.flightassistant.navigation.stall_fault")
+                    )
+                )
                 .add(ComputerFaultAlert(VoidProximityComputer.ID, Text.translatable("alerts.flightassistant.navigation.void_proximity_fault")))
                 .add(ApproachingVoidDamageAltitudeAlert())
                 .add(ReachedVoidDamageAltitudeAlert())
@@ -93,7 +107,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
 
         categories.sortBy { it.getHighestPriority()?.priority }
 
-        var interrupt = false
+        var interrupt: Boolean = !computers.data.flying
         for (category: AlertCategory in categories) {
             for (alert: Alert in category.activeAlerts) {
                 if (interrupt) {
@@ -115,6 +129,6 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("alert")
+        val ID: Identifier = FlightAssistant.id("alert")
     }
 }

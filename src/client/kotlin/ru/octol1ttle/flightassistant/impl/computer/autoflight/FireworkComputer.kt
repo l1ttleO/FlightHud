@@ -80,6 +80,6 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.computerId("firework")
+        val ID: Identifier = FlightAssistant.id("firework")
     }
 }

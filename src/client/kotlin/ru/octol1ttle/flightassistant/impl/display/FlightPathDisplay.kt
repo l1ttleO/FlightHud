@@ -25,7 +25,7 @@ class FlightPathDisplay : Display() {
             }
 
             matrices.push()
-            matrices.translate(0.0, 0.0, -100.0)
+            matrices.translate(0, 0, -100)
             val (x: Int, y: Int) = scaleMatrix(FAConfig.display.flightPathVectorSize, trueX, trueY)
 
             val bodySideSize = 3
@@ -57,6 +57,6 @@ class FlightPathDisplay : Display() {
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.displayId("flight_path")
+        val ID: Identifier = FlightAssistant.id("flight_path")
     }
 }

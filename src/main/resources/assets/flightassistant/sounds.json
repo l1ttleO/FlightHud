@@ -1,4 +1,14 @@
 {
+  "approaching_stall": {
+    "sounds": [
+      "flightassistant:approaching_stall"
+    ]
+  },
+  "full_stall": {
+    "sounds": [
+      "flightassistant:full_stall"
+    ]
+  },
   "master_caution": {
     "sounds": [
       "flightassistant:master_caution"

@@ -53,14 +53,6 @@ object FlightAssistant : ClientModInitializer {
         return Identifier.of(MOD_ID, path)
     }
 
-    internal fun displayId(display: String): Identifier {
-        return id("displays/$display")
-    }
-
-    internal fun computerId(computer: String): Identifier {
-        return id ("computers/$computer")
-    }
-
     internal fun soundEvent(name: String): SoundEvent {
         return SoundEvent.of(id(name))
     }

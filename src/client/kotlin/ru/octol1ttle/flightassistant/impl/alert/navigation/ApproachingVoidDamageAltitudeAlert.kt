@@ -8,7 +8,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
-class ApproachingVoidDamageAltitudeAlert : Alert() {
+class ApproachingVoidDamageAltitudeAlert : Alert(), ECAMAlert {
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
