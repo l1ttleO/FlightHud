@@ -85,6 +85,7 @@ object FAModMenuIntegration : ModMenuApi {
             name(title)
 
             val percentageFormatter: (Float) -> Text = { value: Float -> Text.of("${(value * 100).toInt()}%") }
+            val degreeFormatter: (Int) -> Text = { value: Int -> Text.of("$value°") }
 
             rootOptions.registerLabel("frame", Text.translatable("config.flightassistant.options.display.frame"))
             rootOptions.register<Float>("frame.width") {
@@ -124,7 +125,7 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Int>("attitude.degree_step") {
                 setDisplayName()
                 binding(current::attitudeDegreeStep, defaults.attitudeDegreeStep)
-                controller(slider(5..45, 5) { value: Int -> Text.of("$value*") })
+                controller(slider(5..45, 5), degreeFormatter)
             }
             rootOptions.register<Boolean>("attitude.horizon_outside_frame") {
                 setDisplayName()
@@ -144,7 +145,7 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Int>("attitude.heading_step") {
                 setDisplayName()
                 binding(current::headingDegreeStep, defaults.headingDegreeStep)
-                controller(slider(5..180, 5) { value: Int -> Text.of("$value*") })
+                controller(slider(5..180, 5), degreeFormatter)
             }
 
             rootOptions.registerLabel("speed", Text.translatable("config.flightassistant.options.display.speed"))
