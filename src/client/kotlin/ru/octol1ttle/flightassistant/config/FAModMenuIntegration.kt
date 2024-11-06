@@ -125,7 +125,7 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Int>("attitude.degree_step") {
                 setDisplayName()
                 binding(current::attitudeDegreeStep, defaults.attitudeDegreeStep)
-                controller(slider(5..45, 5), degreeFormatter)
+                controller(slider(5..45, 5, degreeFormatter))
             }
             rootOptions.register<Boolean>("attitude.horizon_outside_frame") {
                 setDisplayName()
@@ -145,7 +145,7 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Int>("attitude.heading_step") {
                 setDisplayName()
                 binding(current::headingDegreeStep, defaults.headingDegreeStep)
-                controller(slider(5..180, 5), degreeFormatter)
+                controller(slider(5..45, 5, degreeFormatter))
             }
 
             rootOptions.registerLabel("speed", Text.translatable("config.flightassistant.options.display.speed"))
