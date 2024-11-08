@@ -12,10 +12,14 @@ alerts.flightassistant:
       flightassistant:velocity_components: VEL/CPMN DSPL FAULT
   stall:
     .: STALL
+    detection_fault: STALL DETECT FAULT
   autoflight:
     .: AUTO FLT
     pitch_fault: PITCH CTL FAULT
     thrust_fault: THR CTL FAULT
+    thrust_locked:
+      .: THR LOCKED
+      move_thrust_levers: '-THR LEVERS: MOVE'
     no_thrust_source: NO THR SRC AVAIL
   firework:
     .: FRWK
@@ -31,7 +35,6 @@ alerts.flightassistant:
   navigation:
     .: NAV
     air_data_fault: AIR DATA FAULT
-    stall_fault: STALL DETECT FAULT
     void_proximity_vault: VOID PROX FAULT
     approaching_void_damage_altitude: APPR.ING VOID DMG ALT
     reached_void_damage_altitude: REACHED VOID DMG ALT
@@ -57,6 +60,7 @@ config.flightassistant:
       colors:
         .: Colors
         primary: Primary color
+        advisory: Advisory color
         caution: Caution color
         warning: Warning color
       attitude:
@@ -112,6 +116,7 @@ config.flightassistant:
 
 mode.flightassistant:
   thrust:
+    locked: THR LK
     maximum: THR MAX
   pitch:
     void_protection: VOID PROT

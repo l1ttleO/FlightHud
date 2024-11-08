@@ -20,7 +20,7 @@ class PitchComputer : Computer(), PitchController {
     private val controllers: ArrayList<PitchController> = ArrayList()
     var minimumPitch: ControlInput? = null
     var maximumPitch: ControlInput? = null
-    var currentPitchMode: Text? = null
+    var pitchMode: Text? = null
 
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
@@ -41,7 +41,7 @@ class PitchComputer : Computer(), PitchController {
 
         val inputs: List<ControlInput> = controllers.mapNotNull { it.getPitchInput(computers) }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
-            currentPitchMode = null
+            pitchMode = null
             return
         }
 
@@ -59,12 +59,12 @@ class PitchComputer : Computer(), PitchController {
                 ?: 90.0f))
         }.maxByOrNull { it.target }
         if (finalInput == null) {
-            currentPitchMode = null
+            pitchMode = null
             return
         }
 
         smoothSetPitch(computers.data.player, pitch, finalInput.target)
-        currentPitchMode = finalInput.text
+        pitchMode = finalInput.text
     }
 
     private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {

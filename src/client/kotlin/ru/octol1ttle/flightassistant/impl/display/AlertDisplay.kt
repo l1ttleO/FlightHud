@@ -33,6 +33,7 @@ class AlertDisplay : Display() {
                 )
                 copy.append(" ")
 
+                var lastRenderedLines = 0
                 for (alert: Alert in category.activeAlerts) {
                     if (!renderedCentered && alert is CenteredAlert) {
                         alert.render(this, computers, centerYI + 8)
@@ -41,7 +42,17 @@ class AlertDisplay : Display() {
                     }
 
                     if (alert is ECAMAlert) {
-                        y += fontHeight * alert.render(this, computers, x + getTextWidth(copy), x, y)
+                        if (lastRenderedLines > 1) {
+                            y += 4
+                            drawText(
+                                copy.setStyle(withUnderline),
+                                x,
+                                y,
+                                (category.getHighestPriority() ?: continue).colorSupplier.invoke()
+                            )
+                        }
+                        lastRenderedLines = alert.render(this, computers, x + getTextWidth(copy), x, y)
+                        y += fontHeight * lastRenderedLines
                     }
                 }
                 y += 3

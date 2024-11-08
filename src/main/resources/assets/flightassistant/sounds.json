@@ -18,5 +18,10 @@
     "sounds": [
       "flightassistant:master_warning"
     ]
+  },
+  "thrust_locked": {
+    "sounds": [
+      "flightassistant:thrust_locked"
+    ]
   }
 }

@@ -24,9 +24,15 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
                 FlightAssistant.soundEvent("master_warning"),
                 RepeatType.REPEAT_FADE_VOLUME
             ) { FAConfig.display.warningColor.rgb }
-        val MASTER_CAUTION =
+        val THRUST_LOCKED =
             AlertData(
                 3,
+                FlightAssistant.soundEvent("thrust_locked"),
+                RepeatType.REPEAT_CONSTANT_VOLUME
+            ) { FAConfig.display.cautionColor.rgb }
+        val MASTER_CAUTION =
+            AlertData(
+                4,
                 FlightAssistant.soundEvent("master_caution"),
                 RepeatType.NO_REPEAT
             ) { FAConfig.display.cautionColor.rgb }

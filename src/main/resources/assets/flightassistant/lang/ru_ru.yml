@@ -12,6 +12,7 @@ alerts.flightassistant:
       flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
   stall:
     .: СВАЛИВАНИЕ
+    detection_fault: ОТКАЗ ОБНАРУЖ
   autoflight:
     .: АВТО ПОЛЕТ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
@@ -31,7 +32,6 @@ alerts.flightassistant:
   navigation:
     .: НАВИГАЦ
     air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
-    stall_fault: ОТКАЗ ОБНАРУЖ СВАЛИВАНИЯ
     void_proximity_vault: ОТКАЗ БЛИЗ ПУСТ
     approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
     reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ

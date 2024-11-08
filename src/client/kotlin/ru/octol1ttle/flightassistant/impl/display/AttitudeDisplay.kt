@@ -82,7 +82,7 @@ class AttitudeDisplay : Display() {
 
         val maxInput: ControlInput? = computers.pitch.maximumPitch
         var max: Float = maxInput?.target ?: 90.0f
-        while (max <= 90) {
+        while (max <= 180) {
             val y: Int = getScreenSpaceY(max) ?: break
             matrices.push()
 
@@ -101,7 +101,7 @@ class AttitudeDisplay : Display() {
 
         val minInput: ControlInput? = computers.pitch.minimumPitch
         var min: Float = minInput?.target ?: -90.0f
-        while (min >= -90) {
+        while (min >= -180) {
             val y: Int = getScreenSpaceY(min) ?: break
             matrices.push()
 

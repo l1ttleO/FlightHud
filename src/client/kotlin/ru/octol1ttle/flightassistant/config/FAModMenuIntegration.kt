@@ -105,6 +105,11 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::primaryColor, defaults.primaryColor)
                 controller(colorPicker())
             }
+            rootOptions.register<Color>("colors.advisory") {
+                setDisplayName()
+                binding(current::advisoryColor, defaults.advisoryColor)
+                controller(colorPicker())
+            }
             rootOptions.register<Color>("colors.caution") {
                 setDisplayName()
                 binding(current::cautionColor, defaults.cautionColor)
@@ -145,7 +150,7 @@ object FAModMenuIntegration : ModMenuApi {
             rootOptions.register<Int>("attitude.heading_step") {
                 setDisplayName()
                 binding(current::headingDegreeStep, defaults.headingDegreeStep)
-                controller(slider(5..45, 5, degreeFormatter))
+                controller(slider(5..90, 5, degreeFormatter))
             }
 
             rootOptions.registerLabel("speed", Text.translatable("config.flightassistant.options.display.speed"))

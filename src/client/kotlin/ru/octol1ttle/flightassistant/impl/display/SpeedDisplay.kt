@@ -8,7 +8,6 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class SpeedDisplay : Display() {
@@ -38,15 +37,14 @@ class SpeedDisplay : Display() {
             if (speed <= 0.0) warningColor
             else primaryColor
 
-        if (speed > 0 || totalTicks % 20 >= 10) {
-            val text: String = speed.roundToInt().toString()
-            val width: Int = getTextWidth(text) + 4
-            val halfHeight = 6
-            val textY: Int = y - 4
+        val text: String = speed.roundToInt().toString()
+        val width: Int = getTextWidth(text) + 4
+        val halfHeight = 6
+        val textY: Int = y - 4
 
-            drawBorder(x - width, y - halfHeight, width + 1, halfHeight * 2 - 1, color)
-            drawRightAlignedText(text, x - 1, textY, color)
-        }
+        drawBorder(x - width, y - halfHeight, width + 1, halfHeight * 2 - 1, color)
+        drawRightAlignedText(text, x - 1, textY, color)
+
         matrices.pop()
     }
 

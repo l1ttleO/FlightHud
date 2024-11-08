@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "client": [
     "ClientShouldTickInvoker",
-    "EntityChangeLookDirectionMixin"
+    "EntityChangeLookDirectionMixin",
+    "sound.SoundManagerMixin",
+    "sound.SoundSystemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

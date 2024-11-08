@@ -1,58 +1,68 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
-import kotlin.math.roundToInt
-import net.minecraft.text.Text
+import net.minecraft.text.*
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.*
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.*
 
 class ThrustComputer : Computer() {
     private val sources: ArrayList<ThrustSource> = ArrayList()
     private val controllers: ArrayList<ThrustController> = ArrayList()
+    private var targetThrust: Float = 0.0f
     private var manualThrust: Float = 0.0f
-    var currentThrustMode: Text? = null
-    var needsManualThrust: Boolean = false
+    var thrustMode: Text? = null
+    var noThrustSource: Boolean = false
+    var thrustLocked: Boolean = false
 
     override fun invokeEvents() {
         ThrustSourceRegistrationCallback.EVENT.invoker().register(sources::add)
         ThrustControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
+    // TODO: thrust keybindings
     override fun tick(computers: ComputerAccess) {
         if (!computers.data.automationsAllowed()) {
             return
         }
-        needsManualThrust = false
 
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
+        if (thrustSource != null) {
+            noThrustSource = false
+        }
 
-        val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
-        if (inputs.isEmpty()) {
-            thrustSource?.tickThrust(computers, manualThrust)
-            currentThrustMode =
-                if (manualThrust != 0.0f) Text.translatable(
-                    "mode.flightassistant.thrust.manual",
-                    manualThrust.roundToInt()
-                )
-                else null
+        var inputs: List<ControlInput> =
+            controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
+        inputs =
+            inputs.filter { it.priority != ControlInput.Priority.SUGGESTION && it.priority.value == inputs[0].priority.value }
+        if (inputs.isNotEmpty()) {
+            val finalInput: ControlInput = inputs.maxBy { it.target }
+
+            targetThrust = finalInput.target
+            thrustMode = finalInput.text
+            thrustLocked = false
+        } else if (targetThrust != manualThrust) {
+            thrustMode =
+                Text.translatable("mode.flightassistant.thrust.locked").setStyle(Style.EMPTY.withColor(cautionColor))
+            thrustLocked = true
+        } else {
+            targetThrust = manualThrust
+            thrustLocked = false
+        }
+        if (targetThrust == 0.0f) {
             return
         }
 
         if (thrustSource == null) {
-            needsManualThrust = true
+            noThrustSource = true
+            thrustMode = null
             return
         }
 
-        val finalInput: ControlInput = inputs.filter { it.priority.value == inputs[0].priority.value }.maxBy { it.target }
-
-        if (finalInput.priority != ControlInput.Priority.SUGGESTION) {
-            thrustSource.tickThrust(computers, finalInput.target)
-            currentThrustMode = finalInput.text
-        }
+        thrustSource.tickThrust(computers, targetThrust)
     }
 
     companion object {

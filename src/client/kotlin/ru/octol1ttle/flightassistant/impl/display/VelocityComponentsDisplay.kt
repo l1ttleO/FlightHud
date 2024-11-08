@@ -8,7 +8,6 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class VelocityComponentsDisplay : Display() {
@@ -23,15 +22,12 @@ class VelocityComponentsDisplay : Display() {
 
             if (FAConfig.display.showVerticalSpeed) {
                 val verticalSpeed: Double = computers.data.velocity.y * 20
-                val danger: Boolean = verticalSpeed <= -10
-                if (!danger || totalTicks % 14 >= 7) {
-                    drawText(
-                        Text.translatable(
-                            "short.flightassistant.vertical_speed",
-                            ": ${verticalSpeed.roundToInt()}"
-                        ), x, y, if (verticalSpeed <= -10) warningColor else primaryColor
-                    )
-                }
+                drawText(
+                    Text.translatable(
+                        "short.flightassistant.vertical_speed",
+                        ": ${verticalSpeed.roundToInt()}"
+                    ), x, y, if (verticalSpeed <= -10) warningColor else primaryColor
+                )
                 y -= fontHeight
             }
             if (FAConfig.display.showGroundSpeed) {

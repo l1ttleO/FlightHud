@@ -7,9 +7,9 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
-import ru.octol1ttle.flightassistant.impl.alert.autoflight.NoThrustSourceAlert
+import ru.octol1ttle.flightassistant.impl.alert.autoflight.*
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
@@ -34,6 +34,12 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.stall"))
+                .add(
+                    ComputerFaultAlert(
+                        StallComputer.ID,
+                        Text.translatable("alerts.flightassistant.stall.detection_fault")
+                    )
+                )
                 .add(ApproachingStallAlert())
                 .add(FullStallAlert())
         )
@@ -51,6 +57,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                         Text.translatable("alerts.flightassistant.autoflight.thrust_fault")
                     )
                 )
+                .add(ThrustLockedAlert())
                 .add(NoThrustSourceAlert())
         )
         register(
@@ -80,12 +87,6 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
                 .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault")))
-                .add(
-                    ComputerFaultAlert(
-                        StallComputer.ID,
-                        Text.translatable("alerts.flightassistant.navigation.stall_fault")
-                    )
-                )
                 .add(ComputerFaultAlert(VoidProximityComputer.ID, Text.translatable("alerts.flightassistant.navigation.void_proximity_fault")))
                 .add(ApproachingVoidDamageAltitudeAlert())
                 .add(ReachedVoidDamageAltitudeAlert())
@@ -100,6 +101,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         categories.add(category)
     }
 
+    // TODO: alert keybindings
     override fun tick(computers: ComputerAccess) {
         for (category: AlertCategory in categories) {
             category.updateActiveAlerts(computers, soundManager)
@@ -110,18 +112,26 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         var interrupt: Boolean = !computers.data.flying
         for (category: AlertCategory in categories) {
             for (alert: Alert in category.activeAlerts) {
+                val soundInstance: AlertSoundInstance? = alert.soundInstance
                 if (interrupt) {
-                    if (alert.soundInstance != null) {
-                        soundManager.stop(alert.soundInstance)
+                    if (soundInstance != null) {
+                        if (soundInstance.isRepeatable) {
+                            soundManager.pause(soundInstance)
+                        } else {
+                            soundManager.stop(soundInstance)
+                        }
                     }
                     continue
                 }
 
-                if (alert.soundInstance == null) {
+                if (soundInstance == null) {
                     alert.soundInstance = AlertSoundInstance(computers.data.player, alert.data)
                     soundManager.play(alert.soundInstance)
+                    interrupt = true
+                } else if (soundInstance.isRepeatable) {
+                    soundManager.resume(soundInstance)
                 }
-                if (soundManager.isPlaying(alert.soundInstance)) {
+                if (soundManager.isPlaying(soundInstance)) {
                     interrupt = true
                 }
             }

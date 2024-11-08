@@ -31,6 +31,9 @@ val DrawContext.centerYI: Int
 val primaryColor: Int
     get() = FAConfig.display.primaryColor.rgb
 
+val advisoryColor: Int
+    get() = FAConfig.display.advisoryColor.rgb
+
 val cautionColor: Int
     get() = FAConfig.display.cautionColor.rgb
 

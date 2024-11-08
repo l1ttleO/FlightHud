@@ -11,8 +11,8 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AutomationModesDisplay : Display() {
-    private val thrustDisplay: ModeDisplay = ModeDisplay(1) { computers -> computers.thrust.currentThrustMode }
-    private val pitchDisplay: ModeDisplay = ModeDisplay(2) { computers -> computers.pitch.currentPitchMode }
+    private val thrustDisplay: ModeDisplay = ModeDisplay(1) { computers -> computers.thrust.thrustMode }
+    private val pitchDisplay: ModeDisplay = ModeDisplay(2) { computers -> computers.pitch.pitchMode }
 
     override fun enabled(): Boolean {
         return FAConfig.display.showAutomationModes
