@@ -40,6 +40,7 @@ class AlertCategory(val categoryText: Text) {
     }
 
     fun getHighestPriority(): AlertData? {
+        @Suppress("UsePropertyAccessSyntax")
         return if (activeAlerts.isEmpty()) null else activeAlerts[0].data
     }
 }

@@ -19,7 +19,8 @@ alerts.flightassistant:
     thrust_fault: THR CTL FAULT
     thrust_locked:
       .: THR LOCKED
-      move_thrust_levers: '-THR LEVERS: MOVE'
+      move_levers_forward: '-THR LEVERS: MOVE FWD'
+      move_levers_back: '-THR LEVERS: MOVE BACK'
     no_thrust_source: NO THR SRC AVAIL
   firework:
     .: FRWK
@@ -116,6 +117,7 @@ config.flightassistant:
 
 mode.flightassistant:
   thrust:
+    manual: MAN THR %s
     locked: THR LK
     maximum: THR MAX
   pitch:

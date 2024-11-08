@@ -4,11 +4,11 @@ import dev.isxander.yacl3.config.v2.api.SerialEntry
 
 class DisplayOptionsStorage {
     @SerialEntry
-    val flying = DisplayOptions()
+    var flying = DisplayOptions()
 
     @SerialEntry
-    val notFlyingHasElytra = DisplayOptions().setMinimal()
+    var notFlyingHasElytra = DisplayOptions().setMinimal()
 
     @SerialEntry
-    val notFlyingNoElytra = DisplayOptions().setDisabled()
+    var notFlyingNoElytra = DisplayOptions().setDisabled()
 }

@@ -9,9 +9,13 @@ object FATickCounter {
     private var lastMillis: Long = 0
 
     var totalTicks: Int = 0
+        private set
     var ticksPassed: Int = 0
+        private set
     var timePassed: Float = 0.0f
+        private set
     var tickDelta: Float = 0.0f
+        private set
 
     fun tick(player: ClientPlayerEntity, tickCounter: RenderTickCounter, paused: Boolean) {
         if (!paused) {

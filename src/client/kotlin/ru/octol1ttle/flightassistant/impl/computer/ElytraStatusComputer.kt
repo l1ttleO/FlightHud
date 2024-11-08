@@ -19,13 +19,13 @@ class ElytraStatusComputer : Computer() {
     override fun tick(computers: ComputerAccess) {
         val player: PlayerEntity = computers.data.player
 
-        for (stack in player.armorItems) {
+        for (stack: ItemStack in player.armorItems) {
             if (stack.item is ElytraItem) { // TODO: update to 1.21.3 and replace with isGliding check
                 activeElytra = stack
                 return
             }
         }
-        for (stack in player.handItems) {
+        for (stack: ItemStack in player.handItems) {
             if (stack.item is ElytraItem) {
                 activeElytra = stack
                 return

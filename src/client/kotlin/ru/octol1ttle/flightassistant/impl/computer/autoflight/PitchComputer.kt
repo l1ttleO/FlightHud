@@ -19,8 +19,11 @@ class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
     private val controllers: ArrayList<PitchController> = ArrayList()
     var minimumPitch: ControlInput? = null
+        private set
     var maximumPitch: ControlInput? = null
+        private set
     var pitchMode: Text? = null
+        private set
 
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
@@ -48,15 +51,9 @@ class PitchComputer : Computer(), PitchController {
         val pitch: Float = computers.data.pitch
         val finalInput: ControlInput? = inputs.filter {
             it.priority.value == inputs[0].priority.value
-                    && !limiters.any { limiter ->
-                it.priority != ControlInput.Priority.SUGGESTION && !it.priority.isHigherOrSame(
-                    limiter.blockPitchChange(computers, if (it.target > pitch) Direction.UP else Direction.DOWN)
-                )
-            }
-                    && (it.priority.isHigherOrSame(minimumPitch?.priority) || it.target >= (minimumPitch?.target
-                ?: -90.0f))
-                    && (it.priority.isHigherOrSame(maximumPitch?.priority) || it.target <= (maximumPitch?.target
-                ?: 90.0f))
+                    && !limiters.any { limiter -> it.priority != ControlInput.Priority.SUGGESTION && !it.priority.isHigherOrSame(limiter.blockPitchChange(computers, if (it.target > pitch) Direction.UP else Direction.DOWN)) }
+                    && (it.priority.isHigherOrSame(minimumPitch?.priority) || it.target >= (minimumPitch?.target ?: -90.0f))
+                    && (it.priority.isHigherOrSame(maximumPitch?.priority) || it.target <= (maximumPitch?.target ?: 90.0f))
         }.maxByOrNull { it.target }
         if (finalInput == null) {
             pitchMode = null

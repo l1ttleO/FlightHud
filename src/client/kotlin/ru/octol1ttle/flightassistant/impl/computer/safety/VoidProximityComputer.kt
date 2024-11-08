@@ -14,6 +14,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 
 class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustController {
     var status: Status = Status.ABOVE_GROUND
+        private set
 
     override fun subscribeToEvents() {
         PitchLimiterRegistrationCallback.EVENT.register { it.accept(this) }

@@ -23,6 +23,7 @@ object FlightAssistant : ClientModInitializer {
     override fun onInitializeClient() {
         logger.info("Initializing (stage 1)")
         FAConfig.load()
+        FAKeyBindings.setup()
         registerCallbacks()
     }
 
@@ -33,6 +34,7 @@ object FlightAssistant : ClientModInitializer {
             HudDisplayHost.sendRegistrationEvent()
         }
         WorldRenderEvents.START.register {
+            FAKeyBindings.checkPressed(ComputerHost)
             ComputerHost.tick(it.tickCounter())
 
             RenderMatrices.projectionMatrix.set(it.projectionMatrix())

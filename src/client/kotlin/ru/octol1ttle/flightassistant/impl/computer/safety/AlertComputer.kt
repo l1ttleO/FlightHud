@@ -34,12 +34,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.stall"))
-                .add(
-                    ComputerFaultAlert(
-                        StallComputer.ID,
-                        Text.translatable("alerts.flightassistant.stall.detection_fault")
-                    )
-                )
+                .add(ComputerFaultAlert(StallComputer.ID, Text.translatable("alerts.flightassistant.stall.detection_fault")))
                 .add(ApproachingStallAlert())
                 .add(FullStallAlert())
         )

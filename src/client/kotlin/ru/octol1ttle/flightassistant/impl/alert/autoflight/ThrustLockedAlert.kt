@@ -14,19 +14,14 @@ class ThrustLockedAlert : Alert(), ECAMAlert {
         return computers.thrust.thrustLocked
     }
 
-    // TODO: flash automation mode "THR LK"
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+        drawContext.drawText(Text.translatable("alerts.flightassistant.autoflight.thrust_locked"), firstLineX, y, cautionColor)
         drawContext.drawText(
-            Text.translatable("alerts.flightassistant.autoflight.thrust_locked"),
-            firstLineX,
-            y,
-            cautionColor
-        )
-        drawContext.drawText(
-            Text.translatable("alerts.flightassistant.autoflight.thrust_locked.move_thrust_levers"),
-            x,
-            y.plus(11),
-            advisoryColor
+            if (computers.thrust.manualThrust < computers.thrust.targetThrust)
+                Text.translatable("alerts.flightassistant.autoflight.thrust_locked.move_levers_forward")
+            else
+                Text.translatable("alerts.flightassistant.autoflight.thrust_locked.move_levers_back"),
+            x, y.plus(11), advisoryColor
         )
         return 2
     }

@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.api.util.data
 
 class StallComputer : Computer(), PitchLimiter, ThrustController {
     var status: Status = Status.SAFE
+        private set
 
     override fun subscribeToEvents() {
         PitchLimiterRegistrationCallback.EVENT.register { it.accept(this) }

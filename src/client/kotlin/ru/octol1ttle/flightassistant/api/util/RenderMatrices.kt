@@ -4,6 +4,7 @@ import org.joml.Matrix4f
 
 object RenderMatrices {
     var ready: Boolean = false
+        internal set
 
     val projectionMatrix = Matrix4f()
     val worldSpaceMatrix = Matrix4f()

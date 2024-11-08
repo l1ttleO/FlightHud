@@ -74,10 +74,12 @@ object FAConfig {
     fun load() {
         GLOBAL_HANDLER.load()
         DISPLAY_HANDLER.load()
+        SAFETY_HANDLER.load()
     }
 
     fun save() {
         GLOBAL_HANDLER.save()
         DISPLAY_HANDLER.save()
+        SAFETY_HANDLER.save()
     }
 }
