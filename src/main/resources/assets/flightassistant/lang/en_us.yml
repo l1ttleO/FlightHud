@@ -89,7 +89,7 @@ config.flightassistant:
         show: Show elytra durability
         units:
           .: Elytra durability units
-          raw: Raw
+          raw: Minecraft
           percentage: Percentage
           time: Time (approximate)
       misc:
@@ -139,3 +139,10 @@ short.flightassistant:
   speed: SPD
   vertical_speed: 'V/S%s'
   void: VOID
+
+keys.flightassistant:
+  .: FlightAssistant
+  decrease_thrust: Decrease thrust (move levers back)
+  increase_thrust: Increase thrust (move levers forward)
+  set_idle: Set thrust to idle (0%)
+  set_toga: Set thrust to TOGA (100%)

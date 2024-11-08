@@ -53,12 +53,7 @@ class RadarAltitudeDisplay : Display() {
 
     override fun renderFaulted(drawContext: DrawContext) {
         with(drawContext) {
-            drawText(
-                Text.translatable("short.flightassistant.radar_altitude"),
-                HudFrame.right - 1,
-                HudFrame.bottom + 4,
-                warningColor
-            )
+            drawText(Text.translatable("short.flightassistant.radar_altitude"), HudFrame.right - 1, HudFrame.bottom + 4, warningColor)
         }
     }
 

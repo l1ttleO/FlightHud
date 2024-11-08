@@ -18,13 +18,7 @@ class FullStallAlert : Alert(), CenteredAlert {
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, y: Int): Boolean {
-        drawContext.drawHighlightedCenteredText(
-            Text.translatable("alerts.flightassistant.stall"),
-            drawContext.centerXI,
-            y,
-            warningColor,
-            totalTicks % 10 >= 5
-        )
+        drawContext.drawHighlightedCenteredText(Text.translatable("alerts.flightassistant.stall"), drawContext.centerXI, y, warningColor, totalTicks % 10 >= 5)
         return true
     }
 }

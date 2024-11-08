@@ -58,12 +58,7 @@ class AltitudeDisplay : Display() {
         enableScissor(0, minY, scaledWindowWidth, maxY + 1)
 
         val scissorMaxY: Int = (if (FAConfig.display.showAltitudeReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt()
-        enableScissor(
-            0,
-            minY,
-            scaledWindowWidth,
-            scissorMaxY + 1
-        )
+        enableScissor(0, minY, scaledWindowWidth, scissorMaxY + 1)
         drawHorizontalLine(x, x + 30, y, primaryColor)
         drawHorizontalLine(x, x + 35, minY, primaryColor)
         if (maxY < scissorMaxY) {
@@ -77,12 +72,7 @@ class AltitudeDisplay : Display() {
         }
         disableScissor()
 
-        enableScissor(
-            0,
-            (if (FAConfig.display.showAltitudeReading) y + 5 * READING_MATRIX_SCALE else minY).toInt(),
-            scaledWindowWidth,
-            maxY + 1
-        )
+        enableScissor(0, (if (FAConfig.display.showAltitudeReading) y + 5 * READING_MATRIX_SCALE else minY).toInt(), scaledWindowWidth, maxY + 1)
         drawHorizontalLine(x, x + 35, maxY, primaryColor)
         val altitudeRoundedDown: Int = MathHelper.roundDownToMultiple(altitude, 5)
         for (i: Int in altitudeRoundedDown downTo (altitudeRoundedDown - 1000).coerceAtLeast(computers.data.world.bottomY) step 5) {

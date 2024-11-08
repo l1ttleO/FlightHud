@@ -1,3 +1,7 @@
+modmenu:
+  descriptionTranslation:
+    flightassistant: FlightAssistant предлагает вам ощутить полеты с Элитрами по-новому, и все на стороне клиента!
+
 alerts.flightassistant:
   fault:
     hud:
@@ -17,6 +21,10 @@ alerts.flightassistant:
     .: АВТО ПОЛЕТ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
     thrust_fault: ОТКАЗ УПР ТЯГОЙ
+    thrust_locked:
+      .: БЛОК ТЯГА
+      move_levers_forward: '-РЫЧАГ ТЯГИ: НАКЛ ВПЕРЕД'
+      move_levers_back: '-РЫЧАГ ТЯГИ: НАКЛ НАЗАД'
     no_thrust_source: ОТСУТ ИСТОЧ ТЯГИ
   firework:
     .: ФРВК
@@ -38,7 +46,7 @@ alerts.flightassistant:
 
 config.flightassistant:
   categories:
-    global: Глобальный настройки
+    global: Глобальные настройки
     no_elytra: На земле (без элитр)
     has_elytra: На земле (с элитрами)
     flying: В полёте
@@ -57,6 +65,7 @@ config.flightassistant:
       colors:
         .: Цвета
         primary: Основной цвет
+        advisory: Цвет указывающих элементов
         caution: Цвет предупреждения
         warning: Цвет опасности
       attitude:
@@ -112,6 +121,8 @@ config.flightassistant:
 
 mode.flightassistant:
   thrust:
+    manual: РУЧН ТЯГА %s
+    locked: БЛОК ТЯГА
     maximum: МАКС ТЯГА
   pitch:
     void_protection: ПУСТ ЗАЩ
@@ -132,3 +143,10 @@ short.flightassistant:
   speed: СКОР
   vertical_speed: 'В/С%s'
   void: ПУСТ
+
+keys.flightassistant:
+  .: FlightAssistant
+  decrease_thrust: Убавить тягу (накл. рычаги назад)
+  increase_thrust: Добавить тягу (накл. рычаги вперед)
+  set_idle: Установить нулевую тягу (0%)
+  set_toga: Установить взлётную тягу (100%)

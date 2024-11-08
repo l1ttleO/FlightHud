@@ -18,18 +18,8 @@ class CoordinatesDisplay : Display() {
             val x: Int = HudFrame.left + 10
             val y: Int = HudFrame.bottom - 19
 
-            drawText(
-                "X: ${computers.data.position.x.toInt()}${getDirectionSignX(computers.data.heading)}",
-                x,
-                y,
-                primaryColor
-            )
-            drawText(
-                "Z: ${computers.data.position.z.toInt()}${getDirectionSignZ(computers.data.heading)}",
-                x,
-                y + fontHeight,
-                primaryColor
-            )
+            drawText("X: ${computers.data.position.x.toInt()}${getDirectionSignX(computers.data.heading)}", x, y, primaryColor)
+            drawText("Z: ${computers.data.position.z.toInt()}${getDirectionSignZ(computers.data.heading)}", x, y + fontHeight, primaryColor)
         }
     }
 

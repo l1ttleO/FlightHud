@@ -25,12 +25,7 @@ class AlertDisplay : Display() {
             var renderedCentered = false
             for (category: AlertCategory in computers.alert.categories) {
                 val copy: MutableText = category.categoryText.copy()
-                drawText(
-                    copy.setStyle(withUnderline),
-                    x,
-                    y,
-                    (category.getHighestPriority() ?: continue).colorSupplier.invoke()
-                )
+                drawText(copy.setStyle(withUnderline), x, y, (category.getHighestPriority() ?: continue).colorSupplier.invoke())
                 copy.append(" ")
 
                 var lastRenderedLines = 0
@@ -44,12 +39,7 @@ class AlertDisplay : Display() {
                     if (alert is ECAMAlert) {
                         if (lastRenderedLines > 1) {
                             y += 4
-                            drawText(
-                                copy.setStyle(withUnderline),
-                                x,
-                                y,
-                                (category.getHighestPriority() ?: continue).colorSupplier.invoke()
-                            )
+                            drawText(copy.setStyle(withUnderline), x, y, (category.getHighestPriority() ?: continue).colorSupplier.invoke())
                         }
                         lastRenderedLines = alert.render(this, computers, x + getTextWidth(copy), x, y)
                         y += fontHeight * lastRenderedLines

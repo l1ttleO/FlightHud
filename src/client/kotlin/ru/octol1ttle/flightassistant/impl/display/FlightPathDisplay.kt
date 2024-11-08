@@ -47,12 +47,7 @@ class FlightPathDisplay : Display() {
 
     override fun renderFaulted(drawContext: DrawContext) {
         with(drawContext) {
-            drawMiddleAlignedText(
-                Text.translatable("short.flightassistant.flight_path"),
-                centerXI,
-                centerYI + 16,
-                warningColor
-            )
+            drawMiddleAlignedText(Text.translatable("short.flightassistant.flight_path"), centerXI, centerYI + 16, warningColor)
         }
     }
 

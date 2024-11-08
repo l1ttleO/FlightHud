@@ -61,12 +61,7 @@ class SpeedDisplay : Display() {
 
         enableScissor(0, minY, scaledWindowWidth, maxY + 1)
 
-        enableScissor(
-            0,
-            minY,
-            scaledWindowWidth,
-            (if (FAConfig.display.showSpeedReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt() + 1
-        )
+        enableScissor(0, minY, scaledWindowWidth, (if (FAConfig.display.showSpeedReading) y - 6 * READING_MATRIX_SCALE else maxY).toInt() + 1)
         drawHorizontalLine(x - 20, x, y, color)
         drawHorizontalLine(x - 35, x, minY, color)
         for (i: Int in speed.toInt()..speed.toInt() + 100) {

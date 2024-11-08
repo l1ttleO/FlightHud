@@ -88,12 +88,7 @@ class AttitudeDisplay : Display() {
 
             matrices.translate(centerXI, y, 0) // Rotate around the middle of the arrow
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(180.0f)) // Flip upside down
-            drawMiddleAlignedText(
-                arrowText,
-                -1,
-                0,
-                if (maxInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
-            )
+            drawMiddleAlignedText(arrowText, -1, 0, if (maxInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor)
 
             matrices.pop()
             max += step
@@ -105,12 +100,7 @@ class AttitudeDisplay : Display() {
             val y: Int = getScreenSpaceY(min) ?: break
             matrices.push()
 
-            drawMiddleAlignedText(
-                arrowText,
-                centerXI,
-                y,
-                if (minInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor
-            )
+            drawMiddleAlignedText(arrowText, centerXI, y, if (minInput?.priority == ControlInput.Priority.SUGGESTION) cautionColor else warningColor)
 
             matrices.pop()
             min -= step
@@ -187,12 +177,7 @@ class AttitudeDisplay : Display() {
 
     override fun renderFaulted(drawContext: DrawContext) {
         with(drawContext) {
-            drawMiddleAlignedText(
-                Text.translatable("short.flightassistant.attitude"),
-                centerXI,
-                centerYI - 16,
-                warningColor
-            )
+            drawMiddleAlignedText(Text.translatable("short.flightassistant.attitude"), centerXI, centerYI - 16, warningColor)
         }
     }
 

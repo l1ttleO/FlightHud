@@ -40,38 +40,18 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
-                .add(
-                    ComputerFaultAlert(
-                        PitchComputer.ID,
-                        Text.translatable("alerts.flightassistant.autoflight.pitch_fault")
-                    )
-                )
-                .add(
-                    ComputerFaultAlert(
-                        ThrustComputer.ID,
-                        Text.translatable("alerts.flightassistant.autoflight.thrust_fault")
-                    )
-                )
+                .add(ComputerFaultAlert(PitchComputer.ID, Text.translatable("alerts.flightassistant.autoflight.pitch_fault")))
+                .add(ComputerFaultAlert(ThrustComputer.ID, Text.translatable("alerts.flightassistant.autoflight.thrust_fault")))
                 .add(ThrustLockedAlert())
                 .add(NoThrustSourceAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.firework"))
-                .add(
-                    ComputerFaultAlert(
-                        FireworkComputer.ID,
-                        Text.translatable("alerts.flightassistant.firework.fault")
-                    )
-                )
+                .add(ComputerFaultAlert(FireworkComputer.ID, Text.translatable("alerts.flightassistant.firework.fault")))
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.flight_controls"))
-                .add(
-                    ComputerFaultAlert(
-                        PitchComputer.ID,
-                        Text.translatable("alerts.flightassistant.flight_controls.pitch_fault")
-                    )
-                )
+                .add(ComputerFaultAlert(PitchComputer.ID, Text.translatable("alerts.flightassistant.flight_controls.pitch_fault")))
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.elytra"))

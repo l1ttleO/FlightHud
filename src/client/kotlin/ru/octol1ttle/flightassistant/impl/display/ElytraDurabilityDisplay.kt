@@ -38,12 +38,7 @@ class ElytraDurabilityDisplay : Display() {
 
     override fun renderFaulted(drawContext: DrawContext) {
         with(drawContext) {
-            drawMiddleAlignedText(
-                Text.translatable("short.flightassistant.elytra_durability"),
-                centerXI,
-                HudFrame.bottom + 1,
-                warningColor
-            )
+            drawMiddleAlignedText(Text.translatable("short.flightassistant.elytra_durability"), centerXI, HudFrame.bottom + 1, warningColor)
         }
     }
 
