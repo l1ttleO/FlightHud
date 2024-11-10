@@ -20,12 +20,6 @@ alerts.flightassistant:
   autoflight:
     .: АВТО ПОЛЕТ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
-    thrust_fault: ОТКАЗ УПР ТЯГОЙ
-    thrust_locked:
-      .: БЛОК ТЯГА
-      move_levers_forward: '-РЫЧАГ ТЯГИ: НАКЛ ВПЕРЕД'
-      move_levers_back: '-РЫЧАГ ТЯГИ: НАКЛ НАЗАД'
-    no_thrust_source: ОТСУТ ИСТОЧ ТЯГИ
   firework:
     .: ФРВК
     fault: ОТКАЗ СИСТ
@@ -37,6 +31,13 @@ alerts.flightassistant:
     fault: ОТКАЗ СИСТ СТС
     low_durability: НИЗК ПРОЧНОСТЬ
     critical_durability: КРИТ ПРОЧНОСТЬ
+  thrust:
+    .: ТЯГА
+    fault: ОТКАЗ СИСТ
+    no_source: ОТСУТ ИСТОЧ
+    locked:
+      .: БЛОК
+      use_keys: '-КЛАВИШИ УПР ТЯГИ: ИСПОЛЬЗ'
   navigation:
     .: НАВИГАЦ
     air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
