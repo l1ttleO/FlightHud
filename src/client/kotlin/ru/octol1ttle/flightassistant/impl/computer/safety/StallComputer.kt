@@ -23,7 +23,7 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
     override fun tick(computers: ComputerAccess) {
         status =
             if (computers.data.flying && computers.data.forwardVelocity.length() == 0.0)
-                if (computers.data.velocity.y * 20 <= -10) Status.FULL_STALL else Status.APPROACHING_STALL
+                if (status == Status.FULL_STALL || computers.data.velocity.y * 20 <= -10) Status.FULL_STALL else Status.APPROACHING_STALL
             else Status.SAFE
     }
 

@@ -9,7 +9,8 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
-import ru.octol1ttle.flightassistant.impl.alert.autoflight.*
+import ru.octol1ttle.flightassistant.impl.alert.autoflight.NoThrustSourceAlert
+import ru.octol1ttle.flightassistant.impl.alert.autoflight.ThrustLockedAlert
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
@@ -41,9 +42,6 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
                 .add(ComputerFaultAlert(PitchComputer.ID, Text.translatable("alerts.flightassistant.autoflight.pitch_fault")))
-                .add(ComputerFaultAlert(ThrustComputer.ID, Text.translatable("alerts.flightassistant.autoflight.thrust_fault")))
-                .add(ThrustLockedAlert())
-                .add(NoThrustSourceAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.firework"))
@@ -58,6 +56,12 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ComputerFaultAlert(ElytraStatusComputer.ID, Text.translatable("alerts.flightassistant.elytra.fault")))
                 .add(ElytraDurabilityLowAlert())
                 .add(ElytraDurabilityCriticalAlert())
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.thrust"))
+                .add(ComputerFaultAlert(ThrustComputer.ID, Text.translatable("alerts.flightassistant.thrust.fault")))
+                .add(ThrustLockedAlert())
+                .add(NoThrustSourceAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
@@ -103,9 +107,15 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                     alert.soundInstance = AlertSoundInstance(computers.data.player, alert.data)
                     soundManager.play(alert.soundInstance)
                     interrupt = true
+                    continue
+                }
+
+                if (soundInstance.isDone) {
+                    alert.soundInstance = null
                 } else if (soundInstance.isRepeatable) {
                     soundManager.resume(soundInstance)
                 }
+
                 if (soundManager.isPlaying(soundInstance)) {
                     interrupt = true
                 }

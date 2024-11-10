@@ -16,12 +16,6 @@ alerts.flightassistant:
   autoflight:
     .: AUTO FLT
     pitch_fault: PITCH CTL FAULT
-    thrust_fault: THR CTL FAULT
-    thrust_locked:
-      .: THR LOCKED
-      move_levers_forward: '-THR LEVERS: MOVE FWD'
-      move_levers_back: '-THR LEVERS: MOVE BACK'
-    no_thrust_source: NO THR SRC AVAIL
   firework:
     .: FRWK
     fault: SYS FAULT
@@ -33,6 +27,13 @@ alerts.flightassistant:
     fault: STS SYS FAULT
     low_durability: LOW DURABILITY
     critical_durability: CRIT DURABILITY
+  thrust:
+    .: THRUST
+    fault: SYS FAULT
+    no_source: NO SRC AVAIL
+    locked:
+      .: LOCKED
+      use_keys: '-THR CTRL KEYS: USE'
   navigation:
     .: NAV
     air_data_fault: AIR DATA FAULT
@@ -118,7 +119,7 @@ config.flightassistant:
 mode.flightassistant:
   thrust:
     manual: MAN THR %s
-    locked: THR LK
+    locked: THR LK %s
     maximum: THR MAX
   pitch:
     void_protection: VOID PROT

@@ -35,32 +35,16 @@ object FAKeyBindings {
     // tODO: reverse thrust
     fun checkPressed(computers: ComputerAccess) {
         while (setIdle.wasPressed()) {
-            computers.thrust.manualThrust = 0.0f
             computers.thrust.targetThrust = 0.0f
         }
         while (setToga.wasPressed()) {
-            computers.thrust.manualThrust = 1.0f
             computers.thrust.targetThrust = 1.0f
         }
         while (decreaseThrust.wasPressed()) {
-            val oldManual: Float = computers.thrust.manualThrust
-            val targetThrust: Float = computers.thrust.targetThrust
-
-            computers.thrust.manualThrust = (computers.thrust.manualThrust - FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
-            val newManual: Float = computers.thrust.manualThrust
-            if (oldManual >= targetThrust && newManual <= targetThrust) {
-                computers.thrust.targetThrust = newManual
-            }
+            computers.thrust.targetThrust = (computers.thrust.targetThrust - FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
         }
         while (increaseThrust.wasPressed()) {
-            val oldManual: Float = computers.thrust.manualThrust
-            val targetThrust: Float = computers.thrust.targetThrust
-
-            computers.thrust.manualThrust = (computers.thrust.manualThrust + FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
-            val newManual: Float = computers.thrust.manualThrust
-            if (oldManual <= targetThrust && newManual >= targetThrust) {
-                computers.thrust.targetThrust = newManual
-            }
+            computers.thrust.targetThrust = (computers.thrust.targetThrust + FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
         }
     }
 }

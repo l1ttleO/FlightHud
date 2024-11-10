@@ -11,16 +11,18 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.*
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
-import ru.octol1ttle.flightassistant.api.util.cautionColor
 
 class ThrustComputer : Computer() {
     private val sources: ArrayList<ThrustSource> = ArrayList()
     private val controllers: ArrayList<ThrustController> = ArrayList()
 
+    private var lastInputAutomatic: Boolean = false
+
     var targetThrust: Float = 0.0f
-        internal set
-    var manualThrust: Float = 0.0f
-        internal set
+        internal set(value) {
+            field = value
+            lastInputAutomatic = false
+        }
 
     var thrustMode: Text? = null
         private set
@@ -43,32 +45,29 @@ class ThrustComputer : Computer() {
 
         var inputs: List<ControlInput> =
             controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
-        inputs =
-            inputs.filter { it.priority != ControlInput.Priority.SUGGESTION && it.priority.value == inputs[0].priority.value }
+        inputs = inputs.filter { it.priority.value == inputs[0].priority.value }
         if (inputs.isNotEmpty()) {
             val finalInput: ControlInput = inputs.maxBy { it.target }
 
-            targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
-            thrustMode = finalInput.text
-            thrustLocked = false
-        } else if (targetThrust != manualThrust) {
-            thrustMode =
-                if (totalTicks % 20 >= 10) Text.translatable("mode.flightassistant.thrust.locked").setStyle(Style.EMPTY.withColor(cautionColor))
+            noThrustSource = thrustSource == null
+            if (finalInput.priority != ControlInput.Priority.SUGGESTION) {
+                targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
+                thrustMode = finalInput.text
+                lastInputAutomatic = true
+            }
+        } else if (targetThrust != 0.0f) {
+            thrustLocked = lastInputAutomatic
+            val thrustValueText: MutableText = Text.literal((targetThrust * 100).roundToInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
+
+            thrustMode = if (thrustLocked) {
+                if (totalTicks % 20 >= 10) Text.translatable("mode.flightassistant.thrust.locked", thrustValueText).setStyle(Style.EMPTY.withColor(cautionColor))
                 else null
-            thrustLocked = true
+            } else {
+                Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
+            }
         } else {
-            thrustMode =
-                if (manualThrust != 0.0f)
-                    Text.translatable(
-                        "mode.flightassistant.thrust.manual",
-                        Text.literal((manualThrust * 100).roundToInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
-                    ).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
-                else
-                    null
-            thrustLocked = false
-        }
-        if (targetThrust == 0.0f) {
             noThrustSource = false
+            thrustMode = null
             return
         }
 
