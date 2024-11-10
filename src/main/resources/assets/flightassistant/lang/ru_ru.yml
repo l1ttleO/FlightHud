@@ -123,7 +123,7 @@ config.flightassistant:
 mode.flightassistant:
   thrust:
     manual: РУЧН ТЯГА %s
-    locked: БЛОК ТЯГА
+    locked: БЛОК ТЯГА %s
     maximum: МАКС ТЯГА
   pitch:
     void_protection: ПУСТ ЗАЩ
