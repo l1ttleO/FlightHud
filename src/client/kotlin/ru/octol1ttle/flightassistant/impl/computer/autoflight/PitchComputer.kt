@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.Direction
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
@@ -13,7 +12,6 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
 class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
@@ -42,7 +40,7 @@ class PitchComputer : Computer(), PitchController {
 
         updateSafePitches(computers)
 
-        val inputs: List<ControlInput> = controllers.mapNotNull { it.getPitchInput(computers) }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.mapNotNull { it.getPitchInput(computers) }.filter { it.priority != ControlInput.Priority.SUGGESTION }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
             pitchMode = null
             return
@@ -51,7 +49,6 @@ class PitchComputer : Computer(), PitchController {
         val pitch: Float = computers.data.pitch
         val finalInput: ControlInput? = inputs.filter {
             it.priority.value == inputs[0].priority.value
-                    && !limiters.any { limiter -> it.priority != ControlInput.Priority.SUGGESTION && !it.priority.isHigherOrSame(limiter.blockPitchChange(computers, if (it.target > pitch) Direction.UP else Direction.DOWN)) }
                     && (it.priority.isHigherOrSame(minimumPitch?.priority) || it.target >= (minimumPitch?.target ?: -90.0f))
                     && (it.priority.isHigherOrSame(maximumPitch?.priority) || it.target <= (maximumPitch?.target ?: 90.0f))
         }.maxByOrNull { it.target }
@@ -73,16 +70,11 @@ class PitchComputer : Computer(), PitchController {
 
             val min: ControlInput? = minimumPitch
             val max: ControlInput? = maximumPitch
-            if (min != null && pitchDelta < 0.0f && newPitch < min.target) {
+            if (min != null && min.priority != ControlInput.Priority.SUGGESTION && pitchDelta < 0.0f && newPitch < min.target) {
                 return -(min.target - oldPitch).coerceAtMost(0.0f)
             }
-            if (max != null && pitchDelta > 0.0f && newPitch > max.target) {
+            if (max != null && max.priority != ControlInput.Priority.SUGGESTION && pitchDelta > 0.0f && newPitch > max.target) {
                 return -(max.target - oldPitch).coerceAtLeast(0.0f)
-            }
-            if (limiters.any { limiter ->
-                    limiter.blockPitchChange(ComputerHost, if (pitchDelta > 0) Direction.UP else Direction.DOWN) != null
-                }) {
-                return 0.0f
             }
         }
         return null
@@ -92,13 +84,13 @@ class PitchComputer : Computer(), PitchController {
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
         minimumPitch =
             if (minimums.isNotEmpty()) minimums.filter { it.priority.value == minimums[0].priority.value }
-                .maxBy { it.target }
+                .maxByOrNull { it.target }
             else null
 
         val maximums: List<ControlInput> = limiters.mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
         maximumPitch =
             if (maximums.isNotEmpty()) maximums.filter { it.priority.value == maximums[0].priority.value }
-                .minBy { it.target }
+                .minByOrNull { it.target }
             else null
     }
 
@@ -115,7 +107,13 @@ class PitchComputer : Computer(), PitchController {
     }
 
     private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float) {
-        player.pitch -= (target - current) * FATickCounter.timePassed
+        val diff: Float = target - current
+
+        if (diff < 0.05) {
+            player.pitch = -target
+        } else {
+            player.pitch -= diff * FATickCounter.timePassed
+        }
     }
 
     companion object {

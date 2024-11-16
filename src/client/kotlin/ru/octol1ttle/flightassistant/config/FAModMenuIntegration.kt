@@ -248,6 +248,16 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::stallAlertMode, defaults.stallAlertMode)
                 controller(enumSwitch(SafetyOptions.AlertMode::class.java))
             }
+            rootOptions.register<Boolean>("stall.limit_pitch") {
+                setSafetyName()
+                binding(current::stallLimitPitch, defaults.stallLimitPitch)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("stall.auto_thrust") {
+                setSafetyName()
+                binding(current::stallAutoThrust, defaults.stallAutoThrust)
+                controller(tickBox())
+            }
 
             rootOptions.registerLabel(
                 "void",
@@ -255,7 +265,7 @@ object FAModMenuIntegration : ModMenuApi {
             )
             rootOptions.register<SafetyOptions.AlertMode>("void.alert_mode") {
                 setSafetyName()
-                binding(current::elytraDurabilityAlertMode, defaults.elytraDurabilityAlertMode)
+                binding(current::voidAlertMode, defaults.voidAlertMode)
                 controller(enumSwitch(SafetyOptions.AlertMode::class.java))
             }
             rootOptions.register<Boolean>("void.limit_pitch") {

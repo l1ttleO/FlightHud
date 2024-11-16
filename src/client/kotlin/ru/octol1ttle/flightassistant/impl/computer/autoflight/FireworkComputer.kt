@@ -19,6 +19,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
 
     private var safeFireworkCount: Int = 0
     private var safeFireworkSlot: Int? = 0
+    private var lastSlotCount: Int? = 0
 
     private var lastActivationTime: Int = 0
 
@@ -29,12 +30,14 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     override fun tick(computers: ComputerAccess) {
         safeFireworkCount = 0
         safeFireworkSlot = null
+        lastSlotCount = null
         for (slot: Int in 0..<PlayerInventory.getHotbarSize()) {
             val stack: ItemStack = computers.data.player.inventory.getStack(slot)
             if (isFireworkAndSafe(stack)) {
                 safeFireworkCount += stack.count
-                if (safeFireworkSlot == null) {
+                if (safeFireworkSlot == null || stack.count < (lastSlotCount ?: 0)) {
                     safeFireworkSlot = slot
+                    lastSlotCount = stack.count
                 }
             }
         }
@@ -45,7 +48,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     }
 
     private fun hasNoExplosions(stack: ItemStack): Boolean {
-        return stack.get(DataComponentTypes.FIREWORKS)?.explosions?.isEmpty() ?: true
+        return stack.get(DataComponentTypes.FIREWORKS)?.explosions?.isEmpty() != false
     }
 
     private fun tryActivateFirework(computers: ComputerAccess) {
@@ -54,9 +57,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         }
 
         val player: PlayerEntity = computers.data.player
-        if (isFireworkAndSafe(player.mainHandStack)) {
-            useFirework(player, Hand.MAIN_HAND)
-        } else if (isFireworkAndSafe(player.offHandStack)) {
+        if (isFireworkAndSafe(player.offHandStack)) {
             useFirework(player, Hand.OFF_HAND)
         } else if (safeFireworkSlot != null) {
             player.inventory.selectedSlot = safeFireworkSlot!!

@@ -48,14 +48,6 @@ fun DrawContext.scaleMatrix(scale: Float, trueX: Int, trueY: Int): Pair<Int, Int
     return Pair(x, y)
 }
 
-fun DrawContext.scaleMatrix(scale: Float, trueX: Float, trueY: Float): Pair<Int, Int> {
-    matrices.scale(scale, scale, 1.0f)
-
-    val x: Int = (trueX / scale).toInt()
-    val y: Int = (trueY / scale).toInt()
-    return Pair(x, y)
-}
-
 fun DrawContext.drawHorizontalLineDashed(
     x1: Int, x2: Int, y: Int,
     dashCount: Int, color: Int

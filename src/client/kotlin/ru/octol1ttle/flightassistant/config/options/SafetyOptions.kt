@@ -10,6 +10,10 @@ class SafetyOptions {
 
     @SerialEntry
     var stallAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
+    @SerialEntry
+    var stallLimitPitch: Boolean = true
+    @SerialEntry
+    var stallAutoThrust: Boolean = true
 
     @SerialEntry
     var voidAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
@@ -22,6 +26,11 @@ class SafetyOptions {
 
     internal fun setDisabled(): SafetyOptions {
         this.elytraDurabilityAlertMode = AlertMode.DISABLED
+
+        this.stallAlertMode = AlertMode.DISABLED
+        this.stallLimitPitch = false
+        this.stallAutoThrust = false
+        
         this.voidAlertMode = AlertMode.DISABLED
         this.voidLimitPitch = false
         this.voidAutoThrust = false

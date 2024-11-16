@@ -81,7 +81,10 @@ class AttitudeDisplay : Display() {
         val arrowText: Text = Text.literal("^")
 
         val maxInput: ControlInput? = computers.pitch.maximumPitch
+        val minInput: ControlInput? = computers.pitch.minimumPitch
         var max: Float = maxInput?.target ?: 90.0f
+        var min: Float = (minInput?.target ?: -90.0f).coerceAtMost(max)
+
         while (max <= 180) {
             val y: Int = getScreenSpaceY(max) ?: break
             matrices.push()
@@ -93,9 +96,6 @@ class AttitudeDisplay : Display() {
             matrices.pop()
             max += step
         }
-
-        val minInput: ControlInput? = computers.pitch.minimumPitch
-        var min: Float = minInput?.target ?: -90.0f
         while (min >= -180) {
             val y: Int = getScreenSpaceY(min) ?: break
             matrices.push()
