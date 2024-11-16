@@ -113,6 +113,8 @@ config.flightassistant:
       stall:
         .: Сваливание
         alert_mode: Режим предупреждения о сваливании
+        limit_pitch: Ограничивать угол наклона для предотвращения сваливания
+        auto_thrust: Автоматически использовать тягу для восстановления из сваливания
       void:
         .: Высота урона от пустоты
         alert_mode: Режим предупреждений высоты урона от пустоты
@@ -128,6 +130,7 @@ mode.flightassistant:
   pitch:
     void_protection: ПУСТ ЗАЩ
     void_escape: ПУСТ ВЫХОД
+    stall_protection: СВАЛ ЗАЩ
 
 short.flightassistant:
   alert: ПРЕДУПР
