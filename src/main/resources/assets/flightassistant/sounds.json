@@ -19,6 +19,16 @@
       "flightassistant:master_warning"
     ]
   },
+  "pull_up": {
+    "sounds": [
+      "flightassistant:pull_up"
+    ]
+  },
+  "sink_rate": {
+    "sounds": [
+      "flightassistant:sink_rate"
+    ]
+  },
   "thrust_locked": {
     "sounds": [
       "flightassistant:thrust_locked"

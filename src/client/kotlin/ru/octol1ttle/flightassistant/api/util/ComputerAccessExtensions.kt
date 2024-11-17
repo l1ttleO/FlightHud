@@ -11,20 +11,23 @@ val ComputerAccess.data: AirDataComputer
 val ComputerAccess.elytra: ElytraStatusComputer
     get() = get(ElytraStatusComputer.ID) as ElytraStatusComputer
 
-val ComputerAccess.alert: AlertComputer
-    get() = get(AlertComputer.ID) as AlertComputer
-
-val ComputerAccess.voidProximity: VoidProximityComputer
-    get() = get(VoidProximityComputer.ID) as VoidProximityComputer
-
-val ComputerAccess.thrust: ThrustComputer
-    get() = get(ThrustComputer.ID) as ThrustComputer
-
 val ComputerAccess.firework: FireworkComputer
     get() = get(FireworkComputer.ID) as FireworkComputer
 
 val ComputerAccess.pitch: PitchComputer
     get() = get(PitchComputer.ID) as PitchComputer
 
+val ComputerAccess.thrust: ThrustComputer
+    get() = get(ThrustComputer.ID) as ThrustComputer
+
+val ComputerAccess.alert: AlertComputer
+    get() = get(AlertComputer.ID) as AlertComputer
+
+val ComputerAccess.gpws: GroundProximityComputer
+    get() = get(GroundProximityComputer.ID) as GroundProximityComputer
+
 val ComputerAccess.stall: StallComputer
     get() = get(StallComputer.ID) as StallComputer
+
+val ComputerAccess.voidProximity: VoidProximityComputer
+    get() = get(VoidProximityComputer.ID) as VoidProximityComputer

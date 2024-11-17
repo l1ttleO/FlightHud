@@ -6,6 +6,9 @@ import net.minecraft.text.Text
 
 class SafetyOptions {
     @SerialEntry
+    var considerInvulnerability: Boolean = true
+
+    @SerialEntry
     var elytraDurabilityAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
 
     @SerialEntry

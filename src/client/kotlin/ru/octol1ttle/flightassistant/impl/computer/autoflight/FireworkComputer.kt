@@ -19,7 +19,6 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
 
     private var safeFireworkCount: Int = 0
     private var safeFireworkSlot: Int? = 0
-    private var lastSlotCount: Int? = 0
 
     private var lastActivationTime: Int = 0
 
@@ -30,12 +29,12 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     override fun tick(computers: ComputerAccess) {
         safeFireworkCount = 0
         safeFireworkSlot = null
-        lastSlotCount = null
+        var lastSlotCount = 0
         for (slot: Int in 0..<PlayerInventory.getHotbarSize()) {
             val stack: ItemStack = computers.data.player.inventory.getStack(slot)
             if (isFireworkAndSafe(stack)) {
                 safeFireworkCount += stack.count
-                if (safeFireworkSlot == null || stack.count < (lastSlotCount ?: 0)) {
+                if (safeFireworkSlot == null || stack.count < lastSlotCount) {
                     safeFireworkSlot = slot
                     lastSlotCount = stack.count
                 }
@@ -51,12 +50,11 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         return stack.get(DataComponentTypes.FIREWORKS)?.explosions?.isEmpty() != false
     }
 
-    private fun tryActivateFirework(computers: ComputerAccess) {
+    private fun tryActivateFirework(player: PlayerEntity) {
         if (FATickCounter.totalTicks < lastActivationTime + 5) {
             return
         }
 
-        val player: PlayerEntity = computers.data.player
         if (isFireworkAndSafe(player.offHandStack)) {
             useFirework(player, Hand.OFF_HAND)
         } else if (safeFireworkSlot != null) {
@@ -76,7 +74,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
 
     override fun tickThrust(computers: ComputerAccess, currentThrust: Float) {
         if (currentThrust > computers.data.forwardVelocity.length() * 20.0f / 30.0f) {
-            tryActivateFirework(computers)
+            tryActivateFirework(computers.data.player)
         }
     }
 

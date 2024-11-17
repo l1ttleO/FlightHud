@@ -32,6 +32,7 @@ internal object ComputerHost : ComputerAccess {
 
         register(StallComputer.ID, StallComputer())
         register(VoidProximityComputer.ID, VoidProximityComputer())
+        register(GroundProximityComputer.ID, GroundProximityComputer())
         register(ElytraStatusComputer.ID, ElytraStatusComputer())
         register(PitchComputer.ID, PitchComputer())
         register(ThrustComputer.ID, ThrustComputer())
@@ -74,7 +75,7 @@ internal object ComputerHost : ComputerAccess {
             return
         }
 
-        mc.profiler.push("flightassistant")
+        mc.profiler.push("flightassistant:computers")
         for ((id: Identifier, computer: Computer) in computers) {
             mc.profiler.push(id.toString())
             if (!computer.faulted) {

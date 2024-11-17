@@ -31,6 +31,12 @@ alerts.flightassistant:
     fault: ОТКАЗ СИСТ СТС
     low_durability: НИЗК ПРОЧНОСТЬ
     critical_durability: КРИТ ПРОЧНОСТЬ
+  gpws:
+    .: GPWS
+    fault: ОТКАЗ
+    sink_rate: СКОР. СНИЖЕНИЯ
+    terrain_ahead: ЗЕМЛЯ ВПЕРЕДИ
+    pull_up: ТЯНИ ВВЕРХ
   thrust:
     .: ТЯГА
     fault: ОТКАЗ СИСТ
@@ -57,7 +63,7 @@ config.flightassistant:
       mod_enabled: Включить FlightAssistant
       hud_enabled: Включить HUD (интерфейс)
       safety_enabled: Включить системы безопасности (предупреждения и системы безопасности)
-      automations_allowed_in_overlays: Разрешить автоматизации (автопилот и системы безопасности) работать на фоне (в инвентаре и на паузе)
+      automations_allowed_in_overlays: Разрешить автоматизации (а/п и сист. безопасности) работать на фоне (в инвентаре и на паузе)
     display:
       frame:
         .: Рамка
@@ -102,6 +108,7 @@ config.flightassistant:
         alerts: Отображать предупреждения
         automation_modes: Отображать режимы автоматизации
     safety:
+      consider_invulnerability: Выключать предупреждения и защиты во время неуязвимости
       alert_mode:
         warning_and_caution: Опасности и предупреждения
         warning: Только опасности

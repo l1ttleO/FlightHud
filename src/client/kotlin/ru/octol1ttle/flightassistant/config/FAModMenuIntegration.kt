@@ -229,6 +229,12 @@ object FAModMenuIntegration : ModMenuApi {
         return categories.registering {
             name(title)
 
+            rootOptions.register<Boolean>("consider_invulnerability") {
+                setSafetyName()
+                binding(current::considerInvulnerability, defaults.considerInvulnerability)
+                controller(tickBox())
+            }
+
             rootOptions.registerLabel(
                 "elytra_durability",
                 Text.translatable("config.flightassistant.options.safety.elytra_durability")

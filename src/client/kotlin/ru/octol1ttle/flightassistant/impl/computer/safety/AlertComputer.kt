@@ -14,6 +14,8 @@ import ru.octol1ttle.flightassistant.impl.alert.autoflight.ThrustLockedAlert
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
 import ru.octol1ttle.flightassistant.impl.alert.stall.*
 import ru.octol1ttle.flightassistant.impl.computer.*
@@ -56,6 +58,12 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ComputerFaultAlert(ElytraStatusComputer.ID, Text.translatable("alerts.flightassistant.elytra.fault")))
                 .add(ElytraDurabilityLowAlert())
                 .add(ElytraDurabilityCriticalAlert())
+        )
+        register(
+            AlertCategory(Text.translatable("alerts.flightassistant.gpws"))
+                .add(ComputerFaultAlert(GroundProximityComputer.ID, Text.translatable("alerts.flightassistant.gpws.fault")))
+                .add(PullUpAlert())
+                .add(SinkRateAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.thrust"))

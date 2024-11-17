@@ -27,6 +27,12 @@ alerts.flightassistant:
     fault: STS SYS FAULT
     low_durability: LOW DURABILITY
     critical_durability: CRIT DURABILITY
+  gpws:
+    .: GPWS
+    fault: FAULT
+    sink_rate: SINK RATE
+    terrain_ahead: TERRAIN AHEAD
+    pull_up: PULL UP
   thrust:
     .: THRUST
     fault: SYS FAULT
@@ -98,6 +104,7 @@ config.flightassistant:
         alerts: Show alerts
         automation_modes: Show automation modes
     safety:
+      consider_invulnerability: Disable alerts and protections when invulnerable
       alert_mode:
         warning_and_caution: Warning & caution
         warning: Warning only
@@ -127,6 +134,8 @@ mode.flightassistant:
     void_protection: VOID PROT
     void_escape: VOID ESC
     stall_protection: STALL PROT
+    terrain_protection: TERR PROT
+    terrain_escape: TERR ESC
 
 short.flightassistant:
   alert: ALERT

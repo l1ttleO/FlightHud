@@ -47,17 +47,20 @@ class PitchComputer : Computer(), PitchController {
         }
 
         val pitch: Float = computers.data.pitch
-        val finalInput: ControlInput? = inputs.filter {
-            it.priority.value == inputs[0].priority.value
-                    && (it.priority.isHigherOrSame(minimumPitch?.priority) || it.target >= (minimumPitch?.target ?: -90.0f))
-                    && (it.priority.isHigherOrSame(maximumPitch?.priority) || it.target <= (maximumPitch?.target ?: 90.0f))
-        }.maxByOrNull { it.target }
+        val finalInput: ControlInput? = inputs.filter { it.priority.value == inputs[0].priority.value }.maxByOrNull { it.target }
         if (finalInput == null) {
             pitchMode = null
             return
         }
 
-        smoothSetPitch(computers.data.player, pitch, finalInput.target)
+        var target: Float = finalInput.target
+        if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
+            target = target.coerceAtLeast(minimumPitch!!.target)
+        }
+        if (!finalInput.priority.isHigherOrSame(maximumPitch?.priority)) {
+            target = target.coerceAtMost(maximumPitch!!.target)
+        }
+        smoothSetPitch(computers.data.player, pitch, finalInput.target, finalInput.deltaTimeMultiplier)
         pitchMode = finalInput.text
     }
 
@@ -106,13 +109,13 @@ class PitchComputer : Computer(), PitchController {
         return null
     }
 
-    private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float) {
+    private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float, deltaTimeMultiplier: Float) {
         val diff: Float = target - current
 
         if (diff < 0.05) {
             player.pitch = -target
         } else {
-            player.pitch -= diff * FATickCounter.timePassed
+            player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier).coerceIn(0.0f..1.0f)
         }
     }
 
