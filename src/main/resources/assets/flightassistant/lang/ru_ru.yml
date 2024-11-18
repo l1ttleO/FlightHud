@@ -138,6 +138,8 @@ mode.flightassistant:
     void_protection: ПУСТ ЗАЩ
     void_escape: ПУСТ ВЫХОД
     stall_protection: СВАЛ ЗАЩ
+    terrain_protection: ЗЕМЛ ЗАЩ
+    terrain_escape: ЗЕМЛ ИЗБЕЖ
 
 short.flightassistant:
   alert: ПРЕДУПР
