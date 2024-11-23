@@ -38,20 +38,20 @@ public class FlightPathDisplay implements IHudDisplay {
         int y = FAMathHelper.round(vec.y);
 
         double rollRadians = FAMathHelper.toRadians(data.roll);
-        int rotatedX = dim.xMid + (int) ((x - dim.xMid) * Math.cos(rollRadians) - (y - dim.yMid) * Math.sin(rollRadians));
-        int rotatedY = dim.yMid + (int) ((x - dim.xMid) * Math.sin(rollRadians) + (y - dim.yMid) * Math.cos(rollRadians));
+        x = dim.xMid + (int) ((x - dim.xMid) * Math.cos(rollRadians) - (y - dim.yMid) * Math.sin(rollRadians));
+        y = dim.yMid + (int) ((x - dim.xMid) * Math.sin(rollRadians) + (y - dim.yMid) * Math.cos(rollRadians));
 
         if (y < dim.tFrame || y > dim.bFrame || x < dim.lFrame || x > dim.rFrame) {
             return;
         }
 
-        int left = rotatedX - 3;
-        int right = rotatedX + 3;
-        int top = rotatedY - 3;
-        int bottom = rotatedY + 3;
+        int left = x - 3;
+        int right = x + 3;
+        int top = y - 3;
+        int bottom = y + 3;
 
         Color color = gpws.getGPWSLampColor();
-        DrawHelper.drawAircraftIcon(context, left, right, top, bottom, rotatedX, rotatedY, color);
+        DrawHelper.drawAircraftIcon(context, left, right, top, bottom, x, y, color);
     }
 
     @Override
