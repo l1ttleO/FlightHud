@@ -30,6 +30,12 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
                 FlightAssistant.soundEvent("sink_rate"),
                 RepeatType.REPEAT_CONSTANT_VOLUME
             ) { FAConfig.display.cautionColor.rgb }
+        val TERRAIN_AHEAD =
+            AlertData(
+                3,
+                FlightAssistant.soundEvent("terrain_ahead"),
+                RepeatType.REPEAT_CONSTANT_VOLUME
+            ) { FAConfig.display.cautionColor.rgb }
         val MASTER_WARNING =
             AlertData(
                 4,

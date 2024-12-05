@@ -8,20 +8,16 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
-class PullUpAlert : Alert(), CenteredAlert {
+class TerrainAheadAlert: Alert(), CenteredAlert {
     override val data: AlertData
-        get() = AlertData.PULL_UP
+        get() = AlertData.TERRAIN_AHEAD
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
-        return computers.gpws.groundImpactStatus <= GroundProximityComputer.Status.WARNING || computers.gpws.obstacleImpactStatus <= GroundProximityComputer.Status.WARNING
+        return computers.gpws.obstacleImpactStatus == GroundProximityComputer.Status.CAUTION
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, y: Int): Boolean {
-        val flash: Boolean =
-            if (computers.gpws.groundImpactStatus == GroundProximityComputer.Status.RECOVER
-                || computers.gpws.obstacleImpactStatus == GroundProximityComputer.Status.RECOVER) totalTicks % 10 >= 5
-            else totalTicks % 14 >= 7
-        drawContext.drawHighlightedCenteredText(Text.translatable("alerts.flightassistant.gpws.pull_up"), drawContext.centerXI, y, warningColor, flash)
+        drawContext.drawHighlightedCenteredText(Text.translatable("alerts.flightassistant.gpws.terrain_ahead"), drawContext.centerXI, y, cautionColor, totalTicks % 20 >= 10)
         return true
     }
 }

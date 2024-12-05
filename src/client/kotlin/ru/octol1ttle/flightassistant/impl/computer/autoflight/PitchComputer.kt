@@ -16,6 +16,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
     private val controllers: ArrayList<PitchController> = ArrayList()
+    private var automationsAllowed: Boolean = true
     var minimumPitch: ControlInput? = null
         private set
     var maximumPitch: ControlInput? = null
@@ -34,7 +35,8 @@ class PitchComputer : Computer(), PitchController {
     }
 
     override fun tick(computers: ComputerAccess) {
-        if (!computers.data.automationsAllowed()) {
+        automationsAllowed = computers.data.automationsAllowed()
+        if (!automationsAllowed) {
             return
         }
 
@@ -65,7 +67,7 @@ class PitchComputer : Computer(), PitchController {
     }
 
     private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {
-        if (entity is ClientPlayerEntity) {
+        if (automationsAllowed && entity is ClientPlayerEntity) {
             val pitchDelta: Float = -mcPitchDelta
 
             val oldPitch: Float = -entity.pitch
@@ -84,17 +86,24 @@ class PitchComputer : Computer(), PitchController {
     }
 
     private fun updateSafePitches(computers: ComputerAccess) {
+        val maximums: List<ControlInput> = limiters.mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
+        maximumPitch =
+            if (maximums.isNotEmpty()) maximums.filter { it.priority.value == maximums[0].priority.value }
+                .minByOrNull { it.target }
+            else null
+
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
         minimumPitch =
             if (minimums.isNotEmpty()) minimums.filter { it.priority.value == minimums[0].priority.value }
                 .maxByOrNull { it.target }
             else null
 
-        val maximums: List<ControlInput> = limiters.mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
-        maximumPitch =
-            if (maximums.isNotEmpty()) maximums.filter { it.priority.value == maximums[0].priority.value }
-                .minByOrNull { it.target }
-            else null
+        // TODO: the priority system is FUCKED
+        val max: ControlInput? = maximumPitch
+        val min: ControlInput? = minimumPitch
+        if (max != null && min != null && max.priority.isHigherOrSame(min.priority)) {
+            minimumPitch = ControlInput(min.target.coerceAtMost(min.target), min.priority, min.text, min.deltaTimeMultiplier)
+        }
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {

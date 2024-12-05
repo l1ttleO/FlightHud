@@ -16,6 +16,7 @@ import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAler
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
 import ru.octol1ttle.flightassistant.impl.alert.stall.*
 import ru.octol1ttle.flightassistant.impl.computer.*
@@ -64,6 +65,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ComputerFaultAlert(GroundProximityComputer.ID, Text.translatable("alerts.flightassistant.gpws.fault")))
                 .add(PullUpAlert())
                 .add(SinkRateAlert())
+                .add(TerrainAheadAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.thrust"))
