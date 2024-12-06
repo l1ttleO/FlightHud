@@ -3,7 +3,6 @@ package ru.octol1ttle.flightassistant.impl.computer.safety
 import kotlin.math.min
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.*
 import net.minecraft.world.Heightmap
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
@@ -47,9 +46,8 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
 
         groundImpactTime = computeGroundImpactTime(data)
         groundImpactStatus =
-            if (data.fallDistanceSafe || data.velocity.y * 20 > -10) {
-                Status.SAFE
-            } else if (groundImpactStatus == Status.SAFE && groundImpactTime > cautionThreshold || groundImpactTime > clearThreshold) {
+            if (groundImpactStatus == Status.SAFE && (data.velocity.y * 20 > -10 || groundImpactTime > cautionThreshold)
+                || data.fallDistanceSafe || data.velocity.y * 20 > -7.5 || groundImpactTime > clearThreshold) {
                 Status.SAFE
             } else if (groundImpactStatus >= Status.CAUTION && groundImpactTime > warningThreshold) {
                 Status.CAUTION
@@ -61,9 +59,10 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
 
         obstacleImpactTime = computeObstacleImpactTime(computers.data)
         obstacleImpactStatus =
-            if (obstacleImpactStatus == Status.SAFE && obstacleImpactTime > cautionThreshold || obstacleImpactTime > clearThreshold) {
+            if (obstacleImpactStatus == Status.SAFE && ((data.velocity.horizontalLength() * 10 - 3) < data.player.health * 0.5f || obstacleImpactTime > cautionThreshold)
+                || (data.velocity.horizontalLength() * 10 - 3) < data.player.health * 0.25f || obstacleImpactTime > clearThreshold) {
                 Status.SAFE
-            } else if (obstacleImpactStatus >= Status.CAUTION && (obstacleImpactTime > warningThreshold || (data.velocity.horizontalLength() * 10 - 3) < data.player.health * 0.5f)) {
+            } else if (obstacleImpactStatus >= Status.CAUTION && obstacleImpactTime > warningThreshold) {
                 Status.CAUTION
             } else if (obstacleImpactStatus >= Status.WARNING && obstacleImpactTime > 0.5f) {
                 Status.WARNING
@@ -86,24 +85,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
 
     // TODO: max/min terrain altitude on status display (that's gonna be so fucking cool /srs)
     private fun computeObstacleImpactTime(data: AirDataComputer): Float {
-        // manual raycasting ftw
-        val horizontalVelocity: Vec3d = data.velocity.multiply(1.0, 0.0, 1.0)
-        var position: Vec3d = data.position
-        var lookAheadTime = 0
-        while (lookAheadTime < maximumLookAheadTime * 20) {
-            lookAheadTime++
-
-            position = position.add(horizontalVelocity)
-            val topY: Int = data.world.getTopY(Heightmap.Type.MOTION_BLOCKING, MathHelper.floor(position.x), MathHelper.floor(position.z))
-            if (topY >= data.position.y) {
-                break
-            }
-            if (lookAheadTime >= maximumLookAheadTime * 20) {
-                return Float.MAX_VALUE
-            }
-        }
-
-        return (position.distanceTo(data.position) / (horizontalVelocity.length() * 20.0f)).toFloat()
+        TODO()
     }
 
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {

@@ -24,7 +24,7 @@ class ThrustComputer : Computer() {
             lastInputAutomatic = false
         }
 
-    var thrustMode: Text? = null
+    var activeThrustInput: ControlInput? = null
         private set
     var noThrustSource: Boolean = false
         private set
@@ -47,9 +47,9 @@ class ThrustComputer : Computer() {
         var inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
         inputs = inputs.filter { it.priority.value == inputs[0].priority.value }.sortedBy { it.target }
         val finalInput: ControlInput? = inputs.firstOrNull()
-        if (finalInput != null && finalInput.priority != ControlInput.Priority.SUGGESTION) {
+        if (finalInput != null && finalInput.active) {
             targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
-            thrustMode = finalInput.text
+            activeThrustInput = finalInput.copy(active = !noThrustSource)
             thrustLocked = false
             lastInputAutomatic = true
             thrustSource?.tickThrust(computers, targetThrust)
@@ -59,18 +59,21 @@ class ThrustComputer : Computer() {
         thrustLocked = lastInputAutomatic
         if (targetThrust == 0.0f) {
             noThrustSource = finalInput != null && thrustSource == null
-            thrustMode = null
+            activeThrustInput = null
             return
         }
 
         val thrustValueText: MutableText = Text.literal((targetThrust * 100).roundToInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
 
-        thrustMode = if (thrustLocked) {
-            if (totalTicks % 20 >= 10) Text.translatable("mode.flightassistant.thrust.locked", thrustValueText).setStyle(Style.EMPTY.withColor(cautionColor))
+        activeThrustInput = ControlInput(targetThrust, ControlInput.Priority.NORMAL, if (thrustLocked) {
+            if (totalTicks % 20 >= 10)
+                if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.locked_toga").setStyle(Style.EMPTY.withColor(cautionColor))
+                else Text.translatable("mode.flightassistant.thrust.locked", thrustValueText).setStyle(Style.EMPTY.withColor(cautionColor))
             else null
         } else {
-            Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
-        }
+            if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.manual_toga").setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
+            else Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
+        }, active = !noThrustSource)
 
         thrustSource?.tickThrust(computers, targetThrust)
     }

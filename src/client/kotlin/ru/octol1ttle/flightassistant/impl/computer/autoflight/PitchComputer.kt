@@ -3,7 +3,6 @@ package ru.octol1ttle.flightassistant.impl.computer.autoflight
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
@@ -21,7 +20,7 @@ class PitchComputer : Computer(), PitchController {
         private set
     var maximumPitch: ControlInput? = null
         private set
-    var pitchMode: Text? = null
+    var activePitchInput: ControlInput? = null
         private set
 
     override fun subscribeToEvents() {
@@ -42,28 +41,30 @@ class PitchComputer : Computer(), PitchController {
 
         updateSafePitches(computers)
 
-        val inputs: List<ControlInput> = controllers.mapNotNull { it.getPitchInput(computers) }.filter { it.priority != ControlInput.Priority.SUGGESTION }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.mapNotNull { it.getPitchInput(computers) }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
-            pitchMode = null
+            activePitchInput = null
             return
         }
 
         val pitch: Float = computers.data.pitch
         val finalInput: ControlInput? = inputs.filter { it.priority.value == inputs[0].priority.value }.maxByOrNull { it.target }
         if (finalInput == null) {
-            pitchMode = null
+            activePitchInput = null
             return
         }
 
-        var target: Float = finalInput.target
-        if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
-            target = target.coerceAtLeast(minimumPitch!!.target)
+        activePitchInput = finalInput
+        if (finalInput.active) {
+            var target: Float = finalInput.target
+            if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
+                target = target.coerceAtLeast(minimumPitch!!.target)
+            }
+            if (!finalInput.priority.isHigherOrSame(maximumPitch?.priority)) {
+                target = target.coerceAtMost(maximumPitch!!.target)
+            }
+            smoothSetPitch(computers.data.player, pitch, finalInput.target, finalInput.deltaTimeMultiplier)
         }
-        if (!finalInput.priority.isHigherOrSame(maximumPitch?.priority)) {
-            target = target.coerceAtMost(maximumPitch!!.target)
-        }
-        smoothSetPitch(computers.data.player, pitch, finalInput.target, finalInput.deltaTimeMultiplier)
-        pitchMode = finalInput.text
     }
 
     private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {
@@ -75,10 +76,10 @@ class PitchComputer : Computer(), PitchController {
 
             val min: ControlInput? = minimumPitch
             val max: ControlInput? = maximumPitch
-            if (min != null && min.priority != ControlInput.Priority.SUGGESTION && pitchDelta < 0.0f && newPitch < min.target) {
+            if (min != null && min.active && pitchDelta < 0.0f && newPitch < min.target) {
                 return -(min.target - oldPitch).coerceAtMost(0.0f)
             }
-            if (max != null && max.priority != ControlInput.Priority.SUGGESTION && pitchDelta > 0.0f && newPitch > max.target) {
+            if (max != null && max.active && pitchDelta > 0.0f && newPitch > max.target) {
                 return -(max.target - oldPitch).coerceAtLeast(0.0f)
             }
         }
@@ -98,21 +99,22 @@ class PitchComputer : Computer(), PitchController {
                 .maxByOrNull { it.target }
             else null
 
-        // TODO: the priority system is FUCKED
         val max: ControlInput? = maximumPitch
         val min: ControlInput? = minimumPitch
         if (max != null && min != null && max.priority.isHigherOrSame(min.priority)) {
-            minimumPitch = ControlInput(min.target.coerceAtMost(min.target), min.priority, min.text, min.deltaTimeMultiplier)
+            minimumPitch = ControlInput(min.target.coerceAtMost(max.target), min.priority, min.text, min.deltaTimeMultiplier, min.active)
         }
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
-        if (maximumPitch != null && computers.data.pitch > maximumPitch!!.target) {
-            val (target: Float, priority: ControlInput.Priority, text: Text?) = maximumPitch!!
-            return ControlInput(target, priority, text)
-        } else if (minimumPitch != null && computers.data.pitch < minimumPitch!!.target) {
-            val (target: Float, priority: ControlInput.Priority, text: Text?) = minimumPitch!!
-            return ControlInput(target, priority, text)
+        val max: ControlInput? = maximumPitch
+        if (max != null && computers.data.pitch > max.target) {
+            return max
+        } else {
+            val min: ControlInput? = minimumPitch
+            if (min != null && computers.data.pitch < min.target) {
+                return min
+            }
         }
 
         return null

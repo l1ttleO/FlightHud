@@ -43,8 +43,9 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
             return ControlInput(
                 (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
                     .coerceIn(-35.0f..55.0f),
-                if (FAConfig.safety.voidLimitPitch) ControlInput.Priority.HIGH else ControlInput.Priority.SUGGESTION,
-                Text.translatable("mode.flightassistant.pitch.void_protection")
+                ControlInput.Priority.HIGH,
+                Text.translatable("mode.flightassistant.pitch.void_protection"),
+                active = FAConfig.safety.voidLimitPitch
             )
         }
 
@@ -63,8 +64,9 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
         if (FAConfig.safety.voidAutoThrust && status < Status.CLEAR_OF_DAMAGE_ALTITUDE) {
             return ControlInput(
                 1.0f,
-                if (status == Status.REACHED_DAMAGE_ALTITUDE) ControlInput.Priority.HIGH else ControlInput.Priority.SUGGESTION,
-                Text.translatable("mode.flightassistant.thrust.maximum")
+                ControlInput.Priority.HIGH,
+                Text.translatable("mode.flightassistant.thrust.toga"),
+                active = status == Status.REACHED_DAMAGE_ALTITUDE
             )
         }
 

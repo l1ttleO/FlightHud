@@ -128,8 +128,10 @@ config.flightassistant:
 mode.flightassistant:
   thrust:
     manual: MAN THR %s
+    manual_toga: MAN TOGA
     locked: THR LK %s
-    maximum: THR MAX
+    locked_toga: TOGA LK
+    toga: THR TOGA
   pitch:
     void_protection: VOID PROT
     void_escape: VOID ESC
