@@ -63,7 +63,7 @@ class PitchComputer : Computer(), PitchController {
             if (!finalInput.priority.isHigherOrSame(maximumPitch?.priority)) {
                 target = target.coerceAtMost(maximumPitch!!.target)
             }
-            smoothSetPitch(computers.data.player, pitch, finalInput.target, finalInput.deltaTimeMultiplier)
+            smoothSetPitch(computers.data.player, pitch, target, finalInput.deltaTimeMultiplier)
         }
     }
 

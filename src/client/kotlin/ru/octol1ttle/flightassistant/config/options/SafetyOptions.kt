@@ -27,6 +27,20 @@ class SafetyOptions {
     @SerialEntry
     var voidAutoPitch: Boolean = true
 
+    @SerialEntry
+    var sinkRateAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
+    @SerialEntry
+    var sinkRateLimitPitch: Boolean = true
+    @SerialEntry
+    var sinkRateAutoPitch: Boolean = true
+
+    @SerialEntry
+    var obstacleAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
+    @SerialEntry
+    var obstacleLimitPitch: Boolean = false
+    @SerialEntry
+    var obstacleAutoPitch: Boolean = true
+
     internal fun setDisabled(): SafetyOptions {
         this.elytraDurabilityAlertMode = AlertMode.DISABLED
 
@@ -38,6 +52,14 @@ class SafetyOptions {
         this.voidLimitPitch = false
         this.voidAutoThrust = false
         this.voidAutoPitch = false
+
+        this.sinkRateAlertMode = AlertMode.DISABLED
+        this.sinkRateLimitPitch = false
+        this.sinkRateAutoPitch = false
+
+        this.obstacleAlertMode = AlertMode.DISABLED
+        this.obstacleLimitPitch = false
+        this.obstacleAutoPitch = false
         return this
     }
 

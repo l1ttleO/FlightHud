@@ -29,6 +29,11 @@
       "flightassistant:sink_rate"
     ]
   },
+  "terrain_ahead": {
+    "sounds": [
+      "flightassistant:terrain_ahead"
+    ]
+  },
   "thrust_locked": {
     "sounds": [
       "flightassistant:thrust_locked"

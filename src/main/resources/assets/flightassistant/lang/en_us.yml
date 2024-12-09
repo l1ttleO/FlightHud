@@ -124,6 +124,16 @@ config.flightassistant:
         limit_pitch: Limit pitch above the void
         auto_thrust: Automatically use thrust to escape the void
         auto_pitch: Automatically raise pitch to escape the void
+      gpws:
+        .: Ground Proximity Warning System
+        sink_rate:
+          alert_mode: Sink rate alert mode
+          limit_pitch: Limit pitch when sink rate is excessive
+          auto_pitch: Automatically raise pitch to recover from excessive sink rate
+        obstacle:
+          alert_mode: Terrain alert mode
+          limit_pitch: Limit pitch when terrain is detected
+          auto_pitch: Automatically raise pitch to escape from terrain
 
 mode.flightassistant:
   thrust:

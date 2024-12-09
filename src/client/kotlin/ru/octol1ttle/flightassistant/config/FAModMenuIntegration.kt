@@ -289,6 +289,41 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::voidAutoPitch, defaults.voidAutoPitch)
                 controller(tickBox())
             }
+
+            rootOptions.registerLabel(
+                "gpws",
+                Text.translatable("config.flightassistant.options.safety.gpws")
+            )
+            rootOptions.register<SafetyOptions.AlertMode>("gpws.sink_rate.alert_mode") {
+                setSafetyName()
+                binding(current::sinkRateAlertMode, defaults.sinkRateAlertMode)
+                controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+            rootOptions.register<Boolean>("gpws.sink_rate.limit_pitch") {
+                setSafetyName()
+                binding(current::sinkRateLimitPitch, defaults.sinkRateLimitPitch)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("gpws.sink_rate.auto_pitch") {
+                setSafetyName()
+                binding(current::sinkRateAutoPitch, defaults.sinkRateAutoPitch)
+                controller(tickBox())
+            }
+            rootOptions.register<SafetyOptions.AlertMode>("gpws.obstacle.alert_mode") {
+                setSafetyName()
+                binding(current::obstacleAlertMode, defaults.obstacleAlertMode)
+                controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+            rootOptions.register<Boolean>("gpws.obstacle.limit_pitch") {
+                setSafetyName()
+                binding(current::obstacleLimitPitch, defaults.obstacleLimitPitch)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("gpws.obstacle.auto_pitch") {
+                setSafetyName()
+                binding(current::obstacleAutoPitch, defaults.obstacleAutoPitch)
+                controller(tickBox())
+            }
         }
     }
 
