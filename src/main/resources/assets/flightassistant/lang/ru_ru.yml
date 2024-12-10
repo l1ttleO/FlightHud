@@ -128,11 +128,25 @@ config.flightassistant:
         limit_pitch: Ограничение угла наклона над пустотой
         auto_thrust: Автоматически использовать тягу чтобы избежать пустоты
         auto_pitch: Автоматически повышать угол наклона чтобы избежать пустоты
+      gpws:
+        .: Система предупреждения о близости земли
+        sink_rate:
+          alert_mode: Режим оповещения о скорости погружения
+          limit_pitch: Ограничение угла наклона при чрезмерной скорости погружения
+          auto_pitch: Автоматическое увеличение угла наклона для восстановления после чрезмерной скорости погружения
+        obstacle:
+          alert_mode: Режим предупреждения о рельефе местности
+          limit_pitch: Ограничение угла наклона при обнаружении рельефа местности
+          auto_pitch: Автоматическое увеличение угла наклона для предотвращения столкновения с местностью
 
+
+# TODO: fuck around with TOGA translation or keep it as it is - mctaylors
 mode.flightassistant:
   thrust:
     manual: РУЧН ТЯГА %s
+    manual_toga: РУЧН TOGA
     locked: БЛОК ТЯГА %s
+    locked_toga: БЛОК TOGA
     maximum: МАКС ТЯГА
   pitch:
     void_protection: ПУСТ ЗАЩ
