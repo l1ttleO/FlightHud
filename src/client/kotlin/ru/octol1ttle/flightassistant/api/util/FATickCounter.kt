@@ -10,6 +10,8 @@ object FATickCounter {
 
     var totalTicks: Int = 0
         private set
+    var ticksSinceWorldLoad: Int = 0
+        private set
     var ticksPassed: Int = 0
         private set
     var timePassed: Float = 0.0f
@@ -19,9 +21,13 @@ object FATickCounter {
 
     fun tick(player: ClientPlayerEntity, tickCounter: RenderTickCounter, paused: Boolean) {
         if (!paused) {
+            if (player.age < lastPlayerAge) {
+                ticksSinceWorldLoad = 0
+            }
             ticksPassed = if (player.age > lastPlayerAge) player.age - lastPlayerAge else 0
             lastPlayerAge = player.age
             totalTicks += ticksPassed
+            ticksSinceWorldLoad += ticksPassed
             tickDelta = tickCounter.getTickDelta(true)
         }
 

@@ -34,9 +34,10 @@ internal object ComputerHost : ComputerAccess {
         register(VoidProximityComputer.ID, VoidProximityComputer())
         register(GroundProximityComputer.ID, GroundProximityComputer())
         register(ElytraStatusComputer.ID, ElytraStatusComputer())
+        register(ChunkStatusComputer.ID, ChunkStatusComputer())
+        register(FireworkComputer.ID, FireworkComputer(mc))
         register(PitchComputer.ID, PitchComputer())
         register(ThrustComputer.ID, ThrustComputer())
-        register(FireworkComputer.ID, FireworkComputer(mc))
 
         register(AlertComputer.ID, AlertComputer(mc.soundManager))
     }
@@ -71,7 +72,7 @@ internal object ComputerHost : ComputerAccess {
     internal fun tick(tickCounter: RenderTickCounter) {
         val paused: Boolean = mc.isPaused || !(mc as ClientShouldTickInvoker).invokeShouldTick()
         FATickCounter.tick(mc.player!!, tickCounter, paused)
-        if (paused || !FAConfig.global.modEnabled) {
+        if (paused || FATickCounter.ticksSinceWorldLoad < 60 || !FAConfig.global.modEnabled) {
             return
         }
 

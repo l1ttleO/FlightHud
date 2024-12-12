@@ -4,6 +4,7 @@ import kotlin.math.atan2
 import kotlin.math.max
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.util.Identifier
@@ -22,8 +23,8 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         get() = checkNotNull(mc.player)
     val flying: Boolean
         get() = player.isFallFlying
-    val world: World
-        get() = player.world
+    val world: ClientWorld
+        get() = checkNotNull(mc.world)
 
     var position: Vec3d = Vec3d.ZERO
         private set
@@ -38,7 +39,7 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
             if (groundLevel == null || groundLevel!! == Double.MAX_VALUE) Float.MAX_VALUE
             else max(player.fallDistance, (altitude - groundLevel!!).toFloat())
     val fallDistanceSafe: Boolean
-        get() = fallDistance <= player.safeFallDistance || isInvulnerableTo(player.damageSources.fall())
+        get() = player.isTouchingWater || fallDistance <= player.safeFallDistance || isInvulnerableTo(player.damageSources.fall())
     var velocity: Vec3d = Vec3d.ZERO
         private set
     var forwardVelocity: Vec3d = Vec3d.ZERO
@@ -51,6 +52,8 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         get() = yaw + 180.0f
     var roll: Float = 0.0f
         private set
+    val isCurrentChunkLoaded: Boolean
+        get() = world.chunkManager.isChunkLoaded(player.chunkPos.x, player.chunkPos.z)
 
     override fun tick(computers: ComputerAccess) {
         position = player.getLerpedPos(tickDelta)
@@ -74,6 +77,10 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     }
 
     private fun computeGroundLevel(): Double? {
+        if (!isCurrentChunkLoaded) {
+            return groundLevel
+        }
+
         val minY: Double = voidLevel.toDouble().coerceAtLeast(altitude - 1000)
         val result: BlockHitResult = world.raycast(
             RaycastContext(

@@ -37,22 +37,20 @@ class ThrustComputer : Computer() {
     }
 
     override fun tick(computers: ComputerAccess) {
-        if (!computers.data.automationsAllowed()) {
-            return
-        }
-
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
         noThrustSource = thrustSource == null
 
         var inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
         inputs = inputs.filter { it.priority.value == inputs[0].priority.value }.sortedBy { it.target }
         val finalInput: ControlInput? = inputs.firstOrNull()
-        if (finalInput != null && finalInput.active) {
-            targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
+        if (finalInput?.active == true) {
             activeThrustInput = finalInput.copy(active = !noThrustSource)
-            thrustLocked = false
+            targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
             lastInputAutomatic = true
-            thrustSource?.tickThrust(computers, targetThrust)
+            thrustLocked = false
+            if (computers.data.automationsAllowed()) {
+                thrustSource?.tickThrust(computers, targetThrust)
+            }
             return
         }
 
@@ -75,7 +73,9 @@ class ThrustComputer : Computer() {
             else Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
         }, active = !noThrustSource)
 
-        thrustSource?.tickThrust(computers, targetThrust)
+        if (computers.data.automationsAllowed()) {
+            thrustSource?.tickThrust(computers, targetThrust)
+        }
     }
 
     companion object {

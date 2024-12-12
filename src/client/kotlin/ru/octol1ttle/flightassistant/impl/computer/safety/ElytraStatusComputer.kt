@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.computer
+package ru.octol1ttle.flightassistant.impl.computer.safety
 
 import dev.isxander.yacl3.api.NameableEnum
 import java.time.Duration
@@ -48,7 +48,7 @@ class ElytraStatusComputer : Computer() {
             DurabilityUnits.PERCENTAGE -> Text.literal("${round((active.maxDamage - active.damage - 1) * 100 / active.maxDamage.toFloat()).roundToInt()}%")
             DurabilityUnits.TIME -> {
                 val duration: Duration = Duration.ofSeconds(getRemainingFlightTime(player)!!.toLong())
-                val seconds: String = if (unbreakingLevel > 0) "XX" else String.format("%02d", duration.toSecondsPart())
+                val seconds: String = if (unbreakingLevel > 0) "--" else String.format("%02d", duration.toSecondsPart())
                 Text.literal("${duration.toMinutesPart()}:$seconds")
             }
         }

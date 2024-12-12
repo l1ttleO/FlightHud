@@ -76,7 +76,10 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
                 .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault")))
+                .add(ComputerFaultAlert(ChunkStatusComputer.ID, Text.translatable("alerts.flightassistant.navigation.chunk_status_fault")))
                 .add(ComputerFaultAlert(VoidProximityComputer.ID, Text.translatable("alerts.flightassistant.navigation.void_proximity_fault")))
+                .add(SlowChunkLoadingAlert())
+                .add(NoChunksLoadedAlert())
                 .add(ApproachingVoidDamageAltitudeAlert())
                 .add(ReachedVoidDamageAltitudeAlert())
         )

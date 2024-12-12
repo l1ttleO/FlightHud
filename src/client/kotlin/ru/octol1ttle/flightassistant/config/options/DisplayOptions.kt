@@ -2,7 +2,7 @@ package ru.octol1ttle.flightassistant.config.options
 
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import java.awt.Color
-import ru.octol1ttle.flightassistant.impl.computer.ElytraStatusComputer
+import ru.octol1ttle.flightassistant.impl.computer.safety.ElytraStatusComputer
 
 class DisplayOptions {
     @SerialEntry

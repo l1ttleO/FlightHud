@@ -18,7 +18,7 @@ class RadarAltitudeDisplay : Display() {
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
         val groundLevel: Double? = computers.data.groundLevel
-        if (groundLevel != null && groundLevel > computers.data.altitude) {
+        if (!computers.data.isCurrentChunkLoaded || groundLevel != null && groundLevel > computers.data.altitude) {
             renderFaulted(drawContext)
             return
         }

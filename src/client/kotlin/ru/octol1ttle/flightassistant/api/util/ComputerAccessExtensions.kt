@@ -8,9 +8,6 @@ import ru.octol1ttle.flightassistant.impl.computer.safety.*
 val ComputerAccess.data: AirDataComputer
     get() = get(AirDataComputer.ID) as AirDataComputer
 
-val ComputerAccess.elytra: ElytraStatusComputer
-    get() = get(ElytraStatusComputer.ID) as ElytraStatusComputer
-
 val ComputerAccess.firework: FireworkComputer
     get() = get(FireworkComputer.ID) as FireworkComputer
 
@@ -22,6 +19,12 @@ val ComputerAccess.thrust: ThrustComputer
 
 val ComputerAccess.alert: AlertComputer
     get() = get(AlertComputer.ID) as AlertComputer
+
+val ComputerAccess.chunk: ChunkStatusComputer
+    get() = get(ChunkStatusComputer.ID) as ChunkStatusComputer
+
+val ComputerAccess.elytra: ElytraStatusComputer
+    get() = get(ElytraStatusComputer.ID) as ElytraStatusComputer
 
 val ComputerAccess.gpws: GroundProximityComputer
     get() = get(GroundProximityComputer.ID) as GroundProximityComputer

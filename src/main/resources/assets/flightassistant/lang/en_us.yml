@@ -24,7 +24,7 @@ alerts.flightassistant:
     pitch_fault: PITCH LIMIT FAULT
   elytra:
     .: ELYTRA
-    fault: STS SYS FAULT
+    fault: STATUS FAULT
     low_durability: LOW DURABILITY
     critical_durability: CRIT DURABILITY
   gpws:
@@ -43,7 +43,10 @@ alerts.flightassistant:
   navigation:
     .: NAV
     air_data_fault: AIR DATA FAULT
-    void_proximity_vault: VOID PROX FAULT
+    chunk_status_fault: CHUNK STATUS FAULT
+    void_proximity_fault: VOID PROX FAULT
+    slow_chunk_loading: SLOW CHUNK LOADING
+    no_chunks_loaded: NO CHUNKS LOADED
     approaching_void_damage_altitude: APPR.ING VOID DMG ALT
     reached_void_damage_altitude: REACHED VOID DMG ALT
 
@@ -167,7 +170,7 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
-  decrease_thrust: Decrease thrust (move levers back)
-  increase_thrust: Increase thrust (move levers forward)
+  decrease_thrust: Decrease thrust
+  increase_thrust: Increase thrust
   set_idle: Set thrust to idle (0%)
   set_toga: Set thrust to TOGA (100%)

@@ -74,7 +74,7 @@ internal object HudDisplayHost {
         mc.profiler.push("flightassistant:displays")
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.enabled() }) {
             mc.profiler.push(id.toString())
-            if (display.faulted || !RenderMatrices.ready) {
+            if (display.faulted || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {
                 try {
                     display.renderFaulted(drawContext)
                 } catch (t: Throwable) {

@@ -35,9 +35,6 @@ class PitchComputer : Computer(), PitchController {
 
     override fun tick(computers: ComputerAccess) {
         automationsAllowed = computers.data.automationsAllowed()
-        if (!automationsAllowed) {
-            return
-        }
 
         updateSafePitches(computers)
 
@@ -55,7 +52,7 @@ class PitchComputer : Computer(), PitchController {
         }
 
         activePitchInput = finalInput
-        if (finalInput.active) {
+        if (automationsAllowed && finalInput.active) {
             var target: Float = finalInput.target
             if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
                 target = target.coerceAtLeast(minimumPitch!!.target)
@@ -102,7 +99,7 @@ class PitchComputer : Computer(), PitchController {
         val max: ControlInput? = maximumPitch
         val min: ControlInput? = minimumPitch
         if (max != null && min != null && max.priority.isHigherOrSame(min.priority)) {
-            minimumPitch = ControlInput(min.target.coerceAtMost(max.target), min.priority, min.text, min.deltaTimeMultiplier, min.active)
+            minimumPitch = min.copy(target = min.target.coerceAtMost(max.target))
         }
     }
 

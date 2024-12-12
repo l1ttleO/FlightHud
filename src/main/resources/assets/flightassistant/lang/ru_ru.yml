@@ -47,7 +47,7 @@ alerts.flightassistant:
   navigation:
     .: НАВИГАЦ
     air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
-    void_proximity_vault: ОТКАЗ БЛИЗ ПУСТ
+    void_proximity_fault: ОТКАЗ БЛИЗ ПУСТ
     approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
     reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ
 
@@ -131,22 +131,20 @@ config.flightassistant:
       gpws:
         .: Система предупреждения о близости земли
         sink_rate:
-          alert_mode: Режим оповещения о скорости погружения
-          limit_pitch: Ограничение угла наклона при чрезмерной скорости погружения
-          auto_pitch: Автоматическое увеличение угла наклона для восстановления после чрезмерной скорости погружения
+          alert_mode: Режим оповещения о скорости снижения
+          limit_pitch: Ограничение угла наклона при чрезмерной скорости снижения
+          auto_pitch: Автоматическое увеличение угла наклона для устранения чрезмерной скорости снижения
         obstacle:
           alert_mode: Режим предупреждения о рельефе местности
           limit_pitch: Ограничение угла наклона при обнаружении рельефа местности
           auto_pitch: Автоматическое увеличение угла наклона для предотвращения столкновения с местностью
 
-
-# TODO: fuck around with TOGA translation or keep it as it is - mctaylors
 mode.flightassistant:
   thrust:
     manual: РУЧН ТЯГА %s
-    manual_toga: РУЧН TOGA
+    manual_toga: РУЧН ВЗЛЁТН
     locked: БЛОК ТЯГА %s
-    locked_toga: БЛОК TOGA
+    locked_toga: БЛОК ВЗЛЁТН
     maximum: МАКС ТЯГА
   pitch:
     void_protection: ПУСТ ЗАЩ

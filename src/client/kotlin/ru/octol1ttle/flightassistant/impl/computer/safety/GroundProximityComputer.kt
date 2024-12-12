@@ -30,7 +30,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
 
     override fun tick(computers: ComputerAccess) {
         val data: AirDataComputer = computers.data
-        if (!data.flying) {
+        if (!data.flying || data.player.isTouchingWater) {
             groundImpactStatus = Status.SAFE
             obstacleImpactStatus = Status.SAFE
             return

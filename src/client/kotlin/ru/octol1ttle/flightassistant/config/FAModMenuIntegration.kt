@@ -8,7 +8,7 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.config.options.*
-import ru.octol1ttle.flightassistant.impl.computer.ElytraStatusComputer
+import ru.octol1ttle.flightassistant.impl.computer.safety.ElytraStatusComputer
 
 object FAModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parent: Screen ->

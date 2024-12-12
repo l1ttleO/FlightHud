@@ -42,6 +42,10 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
     }
 
     override fun getMaximumPitch(computers: ComputerAccess): ControlInput? {
+        if (computers.data.fallDistanceSafe) {
+            return null
+        }
+
         return ControlInput(
             (computers.data.forwardVelocity.length() * 20.0f * 3.0f).toFloat().coerceIn(0.0f..90.0f),
             ControlInput.Priority.HIGHEST,
