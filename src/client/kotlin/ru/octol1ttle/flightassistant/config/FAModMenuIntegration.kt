@@ -236,13 +236,23 @@ object FAModMenuIntegration : ModMenuApi {
             }
 
             rootOptions.registerLabel(
-                "elytra_durability",
-                Text.translatable("config.flightassistant.options.safety.elytra_durability")
+                "elytra",
+                Text.translatable("config.flightassistant.options.safety.elytra")
             )
-            rootOptions.register<SafetyOptions.AlertMode>("elytra_durability.alert_mode") {
+            rootOptions.register<SafetyOptions.AlertMode>("elytra.durability_alert_mode") {
                 setSafetyName()
                 binding(current::elytraDurabilityAlertMode, defaults.elytraDurabilityAlertMode)
                 controller(enumSwitch(SafetyOptions.AlertMode::class.java))
+            }
+            rootOptions.register<Boolean>("elytra.auto_open") {
+                setSafetyName()
+                binding(current::elytraAutoOpen, defaults.elytraAutoOpen)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("elytra.close_underwater") {
+                setSafetyName()
+                binding(current::elytraCloseUnderwater, defaults.elytraCloseUnderwater)
+                controller(tickBox())
             }
 
             rootOptions.registerLabel(

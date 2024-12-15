@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
@@ -40,8 +40,9 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         val clearThreshold: Float = if (anyBlocksAbove) 7.5f else 15.0f
         val cautionThreshold: Float = if (anyBlocksAbove) 5.0f else 10.0f
         val warningThreshold: Float = if (anyBlocksAbove) 2.5f else 5.0f
+        val recoverThreshold: Float = if (anyBlocksAbove) 0.5f else 0.75f
 
-        groundImpactTime = computeGroundImpactTime(data)
+        groundImpactTime = computeGroundImpactTime(data).requireIn(0.0f..Float.MAX_VALUE)
         groundImpactStatus =
             if (data.isInvulnerableTo(data.player.damageSources.fall())) {
                 Status.SAFE
@@ -51,13 +52,13 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
                 Status.SAFE
             } else if (groundImpactStatus >= Status.CAUTION && groundImpactTime > warningThreshold) {
                 Status.CAUTION
-            } else if (groundImpactStatus >= Status.WARNING && groundImpactTime > 0.75f) {
+            } else if (groundImpactStatus >= Status.WARNING && groundImpactTime > recoverThreshold) {
                 Status.WARNING
             } else {
                 Status.RECOVER
             }
 
-        obstacleImpactTime = computeObstacleImpactTime(data, clearThreshold)
+        obstacleImpactTime = computeObstacleImpactTime(data, clearThreshold).requireIn(0.0f..Float.MAX_VALUE)
         obstacleImpactStatus =
             if (data.isInvulnerableTo(data.player.damageSources.flyIntoWall())) {
                 Status.SAFE
@@ -67,7 +68,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
                 Status.SAFE
             } else if (obstacleImpactStatus >= Status.CAUTION && obstacleImpactTime > warningThreshold) {
                 Status.CAUTION
-            } else if (obstacleImpactStatus >= Status.WARNING && obstacleImpactTime > 0.75f) {
+            } else if (obstacleImpactStatus >= Status.WARNING && obstacleImpactTime > recoverThreshold) {
                 Status.WARNING
             } else {
                 Status.RECOVER

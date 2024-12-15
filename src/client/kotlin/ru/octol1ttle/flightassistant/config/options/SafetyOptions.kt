@@ -10,6 +10,10 @@ class SafetyOptions {
 
     @SerialEntry
     var elytraDurabilityAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION
+    @SerialEntry
+    var elytraAutoOpen: Boolean = true
+    @SerialEntry
+    var elytraCloseUnderwater: Boolean = true
 
     @SerialEntry
     var stallAlertMode: AlertMode = AlertMode.WARNING_AND_CAUTION

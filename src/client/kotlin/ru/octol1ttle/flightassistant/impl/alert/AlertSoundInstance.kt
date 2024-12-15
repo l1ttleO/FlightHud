@@ -27,7 +27,7 @@ class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
     override fun tick() {
         age++
         if (data.repeat == AlertData.RepeatType.REPEAT_FADE_VOLUME && age > 100) {
-            this.volume = max(0.2f, this.volume - 0.008f)
+            this.volume = max(0.3f, this.volume - 0.007f)
         }
     }
 }

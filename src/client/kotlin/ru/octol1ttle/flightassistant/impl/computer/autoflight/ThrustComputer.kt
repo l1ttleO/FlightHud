@@ -45,7 +45,7 @@ class ThrustComputer : Computer() {
         val finalInput: ControlInput? = inputs.firstOrNull()
         if (finalInput?.active == true) {
             activeThrustInput = finalInput.copy(active = !noThrustSource)
-            targetThrust = finalInput.target.coerceIn(-1.0f..1.0f)
+            targetThrust = finalInput.target.requireIn(-1.0f..1.0f)
             lastInputAutomatic = true
             thrustLocked = false
             if (computers.data.automationsAllowed()) {
@@ -55,7 +55,7 @@ class ThrustComputer : Computer() {
         }
 
         thrustLocked = lastInputAutomatic
-        if (targetThrust == 0.0f) {
+        if (targetThrust.requireIn(-1.0f..1.0f) == 0.0f) {
             noThrustSource = finalInput != null && thrustSource == null
             activeThrustInput = null
             return

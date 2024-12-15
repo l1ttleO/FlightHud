@@ -60,7 +60,7 @@ class PitchComputer : Computer(), PitchController {
             if (!finalInput.priority.isHigherOrSame(maximumPitch?.priority)) {
                 target = target.coerceAtMost(maximumPitch!!.target)
             }
-            smoothSetPitch(computers.data.player, pitch, target, finalInput.deltaTimeMultiplier)
+            smoothSetPitch(computers.data.player, pitch, target.requireIn(-90.0f..90.0f), finalInput.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE))
         }
     }
 
@@ -89,15 +89,23 @@ class PitchComputer : Computer(), PitchController {
             if (maximums.isNotEmpty()) maximums.filter { it.priority.value == maximums[0].priority.value }
                 .minByOrNull { it.target }
             else null
+        val max: ControlInput? = maximumPitch
+        if (max != null) {
+            max.target.requireIn(-90.0f..90.0f)
+            max.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE)
+        }
 
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
         minimumPitch =
             if (minimums.isNotEmpty()) minimums.filter { it.priority.value == minimums[0].priority.value }
                 .maxByOrNull { it.target }
             else null
-
-        val max: ControlInput? = maximumPitch
         val min: ControlInput? = minimumPitch
+        if (min != null) {
+            min.target.requireIn(-90.0f..90.0f)
+            min.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE)
+        }
+
         if (max != null && min != null && max.priority.isHigherOrSame(min.priority)) {
             minimumPitch = min.copy(target = min.target.coerceAtMost(max.target))
         }
@@ -120,7 +128,7 @@ class PitchComputer : Computer(), PitchController {
     private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float, deltaTimeMultiplier: Float) {
         val diff: Float = target - current
 
-        if (diff < 0.05) {
+        if (diff < 0.05f) {
             player.pitch = -target
         } else {
             player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier).coerceIn(0.0f..1.0f)

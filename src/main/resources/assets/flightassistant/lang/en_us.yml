@@ -62,7 +62,7 @@ config.flightassistant:
       mod_enabled: Enable FlightAssistant
       hud_enabled: Enable HUD
       safety_enabled: Enable safety features (alerts and protections)
-      automations_allowed_in_overlays: Allow automations (autopilot & flight protections) to run in GUIs (inventory & pause screen)
+      automations_allowed_in_overlays: Allow automations (AP & flight prots) to run in GUIs (inventory & pause screen)
     display:
       frame:
         .: Frame
@@ -113,9 +113,11 @@ config.flightassistant:
         warning: Warning only
         caution: Caution only
         disabled: Disabled
-      elytra_durability:
-        .: Elytra durability
-        alert_mode: Elytra durability alert mode
+      elytra:
+        .: Elytra
+        durability_alert_mode: Elytra durability alert mode
+        auto_open: Automatically open Elytra
+        close_underwater: Automatically close Elytra when underwater
       stall:
         .: Stall
         alert_mode: Stall alert mode

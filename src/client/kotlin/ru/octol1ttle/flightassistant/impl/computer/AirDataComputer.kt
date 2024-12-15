@@ -33,8 +33,8 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     val voidLevel: Int
         get() = world.bottomY - 64
     var groundLevel: Double? = 0.0
-        private set
-    val fallDistance: Float
+        private set(value) { field = value?.requireIn(world.bottomY.toDouble()..Double.MAX_VALUE) }
+    private val fallDistance: Float
         get() =
             if (groundLevel == null || groundLevel!! == Double.MAX_VALUE) Float.MAX_VALUE
             else max(player.fallDistance, (altitude - groundLevel!!).toFloat())
@@ -45,13 +45,13 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     var forwardVelocity: Vec3d = Vec3d.ZERO
         private set
     val pitch: Float
-        get() = -player.pitch
+        get() = -player.pitch.requireIn(-90.0f..90.0f)
     val yaw: Float
-        get() = wrapDegrees(player.yaw)
+        get() = wrapDegrees(player.yaw).requireIn(-180.0f..180.0f)
     val heading: Float
-        get() = yaw + 180.0f
+        get() = (yaw + 180.0f).requireIn(0.0f..360.0f)
     var roll: Float = 0.0f
-        private set
+        private set(value) { field = value.requireIn(-180.0f..180.0f) }
     val isCurrentChunkLoaded: Boolean
         get() = world.chunkManager.isChunkLoaded(player.chunkPos.x, player.chunkPos.z)
 
@@ -63,8 +63,8 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         roll = degrees(atan2(-RenderMatrices.worldSpaceMatrix.m10(), RenderMatrices.worldSpaceMatrix.m11()))
     }
 
-    fun automationsAllowed(): Boolean {
-        return flying && (FAConfig.global.automationsAllowedInOverlays || (mc.currentScreen == null && mc.overlay == null))
+    fun automationsAllowed(checkFlying: Boolean = true): Boolean {
+        return (!checkFlying || flying) && (FAConfig.global.automationsAllowedInOverlays || (mc.currentScreen == null && mc.overlay == null))
     }
 
     fun isInvulnerableTo(source: DamageSource): Boolean {
@@ -81,7 +81,7 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
             return groundLevel
         }
 
-        val minY: Double = voidLevel.toDouble().coerceAtLeast(altitude - 1000)
+        val minY: Double = world.bottomY.toDouble().coerceAtLeast(altitude - 1000)
         val result: BlockHitResult = world.raycast(
             RaycastContext(
                 position,
@@ -92,7 +92,7 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
             )
         )
         if (result.type == HitResult.Type.MISS) {
-            return if (result.pos.y > voidLevel) Double.MAX_VALUE else null
+            return if (result.pos.y > world.bottomY) Double.MAX_VALUE else null
         }
         return result.pos.y
     }
