@@ -1,9 +1,17 @@
 package ru.octol1ttle.flightassistant.api.util
 
-import kotlin.math.PI
+import kotlin.math.*
 
 fun degrees(value: Float): Float {
     return (value * (180 / PI)).toFloat()
+}
+
+fun furtherFromZero(value: Float): Float {
+    return if (value < 0.0f) {
+        floor(value)
+    } else {
+        ceil(value)
+    }
 }
 
 fun Float.requireFinite(): Float {

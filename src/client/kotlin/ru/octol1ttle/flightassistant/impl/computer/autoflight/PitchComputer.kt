@@ -85,10 +85,7 @@ class PitchComputer : Computer(), PitchController {
 
     private fun updateSafePitches(computers: ComputerAccess) {
         val maximums: List<ControlInput> = limiters.mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
-        maximumPitch =
-            if (maximums.isNotEmpty()) maximums.filter { it.priority.value == maximums[0].priority.value }
-                .minByOrNull { it.target }
-            else null
+        maximumPitch = maximums.filter { it.priority.value == maximums[0].priority.value }.minByOrNull { it.target }
         val max: ControlInput? = maximumPitch
         if (max != null) {
             max.target.requireIn(-90.0f..90.0f)
@@ -96,10 +93,7 @@ class PitchComputer : Computer(), PitchController {
         }
 
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
-        minimumPitch =
-            if (minimums.isNotEmpty()) minimums.filter { it.priority.value == minimums[0].priority.value }
-                .maxByOrNull { it.target }
-            else null
+        minimumPitch = minimums.filter { it.priority.value == minimums[0].priority.value }.maxByOrNull { it.target }
         val min: ControlInput? = minimumPitch
         if (min != null) {
             min.target.requireIn(-90.0f..90.0f)

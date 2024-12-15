@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.alert.autoflight
+package ru.octol1ttle.flightassistant.impl.alert.thrust
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text

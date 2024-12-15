@@ -39,7 +39,10 @@ alerts.flightassistant:
     no_source: NO SRC AVAIL
     locked:
       .: LOCKED
-      use_keys: '-THR CTRL KEYS: USE'
+      use_keys: ' -THR CTRL KEYS: USE'
+    reverse_not_supported:
+      .: REVERSE NOT SUPPORTED
+      set_forward: ' -THR: SET FORWARD'
   navigation:
     .: NAV
     air_data_fault: AIR DATA FAULT

@@ -9,8 +9,6 @@ import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
-import ru.octol1ttle.flightassistant.impl.alert.autoflight.NoThrustSourceAlert
-import ru.octol1ttle.flightassistant.impl.alert.autoflight.ThrustLockedAlert
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
@@ -19,6 +17,7 @@ import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
 import ru.octol1ttle.flightassistant.impl.alert.stall.*
+import ru.octol1ttle.flightassistant.impl.alert.thrust.*
 import ru.octol1ttle.flightassistant.impl.computer.*
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
@@ -72,6 +71,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ComputerFaultAlert(ThrustComputer.ID, Text.translatable("alerts.flightassistant.thrust.fault")))
                 .add(ThrustLockedAlert())
                 .add(NoThrustSourceAlert())
+                .add(ReverseThrustNotSupportedAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))

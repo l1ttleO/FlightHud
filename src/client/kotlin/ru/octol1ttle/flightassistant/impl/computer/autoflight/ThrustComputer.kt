@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
 import java.awt.Color
-import kotlin.math.roundToInt
 import net.minecraft.text.*
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
@@ -19,14 +18,13 @@ class ThrustComputer : Computer() {
     private var lastInputAutomatic: Boolean = false
 
     var targetThrust: Float = 0.0f
-        internal set(value) {
-            field = value
-            lastInputAutomatic = false
-        }
+        private set
 
     var activeThrustInput: ControlInput? = null
         private set
     var noThrustSource: Boolean = false
+        private set
+    var reverseUnsupported: Boolean = false
         private set
     var thrustLocked: Boolean = false
         private set
@@ -38,44 +36,51 @@ class ThrustComputer : Computer() {
 
     override fun tick(computers: ComputerAccess) {
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
-        noThrustSource = thrustSource == null
 
-        var inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
-        inputs = inputs.filter { it.priority.value == inputs[0].priority.value }.sortedBy { it.target }
-        val finalInput: ControlInput? = inputs.firstOrNull()
-        if (finalInput?.active == true) {
-            activeThrustInput = finalInput.copy(active = !noThrustSource)
-            targetThrust = finalInput.target.requireIn(-1.0f..1.0f)
-            lastInputAutomatic = true
-            thrustLocked = false
-            if (computers.data.automationsAllowed()) {
-                thrustSource?.tickThrust(computers, targetThrust)
-            }
+        val controllerInputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
+        val finalControllerInput: ControlInput? = controllerInputs.filter { it.priority.value == controllerInputs[0].priority.value }.maxByOrNull { it.target }
+
+        noThrustSource = false
+        reverseUnsupported = false
+
+        if (finalControllerInput?.active == true) {
+            setTarget(finalControllerInput.target, true)
+            activeThrustInput = finalControllerInput
+        } else if (targetThrust == 0.0f) {
+            activeThrustInput = finalControllerInput
             return
-        }
-
-        thrustLocked = lastInputAutomatic
-        if (targetThrust.requireIn(-1.0f..1.0f) == 0.0f) {
-            noThrustSource = finalInput != null && thrustSource == null
-            activeThrustInput = null
-            return
-        }
-
-        val thrustValueText: MutableText = Text.literal((targetThrust * 100).roundToInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
-
-        activeThrustInput = ControlInput(targetThrust, ControlInput.Priority.NORMAL, if (thrustLocked) {
-            if (totalTicks % 20 >= 10)
-                if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.locked_toga").setStyle(Style.EMPTY.withColor(cautionColor))
-                else Text.translatable("mode.flightassistant.thrust.locked", thrustValueText).setStyle(Style.EMPTY.withColor(cautionColor))
-            else null
         } else {
-            if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.manual_toga").setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
-            else Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
-        }, active = !noThrustSource)
+            thrustLocked = lastInputAutomatic
+            reverseUnsupported = targetThrust < 0.0f && thrustSource?.supportsReverse == false
+
+            val thrustValueText: MutableText = Text.literal(furtherFromZero(targetThrust * 100).toInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
+            val manualThrustText: Text? =
+                if (thrustLocked) {
+                    if (totalTicks % 20 >= 10)
+                        if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.locked_toga").setStyle(Style.EMPTY.withColor(cautionColor))
+                        else Text.translatable("mode.flightassistant.thrust.locked", thrustValueText).setStyle(Style.EMPTY.withColor(cautionColor))
+                    else null
+                } else {
+                    if (targetThrust == 1.0f) Text.translatable("mode.flightassistant.thrust.manual_toga").setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
+                    else Text.translatable("mode.flightassistant.thrust.manual", thrustValueText).setStyle(Style.EMPTY.withColor(Color.WHITE.rgb))
+                }
+
+            activeThrustInput = ControlInput(targetThrust, ControlInput.Priority.NORMAL, manualThrustText)
+        }
+
+        noThrustSource = thrustSource == null
+        targetThrust.requireIn(-1.0f..1.0f)
+
+        activeThrustInput = activeThrustInput?.copy(active = !noThrustSource && !reverseUnsupported)
 
         if (computers.data.automationsAllowed()) {
-            thrustSource?.tickThrust(computers, targetThrust)
+            thrustSource?.tickThrust(computers, targetThrust.coerceIn((if (thrustSource.supportsReverse) -1.0f else 0.0f)..1.0f))
         }
+    }
+
+    fun setTarget(target: Float, automatic: Boolean) {
+        targetThrust = target
+        lastInputAutomatic = automatic
     }
 
     companion object {

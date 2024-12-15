@@ -26,25 +26,24 @@ object FAKeyBindings {
         }
     }
 
-    fun addKeyBinding(translationKey: String, code: Int): KeyBinding {
+    private fun addKeyBinding(translationKey: String, code: Int): KeyBinding {
         val keyBinding = KeyBinding(translationKey, InputUtil.Type.KEYSYM, code, "keys.flightassistant")
         keyBindings.add(keyBinding)
         return keyBinding
     }
 
-    // tODO: reverse thrust
     fun checkPressed(computers: ComputerAccess) {
         while (setIdle.wasPressed()) {
-            computers.thrust.targetThrust = 0.0f
+            computers.thrust.setTarget(0.0f, false)
         }
         while (setToga.wasPressed()) {
-            computers.thrust.targetThrust = 1.0f
+            computers.thrust.setTarget(1.0f, false)
         }
         while (decreaseThrust.wasPressed()) {
-            computers.thrust.targetThrust = (computers.thrust.targetThrust - FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
+            computers.thrust.setTarget((computers.thrust.targetThrust - FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
         }
         while (increaseThrust.wasPressed()) {
-            computers.thrust.targetThrust = (computers.thrust.targetThrust + FATickCounter.timePassed / 3).coerceIn(0.0f..1.0f)
+            computers.thrust.setTarget((computers.thrust.targetThrust + FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
         }
     }
 }
