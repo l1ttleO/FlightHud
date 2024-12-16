@@ -39,13 +39,12 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
-        if (status != Status.ABOVE_GROUND) {
+        if (FAConfig.safety.voidLimitPitch && status != Status.ABOVE_GROUND) {
             return ControlInput(
                 (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
                     .coerceIn(-35.0f..55.0f),
                 ControlInput.Priority.HIGH,
-                Text.translatable("mode.flightassistant.pitch.void_protection"),
-                active = FAConfig.safety.voidLimitPitch
+                Text.translatable("mode.flightassistant.pitch.void_protection")
             )
         }
 

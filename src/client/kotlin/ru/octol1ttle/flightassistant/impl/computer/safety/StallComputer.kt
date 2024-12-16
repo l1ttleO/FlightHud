@@ -29,12 +29,12 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
-        if (status != Status.SAFE) {
+        if (FAConfig.safety.stallAutoThrust && status != Status.SAFE) {
             return ControlInput(
                 1.0f,
                 ControlInput.Priority.HIGHEST,
                 Text.translatable("mode.flightassistant.thrust.toga"),
-                active = FAConfig.safety.stallAutoThrust && status == Status.FULL_STALL
+                active = status == Status.FULL_STALL
             )
         }
 
@@ -42,15 +42,14 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
     }
 
     override fun getMaximumPitch(computers: ComputerAccess): ControlInput? {
-        if (computers.data.fallDistanceSafe) {
+        if (!FAConfig.safety.stallLimitPitch || computers.data.fallDistanceSafe) {
             return null
         }
 
         return ControlInput(
             (computers.data.forwardVelocity.length() * 20.0f * 3.0f).toFloat().coerceIn(0.0f..90.0f),
             ControlInput.Priority.HIGHEST,
-            Text.translatable("mode.flightassistant.pitch.stall_protection"),
-            active = FAConfig.safety.stallLimitPitch
+            Text.translatable("mode.flightassistant.pitch.stall_protection")
         )
     }
 

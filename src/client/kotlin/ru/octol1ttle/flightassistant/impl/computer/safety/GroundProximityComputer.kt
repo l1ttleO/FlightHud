@@ -107,14 +107,11 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
     }
 
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
-        if (groundImpactStatus <= Status.WARNING || obstacleImpactStatus <= Status.WARNING) {
-            val active: Boolean = groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateLimitPitch
-                    || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleLimitPitch
+        if (groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateLimitPitch || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleLimitPitch) {
             return ControlInput(
                 computers.data.pitch,
                 ControlInput.Priority.HIGH,
-                Text.translatable("mode.flightassistant.pitch.terrain_protection"),
-                active = active
+                Text.translatable("mode.flightassistant.pitch.terrain_protection")
             )
         }
 
@@ -122,15 +119,12 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
-        if (groundImpactStatus == Status.RECOVER || obstacleImpactStatus == Status.RECOVER) {
-            val active: Boolean = groundImpactStatus == Status.RECOVER && FAConfig.safety.sinkRateAutoPitch
-                    || obstacleImpactStatus == Status.RECOVER && FAConfig.safety.obstacleAutoPitch
+        if (groundImpactStatus == Status.RECOVER && FAConfig.safety.sinkRateAutoPitch || obstacleImpactStatus == Status.RECOVER && FAConfig.safety.obstacleAutoPitch) {
             return ControlInput(
                 90.0f,
                 ControlInput.Priority.HIGH,
                 Text.translatable("mode.flightassistant.pitch.terrain_escape"),
-                1.0f / min(groundImpactTime, obstacleImpactTime),
-                active = active
+                1.0f / min(groundImpactTime, obstacleImpactTime)
             )
         }
 

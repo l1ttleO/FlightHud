@@ -48,6 +48,7 @@ class ThrustComputer : Computer() {
             activeThrustInput = finalControllerInput
         } else if (targetThrust == 0.0f) {
             activeThrustInput = finalControllerInput
+            thrustLocked = false
             return
         } else {
             thrustLocked = lastInputAutomatic

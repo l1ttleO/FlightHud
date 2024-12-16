@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer
 
-import kotlin.math.atan2
-import kotlin.math.max
+import kotlin.math.*
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.world.ClientWorld
@@ -11,7 +10,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.hit.*
 import net.minecraft.util.math.*
 import net.minecraft.util.math.MathHelper.wrapDegrees
-import net.minecraft.world.*
+import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.util.*
