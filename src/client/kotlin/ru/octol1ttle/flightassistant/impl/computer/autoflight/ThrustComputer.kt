@@ -47,7 +47,9 @@ class ThrustComputer : Computer() {
             setTarget(finalControllerInput.target, true)
             activeThrustInput = finalControllerInput
         } else if (targetThrust == 0.0f) {
-            activeThrustInput = finalControllerInput
+            noThrustSource = finalControllerInput != null && thrustSource == null
+            val text: Text? = if (!noThrustSource) finalControllerInput?.text else finalControllerInput?.text?.copy()?.styled { it.withColor(cautionColor) }
+            activeThrustInput = finalControllerInput?.copy(text = text)
             thrustLocked = false
             return
         } else {
@@ -72,7 +74,9 @@ class ThrustComputer : Computer() {
         noThrustSource = thrustSource == null
         targetThrust.requireIn(-1.0f..1.0f)
 
-        activeThrustInput = activeThrustInput?.copy(active = !noThrustSource && !reverseUnsupported)
+        val active: Boolean = !noThrustSource && !reverseUnsupported
+        val text: Text? = if (active) activeThrustInput?.text else activeThrustInput?.text?.copy()?.styled { it.withColor(cautionColor) }
+        activeThrustInput = activeThrustInput?.copy(text = text, active = active)
 
         if (computers.data.automationsAllowed()) {
             thrustSource?.tickThrust(computers, targetThrust.coerceIn((if (thrustSource.supportsReverse) -1.0f else 0.0f)..1.0f))
@@ -82,6 +86,15 @@ class ThrustComputer : Computer() {
     fun setTarget(target: Float, automatic: Boolean) {
         targetThrust = target
         lastInputAutomatic = automatic
+    }
+
+    fun getOptimumClimbPitch(): Float {
+        val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
+        if (thrustSource != null) {
+            return thrustSource.optimumClimbPitch
+        }
+
+        return 55.0f
     }
 
     companion object {

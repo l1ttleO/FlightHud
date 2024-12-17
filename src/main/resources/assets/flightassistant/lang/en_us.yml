@@ -4,12 +4,14 @@ alerts.flightassistant:
       .: HUD
       flightassistant:altitude: ALT DSPL FAULT
       flightassistant:attitude: ATT DSPL FAULT
+      flightassistant:automation_modes: AUTO MODE DSPL FAULT
       flightassistant:coordinates: COORD DSPL FAULT
       flightassistant:elytra_durability: E/DURA DSPL FAULT
       flightassistant:flight_path: F/PATH DSPL FAULT
+      flightassistant:heading: HDG DSPL FAULT
       flightassistant:radar_altitude: R/ALT DSPL FAULT
       flightassistant:speed: SPD DSPL FAULT
-      flightassistant:velocity_components: VEL/CPMN DSPL FAULT
+      flightassistant:velocity_components: VEL/CMPN DSPL FAULT
   stall:
     .: STALL
     detection_fault: STALL DETECT FAULT
@@ -79,7 +81,11 @@ config.flightassistant:
         warning: Warning color
       attitude:
         .: Attitude display
-        enabled: Show attitude
+        enabled:
+          .: Show attitude
+          horizon_and_ladder: Horizon and pitch ladder
+          horizon_only: Horizon only
+          disabled: Disabled
         degree_step: Line degree step
         horizon_outside_frame: Draw horizon outside frame
         pitch_outside_frame: Draw pitch lines outside frame
@@ -161,12 +167,13 @@ short.flightassistant:
   alert: ALERT
   altitude: ALT
   attitude: ATT
-  automation_mode: AUTO/MODE
+  automation_modes: AUTO/MODE
   elytra: E
   elytra_durability: E/DURA
   flight_path: F/PTH
   ground: GRND
   ground_speed: 'G/S%s'
+  heading: HDG
   infinite: INFN
   radar_altitude: R/ALT
   speed: SPD

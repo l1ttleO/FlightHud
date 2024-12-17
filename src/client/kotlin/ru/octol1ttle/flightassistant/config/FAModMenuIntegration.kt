@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.config.options.*
-import ru.octol1ttle.flightassistant.impl.computer.safety.ElytraStatusComputer
 
 object FAModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parent: Screen ->
@@ -122,10 +121,10 @@ object FAModMenuIntegration : ModMenuApi {
             }
 
             rootOptions.registerLabel("attitude", Text.translatable("config.flightassistant.options.display.attitude"))
-            rootOptions.register<Boolean>("attitude.enabled") {
+            rootOptions.register<DisplayOptions.AttitudeDisplayMode>("attitude.enabled") {
                 setDisplayName()
                 binding(current::showAttitude, defaults.showAttitude)
-                controller(tickBox())
+                controller(enumSwitch(DisplayOptions.AttitudeDisplayMode::class.java))
             }
             rootOptions.register<Int>("attitude.degree_step") {
                 setDisplayName()
@@ -144,7 +143,7 @@ object FAModMenuIntegration : ModMenuApi {
             }
             rootOptions.register<Boolean>("attitude.show_heading") {
                 setDisplayName()
-                binding(current::showHorizonHeading, defaults.showHorizonHeading)
+                binding(current::showHeadingScale, defaults.showHeadingScale)
                 controller(tickBox())
             }
             rootOptions.register<Int>("attitude.heading_step") {
@@ -201,10 +200,10 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::showFlightPathVector, defaults.showFlightPathVector)
                 controller(tickBox())
             }
-            rootOptions.register<ElytraStatusComputer.DurabilityUnits>("elytra_durability.units") {
+            rootOptions.register<DisplayOptions.DurabilityUnits>("elytra_durability.units") {
                 setDisplayName()
                 binding(current::elytraDurabilityUnits, defaults.elytraDurabilityUnits)
-                controller(enumSwitch(ElytraStatusComputer.DurabilityUnits::class.java))
+                controller(enumSwitch(DisplayOptions.DurabilityUnits::class.java))
             }
 
             rootOptions.registerLabel("misc", Text.translatable("config.flightassistant.options.display.misc"))

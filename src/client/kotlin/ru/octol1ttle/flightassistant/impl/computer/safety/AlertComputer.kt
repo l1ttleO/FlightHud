@@ -12,13 +12,11 @@ import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
 import ru.octol1ttle.flightassistant.impl.alert.elytra.*
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
-import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
-import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
-import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.*
 import ru.octol1ttle.flightassistant.impl.alert.navigation.*
 import ru.octol1ttle.flightassistant.impl.alert.stall.*
 import ru.octol1ttle.flightassistant.impl.alert.thrust.*
-import ru.octol1ttle.flightassistant.impl.computer.*
+import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
@@ -101,7 +99,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
 
         categories.sortBy { it.getHighestPriority()?.priority }
 
-        var interrupt: Boolean = !computers.data.flying
+        var interrupt: Boolean = computers.data.player.isDead || !computers.data.flying
         for (category: AlertCategory in categories) {
             for (alert: Alert in category.activeAlerts) {
                 val soundInstance: AlertSoundInstance? = alert.soundInstance

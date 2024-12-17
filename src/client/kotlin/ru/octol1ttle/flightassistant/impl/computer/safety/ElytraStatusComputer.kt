@@ -1,6 +1,5 @@
 package ru.octol1ttle.flightassistant.impl.computer.safety
 
-import dev.isxander.yacl3.api.NameableEnum
 import java.time.Duration
 import kotlin.math.*
 import net.fabricmc.fabric.api.util.TriState
@@ -16,6 +15,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
 import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
 class ElytraStatusComputer : Computer() {
@@ -59,7 +59,7 @@ class ElytraStatusComputer : Computer() {
 
     private fun findActiveElytra(player: PlayerEntity): ItemStack? {
         for (stack: ItemStack in player.armorItems) {
-            if (stack.item is ElytraItem) { // TODO: update to 1.21.3 and replace with isGliding check
+            if (stack.item is ElytraItem) {
                 return stack
             }
         }
@@ -72,7 +72,7 @@ class ElytraStatusComputer : Computer() {
         return null
     }
 
-    fun formatDurability(units: DurabilityUnits, player: PlayerEntity): Text? {
+    fun formatDurability(units: DisplayOptions.DurabilityUnits, player: PlayerEntity): Text? {
         val active: ItemStack = activeElytra ?: return null
         if (!active.isDamageable) {
             return Text.translatable("short.flightassistant.infinite")
@@ -83,9 +83,9 @@ class ElytraStatusComputer : Computer() {
         )
 
         return when (units) {
-            DurabilityUnits.RAW -> Text.literal((active.maxDamage - active.damage).toString())
-            DurabilityUnits.PERCENTAGE -> Text.literal("${round((active.maxDamage - active.damage - 1) * 100 / active.maxDamage.toFloat()).roundToInt()}%")
-            DurabilityUnits.TIME -> {
+            DisplayOptions.DurabilityUnits.RAW -> Text.literal((active.maxDamage - active.damage).toString())
+            DisplayOptions.DurabilityUnits.PERCENTAGE -> Text.literal("${round((active.maxDamage - active.damage - 1) * 100 / active.maxDamage.toFloat()).roundToInt()}%")
+            DisplayOptions.DurabilityUnits.TIME -> {
                 val duration: Duration = Duration.ofSeconds(getRemainingFlightTime(player)!!.toLong())
                 val seconds: Int = when (unbreakingLevel) {
                     0 -> duration.toSecondsPart()
@@ -112,20 +112,5 @@ class ElytraStatusComputer : Computer() {
 
     companion object {
         val ID: Identifier = FlightAssistant.id("elytra_status")
-    }
-
-    enum class DurabilityUnits : NameableEnum {
-        RAW {
-            override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.elytra_durability.units.raw")
-        },
-        PERCENTAGE {
-            override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.elytra_durability.units.percentage")
-        },
-        TIME {
-            override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.elytra_durability.units.time")
-        };
     }
 }

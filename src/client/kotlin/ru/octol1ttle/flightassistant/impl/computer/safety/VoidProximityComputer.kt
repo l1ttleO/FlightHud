@@ -9,8 +9,7 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.data
-import ru.octol1ttle.flightassistant.api.util.thrust
+import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustController {
@@ -52,15 +51,16 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
-        if (FAConfig.safety.voidAutoPitch && status == Status.REACHED_DAMAGE_ALTITUDE && computers.thrust.targetThrust == 1.0f && !computers.thrust.noThrustSource) {
-            return ControlInput(55.0f /* TODO: get optimum climb pitch from thrust source*/, ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.pitch.void_escape"))
+        if (FAConfig.safety.voidAutoPitch && status <= Status.APPROACHING_DAMAGE_ALTITUDE) {
+            return ControlInput(computers.thrust.getOptimumClimbPitch(), ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.pitch.void_escape"),
+                active = status == Status.REACHED_DAMAGE_ALTITUDE && computers.thrust.targetThrust == 1.0f && !computers.thrust.noThrustSource)
         }
 
         return null
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
-        if (FAConfig.safety.voidAutoThrust && status < Status.CLEAR_OF_DAMAGE_ALTITUDE) {
+        if (FAConfig.safety.voidAutoThrust && status <= Status.APPROACHING_DAMAGE_ALTITUDE) {
             return ControlInput(
                 1.0f,
                 ControlInput.Priority.HIGH,

@@ -45,9 +45,9 @@ class RadarAltitudeDisplay : Display() {
             }
             val xOffset: Int = getTextWidth(altType) + 1
 
-            drawText(altType, x, y + 2, color)
-            drawBorder(x + xOffset, y, getTextWidth(altString) + 5, 11, color)
-            drawText(altString, x + xOffset + 3, y + 2, color)
+            drawText(altType, x - xOffset, y + 2, color)
+            drawBorder(x, y, getTextWidth(altString) + 5, 11, color)
+            drawText(altString, x + 3, y + 2, color)
         }
     }
 

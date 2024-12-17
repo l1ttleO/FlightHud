@@ -26,7 +26,7 @@ fun Float.requireIn(range: ClosedFloatingPointRange<Float>): Float {
     this.requireFinite()
     
     require(range.contains(this)) {
-        "Float value invalid; expected [${range.start}, ${range.endInclusive}], got $this"
+        "Float value invalid; expected [${range.start}; ${range.endInclusive}], got $this"
     }
 
     return this
@@ -44,7 +44,7 @@ fun Double.requireIn(range: ClosedRange<Double>): Double {
     this.requireFinite()
 
     require(range.contains(this)) {
-        "Double value invalid; expected [${range.start}, ${range.endInclusive}], got $this"
+        "Double value invalid; expected [${range.start}; ${range.endInclusive}], got $this"
     }
 
     return this

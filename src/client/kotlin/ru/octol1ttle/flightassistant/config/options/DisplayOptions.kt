@@ -1,8 +1,9 @@
 package ru.octol1ttle.flightassistant.config.options
 
+import dev.isxander.yacl3.api.NameableEnum
 import dev.isxander.yacl3.config.v2.api.SerialEntry
 import java.awt.Color
-import ru.octol1ttle.flightassistant.impl.computer.safety.ElytraStatusComputer
+import net.minecraft.text.Text
 
 class DisplayOptions {
     @SerialEntry
@@ -21,15 +22,18 @@ class DisplayOptions {
     var warningColor: Color = Color.RED
 
     @SerialEntry
-    var showAttitude: Boolean = true // potential TODO: allow displaying only the horizon?
+    var showAttitude: AttitudeDisplayMode = AttitudeDisplayMode.HORIZON_AND_LADDER
     @SerialEntry
     var attitudeDegreeStep: Int = 15
     @SerialEntry
     var drawHorizonOutsideFrame: Boolean = true
     @SerialEntry
     var drawPitchOutsideFrame: Boolean = true
+
     @SerialEntry
-    var showHorizonHeading: Boolean = true
+    var showHeadingReading: Boolean = true
+    @SerialEntry
+    var showHeadingScale: Boolean = true
     @SerialEntry
     var headingDegreeStep: Int = 10
 
@@ -53,7 +57,7 @@ class DisplayOptions {
     @SerialEntry
     var showElytraDurability: Boolean = true
     @SerialEntry
-    var elytraDurabilityUnits: ElytraStatusComputer.DurabilityUnits = ElytraStatusComputer.DurabilityUnits.PERCENTAGE
+    var elytraDurabilityUnits: DurabilityUnits = DurabilityUnits.PERCENTAGE
 
     @SerialEntry
     var showCoordinates: Boolean = true
@@ -70,7 +74,7 @@ class DisplayOptions {
     var showAutomationModes: Boolean = true
 
     internal fun setMinimal(): DisplayOptions {
-        this.showAttitude = false
+        this.showAttitude = AttitudeDisplayMode.DISABLED
         this.showSpeedReading = false
         this.showSpeedScale = false
         this.showAltitudeScale = false
@@ -81,7 +85,7 @@ class DisplayOptions {
     }
 
     internal fun setDisabled(): DisplayOptions {
-        this.showAttitude = false
+        this.showAttitude = AttitudeDisplayMode.DISABLED
         this.showSpeedReading = false
         this.showSpeedScale = false
         this.showAltitudeReading = false
@@ -95,5 +99,35 @@ class DisplayOptions {
         this.showAlerts = false
         this.showAutomationModes = false
         return this
+    }
+
+    enum class AttitudeDisplayMode : NameableEnum {
+        HORIZON_AND_LADDER {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.attitude.enabled.horizon_and_ladder")
+        },
+        HORIZON_ONLY {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.attitude.enabled.horizon_only")
+        },
+        DISABLED {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.attitude.enabled.disabled")
+        };
+    }
+
+    enum class DurabilityUnits : NameableEnum {
+        RAW {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.raw")
+        },
+        PERCENTAGE {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.percentage")
+        },
+        TIME {
+            override fun getDisplayName(): Text =
+                Text.translatable("config.flightassistant.options.display.elytra_durability.units.time")
+        };
     }
 }

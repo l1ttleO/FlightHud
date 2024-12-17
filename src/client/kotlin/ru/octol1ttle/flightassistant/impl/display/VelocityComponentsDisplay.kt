@@ -44,14 +44,14 @@ class VelocityComponentsDisplay : Display() {
     override fun renderFaulted(drawContext: DrawContext) {
         with(drawContext) {
             val x: Int = HudFrame.right - 25
-            var y: Int = HudFrame.bottom - 19
+            var y: Int = HudFrame.bottom - 10
 
             if (FAConfig.display.showVerticalSpeed) {
-                drawText(Text.translatable("short.flightassistant.vertical_speed", ""), x, y, primaryColor)
+                drawText(Text.translatable("short.flightassistant.vertical_speed", ""), x, y, warningColor)
                 y -= fontHeight
             }
             if (FAConfig.display.showGroundSpeed) {
-                drawText(Text.translatable("short.flightassistant.ground_speed", ""), x, y, primaryColor)
+                drawText(Text.translatable("short.flightassistant.ground_speed", ""), x, y, warningColor)
             }
         }
     }

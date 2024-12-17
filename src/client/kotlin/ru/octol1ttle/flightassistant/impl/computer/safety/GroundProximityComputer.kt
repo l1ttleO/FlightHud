@@ -119,12 +119,13 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
     }
 
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
-        if (groundImpactStatus == Status.RECOVER && FAConfig.safety.sinkRateAutoPitch || obstacleImpactStatus == Status.RECOVER && FAConfig.safety.obstacleAutoPitch) {
+        if (groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateAutoPitch || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleAutoPitch) {
             return ControlInput(
                 90.0f,
                 ControlInput.Priority.HIGH,
                 Text.translatable("mode.flightassistant.pitch.terrain_escape"),
-                1.0f / min(groundImpactTime, obstacleImpactTime)
+                1.0f / min(groundImpactTime, obstacleImpactTime),
+                active = groundImpactStatus == Status.RECOVER || obstacleImpactStatus == Status.RECOVER
             )
         }
 

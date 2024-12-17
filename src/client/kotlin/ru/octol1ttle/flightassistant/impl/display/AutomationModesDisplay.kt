@@ -2,7 +2,6 @@ package ru.octol1ttle.flightassistant.impl.display
 
 import java.util.Objects
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
@@ -30,12 +29,12 @@ class AutomationModesDisplay : Display() {
             val x: Int = centerXI
             val y: Int = HudFrame.top - 9
 
-            drawMiddleAlignedText(Text.translatable("short.flightassistant.automation_mode"), x, y, warningColor)
+            drawMiddleAlignedText(Text.translatable("short.flightassistant.automation_modes"), x, y, warningColor)
         }
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("automation_mode")
+        val ID: Identifier = FlightAssistant.id("automation_modes")
         const val TOTAL_MODES: Float = 5.0f
     }
 
@@ -56,15 +55,11 @@ class AutomationModesDisplay : Display() {
             }
 
             if (text != null) {
-                drawContext.drawMiddleAlignedText(if (input.active) text else text.copy().fillStyle(STRIKETHROUGH), (leftX + rightX) / 2, y, if (input.active) primaryColor else cautionColor)
+                drawContext.drawMiddleAlignedText(if (input.active) text else text.copy().styled { it.withStrikethrough(true) }, (leftX + rightX) / 2, y, if (input.active) primaryColor else 0xFFFFFFFF.toInt())
             }
             if (FATickCounter.totalTicks <= textChangeTicks + (if (text == null) 60 else 100)) {
                 drawContext.drawBorder(leftX + 1, y - 2, rightX - leftX - 1, 11, 0xFFFFFFFF.toInt())
             }
-        }
-
-        companion object {
-            val STRIKETHROUGH: Style = Style.EMPTY.withStrikethrough(true)
         }
     }
 }

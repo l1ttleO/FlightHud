@@ -16,6 +16,8 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         get() = ThrustSource.Priority.LOW
     override val supportsReverse: Boolean
         get() = false
+    override val optimumClimbPitch: Float
+        get() = 55.0f
 
     private var safeFireworkCount: Int = 0
     private var safeFireworkSlot: Int? = 0

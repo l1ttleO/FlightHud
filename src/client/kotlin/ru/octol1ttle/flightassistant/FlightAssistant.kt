@@ -30,8 +30,8 @@ object FlightAssistant : ClientModInitializer {
     private fun registerCallbacks() {
         ClientLifecycleEvents.CLIENT_STARTED.register {
             logger.info("Initializing (stage 2)")
-            ComputerHost.sendRegistrationEvent()
             HudDisplayHost.sendRegistrationEvent()
+            ComputerHost.sendRegistrationEvent()
         }
         WorldRenderEvents.START.register {
             FAKeyBindings.checkPressed(ComputerHost)

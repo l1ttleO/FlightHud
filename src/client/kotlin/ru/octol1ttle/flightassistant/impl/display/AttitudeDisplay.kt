@@ -11,11 +11,12 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 
 
 class AttitudeDisplay : Display() {
     override fun enabled(): Boolean {
-        return FAConfig.display.showAttitude
+        return FAConfig.display.showAttitude != DisplayOptions.AttitudeDisplayMode.DISABLED
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
@@ -24,9 +25,13 @@ class AttitudeDisplay : Display() {
             matrices.translate(0, 0, -200)
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
-            renderHorizon(computers)
-            renderPitchBars(computers)
-            renderPitchLimits(computers)
+            if (FAConfig.display.showAttitude <= DisplayOptions.AttitudeDisplayMode.HORIZON_ONLY) {
+                renderHorizon(computers)
+            }
+            if (FAConfig.display.showAttitude == DisplayOptions.AttitudeDisplayMode.HORIZON_AND_LADDER) {
+                renderPitchBars(computers)
+                renderPitchLimits(computers)
+            }
 
             matrices.pop()
         }
@@ -44,7 +49,7 @@ class AttitudeDisplay : Display() {
             val rightXStart: Int = (centerX + halfWidth * 0.025).toInt()
             drawHorizontalLine(rightXStart, scaledWindowWidth, it, primaryColor)
 
-            if (FAConfig.display.showHorizonHeading) {
+            if (FAConfig.display.showHeadingScale) {
                 drawHeading(computers, it)
             }
         }
@@ -145,7 +150,7 @@ class AttitudeDisplay : Display() {
                     180 -> "+Z"
                     270 -> "-X"
                     else -> throw IllegalArgumentException("Degree range out of bounds: $heading")
-                }.toString(), x, y + 3, primaryColor
+                }, x, y + 3, primaryColor
             )
         }
     }
