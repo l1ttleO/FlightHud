@@ -48,7 +48,7 @@ class ThrustComputer : Computer() {
             activeThrustInput = finalControllerInput
         } else if (targetThrust == 0.0f) {
             noThrustSource = finalControllerInput != null && thrustSource == null
-            val text: Text? = if (!noThrustSource) finalControllerInput?.text else finalControllerInput?.text?.copy()?.styled { it.withColor(cautionColor) }
+            val text: Text? = if (!noThrustSource) finalControllerInput?.text else finalControllerInput?.text?.copy()?.withColor(cautionColor)
             activeThrustInput = finalControllerInput?.copy(text = text)
             thrustLocked = false
             return
@@ -75,7 +75,7 @@ class ThrustComputer : Computer() {
         targetThrust.requireIn(-1.0f..1.0f)
 
         val active: Boolean = !noThrustSource && !reverseUnsupported
-        val text: Text? = if (active) activeThrustInput?.text else activeThrustInput?.text?.copy()?.styled { it.withColor(cautionColor) }
+        val text: Text? = if (active) activeThrustInput?.text else activeThrustInput?.text?.copy()?.withColor(cautionColor)
         activeThrustInput = activeThrustInput?.copy(text = text, active = active)
 
         if (computers.data.automationsAllowed()) {

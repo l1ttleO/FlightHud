@@ -75,6 +75,7 @@ class DisplayOptions {
 
     internal fun setMinimal(): DisplayOptions {
         this.showAttitude = AttitudeDisplayMode.DISABLED
+        this.showHeadingScale = false
         this.showSpeedReading = false
         this.showSpeedScale = false
         this.showAltitudeScale = false
@@ -86,6 +87,8 @@ class DisplayOptions {
 
     internal fun setDisabled(): DisplayOptions {
         this.showAttitude = AttitudeDisplayMode.DISABLED
+        this.showHeadingReading = false
+        this.showHeadingScale = false
         this.showSpeedReading = false
         this.showSpeedScale = false
         this.showAltitudeReading = false
@@ -104,15 +107,15 @@ class DisplayOptions {
     enum class AttitudeDisplayMode : NameableEnum {
         HORIZON_AND_LADDER {
             override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.attitude.enabled.horizon_and_ladder")
+                Text.translatable("config.flightassistant.options.display.attitude.show.horizon_and_ladder")
         },
         HORIZON_ONLY {
             override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.attitude.enabled.horizon_only")
+                Text.translatable("config.flightassistant.options.display.attitude.show.horizon_only")
         },
         DISABLED {
             override fun getDisplayName(): Text =
-                Text.translatable("config.flightassistant.options.display.attitude.enabled.disabled")
+                Text.translatable("config.flightassistant.options.display.attitude.show.disabled")
         };
     }
 

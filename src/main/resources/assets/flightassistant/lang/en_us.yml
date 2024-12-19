@@ -14,7 +14,7 @@ alerts.flightassistant:
       flightassistant:velocity_components: VEL/CMPN DSPL FAULT
   stall:
     .: STALL
-    detection_fault: STALL DETECT FAULT
+    detection_fault: DETECT FAULT
   autoflight:
     .: AUTO FLT
     pitch_fault: PITCH CTL FAULT
@@ -81,7 +81,7 @@ config.flightassistant:
         warning: Warning color
       attitude:
         .: Attitude display
-        enabled:
+        show:
           .: Show attitude
           horizon_and_ladder: Horizon and pitch ladder
           horizon_only: Horizon only
@@ -89,8 +89,11 @@ config.flightassistant:
         degree_step: Line degree step
         horizon_outside_frame: Draw horizon outside frame
         pitch_outside_frame: Draw pitch lines outside frame
-        show_heading: Show heading on horizon line
-        heading_step: Heading degree step
+      heading:
+        .: Heading display
+        show_reading: Show heading reading
+        show_scale: Show heading scale on horizon line
+        scale_step: Heading degree step
       speed:
         .: Speed display
         show_reading: Show speed reading

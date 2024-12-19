@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 
+// TODO: stop cutting out sounds like "PULL UP" and instead wait for them to finish
 class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
     AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()), TickableSoundInstance {
     private var age: Int = 0

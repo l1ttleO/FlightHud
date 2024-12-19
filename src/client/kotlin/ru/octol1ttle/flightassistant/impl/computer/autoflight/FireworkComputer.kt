@@ -11,6 +11,8 @@ import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 
+// TODO: FireworkUnsafeAlert
+// TODO: FireworkNoResponseAlert?
 class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {
     override val priority: ThrustSource.Priority
         get() = ThrustSource.Priority.LOW

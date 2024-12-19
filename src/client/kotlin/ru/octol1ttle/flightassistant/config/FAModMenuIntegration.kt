@@ -121,7 +121,7 @@ object FAModMenuIntegration : ModMenuApi {
             }
 
             rootOptions.registerLabel("attitude", Text.translatable("config.flightassistant.options.display.attitude"))
-            rootOptions.register<DisplayOptions.AttitudeDisplayMode>("attitude.enabled") {
+            rootOptions.register<DisplayOptions.AttitudeDisplayMode>("attitude.show") {
                 setDisplayName()
                 binding(current::showAttitude, defaults.showAttitude)
                 controller(enumSwitch(DisplayOptions.AttitudeDisplayMode::class.java))
@@ -141,12 +141,19 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::drawPitchOutsideFrame, defaults.drawPitchOutsideFrame)
                 controller(tickBox())
             }
-            rootOptions.register<Boolean>("attitude.show_heading") {
+
+            rootOptions.registerLabel("heading", Text.translatable("config.flightassistant.options.display.heading"))
+            rootOptions.register<Boolean>("heading.show_reading") {
+                setDisplayName()
+                binding(current::showHeadingReading, defaults.showHeadingReading)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("heading.show_scale") {
                 setDisplayName()
                 binding(current::showHeadingScale, defaults.showHeadingScale)
                 controller(tickBox())
             }
-            rootOptions.register<Int>("attitude.heading_step") {
+            rootOptions.register<Int>("heading.scale_step") {
                 setDisplayName()
                 binding(current::headingDegreeStep, defaults.headingDegreeStep)
                 controller(slider(5..90, 5, degreeFormatter))

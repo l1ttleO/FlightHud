@@ -26,7 +26,7 @@ class AttitudeDisplay : Display() {
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
             if (FAConfig.display.showAttitude <= DisplayOptions.AttitudeDisplayMode.HORIZON_ONLY) {
-                renderHorizon(computers)
+                renderHorizon()
             }
             if (FAConfig.display.showAttitude == DisplayOptions.AttitudeDisplayMode.HORIZON_AND_LADDER) {
                 renderPitchBars(computers)
@@ -37,7 +37,7 @@ class AttitudeDisplay : Display() {
         }
     }
 
-    private fun DrawContext.renderHorizon(computers: ComputerAccess) {
+    private fun DrawContext.renderHorizon() {
         if (!FAConfig.display.drawHorizonOutsideFrame) {
             HudFrame.scissor(this)
         }
@@ -48,10 +48,6 @@ class AttitudeDisplay : Display() {
 
             val rightXStart: Int = (centerX + halfWidth * 0.025).toInt()
             drawHorizontalLine(rightXStart, scaledWindowWidth, it, primaryColor)
-
-            if (FAConfig.display.showHeadingScale) {
-                drawHeading(computers, it)
-            }
         }
 
         if (!FAConfig.display.drawHorizonOutsideFrame) {
@@ -113,45 +109,6 @@ class AttitudeDisplay : Display() {
 
         if (!FAConfig.display.drawPitchOutsideFrame) {
             disableScissor()
-        }
-    }
-
-    private fun DrawContext.drawHeading(computers: ComputerAccess, y: Int) {
-        val step: Int = FAConfig.display.headingDegreeStep
-
-        val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.heading.toDouble(), step)
-        for (i: Int in nextDown downTo -360 step step) {
-            val heading: Int = i % 360
-            val x: Int = getScreenSpaceX(heading.toFloat()) ?: break
-            val text: String = (if (i > 0) i else 360 + i).toString()
-
-            drawHeadingLine(x, y, heading, text)
-        }
-
-        val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.heading.toInt(), step)
-        for (i: Int in nextUp..720 step step) {
-            val heading: Int = i % 360
-            val x: Int = getScreenSpaceX(heading.toFloat()) ?: break
-            val text: String = (if (heading == 0) 360 else heading).toString()
-
-            drawHeadingLine(x, y, heading, text)
-        }
-    }
-
-    private fun DrawContext.drawHeadingLine(x: Int, y: Int, heading: Int, headingText: String) {
-        drawVerticalLine(x, y, y - 3, primaryColor)
-        drawMiddleAlignedText(headingText, x, y - 12, primaryColor)
-
-        if (heading % 90 == 0) {
-            drawMiddleAlignedText(
-                when (heading) {
-                    0 -> "-Z"
-                    90 -> "+X"
-                    180 -> "+Z"
-                    270 -> "-X"
-                    else -> throw IllegalArgumentException("Degree range out of bounds: $heading")
-                }, x, y + 3, primaryColor
-            )
         }
     }
 
