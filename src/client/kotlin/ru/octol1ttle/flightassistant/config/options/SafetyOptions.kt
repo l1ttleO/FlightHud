@@ -6,6 +6,9 @@ import net.minecraft.text.Text
 
 class SafetyOptions {
     @SerialEntry
+    var alertVolume: Float = 1.0f
+
+    @SerialEntry
     var considerInvulnerability: Boolean = true
 
     @SerialEntry
@@ -46,6 +49,8 @@ class SafetyOptions {
     var obstacleAutoPitch: Boolean = true
 
     internal fun setDisabled(): SafetyOptions {
+        this.alertVolume = 0.0f
+
         this.elytraDurabilityAlertMode = AlertMode.DISABLED
 
         this.stallAlertMode = AlertMode.DISABLED

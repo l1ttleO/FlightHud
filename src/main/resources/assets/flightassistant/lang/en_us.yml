@@ -119,6 +119,7 @@ config.flightassistant:
         alerts: Show alerts
         automation_modes: Show automation modes
     safety:
+      alert_volume: Alert sound volume
       consider_invulnerability: Disable alerts and protections when invulnerable
       alert_mode:
         warning_and_caution: Warning & caution

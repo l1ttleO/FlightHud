@@ -1,13 +1,16 @@
 package ru.octol1ttle.flightassistant.config
 
-import com.terraformersmc.modmenu.api.*
+import com.terraformersmc.modmenu.api.ConfigScreenFactory
+import com.terraformersmc.modmenu.api.ModMenuApi
 import dev.isxander.yacl3.api.ConfigCategory
 import dev.isxander.yacl3.dsl.*
 import java.awt.Color
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.config.options.*
+import ru.octol1ttle.flightassistant.config.options.DisplayOptions
+import ru.octol1ttle.flightassistant.config.options.GlobalOptions
+import ru.octol1ttle.flightassistant.config.options.SafetyOptions
 
 object FAModMenuIntegration : ModMenuApi {
     override fun getModConfigScreenFactory(): ConfigScreenFactory<*> = ConfigScreenFactory { parent: Screen ->
@@ -234,6 +237,14 @@ object FAModMenuIntegration : ModMenuApi {
     ): RegisterableActionDelegateProvider<CategoryDsl, ConfigCategory> {
         return categories.registering {
             name(title)
+
+            val percentageFormatter: (Float) -> Text = { value: Float -> Text.of("${(value * 100).toInt()}%") }
+
+            rootOptions.register<Float>("alert_volume") {
+                setSafetyName()
+                binding(current::alertVolume, defaults.alertVolume)
+                controller(slider(0.0f..1.0f, 0.01f, percentageFormatter))
+            }
 
             rootOptions.register<Boolean>("consider_invulnerability") {
                 setSafetyName()

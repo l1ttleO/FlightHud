@@ -8,10 +8,10 @@ import net.minecraft.client.sound.Source;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import ru.octol1ttle.flightassistant.api.util.SoundPauseResumeController;
+import ru.octol1ttle.flightassistant.api.util.SoundExtensions;
 
 @Mixin(SoundSystem.class)
-abstract class SoundSystemMixin implements SoundPauseResumeController {
+abstract class SoundSystemMixin implements SoundExtensions {
     @Shadow
     private boolean started;
 
@@ -20,6 +20,15 @@ abstract class SoundSystemMixin implements SoundPauseResumeController {
     private Map<SoundInstance, Channel.SourceManager> sources;
 
     @Override
+    public void flightassistant$setLooping(SoundInstance soundInstance, boolean looping) {
+        if (started) {
+            Channel.SourceManager sourceManager = this.sources.get(soundInstance);
+            if (sourceManager != null) {
+                sourceManager.run(source -> source.setLooping(looping));
+            }
+        }
+    }
+
     public void flightassistant$pause(SoundInstance soundInstance) {
         if (started) {
             Channel.SourceManager sourceManager = this.sources.get(soundInstance);

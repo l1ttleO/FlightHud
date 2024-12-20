@@ -32,15 +32,15 @@ class AlertCategory(val categoryText: Text) {
                 }
             } else {
                 activeAlerts.remove(alert)
-                alert.stop(soundManager)
+                alert.stopSound(soundManager)
             }
+            alert.tick()
         }
 
         activeAlerts.sortBy { it.data.priority }
     }
 
     fun getHighestPriority(): AlertData? {
-        @Suppress("UsePropertyAccessSyntax")
         return if (activeAlerts.isEmpty()) null else activeAlerts[0].data
     }
 }

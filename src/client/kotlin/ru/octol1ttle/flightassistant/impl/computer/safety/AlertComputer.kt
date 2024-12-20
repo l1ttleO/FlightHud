@@ -4,20 +4,35 @@ import net.minecraft.client.sound.SoundManager
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.alert.*
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.alert.Alert
+import ru.octol1ttle.flightassistant.api.alert.AlertCategory
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.pause
+import ru.octol1ttle.flightassistant.api.util.resume
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
-import ru.octol1ttle.flightassistant.impl.alert.elytra.*
+import ru.octol1ttle.flightassistant.impl.alert.elytra.ElytraDurabilityCriticalAlert
+import ru.octol1ttle.flightassistant.impl.alert.elytra.ElytraDurabilityLowAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
-import ru.octol1ttle.flightassistant.impl.alert.gpws.*
-import ru.octol1ttle.flightassistant.impl.alert.navigation.*
-import ru.octol1ttle.flightassistant.impl.alert.stall.*
-import ru.octol1ttle.flightassistant.impl.alert.thrust.*
+import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
+import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
+import ru.octol1ttle.flightassistant.impl.alert.navigation.ApproachingVoidDamageAltitudeAlert
+import ru.octol1ttle.flightassistant.impl.alert.navigation.NoChunksLoadedAlert
+import ru.octol1ttle.flightassistant.impl.alert.navigation.ReachedVoidDamageAltitudeAlert
+import ru.octol1ttle.flightassistant.impl.alert.navigation.SlowChunkLoadingAlert
+import ru.octol1ttle.flightassistant.impl.alert.stall.ApproachingStallAlert
+import ru.octol1ttle.flightassistant.impl.alert.stall.FullStallAlert
+import ru.octol1ttle.flightassistant.impl.alert.thrust.NoThrustSourceAlert
+import ru.octol1ttle.flightassistant.impl.alert.thrust.ReverseThrustNotSupportedAlert
+import ru.octol1ttle.flightassistant.impl.alert.thrust.ThrustLockedAlert
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.FireworkComputer
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.PitchComputer
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class AlertComputer(private val soundManager: SoundManager) : Computer() {
@@ -104,12 +119,8 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
             for (alert: Alert in category.activeAlerts) {
                 val soundInstance: AlertSoundInstance? = alert.soundInstance
                 if (interrupt) {
-                    if (soundInstance != null) {
-                        if (soundInstance.isRepeatable) {
-                            soundManager.pause(soundInstance)
-                        } else {
-                            soundManager.stop(soundInstance)
-                        }
+                    if (soundInstance?.isRepeatable == true) {
+                        soundManager.pause(soundInstance)
                     }
                     continue
                 }
@@ -123,11 +134,14 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
 
                 if (soundInstance.isDone) {
                     alert.soundInstance = null
-                } else if (soundInstance.isRepeatable) {
+                    return
+                }
+
+                if (soundInstance.isRepeatable) {
                     soundManager.resume(soundInstance)
                 }
 
-                if (soundManager.isPlaying(soundInstance)) {
+                if (soundInstance.volume > 0.0f && !soundInstance.fadingOut) {
                     interrupt = true
                 }
             }

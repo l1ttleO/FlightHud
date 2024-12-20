@@ -16,7 +16,7 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
             AlertData(
                 1,
                 FlightAssistant.soundEvent("approaching_stall"),
-                RepeatType.REPEAT_FADE_VOLUME
+                RepeatType.REPEAT_FADE_IN_OUT,
             ) { FAConfig.display.cautionColor.rgb }
         val PULL_UP =
             AlertData(
@@ -40,7 +40,7 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
             AlertData(
                 4,
                 FlightAssistant.soundEvent("master_warning"),
-                RepeatType.REPEAT_FADE_VOLUME
+                RepeatType.REPEAT_FADE_OUT
             ) { FAConfig.display.warningColor.rgb }
         val THRUST_LOCKED =
             AlertData(
@@ -57,7 +57,8 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
     }
 
     enum class RepeatType {
-        REPEAT_FADE_VOLUME,
+        REPEAT_FADE_IN_OUT,
+        REPEAT_FADE_OUT,
         REPEAT_CONSTANT_VOLUME,
         NO_REPEAT
     }

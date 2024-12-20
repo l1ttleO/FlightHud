@@ -6,21 +6,27 @@ import net.minecraft.client.sound.SoundSystem;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import ru.octol1ttle.flightassistant.api.util.SoundPauseResumeController;
+import ru.octol1ttle.flightassistant.api.util.SoundExtensions;
 
 @Mixin(SoundManager.class)
-abstract class SoundManagerMixin implements SoundPauseResumeController {
+abstract class SoundManagerMixin implements SoundExtensions {
     @Shadow
     @Final
     private SoundSystem soundSystem;
 
     @Override
+    public void flightassistant$setLooping(SoundInstance soundInstance, boolean looping) {
+        ((SoundExtensions) soundSystem).flightassistant$setLooping(soundInstance, looping);
+    }
+
+    @Override
     public void flightassistant$pause(SoundInstance soundInstance) {
-        ((SoundPauseResumeController) soundSystem).flightassistant$pause(soundInstance);
+        ((SoundExtensions) soundSystem).flightassistant$pause(soundInstance);
+
     }
 
     @Override
     public void flightassistant$resume(SoundInstance soundInstance) {
-        ((SoundPauseResumeController) soundSystem).flightassistant$resume(soundInstance);
+        ((SoundExtensions) soundSystem).flightassistant$resume(soundInstance);
     }
 }

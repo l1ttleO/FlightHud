@@ -1,18 +1,22 @@
 package ru.octol1ttle.flightassistant.impl.computer.safety
 
 import java.time.Duration
-import kotlin.math.*
+import kotlin.math.round
+import kotlin.math.roundToInt
 import net.fabricmc.fabric.api.util.TriState
-import net.minecraft.enchantment.*
+import net.minecraft.enchantment.EnchantmentHelper
+import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.*
+import net.minecraft.item.ElytraItem
+import net.minecraft.item.ItemStack
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.config.options.DisplayOptions
@@ -45,7 +49,7 @@ class ElytraStatusComputer : Computer() {
         }
 
         val flying: Boolean = data.flying || data.player.abilities.allowFlying
-        val hasUsableElytra: Boolean = activeElytra != null && ElytraItem.isUsable(activeElytra)
+        val hasUsableElytra: Boolean = data.player.armorItems.contains(activeElytra) && ElytraItem.isUsable(activeElytra)
         val notLookingToClutch: Boolean = data.pitch > -70.0f
         if (FAConfig.safety.elytraAutoOpen && !data.fallDistanceSafe && !flying && hasUsableElytra && notLookingToClutch) {
             sendSwitchState(data)
