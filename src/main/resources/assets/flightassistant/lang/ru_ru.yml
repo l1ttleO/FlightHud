@@ -8,9 +8,11 @@ alerts.flightassistant:
       .: HUD
       flightassistant:altitude: ОТКАЗ ИНД ВЫС
       flightassistant:attitude: ОТКАЗ ИНД ОРИЕНТ
+      flightassistant:automation_modes: ОТКАЗ ИНД АВТО РЕЖИМ
       flightassistant:coordinates: ОТКАЗ ИНД КООРД
       flightassistant:elytra_durability: ОТКАЗ ИНД ПРЧН/ЭЛ
       flightassistant:flight_path: ОТКАЗ ИНД ВЕКТ/П
+      flightassistant:heading: ОТКАЗ ИНД КУРСА
       flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
       flightassistant:speed: ОТКАЗ ИНД СКОР
       flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
@@ -43,7 +45,10 @@ alerts.flightassistant:
     no_source: ОТСУТ ИСТОЧ
     locked:
       .: БЛОК
-      use_keys: '-КЛАВИШИ УПР ТЯГИ: ИСПОЛЬЗ'
+      use_keys: ' -КЛАВИШИ УПР ТЯГИ: ИСПОЛЬЗ'
+    reverse_not_supported:
+      .: ОБРАТН НЕ ПОДДЕРЖ
+      set_forward: ' -ТЯГА: УСТАН ВПЕРЕД'
   navigation:
     .: НАВИГАЦ
     air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
@@ -80,12 +85,19 @@ config.flightassistant:
         warning: Цвет опасности
       attitude:
         .: Авиагоризонт
-        enabled: Отображать авиагоризонт
+        show:
+          .: Отображать авиагоризонт
+          horizon_and_ladder: Горизонт и шкала угла наклона
+          horizon_only: Только горизонт
+          disabled: Отключен
         degree_step: Шаг градусных линий
         horizon_outside_frame: Отображать горизонт за рамкой
         pitch_outside_frame: Отображать угол наклона за рамкой
-        show_heading: Отображать курс на линии горизонта
-        heading_step: Шаг линий курса
+      heading:
+        .: Индикатор курса
+        show_reading: Отображать значение курса
+        show_scale: Отображать шкалу курса на линии горизонта
+        scale_step: Шаг линий курса
       speed:
         .: Индикатор скорости
         show_reading: Отображать значение скорости
@@ -111,6 +123,7 @@ config.flightassistant:
         alerts: Отображать предупреждения
         automation_modes: Отображать режимы автоматизации
     safety:
+      alert_volume: Громкость звуков предупреждений
       consider_invulnerability: Выключать предупреждения и защиты во время неуязвимости
       alert_mode:
         warning_and_caution: Опасности и предупреждения
@@ -168,6 +181,7 @@ short.flightassistant:
   flight_path: ПУТЬ/П
   ground: ЗЕМЛ
   ground_speed: 'Г/С%s'
+  heading: КУРС
   infinite: БЕСК
   radar_altitude: Р/ВЫС
   speed: СКОР
