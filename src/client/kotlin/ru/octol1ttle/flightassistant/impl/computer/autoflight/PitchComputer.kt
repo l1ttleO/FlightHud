@@ -5,12 +5,17 @@ import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
+import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.event.ChangeLookDirectionEvents
-import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
+import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.requireIn
 
 class PitchComputer : Computer(), PitchController {
     private val limiters: ArrayList<PitchLimiter> = ArrayList()
@@ -33,6 +38,7 @@ class PitchComputer : Computer(), PitchController {
         PitchControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
+    // TODO: filter out faulted inputs
     override fun tick(computers: ComputerAccess) {
         automationsAllowed = computers.data.automationsAllowed()
 

@@ -2,6 +2,7 @@ package ru.octol1ttle.flightassistant.api.alert
 
 import net.minecraft.client.sound.SoundManager
 import net.minecraft.text.Text
+import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 
 class AlertCategory(val categoryText: Text) {
@@ -26,15 +27,19 @@ class AlertCategory(val categoryText: Text) {
 
     fun updateActiveAlerts(computers: ComputerAccess, soundManager: SoundManager) {
         for (alert: Alert in registeredAlerts) {
-            if (alert.shouldActivate(computers)) {
-                if (!activeAlerts.contains(alert)) {
-                    activeAlerts.add(alert)
+            try {
+                if (alert.shouldActivate(computers)) {
+                    if (!activeAlerts.contains(alert)) {
+                        activeAlerts.add(alert)
+                    }
+                } else {
+                    activeAlerts.remove(alert)
+                    alert.stopSound(soundManager)
                 }
-            } else {
-                activeAlerts.remove(alert)
-                alert.stopSound(soundManager)
+                alert.tick()
+            } catch (t: Throwable) {
+                FlightAssistant.logger.atError().setCause(t).log("Exception ticking alert of type: {}", alert.javaClass.name)
             }
-            alert.tick()
         }
 
         activeAlerts.sortBy { it.data.priority }

@@ -5,6 +5,7 @@
   "client": [
     "ClientShouldTickInvoker",
     "EntityChangeLookDirectionMixin",
+    "FireworkRocketEntityMixin",
     "sound.SoundManagerMixin",
     "sound.SoundSystemMixin"
   ],

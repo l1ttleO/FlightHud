@@ -22,7 +22,6 @@ abstract class SoundManagerMixin implements SoundExtensions {
     @Override
     public void flightassistant$pause(SoundInstance soundInstance) {
         ((SoundExtensions) soundSystem).flightassistant$pause(soundInstance);
-
     }
 
     @Override

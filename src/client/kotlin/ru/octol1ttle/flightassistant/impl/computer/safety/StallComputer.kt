@@ -3,7 +3,8 @@ package ru.octol1ttle.flightassistant.impl.computer.safety
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
@@ -23,7 +24,7 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
 
     override fun tick(computers: ComputerAccess) {
         status =
-            if (computers.data.flying && !computers.data.fallDistanceSafe && computers.data.forwardVelocity.length() == 0.0)
+            if (computers.data.flying && computers.data.velocity.y < 0 && !computers.data.fallDistanceSafe && computers.data.forwardVelocity.length() == 0.0)
                 if (status == Status.FULL_STALL || computers.data.velocity.y * 20 <= -10) Status.FULL_STALL else Status.APPROACHING_STALL
             else Status.SAFE
     }

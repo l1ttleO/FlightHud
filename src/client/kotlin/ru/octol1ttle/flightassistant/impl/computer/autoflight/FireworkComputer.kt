@@ -1,18 +1,25 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
+import net.fabricmc.fabric.api.event.player.UseItemCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.component.DataComponentTypes
-import net.minecraft.entity.player.*
-import net.minecraft.item.*
-import net.minecraft.util.*
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.item.FireworkRocketItem
+import net.minecraft.item.ItemStack
+import net.minecraft.util.Hand
+import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
+import ru.octol1ttle.flightassistant.api.event.FireworkBoostCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
+import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.config.FAConfig
 
-// TODO: FireworkUnsafeAlert
-// TODO: FireworkNoResponseAlert?
 class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {
     override val priority: ThrustSource.Priority
         get() = ThrustSource.Priority.LOW
@@ -24,13 +31,46 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     private var safeFireworkCount: Int = 0
     private var safeFireworkSlot: Int? = 0
 
-    private var lastActivationTime: Int = 0
+    var waitingForResponse: Boolean = false
+    var lastActivationTime: Int = 0
+    var responseTimes: ArrayDeque<Int> = ArrayDeque()
 
     override fun subscribeToEvents() {
         ThrustSourceRegistrationCallback.EVENT.register { it.accept(this) }
+        UseItemCallback.EVENT.register(UseItemCallback { player, _, hand ->
+            val stack = player.getStackInHand(hand)
+            if (!player.world.isClient()) {
+                return@UseItemCallback TypedActionResult.pass(stack)
+            }
+
+            if (FAConfig.safety.fireworkLockExplosive && !isEmptyOrSafe(player, hand)) {
+                return@UseItemCallback TypedActionResult.fail(stack)
+            }
+
+            if (!waitingForResponse && stack.item is FireworkRocketItem) {
+                lastActivationTime = FATickCounter.totalTicks
+                waitingForResponse = true
+            }
+
+            return@UseItemCallback TypedActionResult.pass(stack)
+        })
+        FireworkBoostCallback.EVENT.register(FireworkBoostCallback { _, _ ->
+            if (waitingForResponse) {
+                waitingForResponse = false
+                responseTimes.add(FATickCounter.totalTicks - lastActivationTime)
+            }
+        })
     }
 
     override fun tick(computers: ComputerAccess) {
+        if (!computers.data.flying) {
+            waitingForResponse = false
+        }
+
+        while (responseTimes.size > 5) {
+            responseTimes.removeFirst()
+        }
+
         safeFireworkCount = 0
         safeFireworkSlot = null
         var lastSlotCount = 0
@@ -44,6 +84,10 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
                 }
             }
         }
+    }
+
+    fun isEmptyOrSafe(player: PlayerEntity, hand: Hand): Boolean {
+        return hasNoExplosions(player.getStackInHand(hand))
     }
 
     private fun isFireworkAndSafe(stack: ItemStack): Boolean {
@@ -69,7 +113,6 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
 
     private fun useFirework(player: PlayerEntity, hand: Hand) {
         mc.interactionManager!!.interactItem(player, hand)
-        lastActivationTime = FATickCounter.totalTicks
     }
 
     override fun isAvailable(): Boolean {

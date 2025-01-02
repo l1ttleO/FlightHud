@@ -21,6 +21,11 @@ alerts.flightassistant:
   firework:
     .: FRWK
     fault: SYS FAULT
+    explosive:
+      main_hand: MAIN HAND EXPLOSIVE
+      off_hand: OFF HAND EXPLOSIVE
+    slow_response: SLOW RESPONSE
+    no_response: NO RESPONSE
   flight_controls:
     .: F/CTL
     pitch_fault: PITCH LIMIT FAULT
@@ -152,6 +157,9 @@ config.flightassistant:
           alert_mode: Terrain alert mode
           limit_pitch: Limit pitch when terrain is detected
           auto_pitch: Automatically raise pitch to escape from terrain
+      firework:
+        .: Fireworks
+        lock_explosive: Lock explosive fireworks
 
 mode.flightassistant:
   thrust:

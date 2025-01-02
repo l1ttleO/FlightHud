@@ -1,13 +1,18 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
 import java.awt.Color
-import net.minecraft.text.*
+import net.minecraft.text.MutableText
+import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.*
-import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.*
+import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
+import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
+import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 
@@ -34,6 +39,7 @@ class ThrustComputer : Computer() {
         ThrustControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
+    // TODO: filter out faulted inputs
     override fun tick(computers: ComputerAccess) {
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
 

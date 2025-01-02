@@ -351,6 +351,16 @@ object FAModMenuIntegration : ModMenuApi {
                 binding(current::obstacleAutoPitch, defaults.obstacleAutoPitch)
                 controller(tickBox())
             }
+
+            rootOptions.registerLabel(
+                "firework",
+                Text.translatable("config.flightassistant.options.safety.firework")
+            )
+            rootOptions.register<Boolean>("firework.lock_explosive") {
+                setSafetyName()
+                binding(current::fireworkLockExplosive, defaults.fireworkLockExplosive)
+                controller(tickBox())
+            }
         }
     }
 

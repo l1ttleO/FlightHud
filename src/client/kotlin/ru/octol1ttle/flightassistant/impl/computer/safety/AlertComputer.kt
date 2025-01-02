@@ -2,6 +2,7 @@ package ru.octol1ttle.flightassistant.impl.computer.safety
 
 import net.minecraft.client.sound.SoundManager
 import net.minecraft.text.Text
+import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.alert.Alert
@@ -17,6 +18,9 @@ import ru.octol1ttle.flightassistant.impl.alert.elytra.ElytraDurabilityCriticalA
 import ru.octol1ttle.flightassistant.impl.alert.elytra.ElytraDurabilityLowAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.fault.display.DisplayFaultAlert
+import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkExplosiveAlert
+import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkNoResponseAlert
+import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkSlowResponseAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
@@ -61,6 +65,10 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.firework"))
                 .add(ComputerFaultAlert(FireworkComputer.ID, Text.translatable("alerts.flightassistant.firework.fault")))
+                .add(FireworkExplosiveAlert(Hand.MAIN_HAND))
+                .add(FireworkExplosiveAlert(Hand.OFF_HAND))
+                .add(FireworkSlowResponseAlert())
+                .add(FireworkNoResponseAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.flight_controls"))

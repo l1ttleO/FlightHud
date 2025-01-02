@@ -48,6 +48,9 @@ class SafetyOptions {
     @SerialEntry
     var obstacleAutoPitch: Boolean = true
 
+    @SerialEntry
+    var fireworkLockExplosive: Boolean = true
+
     internal fun setDisabled(): SafetyOptions {
         this.alertVolume = 0.0f
 
@@ -69,6 +72,8 @@ class SafetyOptions {
         this.obstacleAlertMode = AlertMode.DISABLED
         this.obstacleLimitPitch = false
         this.obstacleAutoPitch = false
+
+        this.fireworkLockExplosive = false
         return this
     }
 
