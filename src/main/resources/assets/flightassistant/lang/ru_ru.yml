@@ -25,6 +25,11 @@ alerts.flightassistant:
   firework:
     .: ФРВК
     fault: ОТКАЗ СИСТ
+    explosive:
+      main_hand: ОСН РУКА ВЗРЫВООПАСН
+      off_hand: ВТОР РУКА ВЗРЫВООПАСН
+      slow_response: МЕДЛЕН ОТКЛИК
+      no_response: ОТСУТСТВ ОТКЛИК
   flight_controls:
     .: УПР/ПОЛЕТ
     pitch_fault: ОТКАЗ ОГРАН УГЛА НАКЛ
@@ -156,6 +161,9 @@ config.flightassistant:
           alert_mode: Режим предупреждения о рельефе местности
           limit_pitch: Ограничение угла наклона при обнаружении рельефа местности
           auto_pitch: Автоматическое увеличение угла наклона для предотвращения столкновения с местностью
+      firework:
+        .: Фейерверки
+        lock_explosive: Блокировать использование взрывоопасных фейерверков
 
 mode.flightassistant:
   thrust:
