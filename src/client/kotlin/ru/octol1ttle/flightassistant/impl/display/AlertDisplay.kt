@@ -1,12 +1,18 @@
 package ru.octol1ttle.flightassistant.impl.display
 
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.text.*
+import net.minecraft.text.MutableText
+import net.minecraft.text.Style
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.alert.*
+import ru.octol1ttle.flightassistant.api.alert.Alert
+import ru.octol1ttle.flightassistant.api.alert.AlertCategory
+import ru.octol1ttle.flightassistant.api.alert.CenteredAlert
+import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.display.*
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
@@ -32,10 +38,9 @@ class AlertDisplay : Display() {
                 var lastRenderedLines = 0
                 for (alert: Alert in category.activeAlerts) {
                     if (!renderedCentered && alert is CenteredAlert) {
-                        alert.render(this, computers, centerYI + 8)
+                        renderedCentered = alert.render(this, computers, centerYI + 8)
+                        categoryRendered = categoryRendered || renderedCentered
                         y += fontHeight
-                        renderedCentered = true
-                        categoryRendered = true
                     }
 
                     if (alert is ECAMAlert) {
@@ -43,8 +48,12 @@ class AlertDisplay : Display() {
                             y += 4
                             drawText(copy.setStyle(withUnderline), x, y, (category.getHighestPriority() ?: continue).colorSupplier.invoke())
                         }
+
                         lastRenderedLines = alert.render(this, computers, x + getTextWidth(copy), x, y)
-                        y += fontHeight * lastRenderedLines
+                        y += fontHeight
+                        if (lastRenderedLines > 1) {
+                            y += 1 + (fontHeight * (lastRenderedLines - 1))
+                        }
                         categoryRendered = true
                     }
                 }

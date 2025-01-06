@@ -14,7 +14,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
     AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()), TickableSoundInstance {
-    private var age: Int = 0
+    var age: Int = 0
     private var actualVolume: Float = 1.0f
     var fadingOut: Boolean = false
 

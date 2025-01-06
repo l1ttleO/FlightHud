@@ -14,43 +14,43 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
             ) { FAConfig.display.warningColor.rgb }
         val APPROACHING_STALL =
             AlertData(
-                1,
+                100,
                 FlightAssistant.soundEvent("approaching_stall"),
                 RepeatType.REPEAT_FADE_IN_OUT,
             ) { FAConfig.display.cautionColor.rgb }
         val PULL_UP =
             AlertData(
-                2,
+                200,
                 FlightAssistant.soundEvent("pull_up"),
                 RepeatType.REPEAT_CONSTANT_VOLUME
             ) { FAConfig.display.warningColor.rgb }
         val SINK_RATE =
             AlertData(
-                3,
+                300,
                 FlightAssistant.soundEvent("sink_rate"),
                 RepeatType.REPEAT_CONSTANT_VOLUME
             ) { FAConfig.display.cautionColor.rgb }
         val TERRAIN_AHEAD =
             AlertData(
-                3,
+                400,
                 FlightAssistant.soundEvent("terrain_ahead"),
                 RepeatType.REPEAT_CONSTANT_VOLUME
             ) { FAConfig.display.cautionColor.rgb }
         val MASTER_WARNING =
             AlertData(
-                4,
+                500,
                 FlightAssistant.soundEvent("master_warning"),
                 RepeatType.REPEAT_FADE_OUT
             ) { FAConfig.display.warningColor.rgb }
         val THRUST_LOCKED =
             AlertData(
-                5,
+                600,
                 FlightAssistant.soundEvent("thrust_locked"),
                 RepeatType.REPEAT_CONSTANT_VOLUME
             ) { FAConfig.display.cautionColor.rgb }
         val MASTER_CAUTION =
             AlertData(
-                6,
+                700,
                 FlightAssistant.soundEvent("master_caution"),
                 RepeatType.NO_REPEAT
             ) { FAConfig.display.cautionColor.rgb }

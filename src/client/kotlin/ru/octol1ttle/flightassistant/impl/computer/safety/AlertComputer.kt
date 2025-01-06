@@ -5,11 +5,12 @@ import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertCategory
+import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.api.util.pause
 import ru.octol1ttle.flightassistant.api.util.resume
@@ -41,6 +42,7 @@ import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class AlertComputer(private val soundManager: SoundManager) : Computer() {
     val categories: ArrayList<AlertCategory> = ArrayList()
+    private val sounds: HashMap<AlertData, AlertSoundInstance> = HashMap()
 
     override fun invokeEvents() {
         registerBuiltin()
@@ -116,42 +118,76 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
 
     // TODO: alert keybindings
     override fun tick(computers: ComputerAccess) {
+        updateAlerts(computers)
+        if (computers.data.player.isDead || !computers.data.flying) {
+            stopInactiveAlerts(true)
+            return
+        }
+        stopInactiveAlerts()
+        startNewSounds(computers)
+        stopOutPrioritizedAlerts()
+    }
+
+    private fun updateAlerts(computers: ComputerAccess) {
         for (category: AlertCategory in categories) {
-            category.updateActiveAlerts(computers, soundManager)
+            category.updateActiveAlerts(computers)
         }
 
         categories.sortBy { it.getHighestPriority()?.priority }
+    }
 
-        var interrupt: Boolean = computers.data.player.isDead || !computers.data.flying
-        for (category: AlertCategory in categories) {
-            for (alert: Alert in category.activeAlerts) {
-                val soundInstance: AlertSoundInstance? = alert.soundInstance
-                if (interrupt) {
-                    if (soundInstance?.isRepeatable == true) {
-                        soundManager.pause(soundInstance)
+    private fun stopInactiveAlerts(force: Boolean = false) {
+        val iterator = sounds.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (!force && categories.any { category -> category.activeAlerts.any { it.data == entry.key } }) {
+                continue
+            }
+
+            entry.value.setRepeat(false, soundManager)
+            if (entry.value.fadeOut(FATickCounter.ticksPassed)) {
+                iterator.remove()
+            }
+        }
+    }
+
+    private fun startNewSounds(computers: ComputerAccess) {
+        val activeDatas: List<AlertData> = categories.flatMap { it.activeAlerts.map { alert -> alert.data } }.sortedBy { it.priority }
+
+        var anyStartedThisTick = false
+        for (data: AlertData in activeDatas) {
+            if (!sounds.containsKey(data)) {
+                val instance = AlertSoundInstance(computers.data.player, data)
+                sounds[data] = instance
+                if (!anyStartedThisTick) {
+                    soundManager.play(instance)
+                } else if (instance.isRepeatable) {
+                    soundManager.play(instance)
+                    if (instance.isRepeatable) {
+                        soundManager.pause(instance)
                     }
-                    continue
                 }
 
-                if (soundInstance == null) {
-                    alert.soundInstance = AlertSoundInstance(computers.data.player, alert.data)
-                    soundManager.play(alert.soundInstance)
-                    interrupt = true
-                    continue
-                }
+                anyStartedThisTick = true
+            }
+        }
+    }
 
-                if (soundInstance.isDone) {
-                    alert.soundInstance = null
-                    return
+    private fun stopOutPrioritizedAlerts() {
+        var interrupt = false
+        for (entry in sounds.entries.sortedBy { it.key.priority }) {
+            if (!interrupt) {
+                interrupt = true
+                if (entry.value.isRepeatable) {
+                    soundManager.resume(entry.value)
                 }
+                continue
+            }
 
-                if (soundInstance.isRepeatable) {
-                    soundManager.resume(soundInstance)
-                }
-
-                if (soundInstance.volume > 0.0f && !soundInstance.fadingOut) {
-                    interrupt = true
-                }
+            if (entry.value.isRepeatable) {
+                soundManager.pause(entry.value)
+            } else {
+                entry.value.fadeOut(FATickCounter.ticksPassed)
             }
         }
     }
