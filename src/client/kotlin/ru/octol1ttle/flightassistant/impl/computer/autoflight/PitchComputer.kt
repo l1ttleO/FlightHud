@@ -38,7 +38,6 @@ class PitchComputer : Computer(), PitchController {
         PitchControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    // TODO: filter out faulted inputs
     override fun tick(computers: ComputerAccess) {
         automationsAllowed = computers.data.automationsAllowed()
 

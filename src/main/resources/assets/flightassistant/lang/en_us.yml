@@ -194,6 +194,8 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
+  hide_current_alert: Hide currently active alert
+  show_hidden_alert: Show last hidden alert
   decrease_thrust: Decrease thrust
   increase_thrust: Increase thrust
   set_idle: Set thrust to idle (0%)

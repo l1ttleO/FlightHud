@@ -98,7 +98,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.navigation"))
-                .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault")))
+                .add(ComputerFaultAlert(AirDataComputer.ID, Text.translatable("alerts.flightassistant.navigation.air_data_fault"), AlertData.MASTER_WARNING))
                 .add(ComputerFaultAlert(ChunkStatusComputer.ID, Text.translatable("alerts.flightassistant.navigation.chunk_status_fault")))
                 .add(ComputerFaultAlert(VoidProximityComputer.ID, Text.translatable("alerts.flightassistant.navigation.void_proximity_fault")))
                 .add(SlowChunkLoadingAlert())
@@ -116,7 +116,26 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         categories.add(category)
     }
 
-    // TODO: alert keybindings
+    fun hideCurrentAlert() {
+        for (category: AlertCategory in categories) {
+            if (category.activeAlerts.isEmpty()) {
+                continue
+            }
+            category.ignoredAlerts.add(category.activeAlerts.removeFirst())
+            break
+        }
+    }
+
+    fun showHiddenAlert() {
+        for (category: AlertCategory in categories) {
+            if (category.ignoredAlerts.isEmpty()) {
+                continue
+            }
+            category.ignoredAlerts.removeFirst()
+            break
+        }
+    }
+
     override fun tick(computers: ComputerAccess) {
         updateAlerts(computers)
         if (computers.data.player.isDead || !computers.data.flying) {
@@ -133,7 +152,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
             category.updateActiveAlerts(computers)
         }
 
-        categories.sortBy { it.getHighestPriority()?.priority }
+        categories.sortBy { it.getHighestPriority()?.priority ?: Int.MAX_VALUE }
     }
 
     private fun stopInactiveAlerts(force: Boolean = false) {

@@ -39,7 +39,6 @@ class ThrustComputer : Computer() {
         ThrustControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    // TODO: filter out faulted inputs
     override fun tick(computers: ComputerAccess) {
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
 

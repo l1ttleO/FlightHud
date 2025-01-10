@@ -3,15 +3,21 @@ package ru.octol1ttle.flightassistant.impl.computer.safety
 import kotlin.math.min
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.hit.*
+import net.minecraft.util.hit.BlockHitResult
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.Vec3d
-import net.minecraft.world.*
+import net.minecraft.world.Heightmap
+import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.*
-import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchLimiter
+import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
@@ -87,7 +93,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         return ((data.altitude - impactLevel) / (data.velocity.y * -20)).toFloat()
     }
 
-    // TODO: max/min terrain altitude on status display (that's gonna be so fucking cool /srs)
+    // IDEA: max/min terrain altitude on status display (that's gonna be so fucking cool /srs)
     private fun computeObstacleImpactTime(data: AirDataComputer, lookAheadTime: Float): Float {
         val end: Vec3d = data.position.add(data.velocity.multiply(lookAheadTime * 20.0, 0.0, lookAheadTime * 20.0))
         val result: BlockHitResult = data.world.raycast(

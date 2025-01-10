@@ -7,6 +7,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 class AlertCategory(val categoryText: Text) {
     private val registeredAlerts: ArrayList<Alert> = ArrayList()
     val activeAlerts: ArrayList<Alert> = ArrayList()
+    val ignoredAlerts: ArrayList<Alert> = ArrayList()
 
     fun add(alert: Alert): AlertCategory {
         if (registeredAlerts.contains(alert)) {
@@ -28,11 +29,12 @@ class AlertCategory(val categoryText: Text) {
         for (alert: Alert in registeredAlerts) {
             try {
                 if (alert.shouldActivate(computers)) {
-                    if (!activeAlerts.contains(alert)) {
+                    if (!activeAlerts.contains(alert) && !ignoredAlerts.contains(alert)) {
                         activeAlerts.add(alert)
                     }
                 } else {
                     activeAlerts.remove(alert)
+                    ignoredAlerts.remove(alert)
                 }
             } catch (t: Throwable) {
                 FlightAssistant.logger.atError().setCause(t).log("Exception ticking alert of type: {}", alert.javaClass.name)
