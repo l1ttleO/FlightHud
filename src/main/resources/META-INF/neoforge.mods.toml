@@ -1,0 +1,33 @@
+modLoader = "kotlinforforge"
+loaderVersion = "[1,)"
+license = "LGPLv3"
+
+issueTrackerURL = "https://github.com/Octol1ttle/FlightAssistant/issues"
+
+[[mods]]
+modId = "flightassistant"
+version = "${version}"
+displayName = "FlightAssistant"
+displayURL = "https://modrinth.com/mod/flightassistant"
+authors = ["Octol1ttle", "mctaylors" ]
+description = '''
+FlightAssistant brings your Elytra flying experience to the next level, all client-side!
+'''
+logoFile = "assets/flightassistant/icon.png"
+
+[[mixins]]
+config = "flightassistant.client.mixins.json"
+
+[[dependencies.flightassistant]]
+modId = "architectury"
+${mnd}
+versionRange = "[9,]"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.flightassistant]]
+modId = "yet_another_config_lib_v3"
+${mnd}
+versionRange = "[3,]"
+ordering = "NONE"
+side = "CLIENT"

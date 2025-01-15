@@ -1,50 +1,57 @@
 {
-  "schemaVersion": 1,
-  "id": "flightassistant",
-  "version": "${version}",
-  "name": "FlightAssistant",
-  "description": "FlightAssistant brings your Elytra flying experience to the next level, all client-side!",
-  "authors": [
-    "Octol1ttle",
-    "mctaylors"
-  ],
-  "contact": {
-    "homepage": "https://modrinth.com/mod/flightassistant",
-    "sources": "https://github.com/Octol1ttle/FlightAssistant",
-    "issues": "https://github.com/Octol1ttle/FlightAssistant/issues"
-  },
-  "license": "LGPL-3.0-only",
-  "icon": "assets/flightassistant/icon.png",
-  "environment": "client",
-  "entrypoints": {
-    "client": [
-      {
-        "value": "ru.octol1ttle.flightassistant.FlightAssistant",
-        "adapter": "kotlin"
-      }
+    "schemaVersion": 1,
+    "id": "flightassistant",
+    "version": "${version}",
+    "name": "FlightAssistant",
+    "description": "FlightAssistant brings your Elytra flying experience to the next level, all client-side!",
+    "authors": [
+        "Octol1ttle",
+        "mctaylors"
     ],
-    "modmenu": [
-      {
-        "value": "ru.octol1ttle.flightassistant.config.FAModMenuIntegration",
-        "adapter": "kotlin"
-      }
-    ]
-  },
-  "mixins": [
-    {
-      "config": "flightassistant.client.mixins.json",
-      "environment": "client"
+    "contact": {
+        "homepage": "https://modrinth.com/mod/flightassistant",
+        "sources": "https://github.com/Octol1ttle/FlightAssistant",
+        "issues": "https://github.com/Octol1ttle/FlightAssistant/issues"
+    },
+    "license": "LGPL-3.0-only",
+    "icon": "assets/flightassistant/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            {
+                "value": "ru.octol1ttle.flightassistant.FlightAssistantFabric",
+                "adapter": "kotlin"
+            }
+        ],
+        "modmenu": [
+            {
+                "value": "ru.octol1ttle.flightassistant.config.FAModMenuIntegration",
+                "adapter": "kotlin"
+            }
+        ]
+    },
+    "mixins": [
+        {
+            "config": "flightassistant.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.3",
+        "minecraft": "${mc}",
+        "java": ">=21",
+        "fabric-api": "*",
+        "fabric-language-kotlin": "*",
+        "yet_another_config_lib_v3": "*"
+    },
+    "recommends": {
+        "modmenu": "*"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "https://discord.gg/5kcBCvnbTp"
+            }
+        }
     }
-  ],
-  "depends": {
-    "fabricloader": ">=0.16.3",
-    "minecraft": "^1.21",
-    "java": ">=21",
-    "fabric-api": "*",
-    "fabric-language-kotlin": "*",
-    "yet_another_config_lib_v3": "*"
-  },
-  "recommends": {
-    "modmenu": "*"
-  }
 }
