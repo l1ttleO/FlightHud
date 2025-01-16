@@ -107,6 +107,8 @@ config.flightassistant:
         .: Индикатор скорости
         show_reading: Отображать значение скорости
         show_scale: Отображать шкалу скорости
+        show_ground: Отображать скорость относительно земли
+        show_vertical: Отображать вертикальную скорость
       altitude:
         .: Индикатор высоты
         show_reading: Отображать значение высоты
@@ -125,6 +127,7 @@ config.flightassistant:
           time: Время (примерное)
       misc:
         .: Разное
+        coordinates: Отображать координаты
         alerts: Отображать предупреждения
         automation_modes: Отображать режимы автоматизации
     safety:

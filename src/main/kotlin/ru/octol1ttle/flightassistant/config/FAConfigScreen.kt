@@ -171,6 +171,16 @@ object FAConfigScreen {
                 binding(current::showSpeedScale, defaults.showSpeedScale)
                 controller(tickBox())
             }
+            rootOptions.register<Boolean>("speed.show_ground") {
+                setDisplayName()
+                binding(current::showGroundSpeed, defaults.showGroundSpeed)
+                controller(tickBox())
+            }
+            rootOptions.register<Boolean>("speed.show_vertical") {
+                setDisplayName()
+                binding(current::showVerticalSpeed, defaults.showVerticalSpeed)
+                controller(tickBox())
+            }
 
             rootOptions.registerLabel("altitude", Text.translatable("config.flightassistant.options.display.altitude"))
             rootOptions.register<Boolean>("altitude.show_reading") {
@@ -205,7 +215,7 @@ object FAConfigScreen {
             )
             rootOptions.register<Boolean>("elytra_durability.show") {
                 setDisplayName()
-                binding(current::showFlightPathVector, defaults.showFlightPathVector)
+                binding(current::showElytraDurability, defaults.showElytraDurability)
                 controller(tickBox())
             }
             rootOptions.register<DisplayOptions.DurabilityUnits>("elytra_durability.units") {
@@ -215,6 +225,11 @@ object FAConfigScreen {
             }
 
             rootOptions.registerLabel("misc", Text.translatable("config.flightassistant.options.display.misc"))
+            rootOptions.register<Boolean>("misc.coordinates") {
+                setDisplayName()
+                binding(current::showCoordinates, defaults.showCoordinates)
+                controller(tickBox())
+            }
             rootOptions.register<Boolean>("misc.alerts") {
                 setDisplayName()
                 binding(current::showAlerts, defaults.showAlerts)

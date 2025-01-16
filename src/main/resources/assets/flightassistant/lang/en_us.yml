@@ -103,6 +103,8 @@ config.flightassistant:
         .: Speed display
         show_reading: Show speed reading
         show_scale: Show speed scale
+        show_ground: Show ground speed
+        show_vertical: Show vertical speed
       altitude:
         .: Altitude display
         show_reading: Show altitude reading
@@ -121,6 +123,7 @@ config.flightassistant:
           time: Time (approximate)
       misc:
         .: Miscellaneous
+        coordinates: Show coordinates
         alerts: Show alerts
         automation_modes: Show automation modes
     safety:

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.RotationAxis
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
@@ -30,11 +31,15 @@ class HeadingDisplay : Display() {
                 if (!FAConfig.display.drawHorizonOutsideFrame) {
                     HudFrame.scissor(this)
                 }
+                matrices.push()
+                matrices.translate(0, 0, -200)
+                matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
                 getScreenSpaceY(0.0f)?.let {
                     drawHeading(computers, it)
                 }
 
+                matrices.pop()
                 if (!FAConfig.display.drawHorizonOutsideFrame) {
                     disableScissor()
                 }
