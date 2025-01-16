@@ -171,10 +171,13 @@ publishMods {
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
     displayName =
         "${mod.name} ${mod.version} for ${loader.replaceFirstChar { it.uppercase() }} ${property("mod.mc_title")}"
-    version = mod.version
+    version = "${mod.version}+mc$mcVersion-$loader"
     changelog = rootProject.file("CHANGELOG.md").readText()
-    type = STABLE
+    type = ALPHA
     modLoaders.add(loader)
+    if (isFabric) {
+        modLoaders.add("quilt")
+    }
 
     val targets = property("mod.mc_targets").toString().split(' ')
     modrinth {
