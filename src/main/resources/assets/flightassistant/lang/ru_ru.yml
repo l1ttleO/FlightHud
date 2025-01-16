@@ -198,6 +198,8 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
+  hide_current_alert: Скрыть активное предупреждение
+  show_hidden_alert: Показать скрытое предупреждение
   decrease_thrust: Убавить тягу (накл. рычаги назад)
   increase_thrust: Добавить тягу (накл. рычаги вперед)
   set_idle: Установить нулевую тягу (0%)
