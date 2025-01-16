@@ -170,7 +170,7 @@ publishMods {
     file = tasks.remapJar.get().archiveFile
     additionalFiles.from(tasks.remapSourcesJar.get().archiveFile)
     displayName =
-        "${mod.name} ${loader.replaceFirstChar { it.uppercase() }} ${mod.version} for ${property("mod.mc_title")}"
+        "${mod.name} ${mod.version} for ${loader.replaceFirstChar { it.uppercase() }} ${property("mod.mc_title")}"
     version = mod.version
     changelog = rootProject.file("CHANGELOG.md").readText()
     type = STABLE
@@ -182,12 +182,13 @@ publishMods {
         accessToken = modrinthToken.toString()
         targets.forEach(minecraftVersions::add)
         if (isFabric) {
-            requires("fabric-api", "fabric-language-kotlin")
+            requires("fabric-language-kotlin")
             optional("modmenu")
         } else {
             requires("kotlin-for-forge")
         }
-        optional("yacl")
+        requires("architectury-api")
+        requires("yacl")
     }
 
     curseforge {
@@ -195,9 +196,12 @@ publishMods {
         accessToken = curseforgeToken.toString()
         targets.forEach(minecraftVersions::add)
         if (isFabric) {
-            requires("fabric-api", "fabric-language-kotlin")
+            requires("fabric-language-kotlin")
             optional("modmenu")
-        } else requires("kotlin-for-forge")
-        optional("yacl")
+        } else {
+            requires("kotlin-for-forge")
+        }
+        requires("architectury-api")
+        requires("yacl")
     }
 }
