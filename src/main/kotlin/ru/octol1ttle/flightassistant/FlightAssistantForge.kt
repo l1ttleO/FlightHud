@@ -3,7 +3,8 @@ package ru.octol1ttle.flightassistant
 //? if !fabric {
 
 /*//? if neoforge {
-/^import net.neoforged.bus.api.IEventBus
+/^import net.minecraft.client.MinecraftClient
+import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModLoadingContext
 import net.neoforged.fml.common.Mod
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent
@@ -49,7 +50,9 @@ object FlightAssistantForge {
 //? if neoforge {
     /^fun onRegisterGuiOverlay(event: RegisterGuiLayersEvent) {
         event.registerBelow(VanillaGuiLayers.SELECTED_ITEM_NAME, FlightAssistant.id("neoforge_gui")) { context, tickCounter ->
-            FixedHudRenderCallback.EVENT.invoker().onRenderHud(context, tickCounter.getTickDelta(true))
+            if (!MinecraftClient.getInstance().options.hudHidden) {
+                FixedHudRenderCallback.EVENT.invoker().onRenderHud(context, tickCounter.getTickDelta(true))
+            }
         }
     }
 ^///?} else {
