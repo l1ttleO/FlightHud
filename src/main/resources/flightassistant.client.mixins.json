@@ -1,7 +1,6 @@
 {
     "required": true,
     "package": "ru.octol1ttle.flightassistant.mixin",
-    "refmap": "flightassistant.client.refmap.json",
     "compatibilityLevel": "JAVA_17",
     "client": [
         "ClientShouldTickInvoker",

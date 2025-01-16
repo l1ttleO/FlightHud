@@ -63,6 +63,10 @@ dependencies {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.2.1.0")
         modImplementation("dev.architectury:architectury-fabric:${property("deps.arch_api")}")
+        val fapi = property("deps.fapi")
+        if (fapi != "[VERSIONED]") {
+            modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$fapi")
+        }
         ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}")
     } else {
         if (loader == "forge") {
@@ -82,7 +86,9 @@ dependencies {
     }
     // Config
     modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}") {
-        isTransitive = false
+        if (!isFabric) {
+            isTransitive = false
+        }
     }
 }
 
