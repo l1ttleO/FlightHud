@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.safety
 
+import kotlin.math.max
 import kotlin.math.min
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -82,7 +83,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
     }
 
     private fun computeGroundImpactTime(data: AirDataComputer): Float {
-        if (data.velocity.y >= 0) {
+        if (data.velocity.y >= 0.0) {
             return Float.MAX_VALUE
         }
 
@@ -90,7 +91,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         val impactLevel: Double =
             if (groundLevel == null || groundLevel == Double.MAX_VALUE) data.voidLevel.toDouble()
             else groundLevel
-        return ((data.altitude - impactLevel) / (data.velocity.y * -20)).toFloat()
+        return (max(0.0, data.altitude - impactLevel) / (data.velocity.y * -20.0)).toFloat()
     }
 
     // IDEA: max/min terrain altitude on status display (that's gonna be so fucking cool /srs)
