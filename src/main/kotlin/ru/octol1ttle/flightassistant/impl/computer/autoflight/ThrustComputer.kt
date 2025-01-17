@@ -42,19 +42,19 @@ class ThrustComputer : Computer() {
     override fun tick(computers: ComputerAccess) {
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
 
-        val controllerInputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
-        val finalControllerInput: ControlInput? = controllerInputs.filter { it.priority.value == controllerInputs[0].priority.value }.maxByOrNull { it.target }
+        val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
+        val finalInput: ControlInput? = inputs.getActiveHighestPriority()
 
         noThrustSource = false
         reverseUnsupported = false
 
-        if (finalControllerInput?.active == true) {
-            setTarget(finalControllerInput.target, true)
-            activeThrustInput = finalControllerInput
+        if (finalInput?.active == true) {
+            setTarget(finalInput.target, true)
+            activeThrustInput = finalInput
         } else if (targetThrust == 0.0f) {
-            noThrustSource = finalControllerInput != null && thrustSource == null
-            val text: Text? = if (!noThrustSource) finalControllerInput?.text else finalControllerInput?.text?.copy()?.styled { it.withColor(cautionColor) }
-            activeThrustInput = finalControllerInput?.copy(text = text)
+            noThrustSource = finalInput != null && thrustSource == null
+            val text: Text? = if (!noThrustSource) finalInput?.text else finalInput?.text?.copy()?.styled { it.withColor(cautionColor) }
+            activeThrustInput = finalInput?.copy(text = text)
             thrustLocked = false
             return
         } else {

@@ -15,6 +15,7 @@ import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerR
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.getActiveHighestPriority
 import ru.octol1ttle.flightassistant.api.util.requireIn
 
 class PitchComputer : Computer(), PitchController {
@@ -50,7 +51,7 @@ class PitchComputer : Computer(), PitchController {
         }
 
         val pitch: Float = computers.data.pitch
-        val finalInput: ControlInput? = inputs.filter { it.priority.value == inputs[0].priority.value }.maxByOrNull { it.target }
+        val finalInput: ControlInput? = inputs.getActiveHighestPriority()
         if (finalInput == null) {
             activePitchInput = null
             return
