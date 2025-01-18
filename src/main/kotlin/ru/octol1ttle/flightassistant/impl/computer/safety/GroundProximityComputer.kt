@@ -116,7 +116,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
     override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
         if (groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateLimitPitch || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleLimitPitch) {
             return ControlInput(
-                computers.data.pitch,
+                computers.data.pitch.coerceAtMost(0.0f),
                 ControlInput.Priority.HIGH,
                 Text.translatable("mode.flightassistant.pitch.terrain_protection")
             )
