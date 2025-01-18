@@ -3,6 +3,7 @@ package ru.octol1ttle.flightassistant.impl.computer
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
+import ru.octol1ttle.flightassistant.api.SystemHost
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.event.ComputerRegistrationCallback
@@ -13,15 +14,33 @@ import ru.octol1ttle.flightassistant.impl.computer.autoflight.PitchComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
-internal object ComputerHost : ComputerAccess {
+internal object ComputerHost : ComputerAccess, SystemHost {
     private val computers: MutableMap<Identifier, Computer> = HashMap()
 
-    fun isFaulted(identifier: Identifier): Boolean {
+    override fun isEnabled(identifier: Identifier): Boolean {
+        return get(identifier).enabled
+    }
+
+    override fun isFaulted(identifier: Identifier): Boolean {
         return get(identifier).faulted
     }
 
-    fun countFaults(identifier: Identifier): Int {
+    override fun toggleEnabled(identifier: Identifier): Boolean {
+        val computer: Computer = get(identifier)
+        computer.enabled = !computer.enabled
+        if (!computer.enabled) {
+            computer.reset()
+            computer.faulted = false
+        }
+        return computer.enabled
+    }
+
+    fun getFaultCount(identifier: Identifier): Int {
         return get(identifier).faultCount
+    }
+
+    fun identifiers(): Set<Identifier> {
+        return computers.keys
     }
 
     private fun register(identifier: Identifier, computer: Computer) {
@@ -82,7 +101,7 @@ internal object ComputerHost : ComputerAccess {
         }
 
         for ((id: Identifier, computer: Computer) in computers) {
-            if (!computer.faulted) {
+            if (computer.enabled && !computer.faulted) {
                 try {
                     computer.tick(this)
                 } catch (t: Throwable) {

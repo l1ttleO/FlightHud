@@ -1,19 +1,18 @@
 package ru.octol1ttle.flightassistant.screen
 
-import dev.isxander.yacl3.gui.ElementListWidgetExt
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.gui.widget.TextWidget
-import net.minecraft.client.gui.widget.Widget
 import net.minecraft.text.Text
+import ru.octol1ttle.flightassistant.screen.status.SystemStatusScreen
 
-class FlightConfigurationScreen : FABaseScreen(Text.of("Flight Configuration")) {
+class FlightConfigurationScreen : FABaseScreen(Text.translatable("menu.flightassistant")) {
     override fun init() {
         super.init()
 
-        this.addDrawableChild(ButtonWidget.builder(Text.of("Flight Plan")) {
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.flightassistant.flight_plan")) {
             TODO()
         }.position(this.centerX - 200, this.centerY - 10).width(98).build()).active = false
-        this.addDrawableChild(ButtonWidget.builder(Text.of("System Status")) {
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("menu.flightassistant.system")) {
             this.client!!.setScreen(SystemStatusScreen())
         }.position(this.centerX + 102, this.centerY - 10).width(98).build())
 

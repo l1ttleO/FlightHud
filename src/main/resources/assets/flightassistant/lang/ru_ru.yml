@@ -31,7 +31,7 @@ alerts.flightassistant:
       flightassistant:heading: ОТКАЗ ИНД КУРСА
       flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
       flightassistant:speed: ОТКАЗ ИНД СКОР
-      flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
+      flightassistant:velocity_components: ОТКАЗ ИНД Г/С И В/C
   firework:
     .: ФРВК
     fault: ОТКАЗ СИСТ

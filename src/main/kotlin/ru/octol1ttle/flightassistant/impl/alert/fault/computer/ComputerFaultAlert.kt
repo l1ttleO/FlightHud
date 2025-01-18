@@ -18,7 +18,7 @@ class ComputerFaultAlert(private val identifier: Identifier, private val alertTe
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
         drawContext.drawText(alertText, firstLineX, y, data.colorSupplier.invoke())
-        if (ComputerHost.countFaults(identifier) == 1) {
+        if (ComputerHost.getFaultCount(identifier) == 1) {
             drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y + 11, advisoryColor)
         } else {
             drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y + 11, advisoryColor)

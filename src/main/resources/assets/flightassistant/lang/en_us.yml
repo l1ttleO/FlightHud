@@ -27,7 +27,7 @@ alerts.flightassistant:
       flightassistant:heading: HDG DSPL FAULT
       flightassistant:radar_altitude: R/ALT DSPL FAULT
       flightassistant:speed: SPD DSPL FAULT
-      flightassistant:velocity_components: VEL/CMPN DSPL FAULT
+      flightassistant:velocity_components: G/S & V/S DSPL FAULT
   firework:
     .: FRWK
     fault: SYS FAULT
@@ -171,6 +171,40 @@ config.flightassistant:
       firework:
         .: Fireworks
         lock_explosive: Lock explosive fireworks
+
+menu.flightassistant:
+  .: Flight Configuration
+  flight_plan: Flight Plan
+  system:
+    .: System Status
+    fault: FAULT
+    'off': 'OFF'
+    off_reset: OFF/RESET
+    'on': 'ON'
+    name:
+      hud:
+        flightassistant:alert: Alert display
+        flightassistant:altitude: Altitude display
+        flightassistant:attitude: Attitude display
+        flightassistant:automation_modes: Automation modes display
+        flightassistant:coordinates: Coordinates display
+        flightassistant:elytra_durability: Elytra durability display
+        flightassistant:flight_path: Flight path display
+        flightassistant:heading: Heading display
+        flightassistant:radar_altitude: Radar altitude display
+        flightassistant:speed: Speed
+        flightassistant:velocity_components: G/S & V/S display
+      computer:
+        flightassistant:air_data: Air data computer
+        flightassistant:alert: Alert computer
+        flightassistant:chunk_status: Chunk status computer
+        flightassistant:elytra_status: Elytra status computer
+        flightassistant:ground_proximity: Ground Proximity Warning System
+        flightassistant:stall: Stall computer
+        flightassistant:void_proximity: Void proximity computer
+        flightassistant:firework: Firework computer
+        flightassistant:pitch: Pitch computer
+        flightassistant:thrust: Thrust computer
 
 mode.flightassistant:
   thrust:
