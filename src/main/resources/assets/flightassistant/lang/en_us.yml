@@ -1,23 +1,27 @@
 alerts.flightassistant:
-  fault:
-    hud:
-      .: HUD
-      flightassistant:altitude: ALT DSPL FAULT
-      flightassistant:attitude: ATT DSPL FAULT
-      flightassistant:automation_modes: AUTO MODE DSPL FAULT
-      flightassistant:coordinates: COORD DSPL FAULT
-      flightassistant:elytra_durability: E/DURA DSPL FAULT
-      flightassistant:flight_path: F/PATH DSPL FAULT
-      flightassistant:heading: HDG DSPL FAULT
-      flightassistant:radar_altitude: R/ALT DSPL FAULT
-      flightassistant:speed: SPD DSPL FAULT
-      flightassistant:velocity_components: VEL/CMPN DSPL FAULT
-  stall:
-    .: STALL
-    detection_fault: DETECT FAULT
+  alert:
+    .: ALERT
+    fault: SYS FAULT (SOME ALERTS LOST)
   autoflight:
     .: AUTO FLT
     pitch_fault: PITCH CTL FAULT
+  elytra:
+    .: ELYTRA
+    fault: STATUS FAULT
+    low_durability: LOW DURABILITY
+    critical_durability: CRIT DURABILITY
+  hud:
+    .: HUD
+    flightassistant:altitude: ALT DSPL FAULT
+    flightassistant:attitude: ATT DSPL FAULT
+    flightassistant:automation_modes: AUTO MODE DSPL FAULT
+    flightassistant:coordinates: COORD DSPL FAULT
+    flightassistant:elytra_durability: E/DURA DSPL FAULT
+    flightassistant:flight_path: F/PATH DSPL FAULT
+    flightassistant:heading: HDG DSPL FAULT
+    flightassistant:radar_altitude: R/ALT DSPL FAULT
+    flightassistant:speed: SPD DSPL FAULT
+    flightassistant:velocity_components: VEL/CMPN DSPL FAULT
   firework:
     .: FRWK
     fault: SYS FAULT
@@ -29,17 +33,24 @@ alerts.flightassistant:
   flight_controls:
     .: F/CTL
     pitch_fault: PITCH LIMIT FAULT
-  elytra:
-    .: ELYTRA
-    fault: STATUS FAULT
-    low_durability: LOW DURABILITY
-    critical_durability: CRIT DURABILITY
   gpws:
     .: GPWS
     fault: FAULT
     sink_rate: SINK RATE
     terrain_ahead: TERRAIN AHEAD
     pull_up: PULL UP
+  stall:
+    .: STALL
+    detection_fault: DETECT FAULT
+  navigation:
+    .: NAV
+    air_data_fault: AIR DATA FAULT
+    chunk_status_fault: CHUNK STATUS FAULT
+    void_proximity_fault: VOID PROX FAULT
+    slow_chunk_loading: SLOW CHUNK LOADING
+    no_chunks_loaded: NO CHUNKS LOADED
+    approaching_void_damage_altitude: APPR.ING VOID DMG ALT
+    reached_void_damage_altitude: REACHED VOID DMG ALT
   thrust:
     .: THRUST
     fault: SYS FAULT
@@ -50,15 +61,6 @@ alerts.flightassistant:
     reverse_not_supported:
       .: REVERSE NOT SUPPORTED
       set_forward: ' -THR: SET FORWARD'
-  navigation:
-    .: NAV
-    air_data_fault: AIR DATA FAULT
-    chunk_status_fault: CHUNK STATUS FAULT
-    void_proximity_fault: VOID PROX FAULT
-    slow_chunk_loading: SLOW CHUNK LOADING
-    no_chunks_loaded: NO CHUNKS LOADED
-    approaching_void_damage_altitude: APPR.ING VOID DMG ALT
-    reached_void_damage_altitude: REACHED VOID DMG ALT
 
 config.flightassistant:
   categories:

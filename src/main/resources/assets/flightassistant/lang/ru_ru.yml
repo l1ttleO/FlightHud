@@ -3,25 +3,29 @@ modmenu:
     flightassistant: FlightAssistant предлагает вам ощутить полеты с Элитрами по-новому, и все на стороне клиента!
 
 alerts.flightassistant:
-  fault:
-    hud:
-      .: HUD
-      flightassistant:altitude: ОТКАЗ ИНД ВЫС
-      flightassistant:attitude: ОТКАЗ ИНД ОРИЕНТ
-      flightassistant:automation_modes: ОТКАЗ ИНД АВТО РЕЖИМ
-      flightassistant:coordinates: ОТКАЗ ИНД КООРД
-      flightassistant:elytra_durability: ОТКАЗ ИНД ПРЧН/ЭЛ
-      flightassistant:flight_path: ОТКАЗ ИНД ВЕКТ/П
-      flightassistant:heading: ОТКАЗ ИНД КУРСА
-      flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
-      flightassistant:speed: ОТКАЗ ИНД СКОР
-      flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
-  stall:
-    .: СВАЛИВАНИЕ
-    detection_fault: ОТКАЗ ОБНАРУЖ
+  alert:
+    .: ПРЕДУПР
+    fault: ОТКАЗ (НЕКОТОРЫЕ ПРЕДУПР ПОТЕР)
   autoflight:
     .: АВТО ПОЛЕТ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
+  elytra:
+    .: ЭЛИТРЫ
+    fault: ОТКАЗ СТАТУС
+    low_durability: НИЗК ПРОЧНОСТЬ
+    critical_durability: КРИТ ПРОЧНОСТЬ
+  hud:
+    .: HUD
+    flightassistant:altitude: ОТКАЗ ИНД ВЫС
+    flightassistant:attitude: ОТКАЗ ИНД ОРИЕНТ
+    flightassistant:automation_modes: ОТКАЗ ИНД АВТО РЕЖИМ
+    flightassistant:coordinates: ОТКАЗ ИНД КООРД
+    flightassistant:elytra_durability: ОТКАЗ ИНД ПРЧН/ЭЛ
+    flightassistant:flight_path: ОТКАЗ ИНД ВЕКТ/П
+    flightassistant:heading: ОТКАЗ ИНД КУРСА
+    flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
+    flightassistant:speed: ОТКАЗ ИНД СКОР
+    flightassistant:velocity_components: ОТКАЗ ИНД КМПН/СКОР
   firework:
     .: ФРВК
     fault: ОТКАЗ СИСТ
@@ -33,17 +37,24 @@ alerts.flightassistant:
   flight_controls:
     .: УПР/ПОЛЕТ
     pitch_fault: ОТКАЗ ОГРАН УГЛА НАКЛ
-  elytra:
-    .: ЭЛИТРЫ
-    fault: ОТКАЗ СТАТУС
-    low_durability: НИЗК ПРОЧНОСТЬ
-    critical_durability: КРИТ ПРОЧНОСТЬ
   gpws:
     .: GPWS
     fault: ОТКАЗ
     sink_rate: СКОР. СНИЖЕНИЯ
     terrain_ahead: ЗЕМЛЯ ВПЕРЕДИ
     pull_up: ТЯНИ ВВЕРХ
+  navigation:
+    .: НАВИГАЦ
+    air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
+    chunk_status_fault: ОТКАЗ СТАТУС ЧАНКОВ
+    void_proximity_fault: ОТКАЗ БЛИЗ ПУСТ
+    slow_chunk_loading: МЕДЛЕН ЗАГРУЗКА ЧАНКОВ
+    no_chunks_loaded: ЧАНКИ НЕ ЗАГРУЖЕНЫ
+    approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
+    reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ
+  stall:
+    .: СВАЛИВАНИЕ
+    detection_fault: ОТКАЗ ОБНАРУЖ
   thrust:
     .: ТЯГА
     fault: ОТКАЗ СИСТ
@@ -54,15 +65,6 @@ alerts.flightassistant:
     reverse_not_supported:
       .: ОБРАТН НЕ ПОДДЕРЖ
       set_forward: ' -ТЯГА: УСТАН ВПЕРЕД'
-  navigation:
-    .: НАВИГАЦ
-    air_data_fault: ОТКАЗ ДАНН ПОЛЕТ
-    chunk_status_fault: ОТКАЗ СТАТУС ЧАНКОВ
-    void_proximity_fault: ОТКАЗ БЛИЗ ПУСТ
-    slow_chunk_loading: МЕДЛЕН ЗАГРУЗКА ЧАНКОВ
-    no_chunks_loaded: ЧАНКИ НЕ ЗАГРУЖЕНЫ
-    approaching_void_damage_altitude: ПРИБЛИЖ ОПАСН ВЫС ПУСТОТЫ
-    reached_void_damage_altitude: ДОСТИГ ОПАСН ВЫС ПУСТОТЫ
 
 config.flightassistant:
   categories:

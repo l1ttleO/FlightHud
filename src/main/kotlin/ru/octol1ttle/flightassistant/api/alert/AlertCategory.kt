@@ -3,6 +3,7 @@ package ru.octol1ttle.flightassistant.api.alert
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.util.alert
 
 class AlertCategory(val categoryText: Text) {
     private val registeredAlerts: ArrayList<Alert> = ArrayList()
@@ -37,6 +38,7 @@ class AlertCategory(val categoryText: Text) {
                     ignoredAlerts.remove(alert)
                 }
             } catch (t: Throwable) {
+                computers.alert.alertsFaulted = true
                 FlightAssistant.logger.atError().setCause(t).log("Exception ticking alert of type: {}", alert.javaClass.name)
             }
         }

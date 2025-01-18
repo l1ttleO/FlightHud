@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.alert.fault.display
+package ru.octol1ttle.flightassistant.impl.alert.fault
 
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
