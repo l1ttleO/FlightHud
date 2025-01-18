@@ -51,7 +51,7 @@ class PitchComputer : Computer(), PitchController {
         }
 
         val pitch: Float = computers.data.pitch
-        val finalInput: ControlInput? = inputs.getActiveHighestPriority()
+        val finalInput: ControlInput? = inputs.getActiveHighestPriority().maxByOrNull { it.target }
         if (finalInput == null) {
             activePitchInput = null
             return
@@ -91,7 +91,7 @@ class PitchComputer : Computer(), PitchController {
 
     private fun updateSafePitches(computers: ComputerAccess) {
         val maximums: List<ControlInput> = limiters.mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
-        maximumPitch = maximums.filter { it.priority.value == maximums[0].priority.value }.minByOrNull { it.target }
+        maximumPitch = maximums.getActiveHighestPriority().minByOrNull { it.target }
         val max: ControlInput? = maximumPitch
         if (max != null) {
             max.target.requireIn(-90.0f..90.0f)
@@ -99,7 +99,7 @@ class PitchComputer : Computer(), PitchController {
         }
 
         val minimums: List<ControlInput> = limiters.mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
-        minimumPitch = minimums.filter { it.priority.value == minimums[0].priority.value }.maxByOrNull { it.target }
+        minimumPitch = minimums.getActiveHighestPriority().maxByOrNull { it.target }
         val min: ControlInput? = minimumPitch
         if (min != null) {
             min.target.requireIn(-90.0f..90.0f)

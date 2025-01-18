@@ -43,7 +43,7 @@ class ThrustComputer : Computer() {
         val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
 
         val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
-        val finalInput: ControlInput? = inputs.getActiveHighestPriority()
+        val finalInput: ControlInput? = inputs.getActiveHighestPriority().maxByOrNull { it.target }
 
         noThrustSource = false
         reverseUnsupported = false
