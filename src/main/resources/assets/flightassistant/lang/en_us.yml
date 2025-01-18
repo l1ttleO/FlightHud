@@ -10,18 +10,24 @@ alerts.flightassistant:
     fault: STATUS FAULT
     low_durability: LOW DURABILITY
     critical_durability: CRIT DURABILITY
-  hud:
-    .: HUD
-    flightassistant:altitude: ALT DSPL FAULT
-    flightassistant:attitude: ATT DSPL FAULT
-    flightassistant:automation_modes: AUTO MODE DSPL FAULT
-    flightassistant:coordinates: COORD DSPL FAULT
-    flightassistant:elytra_durability: E/DURA DSPL FAULT
-    flightassistant:flight_path: F/PATH DSPL FAULT
-    flightassistant:heading: HDG DSPL FAULT
-    flightassistant:radar_altitude: R/ALT DSPL FAULT
-    flightassistant:speed: SPD DSPL FAULT
-    flightassistant:velocity_components: VEL/CMPN DSPL FAULT
+  fault:
+    computer:
+      reset: ' -SYSTEM: OFF THEN ON'
+      turn_off: ' -SYSTEM: OFF'
+    hud:
+      .: HUD
+      reset: ' -DISPLAY: OFF THEN ON'
+      turn_off: ' -DISPLAY: OFF'
+      flightassistant:altitude: ALT DSPL FAULT
+      flightassistant:attitude: ATT DSPL FAULT
+      flightassistant:automation_modes: AUTO MODE DSPL FAULT
+      flightassistant:coordinates: COORD DSPL FAULT
+      flightassistant:elytra_durability: E/DURA DSPL FAULT
+      flightassistant:flight_path: F/PATH DSPL FAULT
+      flightassistant:heading: HDG DSPL FAULT
+      flightassistant:radar_altitude: R/ALT DSPL FAULT
+      flightassistant:speed: SPD DSPL FAULT
+      flightassistant:velocity_components: VEL/CMPN DSPL FAULT
   firework:
     .: FRWK
     fault: SYS FAULT

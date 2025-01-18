@@ -215,6 +215,13 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         }
     }
 
+    override fun reset() {
+        categories.forEach { it.activeAlerts.clear() }
+        categories.forEach { it.ignoredAlerts.clear() }
+        sounds.values.forEach { soundManager.stop(it) }
+        sounds.clear()
+    }
+
     companion object {
         val ID: Identifier = FlightAssistant.id("alert")
     }

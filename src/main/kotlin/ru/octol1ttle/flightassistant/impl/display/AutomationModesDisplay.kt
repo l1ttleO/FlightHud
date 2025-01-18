@@ -15,7 +15,7 @@ class AutomationModesDisplay : Display() {
     private val thrustDisplay: ModeDisplay = ModeDisplay(1) { computers -> computers.thrust.activeThrustInput }
     private val pitchDisplay: ModeDisplay = ModeDisplay(2) { computers -> computers.pitch.activePitchInput }
 
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAutomationModes
     }
 

@@ -27,11 +27,12 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
 
     var position: Vec3d = Vec3d.ZERO
         private set
+
     val altitude: Double
         get() = position.y
     val voidLevel: Int
         get() = world.bottomY - 64
-    var groundLevel: Double? = 0.0
+    var groundLevel: Double? = null
         private set(value) { field = value?.requireIn(world.bottomY.toDouble()..Double.MAX_VALUE) }
     private val fallDistance: Float
         get() =
@@ -103,6 +104,14 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
         val normalizedRotation: Vec3d = player.rotationVector.normalize()
         val normalizedVelocity: Vec3d = velocity.normalize()
         return velocity.multiply(normalizedRotation.dotProduct(normalizedVelocity).coerceAtLeast(0.0))
+    }
+
+    override fun reset() {
+        position = Vec3d.ZERO
+        groundLevel = null
+        velocity = Vec3d.ZERO
+        forwardVelocity = Vec3d.ZERO
+        roll = 0.0f
     }
 
     companion object {

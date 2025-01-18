@@ -13,7 +13,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AltitudeDisplay : Display() {
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAltitudeReading || FAConfig.display.showAltitudeScale
     }
 

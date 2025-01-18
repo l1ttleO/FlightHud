@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class SpeedDisplay : Display() {
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showSpeedReading || FAConfig.display.showSpeedScale
     }
 

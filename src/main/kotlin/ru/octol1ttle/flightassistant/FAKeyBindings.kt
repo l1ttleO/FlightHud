@@ -3,13 +3,17 @@ package ru.octol1ttle.flightassistant
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
+import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.alert
 import ru.octol1ttle.flightassistant.api.util.thrust
+import ru.octol1ttle.flightassistant.screen.FlightConfigurationScreen
 
 object FAKeyBindings {
     internal val keyBindings: ArrayList<KeyBinding> = ArrayList()
+
+    private lateinit var openFlightConfiguration: KeyBinding
 
     private lateinit var hideCurrentAlert: KeyBinding
     private lateinit var showHiddenAlert: KeyBinding
@@ -20,6 +24,8 @@ object FAKeyBindings {
     private lateinit var setToga: KeyBinding
 
     fun setup() {
+        openFlightConfiguration = addKeyBinding("keys.flightassistant.open_flight_configuration", GLFW.GLFW_KEY_KP_ENTER)
+
         hideCurrentAlert = addKeyBinding("keys.flightassistant.hide_current_alert", GLFW.GLFW_KEY_KP_0)
         showHiddenAlert = addKeyBinding("keys.flightassistant.show_hidden_alert", GLFW.GLFW_KEY_KP_DECIMAL)
 
@@ -36,6 +42,12 @@ object FAKeyBindings {
     }
 
     fun checkPressed(computers: ComputerAccess) {
+        while (openFlightConfiguration.wasPressed()) {
+            mc.execute {
+                mc.setScreen(FlightConfigurationScreen())
+            }
+        }
+
         while (hideCurrentAlert.wasPressed()) {
             computers.alert.hideCurrentAlert()
         }

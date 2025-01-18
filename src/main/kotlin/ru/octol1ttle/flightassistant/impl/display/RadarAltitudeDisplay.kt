@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
 class RadarAltitudeDisplay : Display() {
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showRadarAltitude
     }
 

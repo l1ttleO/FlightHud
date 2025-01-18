@@ -140,6 +140,12 @@ class ElytraStatusComputer : Computer() {
         return (active.maxDamage - active.damage - 1) * (unbreakingLevel + 1)
     }
 
+
+    override fun reset() {
+        activeElytra = null
+        syncedFlyingState = null
+    }
+
     companion object {
         val ID: Identifier = FlightAssistant.id("elytra_status")
     }

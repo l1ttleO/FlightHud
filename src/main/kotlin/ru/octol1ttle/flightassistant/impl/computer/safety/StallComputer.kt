@@ -55,6 +55,10 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
         )
     }
 
+    override fun reset() {
+        status = Status.SAFE
+    }
+
     enum class Status {
         FULL_STALL,
         APPROACHING_STALL,

@@ -40,6 +40,10 @@ class ChunkStatusComputer : Computer() {
             }
     }
 
+    override fun reset() {
+        status = Status.LOADED
+    }
+
     enum class Status {
         ALL_UNLOADED,
         SOME_UNLOADED,

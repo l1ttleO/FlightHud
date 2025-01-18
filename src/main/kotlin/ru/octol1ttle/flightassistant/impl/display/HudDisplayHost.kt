@@ -11,13 +11,17 @@ import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.updateViewport
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
+import ru.octol1ttle.flightassistant.impl.computer.ComputerHost.get
 
 internal object HudDisplayHost {
     private val displays: MutableMap<Identifier, Display> = HashMap()
 
     fun isFaulted(identifier: Identifier): Boolean {
-        return displays[identifier]?.faulted
-            ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+        return displays[identifier]?.faulted ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+    }
+
+    fun countFaults(identifier: Identifier): Int {
+        return get(identifier).faultCount
     }
 
     fun identifiers(): Set<Identifier> {
@@ -74,7 +78,7 @@ internal object HudDisplayHost {
         HudFrame.update()
         updateViewport()
 
-        for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.enabled() }) {
+        for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.allowedByConfig() }) {
             if (display.faulted || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {
                 try {
                     display.renderFaulted(drawContext)
@@ -87,6 +91,7 @@ internal object HudDisplayHost {
                     display.render(drawContext, ComputerHost)
                 } catch (t: Throwable) {
                     display.faulted = true
+                    display.faultCount++
                     FlightAssistant.logger.atError().setCause(t)
                         .log("Exception rendering display with identifier: {}", id)
                 }

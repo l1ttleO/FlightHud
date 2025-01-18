@@ -10,7 +10,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class ElytraDurabilityDisplay : Display() {
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showElytraDurability
     }
 

@@ -139,6 +139,14 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         return null
     }
 
+
+    override fun reset() {
+        groundImpactTime = Float.MAX_VALUE
+        groundImpactStatus = Status.SAFE
+        obstacleImpactTime = Float.MAX_VALUE
+        obstacleImpactStatus = Status.SAFE
+    }
+
     enum class Status {
         RECOVER,
         WARNING,

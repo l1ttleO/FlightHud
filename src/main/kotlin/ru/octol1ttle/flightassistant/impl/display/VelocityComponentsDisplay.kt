@@ -11,7 +11,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class VelocityComponentsDisplay : Display() {
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showGroundSpeed || FAConfig.display.showVerticalSpeed
     }
 

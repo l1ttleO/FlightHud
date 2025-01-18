@@ -40,9 +40,9 @@ class ThrustComputer : Computer() {
     }
 
     override fun tick(computers: ComputerAccess) {
-        val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
+        val thrustSource: ThrustSource? = sources.filterNonFaulted().filter { it.isAvailable() }.minByOrNull { it.priority.value }
 
-        val inputs: List<ControlInput> = controllers.mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
         val finalInput: ControlInput? = inputs.getActiveHighestPriority().maxByOrNull { it.target }
 
         noThrustSource = false
@@ -94,12 +94,21 @@ class ThrustComputer : Computer() {
     }
 
     fun getOptimumClimbPitch(): Float {
-        val thrustSource: ThrustSource? = sources.filter { it.isAvailable() }.minByOrNull { it.priority.value }
+        val thrustSource: ThrustSource? = sources.filterNonFaulted().filter { it.isAvailable() }.minByOrNull { it.priority.value }
         if (thrustSource != null) {
             return thrustSource.optimumClimbPitch
         }
 
         return 55.0f
+    }
+
+    override fun reset() {
+        lastInputAutomatic = false
+        targetThrust = 0.0f
+        activeThrustInput = null
+        noThrustSource = false
+        reverseUnsupported = false
+        thrustLocked = false
     }
 
     companion object {

@@ -27,7 +27,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         get() = 55.0f
 
     private var safeFireworkCount: Int = 0
-    private var safeFireworkSlot: Int? = 0
+    private var safeFireworkSlot: Int? = null
 
     var waitingForResponse: Boolean = false
     var lastActivationTime: Int = 0
@@ -134,6 +134,14 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         if (currentThrust > computers.data.forwardVelocity.length() * 20.0f / 30.0f) {
             tryActivateFirework(computers.data.player)
         }
+    }
+
+    override fun reset() {
+        safeFireworkCount = 0
+        safeFireworkSlot = null
+        waitingForResponse = false
+        lastActivationTime = 0
+        responseTimes.clear()
     }
 
     companion object {

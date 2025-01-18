@@ -20,6 +20,10 @@ internal object ComputerHost : ComputerAccess {
         return get(identifier).faulted
     }
 
+    fun countFaults(identifier: Identifier): Int {
+        return get(identifier).faultCount
+    }
+
     private fun register(identifier: Identifier, computer: Computer) {
         if (computers.containsKey(identifier)) {
             throw IllegalArgumentException("Already registered computer with identifier: $identifier")
@@ -83,6 +87,7 @@ internal object ComputerHost : ComputerAccess {
                     computer.tick(this)
                 } catch (t: Throwable) {
                     computer.faulted = true
+                    computer.faultCount++
                     FlightAssistant.logger.atError().setCause(t)
                         .log("Exception ticking computer with identifier: {}", id)
                 }

@@ -72,6 +72,10 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
         return null
     }
 
+    override fun reset() {
+        status = Status.ABOVE_GROUND
+    }
+
     enum class Status {
         REACHED_DAMAGE_ALTITUDE,
         APPROACHING_DAMAGE_ALTITUDE,

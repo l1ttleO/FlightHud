@@ -1,6 +1,7 @@
 package ru.octol1ttle.flightassistant.api.util
 
 import ru.octol1ttle.flightassistant.api.alert.AlertData
+import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 
 fun List<ControlInput>.getActiveHighestPriority(): List<ControlInput> {
@@ -14,4 +15,8 @@ fun List<ControlInput>.getActiveHighestPriority(): List<ControlInput> {
 
 fun List<AlertData>.getHighestPriority(): List<AlertData> {
     return this.filter { it.priority == this[0].priority }
+}
+
+fun <T> List<T>.filterNonFaulted(): List<T> {
+    return this.filter { it !is Computer || !it.faulted}
 }

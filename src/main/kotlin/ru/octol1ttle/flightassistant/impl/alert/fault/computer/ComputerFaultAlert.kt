@@ -7,6 +7,7 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.util.advisoryColor
 import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
@@ -17,6 +18,11 @@ class ComputerFaultAlert(private val identifier: Identifier, private val alertTe
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
         drawContext.drawText(alertText, firstLineX, y, data.colorSupplier.invoke())
-        return 1
+        if (ComputerHost.countFaults(identifier) == 1) {
+            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y + 11, advisoryColor)
+        } else {
+            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y + 11, advisoryColor)
+        }
+        return 2
     }
 }

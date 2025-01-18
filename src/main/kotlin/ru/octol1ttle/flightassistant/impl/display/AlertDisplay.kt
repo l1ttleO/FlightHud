@@ -19,7 +19,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 class AlertDisplay : Display() {
     private val withUnderline: Style = Style.EMPTY.withUnderline(true)
 
-    override fun enabled(): Boolean {
+    override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAlerts
     }
 
