@@ -39,7 +39,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         return get(identifier).faultCount
     }
 
-    fun identifiers(): Set<Identifier> {
+    override fun identifiers(): Set<Identifier> {
         return computers.keys
     }
 

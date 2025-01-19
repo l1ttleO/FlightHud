@@ -15,13 +15,13 @@ import ru.octol1ttle.flightassistant.api.util.cautionColor
 import ru.octol1ttle.flightassistant.api.util.textRenderer
 
 class SystemStatusListWidget(
-    width: Int, height: Int, top: Int, bottom: Int, left: Int,
-    systems: Collection<Identifier>, baseKey: String, systemHost: SystemHost
+    val width: Int, height: Int, top: Int, bottom: Int, left: Int,
+    systemHost: SystemHost, baseKey: String
 )
-    : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top, bottom, 10) {
+    : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top, bottom, 25) {
     init {
         var y = 20
-        for (system: Identifier in systems) {
+        for (system: Identifier in systemHost.identifiers()) {
             this.addEntry(SystemStatusWidgetEntry(
                 left, y, width, system, Text.translatable("$baseKey.$system"), systemHost)
             )
@@ -30,7 +30,11 @@ class SystemStatusListWidget(
     }
 
     override fun getScrollbarPositionX(): Int {
-        return Int.MAX_VALUE
+        return this.left + this.width - 4
+    }
+
+    override fun getRowWidth(): Int {
+        return this.width
     }
 
     class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int,

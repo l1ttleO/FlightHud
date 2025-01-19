@@ -10,10 +10,10 @@ class SystemStatusScreen : FABaseScreen(Text.translatable("menu.flightassistant.
     override fun init() {
         super.init()
 
-        val hudListWidget = SystemStatusListWidget(centerX, this.height - 10, 10, this.height, 0, HudDisplayHost.identifiers(), "menu.flightassistant.system.name.hud", HudDisplayHost)
+        val hudListWidget = SystemStatusListWidget(centerX, this.height - 10, 10, this.height, 0, HudDisplayHost, "menu.flightassistant.system.name.hud")
         this.addDrawableChild(hudListWidget)
 
-        val computerListWidget = SystemStatusListWidget(centerX, this.height - 10, 10, this.height, this.centerX, ComputerHost.identifiers(), "menu.flightassistant.system.name.computer",  ComputerHost)
+        val computerListWidget = SystemStatusListWidget(centerX, this.height - 10, 10, this.height, this.centerX, ComputerHost, "menu.flightassistant.system.name.computer")
         computerListWidget.setLeftPos(this.centerX)
         this.addDrawableChild(computerListWidget)
     }
