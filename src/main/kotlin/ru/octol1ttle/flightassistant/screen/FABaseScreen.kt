@@ -14,12 +14,10 @@ abstract class FABaseScreen(title: Text?) : Screen(title) {
         this.centerY = this.height / 2
     }
 
-    override fun renderBackground(context: DrawContext) {
-        super.renderBackground(context)
-    }
-
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        this.renderBackground(context)
+        this.renderBackground(context
+/*? if >=1.21 {*//*, mouseX, mouseY, delta *///?}
+        )
         super.render(context, mouseX, mouseY, delta)
     }
 

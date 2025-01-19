@@ -14,11 +14,10 @@ import ru.octol1ttle.flightassistant.api.SystemHost
 import ru.octol1ttle.flightassistant.api.util.cautionColor
 import ru.octol1ttle.flightassistant.api.util.textRenderer
 
-class SystemStatusListWidget(
-    val width: Int, height: Int, top: Int, bottom: Int, left: Int,
-    systemHost: SystemHost, baseKey: String
-)
-    : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top, bottom, 25) {
+class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSED_PARAMETER", "KotlinRedundantDiagnosticSuppress") bottom: Int, left: Int, systemHost: SystemHost, baseKey: String)
+    : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top,
+/*? if <1.21 {*/ bottom, //?}
+    25) {
     init {
         var y = 20
         for (system: Identifier in systemHost.identifiers()) {
@@ -29,20 +28,23 @@ class SystemStatusListWidget(
         }
     }
 
+//? if >=1.21 {
+    /*override fun getScrollbarX(): Int {
+        return this.x + this.width - 4
+    }
+*///?} else {
     override fun getScrollbarPositionX(): Int {
         return this.left + this.width - 4
     }
+//?}
 
     override fun getRowWidth(): Int {
         return this.width
     }
 
-    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int,
-                                  val identifier: Identifier, displayNameText: Text,
-                                  private val systemHost: SystemHost
-    )
+    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int, val identifier: Identifier, displayNameText: Text, private val systemHost: SystemHost)
         : Entry<SystemStatusWidgetEntry>() {
-        private val displayName: TextWidget = TextWidget(x, y, this.listWidth / 4, 9, displayNameText, textRenderer).alignLeft()
+        private val displayName: TextWidget = TextWidget(x, y, this.listWidth / 2, 9, displayNameText, textRenderer).alignLeft()
         private val faultText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, FAULT_TEXT, textRenderer)
         private val offText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, OFF_TEXT, textRenderer)
         private val toggleButton: ButtonWidget = ButtonWidget.builder(OFF_RESET_TEXT) {
