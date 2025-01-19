@@ -110,7 +110,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     }
 
     private fun tryActivateFirework(player: PlayerEntity) {
-        if (FATickCounter.totalTicks < lastActivationTime + 5) {
+        if (FATickCounter.totalTicks < lastActivationTime + 10) {
             return
         }
 
