@@ -38,7 +38,10 @@ alerts.flightassistant:
     no_response: NO RESPONSE
   flight_controls:
     .: F/CTL
-    pitch_fault: PITCH LIMIT FAULT
+    pitch_fault:
+      .: PITCH LIMIT FAULT
+      use_manual_pitch: ' -MAN PITCH CTL: USE'
+    manual_pitch: MAN PITCH CTL
   gpws:
     .: GPWS
     fault: FAULT
@@ -117,6 +120,7 @@ config.flightassistant:
         .: Altitude display
         show_reading: Show altitude reading
         show_scale: Show altitude scale
+        show_radar: Show radar altitude
       flight_path_vector:
         .: Flight path vector display
         show: Show flight path vector
@@ -199,7 +203,7 @@ menu.flightassistant:
         flightassistant:alert: Alert computer
         flightassistant:chunk_status: Chunk status computer
         flightassistant:elytra_status: Elytra status computer
-        flightassistant:ground_proximity: Ground Proximity Warning System
+        flightassistant:ground_proximity: Ground proximity computer
         flightassistant:stall: Stall computer
         flightassistant:void_proximity: Void proximity computer
         flightassistant:firework: Firework computer
@@ -239,6 +243,8 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
+  open_flight_configuration: Open flight configuration screen
+  force_manual_pitch_control: Force manual pitch control (hold)
   hide_current_alert: Hide currently active alert
   show_hidden_alert: Show last hidden alert
   decrease_thrust: Decrease thrust

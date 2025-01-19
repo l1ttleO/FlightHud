@@ -21,12 +21,14 @@ class DisplayFaultAlert(val identifier: Identifier) : Alert(), ECAMAlert {
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, y, cautionColor)
-        if (HudDisplayHost.countFaults(identifier) == 1) {
-            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y + 11, advisoryColor)
-        } else {
-            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y + 11, advisoryColor)
-        }
-        return 1
+        var i = 0
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, y, cautionColor)
+        i +=
+            if (HudDisplayHost.countFaults(identifier) == 1) {
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y + 11, advisoryColor)
+            } else {
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y + 11, advisoryColor)
+            }
+        return i
     }
 }

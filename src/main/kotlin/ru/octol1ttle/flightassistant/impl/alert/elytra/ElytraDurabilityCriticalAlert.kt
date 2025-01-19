@@ -20,7 +20,6 @@ class ElytraDurabilityCriticalAlert : Alert(), ECAMAlert {
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        drawContext.drawText(Text.translatable("alerts.flightassistant.elytra.critical_durability"), firstLineX, y, warningColor)
-        return 1
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.elytra.critical_durability"), firstLineX, y, warningColor)
     }
 }

@@ -42,7 +42,10 @@ alerts.flightassistant:
       no_response: ОТСУТСТВ ОТКЛИК
   flight_controls:
     .: УПР/ПОЛЕТ
-    pitch_fault: ОТКАЗ ОГРАН УГЛА НАКЛ
+    pitch_fault:
+      .: ОТКАЗ ОГРАН УГЛА НАКЛ
+      use_manual_pitch: ' -РУЧН УПР УГЛ НАКЛ: ИСПОЛЬЗ'
+    manual_pitch: РУЧН УПР УГЛ НАКЛ
   gpws:
     .: GPWS
     fault: ОТКАЗ
@@ -121,6 +124,7 @@ config.flightassistant:
         .: Индикатор высоты
         show_reading: Отображать значение высоты
         show_scale: Отображать шкалу высоты
+        show_radar: Отображать истинную высоту
       flight_path_vector:
         .: Индикатор вектора пути полёта
         show: Отображать вектор пути полёта
@@ -176,6 +180,40 @@ config.flightassistant:
         .: Фейерверки
         lock_explosive: Блокировать использование взрывоопасных фейерверков
 
+menu.flightassistant:
+  .: Настройка полёта
+  flight_plan: План полёта
+  system:
+    .: Статус систем
+    fault: ОТКАЗ
+    'off': 'ВЫКЛ'
+    off_reset: ВЫКЛ/СБРОС
+    'on': 'ВКЛ'
+    name:
+      hud:
+        flightassistant:alert: Индикатор предупреждений
+        flightassistant:altitude: Индикатор высоты
+        flightassistant:attitude: Авиагоризонт
+        flightassistant:automation_modes: Индикатор режимов автоматизации
+        flightassistant:coordinates: Индикатор координат
+        flightassistant:elytra_durability: Индикатор прочности элитр
+        flightassistant:flight_path: Индикатор пути полёта
+        flightassistant:heading: Индикатор курса
+        flightassistant:radar_altitude: Радиовысотомер
+        flightassistant:speed: Индикатор скорости
+        flightassistant:velocity_components: Индикатор Г/С и В/С
+      computer:
+        flightassistant:air_data: Компьютер данных полёта
+        flightassistant:alert: Компьютер предупреждений
+        flightassistant:chunk_status: Компьютер статуса чанков
+        flightassistant:elytra_status: Компьютер статуса элитр
+        flightassistant:ground_proximity: Компьютер близости земли
+        flightassistant:stall: Компьютер обнаружения сваливания
+        flightassistant:void_proximity: Компьютер близости пустоты
+        flightassistant:firework: Компьютер фейерверков
+        flightassistant:pitch: Компьютер угла наклона
+        flightassistant:thrust: Компьютер тяги
+
 mode.flightassistant:
   thrust:
     manual: РУЧН ТЯГА %s
@@ -209,6 +247,8 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
+  open_flight_configuration: Открыть экран настройки полёта
+  force_manual_pitch_control: Принудительное ручное управление углом наклона (зажать)
   hide_current_alert: Скрыть активное предупреждение
   show_hidden_alert: Показать скрытое предупреждение
   decrease_thrust: Убавить тягу (накл. рычаги назад)

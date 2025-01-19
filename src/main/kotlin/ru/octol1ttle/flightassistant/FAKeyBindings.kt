@@ -7,6 +7,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.alert
+import ru.octol1ttle.flightassistant.api.util.pitch
 import ru.octol1ttle.flightassistant.api.util.thrust
 import ru.octol1ttle.flightassistant.screen.FlightConfigurationScreen
 
@@ -14,6 +15,8 @@ object FAKeyBindings {
     internal val keyBindings: ArrayList<KeyBinding> = ArrayList()
 
     private lateinit var openFlightConfiguration: KeyBinding
+
+    private lateinit var forceManualPitchControl: KeyBinding
 
     private lateinit var hideCurrentAlert: KeyBinding
     private lateinit var showHiddenAlert: KeyBinding
@@ -26,6 +29,8 @@ object FAKeyBindings {
     fun setup() {
         openFlightConfiguration = addKeyBinding("keys.flightassistant.open_flight_configuration", GLFW.GLFW_KEY_KP_ENTER)
 
+        forceManualPitchControl = addKeyBinding("keys.flightassistant.force_manual_pitch_control", GLFW.GLFW_KEY_LEFT_ALT)
+
         hideCurrentAlert = addKeyBinding("keys.flightassistant.hide_current_alert", GLFW.GLFW_KEY_KP_0)
         showHiddenAlert = addKeyBinding("keys.flightassistant.show_hidden_alert", GLFW.GLFW_KEY_KP_DECIMAL)
 
@@ -35,8 +40,8 @@ object FAKeyBindings {
         setToga = addKeyBinding("keys.flightassistant.set_toga", GLFW.GLFW_KEY_RIGHT)
     }
 
-    private fun addKeyBinding(translationKey: String, code: Int): KeyBinding {
-        val keyBinding = KeyBinding(translationKey, InputUtil.Type.KEYSYM, code, "keys.flightassistant")
+    private fun addKeyBinding(translationKey: String, code: Int, type: InputUtil.Type = InputUtil.Type.KEYSYM): KeyBinding {
+        val keyBinding = KeyBinding(translationKey, type, code, "keys.flightassistant")
         keyBindings.add(keyBinding)
         return keyBinding
     }
@@ -47,6 +52,8 @@ object FAKeyBindings {
                 mc.setScreen(FlightConfigurationScreen())
             }
         }
+
+        computers.pitch.forceManual = forceManualPitchControl.isPressed
 
         while (hideCurrentAlert.wasPressed()) {
             computers.alert.hideCurrentAlert()

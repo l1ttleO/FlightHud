@@ -21,7 +21,6 @@ class FireworkExplosiveAlert(private val hand: Hand) : Alert(), ECAMAlert {
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        drawContext.drawText(Text.translatable("alerts.flightassistant.firework.explosive.${hand.toString().lowercase()}"), firstLineX, y, cautionColor)
-        return 1
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.firework.explosive.${hand.toString().lowercase()}"), firstLineX, y, cautionColor)
     }
 }

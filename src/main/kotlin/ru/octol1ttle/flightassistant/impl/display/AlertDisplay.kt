@@ -52,7 +52,7 @@ class AlertDisplay : Display() {
                         lastRenderedLines = alert.render(this, computers, x + getTextWidth(copy), x, y)
                         y += fontHeight
                         if (lastRenderedLines > 1) {
-                            y += 1 + (fontHeight * (lastRenderedLines - 1))
+                            y += (fontHeight + 1) * (lastRenderedLines - 1)
                         }
                         categoryRendered = true
                     }

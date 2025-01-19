@@ -17,7 +17,6 @@ class ReachedVoidDamageAltitudeAlert : Alert(), ECAMAlert {
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.reached_void_damage_altitude"), firstLineX, y, warningColor)
-        return 1
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.reached_void_damage_altitude"), firstLineX, y, warningColor)
     }
 }

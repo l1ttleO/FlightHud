@@ -193,6 +193,11 @@ object FAConfigScreen {
                 binding(current::showAltitudeScale, defaults.showAltitudeScale)
                 controller(tickBox())
             }
+            rootOptions.register<Boolean>("altitude.show_radar") {
+                setDisplayName()
+                binding(current::showRadarAltitude, defaults.showRadarAltitude)
+                controller(tickBox())
+            }
 
             rootOptions.registerLabel(
                 "flight_path_vector",

@@ -85,8 +85,9 @@ fun getTextWidth(text: Text): Int {
     return textRenderer.getWidth(text)
 }
 
-fun DrawContext.drawText(text: Text, x: Int, y: Int, color: Int) {
+fun DrawContext.drawText(text: Text, x: Int, y: Int, color: Int): Int {
     drawText(textRenderer, text, x, y, color, false)
+    return 1
 }
 
 private fun getContrasting(original: Int): Int {
