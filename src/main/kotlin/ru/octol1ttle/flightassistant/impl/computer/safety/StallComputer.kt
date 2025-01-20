@@ -16,6 +16,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 class StallComputer : Computer(), PitchLimiter, ThrustController {
     var status: Status = Status.SAFE
         private set
+    private var maximumSafePitch: Float = 90.0f
 
     override fun subscribeToEvents() {
         PitchLimiterRegistrationCallback.EVENT.register { it.accept(this) }
@@ -27,6 +28,7 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
             if (computers.data.flying && computers.data.velocity.y < 0 && !computers.data.fallDistanceSafe && computers.data.forwardVelocity.length() == 0.0)
                 if (status == Status.FULL_STALL || computers.data.velocity.y * 20 <= -10) Status.FULL_STALL else Status.APPROACHING_STALL
             else Status.SAFE
+        maximumSafePitch = (computers.data.forwardVelocity.length() * 20.0f * 3.0f).toFloat().coerceIn(0.0f..90.0f)
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
@@ -48,7 +50,7 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
         }
 
         return ControlInput(
-            (computers.data.forwardVelocity.length() * 20.0f * 3.0f).toFloat().coerceIn(0.0f..90.0f),
+            maximumSafePitch,
             ControlInput.Priority.HIGHEST,
             Text.translatable("mode.flightassistant.pitch.stall_protection"),
             active = FAConfig.safety.stallLimitPitch
@@ -57,6 +59,7 @@ class StallComputer : Computer(), PitchLimiter, ThrustController {
 
     override fun reset() {
         status = Status.SAFE
+        maximumSafePitch = 90.0f
     }
 
     enum class Status {
