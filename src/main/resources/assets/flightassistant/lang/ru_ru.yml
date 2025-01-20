@@ -16,12 +16,10 @@ alerts.flightassistant:
     critical_durability: КРИТ ПРОЧНОСТЬ
   fault:
     computer:
-      reset: ' -СИСТЕМА: ВЫКЛ ЗАТЕМ ВКЛ'
-      turn_off: ' -СИСТЕМА: ВЫКЛ'
+      reset: ' -СИСТЕМА: ВКЛ/СБРОС'
     hud:
       .: HUD
-      reset: ' -ИНДИК: ВЫКЛ ЗАТЕМ ВКЛ'
-      turn_off: ' -ИНДИК: ВЫКЛ'
+      reset: ' -ИНДИК: ВКЛ/СБРОС'
       flightassistant:altitude: ОТКАЗ ИНД ВЫС
       flightassistant:attitude: ОТКАЗ ИНД ОРИЕНТ
       flightassistant:automation_modes: ОТКАЗ ИНД АВТО РЕЖИМ
@@ -187,8 +185,7 @@ menu.flightassistant:
     .: Статус систем
     fault: ОТКАЗ
     'off': 'ВЫКЛ'
-    off_reset: ВЫКЛ/СБРОС
-    'on': 'ВКЛ'
+    on_reset: ВКЛ/СБРОС
     name:
       hud:
         flightassistant:alert: Индикатор предупреждений
@@ -217,10 +214,10 @@ menu.flightassistant:
 mode.flightassistant:
   thrust:
     manual: РУЧН ТЯГА %s
-    manual_toga: РУЧН ВЗЛЁТН
+    manual_toga: РУЧН ВЗЛЕТН
     locked: БЛОК ТЯГА %s
-    locked_toga: БЛОК ВЗЛЁТН
-    maximum: МАКС ТЯГА
+    locked_toga: БЛОК ВЗЛЕТН
+    toga: ТЯГА ВЗЛЕТН
   pitch:
     void_protection: ПУСТ ЗАЩ
     void_escape: ПУСТ ВЫХОД
@@ -248,7 +245,7 @@ short.flightassistant:
 keys.flightassistant:
   .: FlightAssistant
   open_flight_configuration: Открыть экран настройки полёта
-  force_manual_pitch_control: Принудительное ручное управление углом наклона (зажать)
+  manual_pitch_override: Принудительное ручное управление углом наклона (зажать)
   hide_current_alert: Скрыть активное предупреждение
   show_hidden_alert: Показать скрытое предупреждение
   decrease_thrust: Убавить тягу (накл. рычаги назад)

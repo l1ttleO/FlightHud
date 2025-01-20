@@ -16,7 +16,7 @@ object FAKeyBindings {
 
     private lateinit var openFlightConfiguration: KeyBinding
 
-    private lateinit var forceManualPitchControl: KeyBinding
+    private lateinit var manualPitchOverride: KeyBinding
 
     private lateinit var hideCurrentAlert: KeyBinding
     private lateinit var showHiddenAlert: KeyBinding
@@ -29,7 +29,7 @@ object FAKeyBindings {
     fun setup() {
         openFlightConfiguration = addKeyBinding("keys.flightassistant.open_flight_configuration", GLFW.GLFW_KEY_KP_ENTER)
 
-        forceManualPitchControl = addKeyBinding("keys.flightassistant.force_manual_pitch_control", GLFW.GLFW_KEY_LEFT_ALT)
+        manualPitchOverride = addKeyBinding("keys.flightassistant.manual_pitch_override", GLFW.GLFW_KEY_LEFT_ALT)
 
         hideCurrentAlert = addKeyBinding("keys.flightassistant.hide_current_alert", GLFW.GLFW_KEY_KP_0)
         showHiddenAlert = addKeyBinding("keys.flightassistant.show_hidden_alert", GLFW.GLFW_KEY_KP_DECIMAL)
@@ -53,7 +53,7 @@ object FAKeyBindings {
             }
         }
 
-        computers.pitch.forceManual = forceManualPitchControl.isPressed
+        computers.pitch.manualOverride = manualPitchOverride.isPressed
 
         while (hideCurrentAlert.wasPressed()) {
             computers.alert.hideCurrentAlert()

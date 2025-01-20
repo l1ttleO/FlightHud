@@ -39,7 +39,7 @@ class ComputerFaultAlert(private val identifier: Identifier, private val alertTe
         return if (ComputerHost.getFaultCount(identifier) == 1) {
             drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y, advisoryColor)
         } else {
-            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y, advisoryColor)
+            0
         }
     }
 }

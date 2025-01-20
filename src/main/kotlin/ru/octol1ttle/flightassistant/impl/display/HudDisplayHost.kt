@@ -28,9 +28,6 @@ internal object HudDisplayHost: SystemHost {
     override fun toggleEnabled(identifier: Identifier): Boolean {
         val display: Display = displays[identifier] ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
         display.enabled = !display.enabled
-        if (!display.enabled) {
-            display.faulted = false
-        }
         return display.enabled
     }
 
@@ -93,22 +90,25 @@ internal object HudDisplayHost: SystemHost {
         updateViewport()
 
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.allowedByConfig() }) {
-            if (!display.enabled || display.faulted || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {
+            if (!display.enabled || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {
                 try {
                     display.renderFaulted(drawContext)
                 } catch (t: Throwable) {
                     FlightAssistant.logger.atError().setCause(t)
                         .log("Exception rendering already faulted display with identifier: {}", id)
                 }
-            } else {
-                try {
-                    display.render(drawContext, ComputerHost)
-                } catch (t: Throwable) {
-                    display.faulted = true
-                    display.faultCount++
-                    FlightAssistant.logger.atError().setCause(t)
-                        .log("Exception rendering display with identifier: {}", id)
-                }
+                continue
+            }
+
+            try {
+                display.render(drawContext, ComputerHost)
+                display.faulted = false
+            } catch (t: Throwable) {
+                display.faulted = true
+                display.faultCount++
+                display.enabled = false
+                FlightAssistant.logger.atError().setCause(t)
+                    .log("Exception rendering display with identifier: {}", id)
             }
         }
     }

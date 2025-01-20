@@ -27,7 +27,6 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
 
     var position: Vec3d = Vec3d.ZERO
         private set
-
     val altitude: Double
         get() = position.y
     val voidLevel: Int

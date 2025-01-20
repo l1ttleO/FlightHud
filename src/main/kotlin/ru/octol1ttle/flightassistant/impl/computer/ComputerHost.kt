@@ -28,10 +28,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
     override fun toggleEnabled(identifier: Identifier): Boolean {
         val computer: Computer = get(identifier)
         computer.enabled = !computer.enabled
-        if (!computer.enabled) {
-            computer.reset()
-            computer.faulted = false
-        }
+        computer.reset()
         return computer.enabled
     }
 
@@ -101,12 +98,16 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         }
 
         for ((id: Identifier, computer: Computer) in computers) {
-            if (computer.enabled && !computer.faulted) {
+            if (computer.enabled) {
                 try {
                     computer.tick(this)
+                    computer.faulted = false
                 } catch (t: Throwable) {
                     computer.faulted = true
                     computer.faultCount++
+                    computer.enabled = false
+                    computer.reset()
+
                     FlightAssistant.logger.atError().setCause(t)
                         .log("Exception ticking computer with identifier: {}", id)
                 }

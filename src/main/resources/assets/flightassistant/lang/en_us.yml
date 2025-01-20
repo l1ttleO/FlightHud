@@ -12,12 +12,10 @@ alerts.flightassistant:
     critical_durability: CRIT DURABILITY
   fault:
     computer:
-      reset: ' -SYSTEM: OFF THEN ON'
-      turn_off: ' -SYSTEM: OFF'
+      reset: ' -SYSTEM: ON/RESET'
     hud:
       .: HUD
-      reset: ' -DISPLAY: OFF THEN ON'
-      turn_off: ' -DISPLAY: OFF'
+      reset: ' -DISPLAY: ON/RESET'
       flightassistant:altitude: ALT DSPL FAULT
       flightassistant:attitude: ATT DSPL FAULT
       flightassistant:automation_modes: AUTO MODE DSPL FAULT
@@ -40,8 +38,8 @@ alerts.flightassistant:
     .: F/CTL
     pitch_fault:
       .: PITCH LIMIT FAULT
-      use_manual_pitch: ' -MAN PITCH CTL: USE'
-    manual_pitch: MAN PITCH CTL
+      use_manual_pitch: ' -MAN PITCH OVRD: USE'
+    manual_pitch: MAN PITCH OVRD ACTIVE
   gpws:
     .: GPWS
     fault: FAULT
@@ -183,8 +181,7 @@ menu.flightassistant:
     .: System Status
     fault: FAULT
     'off': 'OFF'
-    off_reset: OFF/RESET
-    'on': 'ON'
+    on_reset: ON/RESET
     name:
       hud:
         flightassistant:alert: Alert display
@@ -244,7 +241,7 @@ short.flightassistant:
 keys.flightassistant:
   .: FlightAssistant
   open_flight_configuration: Open flight configuration screen
-  force_manual_pitch_control: Force manual pitch control (hold)
+  manual_pitch_override: Manual pitch override (hold)
   hide_current_alert: Hide currently active alert
   show_hidden_alert: Show last hidden alert
   decrease_thrust: Decrease thrust

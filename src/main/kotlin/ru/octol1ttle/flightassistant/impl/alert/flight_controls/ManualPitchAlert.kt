@@ -15,7 +15,7 @@ class ManualPitchAlert : Alert(), ECAMAlert {
         get() = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
-        return computers.pitch.forceManual
+        return computers.pitch.manualOverride
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {

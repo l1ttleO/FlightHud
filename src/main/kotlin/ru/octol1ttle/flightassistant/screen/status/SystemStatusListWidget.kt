@@ -47,10 +47,10 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
         private val displayName: TextWidget = TextWidget(x, y, this.listWidth / 2, 9, displayNameText, textRenderer).alignLeft()
         private val faultText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, FAULT_TEXT, textRenderer)
         private val offText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, OFF_TEXT, textRenderer)
-        private val toggleButton: ButtonWidget = ButtonWidget.builder(OFF_RESET_TEXT) {
+        private val toggleButton: ButtonWidget = ButtonWidget.builder(OFF_TEXT) {
             it.message =
-                if (systemHost.toggleEnabled(identifier)) OFF_RESET_TEXT
-                else ON_TEXT
+                if (systemHost.toggleEnabled(identifier)) OFF_TEXT
+                else ON_RESET_TEXT
         }.position(x, y).width(60).build()
 
         override fun render(context: DrawContext?, index: Int, y: Int, x: Int, entryWidth: Int, entryHeight: Int, mouseX: Int, mouseY: Int, hovered: Boolean, tickDelta: Float) {
@@ -59,8 +59,8 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
             displayName.render(context, mouseX, mouseY, tickDelta)
 
             toggleButton.message =
-                if (systemHost.isEnabled(identifier)) OFF_RESET_TEXT
-                else ON_TEXT
+                if (systemHost.isEnabled(identifier)) OFF_TEXT
+                else ON_RESET_TEXT
             toggleButton.x = this.x + this.listWidth - toggleButton.width - 5
             toggleButton.y = this.y - toggleButton.height / 4 - 1
             toggleButton.render(context, mouseX, mouseY, tickDelta)
@@ -91,9 +91,7 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
         companion object {
             val FAULT_TEXT: Text = Text.translatable("menu.flightassistant.system.fault")
             val OFF_TEXT: Text = Text.translatable("menu.flightassistant.system.off")
-
-            val OFF_RESET_TEXT: Text = Text.translatable("menu.flightassistant.system.off_reset")
-            val ON_TEXT: Text = Text.translatable("menu.flightassistant.system.on")
+            val ON_RESET_TEXT: Text = Text.translatable("menu.flightassistant.system.on_reset")
         }
     }
 }
