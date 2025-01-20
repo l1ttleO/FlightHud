@@ -49,7 +49,7 @@ object FlightAssistantForge {
 
 //? if neoforge {
     /^fun onRegisterGuiOverlay(event: RegisterGuiLayersEvent) {
-        event.registerBelow(VanillaGuiLayers.SELECTED_ITEM_NAME, FlightAssistant.id("neoforge_gui")) { context, tickCounter ->
+        event.registerBelow(VanillaGuiLayers.HOTBAR, FlightAssistant.id("neoforge_gui")) { context, tickCounter ->
             if (!MinecraftClient.getInstance().options.hudHidden) {
                 FixedHudRenderCallback.EVENT.invoker().onRenderHud(context, tickCounter.getTickDelta(true))
             }
@@ -57,7 +57,7 @@ object FlightAssistantForge {
     }
 ^///?} else {
     fun onRegisterGuiOverlay(event: RegisterGuiOverlaysEvent) {
-        event.registerBelow(VanillaGuiOverlay.ITEM_NAME.id(), "flightassistant") { gui, context, tickDelta, _, _ ->
+        event.registerBelow(VanillaGuiOverlay.HOTBAR.id(), "flightassistant") { gui, context, tickDelta, _, _ ->
             if (!gui.minecraft.options.hudHidden) {
                 gui.setupOverlayRenderState(true, false)
                 FixedHudRenderCallback.EVENT.invoker().onRenderHud(context, tickDelta)
