@@ -26,6 +26,9 @@ val ComputerAccess.chunk: ChunkStatusComputer
 val ComputerAccess.elytra: ElytraStatusComputer
     get() = get(ElytraStatusComputer.ID) as ElytraStatusComputer
 
+val ComputerAccess.protections: FlightProtectionsComputer
+    get() = get(FlightProtectionsComputer.ID) as FlightProtectionsComputer
+
 val ComputerAccess.gpws: GroundProximityComputer
     get() = get(GroundProximityComputer.ID) as GroundProximityComputer
 

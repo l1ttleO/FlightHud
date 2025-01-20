@@ -11,6 +11,7 @@ import ru.octol1ttle.flightassistant.api.util.cautionColor
 import ru.octol1ttle.flightassistant.api.util.drawText
 
 class AlertComputerFaultAlert : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 15
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -18,7 +19,7 @@ class AlertComputerFaultAlert : Alert(), ECAMAlert {
         return computers.alert.alertsFaulted
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.alert.fault"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.alert.fault"), firstLineX, firstLineY, cautionColor)
     }
 }

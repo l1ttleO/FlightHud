@@ -20,7 +20,7 @@ import ru.octol1ttle.flightassistant.impl.alert.fault.DisplayFaultAlert
 import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkExplosiveAlert
 import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkNoResponseAlert
 import ru.octol1ttle.flightassistant.impl.alert.firework.FireworkSlowResponseAlert
-import ru.octol1ttle.flightassistant.impl.alert.flight_controls.ManualPitchAlert
+import ru.octol1ttle.flightassistant.impl.alert.flight_controls.ProtectionsLostAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.PullUpAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.SinkRateAlert
 import ru.octol1ttle.flightassistant.impl.alert.gpws.TerrainAheadAlert
@@ -81,7 +81,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ComputerFaultAlert(PitchComputer.ID, Text.translatable("alerts.flightassistant.flight_controls.pitch_fault"), listOf(
                     Text.translatable("alerts.flightassistant.flight_controls.pitch_fault.use_manual_pitch"),
                 )))
-                .add(ManualPitchAlert())
+                .add(ProtectionsLostAlert())
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.gpws"))
@@ -159,7 +159,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
             category.updateActiveAlerts(computers)
         }
 
-        categories.sortBy { it.getHighestPriority()?.priority ?: Int.MAX_VALUE }
+        categories.sortBy { it.getHighestPriority() ?: Int.MAX_VALUE }
     }
 
     private fun stopInactiveAlerts(force: Boolean = false) {

@@ -50,6 +50,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
 
     private fun registerBuiltin() {
         register(AirDataComputer.ID, AirDataComputer(mc))
+        register(FlightProtectionsComputer.ID, FlightProtectionsComputer())
 
         register(StallComputer.ID, StallComputer())
         register(VoidProximityComputer.ID, VoidProximityComputer())

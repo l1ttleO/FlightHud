@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
 class SlowChunkLoadingAlert : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 55
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
     private var alertDuration = 0
@@ -26,7 +27,7 @@ class SlowChunkLoadingAlert : Alert(), ECAMAlert {
         return shouldActivate
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.slow_chunk_loading"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.slow_chunk_loading"), firstLineX, firstLineY, cautionColor)
     }
 }

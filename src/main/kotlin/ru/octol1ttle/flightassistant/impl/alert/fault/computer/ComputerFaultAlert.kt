@@ -12,26 +12,26 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
 class ComputerFaultAlert(private val identifier: Identifier, private val alertText: Text, private val extraTexts: Collection<Text>? = null, override val data: AlertData = AlertData.MASTER_CAUTION) : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 20
+
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return ComputerHost.isFaulted(identifier)
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
         val color: Int = data.colorSupplier.invoke()
         var i = 0
-        var newY: Int = y
-
-        i += drawContext.drawText(alertText, firstLineX, y, color)
-        newY += 11
+        i += drawContext.drawText(alertText, firstLineX, firstLineY, color)
+        var y: Int = firstLineY + 11
 
         if (extraTexts != null) {
             for (text in extraTexts) {
-                i += drawContext.drawText(text, x, newY, advisoryColor)
-                newY += 10
+                i += drawContext.drawText(text, otherLinesX, y, advisoryColor)
+                y += 10
             }
         }
 
-        i += drawResetText(drawContext, x, newY)
+        i += drawResetText(drawContext, otherLinesX, y)
         return i
     }
 

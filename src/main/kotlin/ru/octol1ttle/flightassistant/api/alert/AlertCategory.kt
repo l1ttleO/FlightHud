@@ -43,10 +43,14 @@ class AlertCategory(val categoryText: Text) {
             }
         }
 
-        activeAlerts.sortBy { it.data.priority }
+        activeAlerts.sortBy { it.data.priority + it.priorityOffset }
     }
 
-    fun getHighestPriority(): AlertData? {
+    fun getHighestPriority(): Int? {
+        return if (activeAlerts.isEmpty()) null else activeAlerts[0].priority
+    }
+
+    fun getFirstData(): AlertData? {
         return if (activeAlerts.isEmpty()) null else activeAlerts[0].data
     }
 }

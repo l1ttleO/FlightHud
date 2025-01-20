@@ -15,7 +15,7 @@ class NoChunksLoadedAlert : Alert(), ECAMAlert {
         return computers.chunk.status == ChunkStatusComputer.Status.ALL_UNLOADED
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.no_chunks_loaded"), firstLineX, y, warningColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.no_chunks_loaded"), firstLineX, firstLineY, warningColor)
     }
 }

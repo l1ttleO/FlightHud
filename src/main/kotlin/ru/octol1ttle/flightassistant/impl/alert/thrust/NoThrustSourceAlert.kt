@@ -7,6 +7,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
 
 class NoThrustSourceAlert : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 30
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -14,7 +15,7 @@ class NoThrustSourceAlert : Alert(), ECAMAlert {
         return computers.thrust.noThrustSource
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.no_source"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.no_source"), firstLineX, firstLineY, cautionColor)
     }
 }

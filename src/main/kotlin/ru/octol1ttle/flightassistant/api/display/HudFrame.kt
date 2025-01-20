@@ -9,7 +9,8 @@ object HudFrame {
     private val window: Window = mc.window
     var width: Float = 0.0f
         private set
-    private var height: Float = 0.0f
+    var height: Float = 0.0f
+        private set
     var top: Int = 0
         private set
     var bottom: Int = 0

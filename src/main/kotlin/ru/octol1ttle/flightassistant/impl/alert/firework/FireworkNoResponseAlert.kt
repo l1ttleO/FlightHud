@@ -19,7 +19,7 @@ class FireworkNoResponseAlert : Alert(), ECAMAlert {
         return computers.firework.waitingForResponse && FATickCounter.totalTicks - computers.firework.lastActivationTime >= 30
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.firework.no_response"), firstLineX, y, warningColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.firework.no_response"), firstLineX, firstLineY, warningColor)
     }
 }

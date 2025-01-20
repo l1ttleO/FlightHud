@@ -1,20 +1,27 @@
 package ru.octol1ttle.flightassistant.impl.computer
 
-import kotlin.math.*
+import kotlin.math.atan2
+import kotlin.math.max
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.registry.tag.DamageTypeTags
 import net.minecraft.util.Identifier
-import net.minecraft.util.hit.*
-import net.minecraft.util.math.*
+import net.minecraft.util.hit.BlockHitResult
+import net.minecraft.util.hit.HitResult
+import net.minecraft.util.math.Direction
 import net.minecraft.util.math.MathHelper.wrapDegrees
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
+import ru.octol1ttle.flightassistant.api.util.RenderMatrices
+import ru.octol1ttle.flightassistant.api.util.degrees
+import ru.octol1ttle.flightassistant.api.util.fallFlying
+import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AirDataComputer(private val mc: MinecraftClient) : Computer() {

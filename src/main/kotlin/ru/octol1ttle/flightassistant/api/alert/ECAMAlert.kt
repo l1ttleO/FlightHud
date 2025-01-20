@@ -9,5 +9,5 @@ interface ECAMAlert {
      *
      * @return the amount of lines rendered
      */
-    fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int
+    fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int
 }

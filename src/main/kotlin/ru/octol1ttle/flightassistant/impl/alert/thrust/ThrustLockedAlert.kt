@@ -19,10 +19,10 @@ class ThrustLockedAlert : Alert(), ECAMAlert {
         return computers.thrust.thrustLocked
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
         var i = 0
-        i += drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.locked"), firstLineX, y, cautionColor)
-        i += drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.locked.use_keys"), x, y + 11, advisoryColor)
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.locked"), firstLineX, firstLineY, cautionColor)
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.thrust.locked.use_keys"), otherLinesX, firstLineY + 11, advisoryColor)
         return i
     }
 }

@@ -39,7 +39,12 @@ alerts.flightassistant:
     pitch_fault:
       .: PITCH LIMIT FAULT
       use_manual_pitch: ' -MAN PITCH OVRD: USE'
-    manual_pitch: MAN PITCH OVRD ACTIVE
+    protections_lost:
+      .: PROTECT LOST
+      enable_air_data: ' -AIR DATA: ON'
+      enable_pitch: ' -PITCH SYS: ON'
+      max_pitch: ' MAX PITCH: 55* UP'
+      max_descent_rate: ' MAX DESCENT RATE: 8 BPS'
   gpws:
     .: GPWS
     fault: FAULT
@@ -200,6 +205,7 @@ menu.flightassistant:
         flightassistant:alert: Alert computer
         flightassistant:chunk_status: Chunk status computer
         flightassistant:elytra_status: Elytra status computer
+        flightassistant:flight_protections: Flight protections computer
         flightassistant:ground_proximity: Ground proximity computer
         flightassistant:stall: Stall computer
         flightassistant:void_proximity: Void proximity computer

@@ -43,7 +43,12 @@ alerts.flightassistant:
     pitch_fault:
       .: ОТКАЗ ОГРАН УГЛА НАКЛ
       use_manual_pitch: ' -РУЧН УПР УГЛ НАКЛ: ИСПОЛЬЗ'
-    manual_pitch: РУЧН УПР УГЛ НАКЛ
+    protections_lost:
+      .: ЗАЩИТЫ ПОТЕРЯНЫ
+      enable_air_data: ' -КОМП ДАННЫХ ПОЛЕТА: ВКЛ'
+      enable_pitch: ' -КОМП УГЛА НАКЛ: ВКЛ'
+      max_pitch: ' МАКС УГОЛ НАКЛ: 55* UP'
+      max_descent_rate: ' МАКС СКОР СНИЖЕНИЯ: 8 Б/С'
   gpws:
     .: GPWS
     fault: ОТКАЗ
@@ -204,6 +209,7 @@ menu.flightassistant:
         flightassistant:alert: Компьютер предупреждений
         flightassistant:chunk_status: Компьютер статуса чанков
         flightassistant:elytra_status: Компьютер статуса элитр
+        flightassistant:flight_protections: Компьютер защит полёта
         flightassistant:ground_proximity: Компьютер близости земли
         flightassistant:stall: Компьютер обнаружения сваливания
         flightassistant:void_proximity: Компьютер близости пустоты

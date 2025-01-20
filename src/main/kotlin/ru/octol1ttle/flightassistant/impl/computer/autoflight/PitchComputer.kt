@@ -38,7 +38,7 @@ class PitchComputer : Computer(), PitchController {
     }
 
     override fun tick(computers: ComputerAccess) {
-        automationsAllowed = !manualOverride && computers.data.automationsAllowed()
+        automationsAllowed = !manualOverride && !computers.protections.protectionsLost && computers.data.automationsAllowed()
 
         updateSafePitches(computers)
 
@@ -69,7 +69,7 @@ class PitchComputer : Computer(), PitchController {
     }
 
     private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {
-        if (!manualOverride && automationsAllowed && entity is ClientPlayerEntity) {
+        if (entity is ClientPlayerEntity && !manualOverride && automationsAllowed) {
             val pitchDelta: Float = -mcPitchDelta
 
             val oldPitch: Float = -entity.pitch
@@ -135,6 +135,7 @@ class PitchComputer : Computer(), PitchController {
 
     override fun reset() {
         automationsAllowed = false
+        manualOverride = true
         minimumPitch = null
         maximumPitch = null
         activePitchInput = null

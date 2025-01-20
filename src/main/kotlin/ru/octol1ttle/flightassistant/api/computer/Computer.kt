@@ -4,9 +4,9 @@ package ru.octol1ttle.flightassistant.api.computer
  * A class responsible for computing data and providing it to [ru.octol1ttle.flightassistant.api.display.Display]s and [ru.octol1ttle.flightassistant.api.alert.Alert]s
  */
 abstract class Computer {
-    internal var enabled: Boolean = true
-    internal var faulted: Boolean = false
-    internal var faultCount: Int = 0
+    var enabled: Boolean = true
+    var faulted: Boolean = false
+    var faultCount: Int = 0
 
     /**
      * Called once per world render

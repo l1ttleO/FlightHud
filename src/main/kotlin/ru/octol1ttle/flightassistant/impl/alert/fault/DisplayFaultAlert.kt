@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class DisplayFaultAlert(val identifier: Identifier) : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 40
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -20,14 +21,14 @@ class DisplayFaultAlert(val identifier: Identifier) : Alert(), ECAMAlert {
         return HudDisplayHost.isFaulted(identifier)
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
         var i = 0
-        i += drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, y, cautionColor)
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, firstLineY, cautionColor)
         i +=
             if (HudDisplayHost.countFaults(identifier) == 1) {
-                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y + 11, advisoryColor)
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), otherLinesX, firstLineY + 11, advisoryColor)
             } else {
-                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), x, y + 11, advisoryColor)
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), otherLinesX, firstLineY + 11, advisoryColor)
             }
         return i
     }

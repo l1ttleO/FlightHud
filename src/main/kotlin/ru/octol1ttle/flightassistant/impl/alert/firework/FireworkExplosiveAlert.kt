@@ -13,6 +13,7 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.api.util.firework
 
 class FireworkExplosiveAlert(private val hand: Hand) : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 0
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -20,7 +21,7 @@ class FireworkExplosiveAlert(private val hand: Hand) : Alert(), ECAMAlert {
         return !computers.firework.isEmptyOrSafe(computers.data.player, hand)
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.firework.explosive.${hand.toString().lowercase()}"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.firework.explosive.${hand.toString().lowercase()}"), firstLineX, firstLineY, cautionColor)
     }
 }

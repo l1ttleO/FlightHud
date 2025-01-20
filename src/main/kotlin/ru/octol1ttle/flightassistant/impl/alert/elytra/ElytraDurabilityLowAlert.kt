@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class ElytraDurabilityLowAlert : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 25
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -19,7 +20,7 @@ class ElytraDurabilityLowAlert : Alert(), ECAMAlert {
         return remainingFlightTime in 30..<90
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.elytra.low_durability"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.elytra.low_durability"), firstLineX, firstLineY, cautionColor)
     }
 }

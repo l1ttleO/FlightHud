@@ -9,6 +9,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
 class ApproachingVoidDamageAltitudeAlert : Alert(), ECAMAlert {
+    override val priorityOffset: Int = 5
     override val data: AlertData
         get() = AlertData.MASTER_CAUTION
 
@@ -16,7 +17,7 @@ class ApproachingVoidDamageAltitudeAlert : Alert(), ECAMAlert {
         return FAConfig.safety.voidAlertMode.caution() && computers.voidProximity.status == VoidProximityComputer.Status.APPROACHING_DAMAGE_ALTITUDE
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, x: Int, y: Int): Int {
-        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.approaching_void_damage_altitude"), firstLineX, y, cautionColor)
+    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+        return drawContext.drawText(Text.translatable("alerts.flightassistant.navigation.approaching_void_damage_altitude"), firstLineX, firstLineY, cautionColor)
     }
 }
