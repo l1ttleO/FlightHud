@@ -41,7 +41,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
         if (FAConfig.safety.voidLimitPitch && status != Status.ABOVE_GROUND) {
             return ControlInput(
                 (-90.0f + (computers.data.world.bottomY - (computers.data.altitude + computers.data.velocity.y * 20)) / 64.0f * 105.0f).toFloat()
-                    .coerceIn(-35.0f..55.0f),
+                    .coerceIn(-35.0f..computers.thrust.getOptimumClimbPitch()),
                 ControlInput.Priority.HIGH,
                 Text.translatable("mode.flightassistant.pitch.void_protection")
             )
