@@ -3,6 +3,11 @@ package ru.octol1ttle.flightassistant.api.computer.autoflight.thrust
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 
 interface ThrustSource {
+    /**
+     * Defines the priority of this thrust source.
+     *
+     * @see [ThrustSource.Priority]
+     */
     val priority: Priority
 
     /**
@@ -28,7 +33,12 @@ interface ThrustSource {
     fun tickThrust(computers: ComputerAccess, currentThrust: Float)
 
     /**
-     * Defines the priority, which determines which thrust source to choose in the case there are multiple sources available ([isAvailable])
+     * Calculates the thrust required to achieve the target speed.
+     */
+    fun calculateThrustForSpeed(computers: ComputerAccess, targetSpeed: Int): Float
+
+    /**
+     * Defines the priority, which determines which thrust source to choose in the case there are multiple sources available ([isAvailable]).
      * In the case there are multiple thrust sources with the same priority, a single thrust source will be ticked. Which one exactly is determined by mod loading order
      */
     enum class Priority(val value: Int) {

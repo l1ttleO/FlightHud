@@ -11,6 +11,7 @@ import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.*
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
 
 class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustController {
     var status: Status = Status.ABOVE_GROUND
@@ -53,7 +54,7 @@ class VoidProximityComputer : Computer(), PitchLimiter, PitchController, ThrustC
     override fun getPitchInput(computers: ComputerAccess): ControlInput? {
         if (FAConfig.safety.voidAutoPitch && status <= Status.APPROACHING_DAMAGE_ALTITUDE) {
             return ControlInput(computers.thrust.getOptimumClimbPitch(), ControlInput.Priority.HIGH, Text.translatable("mode.flightassistant.pitch.void_escape"),
-                active = status == Status.REACHED_DAMAGE_ALTITUDE && computers.thrust.targetThrust == 1.0f && !computers.thrust.noThrustSource)
+                active = status == Status.REACHED_DAMAGE_ALTITUDE && computers.thrust.current >= ThrustComputer.TOGA_THRESHOLD && !computers.thrust.noThrustSource)
         }
 
         return null

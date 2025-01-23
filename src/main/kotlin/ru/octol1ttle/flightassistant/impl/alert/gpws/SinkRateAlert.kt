@@ -14,8 +14,7 @@ import ru.octol1ttle.flightassistant.api.util.gpws
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
 class SinkRateAlert: Alert(), CenteredAlert {
-    override val data: AlertData
-        get() = AlertData.SINK_RATE
+    override val data: AlertData = AlertData.SINK_RATE
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.gpws.groundImpactStatus == GroundProximityComputer.Status.CAUTION

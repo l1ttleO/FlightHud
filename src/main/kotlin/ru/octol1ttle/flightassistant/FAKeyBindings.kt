@@ -9,12 +9,12 @@ import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.alert
 import ru.octol1ttle.flightassistant.api.util.pitch
 import ru.octol1ttle.flightassistant.api.util.thrust
-import ru.octol1ttle.flightassistant.screen.FlightConfigurationScreen
+import ru.octol1ttle.flightassistant.screen.FlightSetupScreen
 
 object FAKeyBindings {
     internal val keyBindings: ArrayList<KeyBinding> = ArrayList()
 
-    private lateinit var openFlightConfiguration: KeyBinding
+    private lateinit var openFlightSetup: KeyBinding
 
     private lateinit var manualPitchOverride: KeyBinding
 
@@ -27,7 +27,7 @@ object FAKeyBindings {
     private lateinit var setToga: KeyBinding
 
     fun setup() {
-        openFlightConfiguration = addKeyBinding("keys.flightassistant.open_flight_configuration", GLFW.GLFW_KEY_KP_ENTER)
+        openFlightSetup = addKeyBinding("keys.flightassistant.open_flight_setup", GLFW.GLFW_KEY_KP_ENTER)
 
         manualPitchOverride = addKeyBinding("keys.flightassistant.manual_pitch_override", GLFW.GLFW_KEY_LEFT_ALT)
 
@@ -47,9 +47,9 @@ object FAKeyBindings {
     }
 
     fun checkPressed(computers: ComputerAccess) {
-        while (openFlightConfiguration.wasPressed()) {
+        while (openFlightSetup.wasPressed()) {
             mc.execute {
-                mc.setScreen(FlightConfigurationScreen())
+                mc.setScreen(FlightSetupScreen())
             }
         }
 
@@ -69,10 +69,10 @@ object FAKeyBindings {
             computers.thrust.setTarget(1.0f, false)
         }
         while (decreaseThrust.wasPressed()) {
-            computers.thrust.setTarget((computers.thrust.targetThrust - FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
+            computers.thrust.setTarget((computers.thrust.current - FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
         }
         while (increaseThrust.wasPressed()) {
-            computers.thrust.setTarget((computers.thrust.targetThrust + FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
+            computers.thrust.setTarget((computers.thrust.current + FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
         }
     }
 }

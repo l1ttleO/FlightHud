@@ -7,9 +7,8 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
 
 class ReverseThrustNotSupportedAlert : Alert(), ECAMAlert {
-    override val priorityOffset: Int = 35
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val priorityOffset: Int = 40
+    override val data: AlertData = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.thrust.reverseUnsupported

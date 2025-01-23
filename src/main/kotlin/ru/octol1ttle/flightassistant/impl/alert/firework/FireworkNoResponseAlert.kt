@@ -12,8 +12,7 @@ import ru.octol1ttle.flightassistant.api.util.firework
 import ru.octol1ttle.flightassistant.api.util.warningColor
 
 class FireworkNoResponseAlert : Alert(), ECAMAlert {
-    override val data: AlertData
-        get() = AlertData.MASTER_WARNING
+    override val data: AlertData = AlertData.MASTER_WARNING
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.firework.waitingForResponse && FATickCounter.totalTicks - computers.firework.lastActivationTime >= 30

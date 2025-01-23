@@ -10,8 +10,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.StallComputer
 
 class ApproachingStallAlert : Alert(), CenteredAlert {
-    override val data: AlertData
-        get() = AlertData.APPROACHING_STALL
+    override val data: AlertData = AlertData.APPROACHING_STALL
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return FAConfig.safety.stallAlertMode.caution() && computers.stall.status == StallComputer.Status.APPROACHING_STALL

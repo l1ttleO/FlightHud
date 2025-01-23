@@ -4,7 +4,10 @@ alerts.flightassistant:
     fault: SYS FAULT (SOME ALERTS LOST)
   autoflight:
     .: AUTO FLT
+    fault: SYS FAULT
     pitch_fault: PITCH CTL FAULT
+    autopilot_off: AP OFF
+    auto_thrust_off: A/THR OFF
   elytra:
     .: ELYTRA
     fault: STATUS FAULT
@@ -180,10 +183,10 @@ config.flightassistant:
         lock_explosive: Lock explosive fireworks
 
 menu.flightassistant:
-  .: Flight Configuration
-  flight_plan: Flight Plan
+  .: Flight setup
+  flight_plan: Flight plan
   system:
-    .: System Status
+    .: System status
     fault: FAULT
     'off': 'OFF'
     on_reset: ON/RESET
@@ -209,9 +212,16 @@ menu.flightassistant:
         flightassistant:ground_proximity: Ground proximity computer
         flightassistant:stall: Stall computer
         flightassistant:void_proximity: Void proximity computer
+        flightassistant:autopilot: Automatics computer
         flightassistant:firework: Firework computer
         flightassistant:pitch: Pitch computer
         flightassistant:thrust: Thrust computer
+  autoflight:
+    .: Auto flight
+    flight_directors: Flight directors
+    auto_thrust: Auto thrust
+    autopilot: Autopilot
+    speed: Speed
 
 mode.flightassistant:
   thrust:
@@ -220,12 +230,17 @@ mode.flightassistant:
     locked: THR LK %s
     locked_toga: TOGA LK
     toga: THR TOGA
+    speed: SPD %s
   pitch:
     void_protection: VOID PROT
     void_escape: VOID ESC
     stall_protection: STALL PROT
     terrain_protection: TERR PROT
     terrain_escape: TERR ESC
+  autoflight:
+    flight_directors: FD
+    auto_thrust: A/THR
+    autopilot: AP
 
 short.flightassistant:
   alert: ALERT
@@ -246,7 +261,7 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
-  open_flight_configuration: Open flight configuration screen
+  open_flight_setup: Open flight setup screen
   manual_pitch_override: Manual pitch override (hold)
   hide_current_alert: Hide currently active alert
   show_hidden_alert: Show last hidden alert

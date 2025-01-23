@@ -24,7 +24,7 @@ class PitchComputer : Computer(), PitchController {
         private set
     var maximumPitch: ControlInput? = null
         private set
-    var activePitchInput: ControlInput? = null
+    var activeInput: ControlInput? = null
         private set
 
     override fun subscribeToEvents() {
@@ -44,18 +44,18 @@ class PitchComputer : Computer(), PitchController {
 
         val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getPitchInput(computers) }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
-            activePitchInput = null
+            activeInput = null
             return
         }
 
         val pitch: Float = computers.data.pitch
         val finalInput: ControlInput? = inputs.getActiveHighestPriority().maxByOrNull { it.target }
         if (finalInput == null) {
-            activePitchInput = null
+            activeInput = null
             return
         }
 
-        activePitchInput = finalInput
+        activeInput = finalInput
         if (automationsAllowed && finalInput.active) {
             var target: Float = finalInput.target
             if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
@@ -138,7 +138,7 @@ class PitchComputer : Computer(), PitchController {
         manualOverride = true
         minimumPitch = null
         maximumPitch = null
-        activePitchInput = null
+        activeInput = null
     }
 
     companion object {

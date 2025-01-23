@@ -10,8 +10,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.StallComputer
 
 class FullStallAlert : Alert(), CenteredAlert {
-    override val data: AlertData
-        get() = AlertData.FULL_STALL
+    override val data: AlertData = AlertData.FULL_STALL
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return FAConfig.safety.stallAlertMode.warning() && computers.stall.status == StallComputer.Status.FULL_STALL

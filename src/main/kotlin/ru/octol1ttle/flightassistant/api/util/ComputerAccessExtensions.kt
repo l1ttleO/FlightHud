@@ -8,6 +8,9 @@ import ru.octol1ttle.flightassistant.impl.computer.safety.*
 val ComputerAccess.data: AirDataComputer
     get() = get(AirDataComputer.ID) as AirDataComputer
 
+val ComputerAccess.autoflight: AutoFlightComputer
+    get() = get(AutoFlightComputer.ID) as AutoFlightComputer
+
 val ComputerAccess.firework: FireworkComputer
     get() = get(FireworkComputer.ID) as FireworkComputer
 

@@ -9,8 +9,7 @@ import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
 class TerrainAheadAlert: Alert(), CenteredAlert {
-    override val data: AlertData
-        get() = AlertData.TERRAIN_AHEAD
+    override val data: AlertData = AlertData.TERRAIN_AHEAD
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.gpws.obstacleImpactStatus == GroundProximityComputer.Status.CAUTION

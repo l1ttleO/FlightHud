@@ -8,8 +8,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class ElytraDurabilityCriticalAlert : Alert(), ECAMAlert {
-    override val data: AlertData
-        get() = AlertData.MASTER_WARNING
+    override val data: AlertData = AlertData.MASTER_WARNING
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         if (!FAConfig.safety.elytraDurabilityAlertMode.warning()) {

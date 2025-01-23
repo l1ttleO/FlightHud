@@ -8,7 +8,10 @@ alerts.flightassistant:
     fault: ОТКАЗ (НЕКОТОРЫЕ ПРЕДУПР ПОТЕР)
   autoflight:
     .: АВТО ПОЛЕТ
+    fault: ОТКАЗ СИСТ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
+    autopilot_off: АП ОТКЛ
+    auto_thrust_off: А/ТЯГА ОТКЛ
   elytra:
     .: ЭЛИТРЫ
     fault: ОТКАЗ СТАТУС
@@ -213,9 +216,16 @@ menu.flightassistant:
         flightassistant:ground_proximity: Компьютер близости земли
         flightassistant:stall: Компьютер обнаружения сваливания
         flightassistant:void_proximity: Компьютер близости пустоты
+        flightassistant:autopilot: Компьютер автоматики
         flightassistant:firework: Компьютер фейерверков
         flightassistant:pitch: Компьютер угла наклона
         flightassistant:thrust: Компьютер тяги
+  autoflight:
+    .: Автополёт
+    flight_directors: Указатели полёта
+    auto_thrust: Автомат тяги
+    autopilot: Автопилот
+    speed: Скорость
 
 mode.flightassistant:
   thrust:
@@ -224,12 +234,17 @@ mode.flightassistant:
     locked: БЛОК ТЯГА %s
     locked_toga: БЛОК ВЗЛЕТН
     toga: ТЯГА ВЗЛЕТН
+    speed: СКОР %s
   pitch:
     void_protection: ПУСТ ЗАЩ
     void_escape: ПУСТ ВЫХОД
     stall_protection: СВАЛ ЗАЩ
     terrain_protection: ЗЕМЛ ЗАЩ
     terrain_escape: ЗЕМЛ ИЗБЕЖ
+  autoflight:
+    flight_directors: УК
+    auto_thrust: А/ТЯГА
+    autopilot: АП
 
 short.flightassistant:
   alert: ПРЕДУПР
@@ -250,7 +265,7 @@ short.flightassistant:
 
 keys.flightassistant:
   .: FlightAssistant
-  open_flight_configuration: Открыть экран настройки полёта
+  open_flight_setup: Открыть экран настройки полёта
   manual_pitch_override: Принудительное ручное управление углом наклона (зажать)
   hide_current_alert: Скрыть активное предупреждение
   show_hidden_alert: Показать скрытое предупреждение

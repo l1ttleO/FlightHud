@@ -12,8 +12,7 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 
 class AlertComputerFaultAlert : Alert(), ECAMAlert {
     override val priorityOffset: Int = 15
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val data: AlertData = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.alert.alertsFaulted

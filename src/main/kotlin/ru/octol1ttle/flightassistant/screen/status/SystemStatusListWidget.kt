@@ -58,26 +58,26 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
 
             displayName.render(context, mouseX, mouseY, tickDelta)
 
-            toggleButton.message =
-                if (systemHost.isEnabled(identifier)) OFF_TEXT
-                else ON_RESET_TEXT
             toggleButton.x = this.x + this.listWidth - toggleButton.width - 5
             toggleButton.y = this.y - toggleButton.height / 4 - 1
             toggleButton.render(context, mouseX, mouseY, tickDelta)
+            toggleButton.message =
+                if (systemHost.isEnabled(identifier)) OFF_TEXT
+                else ON_RESET_TEXT
 
             offText.x = toggleButton.x - toggleButton.width / 2 - textRenderer.getWidth(OFF_TEXT) - 2
+            offText.render(context, mouseX, mouseY, tickDelta)
             offText.setTextColor(
                 if (systemHost.isEnabled(identifier)) 0x0F0F0F
                 else 0xFFFFFF
             )
-            offText.render(context, mouseX, mouseY, tickDelta)
 
             faultText.x = offText.x - textRenderer.getWidth(FAULT_TEXT) - 2
+            faultText.render(context, mouseX, mouseY, tickDelta)
             faultText.setTextColor(
                 if (systemHost.isFaulted(identifier)) cautionColor
                 else 0x0F0F0F
             )
-            faultText.render(context, mouseX, mouseY, tickDelta)
         }
 
         override fun children(): MutableList<out Element> {

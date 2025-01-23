@@ -8,8 +8,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
 class NoChunksLoadedAlert : Alert(), ECAMAlert {
-    override val data: AlertData
-        get() = AlertData.MASTER_WARNING
+    override val data: AlertData = AlertData.MASTER_WARNING
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.chunk.status == ChunkStatusComputer.Status.ALL_UNLOADED

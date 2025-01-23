@@ -10,8 +10,7 @@ import ru.octol1ttle.flightassistant.api.util.*
 
 class ProtectionsLostAlert : Alert(), ECAMAlert {
     override val priorityOffset: Int = 10
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val data: AlertData = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.protections.protectionsLost

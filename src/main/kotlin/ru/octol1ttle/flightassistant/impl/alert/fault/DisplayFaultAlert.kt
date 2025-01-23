@@ -13,9 +13,8 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 class DisplayFaultAlert(val identifier: Identifier) : Alert(), ECAMAlert {
-    override val priorityOffset: Int = 40
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val priorityOffset: Int = 45
+    override val data: AlertData = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return HudDisplayHost.isFaulted(identifier)

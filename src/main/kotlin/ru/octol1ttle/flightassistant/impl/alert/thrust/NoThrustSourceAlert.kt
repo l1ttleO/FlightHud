@@ -7,9 +7,8 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
 
 class NoThrustSourceAlert : Alert(), ECAMAlert {
-    override val priorityOffset: Int = 30
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val priorityOffset: Int = 35
+    override val data: AlertData = AlertData.MASTER_CAUTION
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.thrust.noThrustSource

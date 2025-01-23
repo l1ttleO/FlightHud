@@ -9,8 +9,7 @@ import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
 class SlowChunkLoadingAlert : Alert(), ECAMAlert {
     override val priorityOffset: Int = 55
-    override val data: AlertData
-        get() = AlertData.MASTER_CAUTION
+    override val data: AlertData = AlertData.MASTER_CAUTION
     private var alertDuration = 0
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {

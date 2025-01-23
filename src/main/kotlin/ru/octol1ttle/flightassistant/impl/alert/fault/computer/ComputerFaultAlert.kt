@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
 class ComputerFaultAlert(private val identifier: Identifier, private val alertText: Text, private val extraTexts: Collection<Text>? = null, override val data: AlertData = AlertData.MASTER_CAUTION) : Alert(), ECAMAlert {
-    override val priorityOffset: Int = 20
+    override val priorityOffset: Int = 25
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return ComputerHost.isFaulted(identifier)

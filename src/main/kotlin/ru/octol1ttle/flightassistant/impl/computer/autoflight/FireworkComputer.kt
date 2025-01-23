@@ -136,6 +136,10 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         }
     }
 
+    override fun calculateThrustForSpeed(computers: ComputerAccess, targetSpeed: Int): Float {
+        return (targetSpeed / 30.0f).coerceIn(0.0f..1.0f)
+    }
+
     override fun reset() {
         safeFireworkCount = 0
         safeFireworkSlot = null

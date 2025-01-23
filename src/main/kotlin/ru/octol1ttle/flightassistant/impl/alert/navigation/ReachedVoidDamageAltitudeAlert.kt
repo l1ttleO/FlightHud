@@ -9,8 +9,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
 class ReachedVoidDamageAltitudeAlert : Alert(), ECAMAlert {
-    override val data: AlertData
-        get() = AlertData.MASTER_WARNING
+    override val data: AlertData = AlertData.MASTER_WARNING
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return FAConfig.safety.voidAlertMode.warning() && computers.voidProximity.status == VoidProximityComputer.Status.REACHED_DAMAGE_ALTITUDE

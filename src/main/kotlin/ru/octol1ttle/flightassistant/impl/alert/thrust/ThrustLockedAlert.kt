@@ -12,8 +12,7 @@ import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.api.util.thrust
 
 class ThrustLockedAlert : Alert(), ECAMAlert {
-    override val data: AlertData
-        get() = AlertData.THRUST_LOCKED
+    override val data: AlertData = AlertData.THRUST_LOCKED
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.thrust.thrustLocked

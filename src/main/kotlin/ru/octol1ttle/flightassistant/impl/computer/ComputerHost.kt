@@ -9,6 +9,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.event.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.FireworkComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.PitchComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
@@ -57,6 +58,8 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         register(GroundProximityComputer.ID, GroundProximityComputer())
         register(ElytraStatusComputer.ID, ElytraStatusComputer())
         register(ChunkStatusComputer.ID, ChunkStatusComputer())
+
+        register(AutoFlightComputer.ID, AutoFlightComputer())
         register(FireworkComputer.ID, FireworkComputer(mc))
         register(PitchComputer.ID, PitchComputer())
         register(ThrustComputer.ID, ThrustComputer())

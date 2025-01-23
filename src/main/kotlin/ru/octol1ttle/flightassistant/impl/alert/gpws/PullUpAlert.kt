@@ -9,8 +9,7 @@ import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
 class PullUpAlert : Alert(), CenteredAlert {
-    override val data: AlertData
-        get() = AlertData.PULL_UP
+    override val data: AlertData = AlertData.PULL_UP
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
         return computers.gpws.groundImpactStatus <= GroundProximityComputer.Status.WARNING || computers.gpws.obstacleImpactStatus <= GroundProximityComputer.Status.WARNING
