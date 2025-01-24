@@ -5,19 +5,17 @@ import kotlin.math.min
 import net.minecraft.client.sound.AbstractSoundInstance
 import net.minecraft.client.sound.SoundInstance
 import net.minecraft.client.sound.SoundManager
-import net.minecraft.client.sound.TickableSoundInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
-import ru.octol1ttle.flightassistant.api.util.fallFlying
 import ru.octol1ttle.flightassistant.api.util.setLooping
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
-    AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()), TickableSoundInstance {
+    AbstractSoundInstance(data.soundEvent, SoundCategory.MASTER, SoundInstance.createRandom()) {
     var age: Int = 0
     private var actualVolume: Float = 1.0f
-    var fadingOut: Boolean = false
+    private var fadingOut: Boolean = false
 
     init {
         this.relative = true
@@ -33,11 +31,7 @@ class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
         return true
     }
 
-    override fun isDone(): Boolean {
-        return player.isDead || !player.fallFlying
-    }
-
-    override fun tick() {
+    fun tick() {
         age++
         if (this.fadingOut) {
             return

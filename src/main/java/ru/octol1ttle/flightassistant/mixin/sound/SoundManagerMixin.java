@@ -15,6 +15,11 @@ abstract class SoundManagerMixin implements SoundExtensions {
     private SoundSystem soundSystem;
 
     @Override
+    public void flightassistant$applyVolume(SoundInstance soundInstance) {
+        ((SoundExtensions) soundSystem).flightassistant$applyVolume(soundInstance);
+    }
+
+    @Override
     public void flightassistant$setLooping(SoundInstance soundInstance, boolean looping) {
         ((SoundExtensions) soundSystem).flightassistant$setLooping(soundInstance, looping);
     }

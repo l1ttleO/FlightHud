@@ -5,6 +5,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
+import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.computer.Computer
@@ -46,7 +47,8 @@ import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 // TODO: allow new alerts to repeat an already-played active sound
 class AlertComputer(private val soundManager: SoundManager) : Computer() {
     internal var alertsFaulted: Boolean = false
-    val categories: ArrayList<AlertCategory> = ArrayList()
+    val categories: MutableList<AlertCategory> = ArrayList()
+    private val alertLists: HashMap<AlertData, ChangeTrackingArrayList<Alert>> = HashMap()
     private val sounds: HashMap<AlertData, AlertSoundInstance> = HashMap()
 
     override fun invokeEvents() {
@@ -126,7 +128,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
 
     fun register(category: AlertCategory) {
         if (categories.contains(category)) {
-            throw IllegalArgumentException("Already registered alert category: ${category.javaClass.name}")
+            throw IllegalArgumentException("Already registered alert category: ${category.categoryText.string}")
         }
 
         categories.add(category)
@@ -155,10 +157,10 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
     override fun tick(computers: ComputerAccess) {
         updateAlerts(computers)
         if (computers.data.player.isDead || !computers.data.flying) {
-            stopInactiveAlerts(true)
+            tickSoundsAndStopInactive(true)
             return
         }
-        stopInactiveAlerts()
+        tickSoundsAndStopInactive()
         startNewSounds(computers)
         stopOutPrioritizedAlerts()
     }
@@ -169,30 +171,45 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         }
 
         categories.sortBy { it.getHighestPriority() ?: Int.MAX_VALUE }
+
+        for (list: ChangeTrackingArrayList<Alert> in alertLists.values) {
+            list.startTracking()
+        }
+
+        for (alert: Alert in categories.flatMap { it.activeAlerts } ) {
+            alertLists.computeIfAbsent(alert.data) { return@computeIfAbsent ChangeTrackingArrayList<Alert>() }.add(alert)
+        }
     }
 
-    private fun stopInactiveAlerts(force: Boolean = false) {
+    private fun tickSoundsAndStopInactive(force: Boolean = false) {
         val iterator = sounds.entries.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
-            if (!force && categories.any { category -> category.activeAlerts.any { it.data == entry.key } }) {
-                continue
+            for (i: Int in 1..FATickCounter.ticksPassed) {
+                entry.value.tick()
+                soundManager.applyVolume(entry.value)
             }
 
-            entry.value.setRepeat(false, soundManager)
-            if (entry.value.fadeOut(FATickCounter.ticksPassed)) {
-                iterator.remove()
+            if (force || alertLists[entry.key]?.isEmpty() != false) {
+                entry.value.setRepeat(false, soundManager)
+                if (entry.value.fadeOut(FATickCounter.ticksPassed)) {
+                    iterator.remove()
+                }
+                soundManager.applyVolume(entry.value)
             }
         }
     }
 
     private fun startNewSounds(computers: ComputerAccess) {
-        val activeDatas: List<AlertData> = categories.flatMap { it.activeAlerts.map { alert -> alert.data } }.sortedBy { it.priority }
+        val activeDatas: List<AlertData> = alertLists.filterValues { it.hasNewElements() }.keys.sortedBy { it.priority }
         val highestPriority: List<AlertData> = activeDatas.getHighestPriority()
 
         var anyStartedThisTick = false
         for (data: AlertData in highestPriority) {
-            if (!sounds.containsKey(data)) {
+            val existing: AlertSoundInstance? = sounds[data]
+            if (existing == null || (!existing.isRepeatable && existing.age > 60)) {
+                soundManager.stop(existing)
+
                 val instance = AlertSoundInstance(computers.data.player, data)
                 sounds[data] = instance
                 if (!anyStartedThisTick) {

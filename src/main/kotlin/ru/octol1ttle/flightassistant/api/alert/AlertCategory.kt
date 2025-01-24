@@ -6,9 +6,9 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.alert
 
 class AlertCategory(val categoryText: Text) {
-    private val registeredAlerts: ArrayList<Alert> = ArrayList()
-    val activeAlerts: ArrayList<Alert> = ArrayList()
-    val ignoredAlerts: ArrayList<Alert> = ArrayList()
+    private val registeredAlerts: MutableList<Alert> = ArrayList()
+    val activeAlerts: MutableList<Alert> = ArrayList()
+    val ignoredAlerts: MutableList<Alert> = ArrayList()
 
     fun add(alert: Alert): AlertCategory {
         if (registeredAlerts.contains(alert)) {

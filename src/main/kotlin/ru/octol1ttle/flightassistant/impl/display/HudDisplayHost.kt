@@ -1,5 +1,15 @@
 package ru.octol1ttle.flightassistant.impl.display
 
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.filter
+import kotlin.collections.iterator
+import kotlin.collections.joinToString
+import kotlin.collections.set
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
@@ -12,21 +22,24 @@ import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.updateViewport
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
-import ru.octol1ttle.flightassistant.impl.computer.ComputerHost.get
 
 internal object HudDisplayHost: SystemHost {
     private val displays: MutableMap<Identifier, Display> = HashMap()
 
+    private fun get(identifier: Identifier): Display {
+        return displays[identifier] ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+    }
+
     override fun isEnabled(identifier: Identifier): Boolean {
-        return displays[identifier]?.enabled ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+        return get(identifier).enabled
     }
 
     override fun isFaulted(identifier: Identifier): Boolean {
-        return displays[identifier]?.faulted ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+        return get(identifier).faulted
     }
 
     override fun toggleEnabled(identifier: Identifier): Boolean {
-        val display: Display = displays[identifier] ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
+        val display: Display = get(identifier)
         display.enabled = !display.enabled
         return display.enabled
     }

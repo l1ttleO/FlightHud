@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.api.util.thrust
 import ru.octol1ttle.flightassistant.screen.FlightSetupScreen
 
 object FAKeyBindings {
-    internal val keyBindings: ArrayList<KeyBinding> = ArrayList()
+    internal val keyBindings: MutableList<KeyBinding> = ArrayList()
 
     private lateinit var openFlightSetup: KeyBinding
 

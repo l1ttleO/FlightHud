@@ -18,8 +18,8 @@ import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
 
 class ThrustComputer : Computer() {
-    private val sources: ArrayList<ThrustSource> = ArrayList()
-    private val controllers: ArrayList<ThrustController> = ArrayList()
+    private val sources: MutableList<ThrustSource> = ArrayList()
+    private val controllers: MutableList<ThrustController> = ArrayList()
 
     private var lastInputAutomatic: Boolean = false
 

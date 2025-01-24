@@ -16,8 +16,8 @@ import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegi
 import ru.octol1ttle.flightassistant.api.util.*
 
 class PitchComputer : Computer(), PitchController {
-    private val limiters: ArrayList<PitchLimiter> = ArrayList()
-    private val controllers: ArrayList<PitchController> = ArrayList()
+    private val limiters: MutableList<PitchLimiter> = ArrayList()
+    private val controllers: MutableList<PitchController> = ArrayList()
     private var automationsAllowed: Boolean = false
     internal var manualOverride: Boolean = false
     var minimumPitch: ControlInput? = null

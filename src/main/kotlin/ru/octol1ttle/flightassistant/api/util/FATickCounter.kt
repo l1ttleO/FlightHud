@@ -21,9 +21,9 @@ object FATickCounter {
     fun tick(player: ClientPlayerEntity, tickDelta: Float, paused: Boolean) {
         if (!paused) {
             if (player.age < lastPlayerAge) {
-                ticksSinceWorldLoad = 0
+                ticksSinceWorldLoad = player.age
             }
-            ticksPassed = if (player.age > lastPlayerAge) player.age - lastPlayerAge else 0
+            ticksPassed = if (player.age >= lastPlayerAge) player.age - lastPlayerAge else player.age
             lastPlayerAge = player.age
             totalTicks += ticksPassed
             ticksSinceWorldLoad += ticksPassed

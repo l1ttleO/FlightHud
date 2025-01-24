@@ -20,6 +20,16 @@ abstract class SoundSystemMixin implements SoundExtensions {
     private Map<SoundInstance, Channel.SourceManager> sources;
 
     @Override
+    public void flightassistant$applyVolume(SoundInstance soundInstance) {
+        if (started) {
+            Channel.SourceManager sourceManager = this.sources.get(soundInstance);
+            if (sourceManager != null) {
+                sourceManager.run(source -> source.setVolume(soundInstance.getVolume()));
+            }
+        }
+    }
+
+    @Override
     public void flightassistant$setLooping(SoundInstance soundInstance, boolean looping) {
         if (started) {
             Channel.SourceManager sourceManager = this.sources.get(soundInstance);
