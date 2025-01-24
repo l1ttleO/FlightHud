@@ -8,7 +8,8 @@ import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.display.*
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
@@ -27,6 +28,9 @@ class AutomationModesDisplay : Display() {
             text.appendWithSeparation(Text.translatable("mode.flightassistant.autoflight.autopilot"))
         }
 
+        if (text.siblings.isEmpty()) {
+            return@ModeDisplay null
+        }
         return@ModeDisplay Pair(text, true)
     }
 

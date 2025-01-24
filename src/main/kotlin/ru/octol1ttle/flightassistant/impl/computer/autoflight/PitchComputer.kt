@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
+import kotlin.math.abs
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -126,7 +127,7 @@ class PitchComputer : Computer(), PitchController {
     private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float, deltaTimeMultiplier: Float) {
         val diff: Float = target - current
 
-        if (diff < 0.05f) {
+        if (abs(diff) < 0.05f) {
             player.pitch = -target
         } else {
             player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier).coerceIn(0.0f..1.0f)

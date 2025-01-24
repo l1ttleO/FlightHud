@@ -21,7 +21,7 @@ class ThrustComputer : Computer() {
     private val sources: MutableList<ThrustSource> = ArrayList()
     private val controllers: MutableList<ThrustController> = ArrayList()
 
-    private var lastInputAutomatic: Boolean = false
+    private var lastChangeAutomatic: Boolean = false
 
     var current: Float = 0.0f
         private set
@@ -50,17 +50,17 @@ class ThrustComputer : Computer() {
         reverseUnsupported = false
 
         if (finalInput?.active == true) {
-            setTarget(finalInput.target, true)
+            setTarget(finalInput.target, finalInput)
             activeInput = finalInput
             thrustLocked = false
         } else if (current == 0.0f) {
             noThrustSource = finalInput != null && thrustSource == null
             val text: Text? = if (!noThrustSource) finalInput?.text else finalInput?.text?.copy()?.styled { it.withColor(cautionColor) }
-            activeInput = finalInput?.copy(text = text ?: Text.empty())
+            activeInput = finalInput?.copy(text = text!!)
             thrustLocked = false
             return
         } else {
-            thrustLocked = lastInputAutomatic
+            thrustLocked = lastChangeAutomatic
             reverseUnsupported = current < 0.0f && thrustSource?.supportsReverse == false
 
             val thrustValueText: MutableText = Text.literal(furtherFromZero(current * 100).toInt().toString() + "%").setStyle(Style.EMPTY.withColor(advisoryColor))
@@ -83,20 +83,20 @@ class ThrustComputer : Computer() {
 
         val active: Boolean = !noThrustSource && !reverseUnsupported
         val text: Text? = if (active) activeInput?.text else activeInput?.text?.copy()?.styled { it.withColor(cautionColor) }
-        activeInput = activeInput?.copy(text = text ?: Text.empty(), active = active)
+        activeInput = activeInput?.copy(text = text!!, active = active)
 
         if (computers.data.automationsAllowed()) {
             thrustSource?.tickThrust(computers, current.coerceIn((if (thrustSource.supportsReverse) -1.0f else 0.0f)..1.0f))
         }
     }
 
-    fun setTarget(target: Float, automatic: Boolean) {
+    fun setTarget(target: Float, input: ControlInput? = null) {
         val oldThrust: Float = current
         if (oldThrust != target) {
             current = target
-            ThrustChangeCallback.EVENT.invoker().onThrustChange(oldThrust, current, automatic)
+            ThrustChangeCallback.EVENT.invoker().onThrustChange(oldThrust, current, input)
         }
-        lastInputAutomatic = automatic
+        lastChangeAutomatic = input != null
     }
 
     fun getOptimumClimbPitch(): Float {
@@ -118,7 +118,7 @@ class ThrustComputer : Computer() {
     }
 
     override fun reset() {
-        lastInputAutomatic = false
+        lastChangeAutomatic = false
         current = 0.0f
         activeInput = null
         noThrustSource = false

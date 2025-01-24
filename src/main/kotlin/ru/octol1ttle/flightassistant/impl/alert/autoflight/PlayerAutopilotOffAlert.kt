@@ -6,6 +6,7 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.autoflight
 import ru.octol1ttle.flightassistant.api.util.drawText
 import ru.octol1ttle.flightassistant.api.util.warningColor
@@ -16,8 +17,9 @@ class PlayerAutopilotOffAlert: Alert(), ECAMAlert {
     private var wasAutopilot: Boolean = false
 
     override fun shouldActivate(computers: ComputerAccess): Boolean {
-        if (age > 60) {
+        if (computers.autoflight.autopilotAlert || age > 80) {
             wasAutopilot = false
+            age = 0
             return false
         }
 
@@ -26,7 +28,7 @@ class PlayerAutopilotOffAlert: Alert(), ECAMAlert {
         }
         val autopilotOff: Boolean = wasAutopilot && !computers.autoflight.autopilot
         if (autopilotOff) {
-            age++
+            age += FATickCounter.ticksPassed
         }
 
         return autopilotOff

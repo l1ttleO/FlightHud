@@ -1,42 +1,47 @@
 {
-  "approaching_stall": {
-    "sounds": [
-      "flightassistant:approaching_stall"
-    ]
-  },
-  "full_stall": {
-    "sounds": [
-      "flightassistant:full_stall"
-    ]
-  },
-  "master_caution": {
-    "sounds": [
-      "flightassistant:master_caution"
-    ]
-  },
-  "master_warning": {
-    "sounds": [
-      "flightassistant:master_warning"
-    ]
-  },
-  "pull_up": {
-    "sounds": [
-      "flightassistant:pull_up"
-    ]
-  },
-  "sink_rate": {
-    "sounds": [
-      "flightassistant:sink_rate"
-    ]
-  },
-  "terrain_ahead": {
-    "sounds": [
-      "flightassistant:terrain_ahead"
-    ]
-  },
-  "thrust_locked": {
-    "sounds": [
-      "flightassistant:thrust_locked"
-    ]
-  }
+    "approaching_stall": {
+        "sounds": [
+            "flightassistant:approaching_stall"
+        ]
+    },
+    "autopilot_off": {
+        "sounds": [
+            "flightassistant:autopilot_off"
+        ]
+    },
+    "full_stall": {
+        "sounds": [
+            "flightassistant:full_stall"
+        ]
+    },
+    "master_caution": {
+        "sounds": [
+            "flightassistant:master_caution"
+        ]
+    },
+    "master_warning": {
+        "sounds": [
+            "flightassistant:master_warning"
+        ]
+    },
+    "pull_up": {
+        "sounds": [
+            "flightassistant:pull_up"
+        ]
+    },
+    "sink_rate": {
+        "sounds": [
+            "flightassistant:sink_rate"
+        ]
+    },
+    "terrain_ahead": {
+        "sounds": [
+            "flightassistant:terrain_ahead"
+        ]
+    },
+    "thrust_locked": {
+        "sounds": [
+            "flightassistant:thrust_locked"
+        ]
+    }
 }

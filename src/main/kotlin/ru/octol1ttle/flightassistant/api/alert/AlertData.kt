@@ -46,7 +46,7 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
             AlertData(
                 500,
                 FlightAssistant.soundEvent("autopilot_off"),
-                RepeatType.REPEAT_CONSTANT_VOLUME
+                RepeatType.NO_REPEAT
             ) { FAConfig.display.warningColor.rgb }
         val MASTER_WARNING =
             AlertData(

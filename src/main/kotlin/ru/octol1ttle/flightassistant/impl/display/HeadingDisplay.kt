@@ -24,7 +24,7 @@ class HeadingDisplay : Display() {
                 val y: Int = HudFrame.top + 1
 
                 drawBorder(x - 11, y, 23, 11, primaryColor)
-                drawMiddleAlignedText(String.format("%03d", computers.data.heading.roundToInt()), x, y + 2, primaryColor)
+                drawMiddleAlignedText("%03d".format(computers.data.heading.roundToInt()), x, y + 2, primaryColor)
             }
 
             if (FAConfig.display.showHeadingScale) {

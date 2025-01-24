@@ -67,6 +67,7 @@ internal object HudDisplayHost: SystemHost {
         register(AutomationModesDisplay.ID, AutomationModesDisplay())
         register(CoordinatesDisplay.ID, CoordinatesDisplay())
         register(ElytraDurabilityDisplay.ID, ElytraDurabilityDisplay())
+        register(FlightDirectorsDisplay.ID, FlightDirectorsDisplay())
         register(FlightPathDisplay.ID, FlightPathDisplay())
         register(HeadingDisplay.ID, HeadingDisplay())
         register(RadarAltitudeDisplay.ID, RadarAltitudeDisplay())

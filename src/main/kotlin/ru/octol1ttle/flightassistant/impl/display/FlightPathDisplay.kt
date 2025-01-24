@@ -20,9 +20,6 @@ class FlightPathDisplay : Display() {
             val screenSpaceVec: Vec3d = getScreenSpace(computers.data.velocity) ?: return
             val trueX: Int = screenSpaceVec.x.toInt()
             val trueY: Int = screenSpaceVec.y.toInt()
-            if (trueX < HudFrame.left - 100 || trueX > HudFrame.right + 100 || trueY < HudFrame.top - 100 || trueY > HudFrame.bottom + 100) {
-                return
-            }
 
             matrices.push()
             matrices.translate(0, 0, -100)

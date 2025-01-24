@@ -117,7 +117,7 @@ class ElytraStatusComputer : Computer() {
                     2 -> MathHelper.roundDownToMultiple(duration.toSecondsPart().toDouble(), 15)
                     else -> MathHelper.roundDownToMultiple(duration.toSecondsPart().toDouble(), 30)
                 }
-                Text.literal("${duration.toMinutesPart()}:${String.format("%02d", seconds)}")
+                Text.literal("${duration.toMinutesPart()}:${"%02d".format(seconds)}")
             }
         }
     }

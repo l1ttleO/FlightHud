@@ -5,10 +5,7 @@ import net.minecraft.client.util.InputUtil
 import org.lwjgl.glfw.GLFW
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.FATickCounter
-import ru.octol1ttle.flightassistant.api.util.alert
-import ru.octol1ttle.flightassistant.api.util.pitch
-import ru.octol1ttle.flightassistant.api.util.thrust
+import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.screen.FlightSetupScreen
 
 object FAKeyBindings {
@@ -16,6 +13,7 @@ object FAKeyBindings {
 
     private lateinit var openFlightSetup: KeyBinding
 
+    private lateinit var autopilotDisconnect: KeyBinding
     private lateinit var manualPitchOverride: KeyBinding
 
     private lateinit var hideCurrentAlert: KeyBinding
@@ -29,6 +27,7 @@ object FAKeyBindings {
     fun setup() {
         openFlightSetup = addKeyBinding("keys.flightassistant.open_flight_setup", GLFW.GLFW_KEY_KP_ENTER)
 
+        autopilotDisconnect = addKeyBinding("keys.flightassistant.autopilot_disconnect", GLFW.GLFW_KEY_CAPS_LOCK)
         manualPitchOverride = addKeyBinding("keys.flightassistant.manual_pitch_override", GLFW.GLFW_KEY_LEFT_ALT)
 
         hideCurrentAlert = addKeyBinding("keys.flightassistant.hide_current_alert", GLFW.GLFW_KEY_KP_0)
@@ -53,6 +52,10 @@ object FAKeyBindings {
             }
         }
 
+        while (autopilotDisconnect.wasPressed()) {
+            computers.autoflight.autopilot = false
+            computers.autoflight.autopilotAlert = false
+        }
         computers.pitch.manualOverride = manualPitchOverride.isPressed
 
         while (hideCurrentAlert.wasPressed()) {
@@ -63,16 +66,16 @@ object FAKeyBindings {
         }
 
         while (setIdle.wasPressed()) {
-            computers.thrust.setTarget(0.0f, false)
+            computers.thrust.setTarget(0.0f)
         }
         while (setToga.wasPressed()) {
-            computers.thrust.setTarget(1.0f, false)
+            computers.thrust.setTarget(1.0f)
         }
         while (decreaseThrust.wasPressed()) {
-            computers.thrust.setTarget((computers.thrust.current - FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
+            computers.thrust.setTarget((computers.thrust.current - FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f))
         }
         while (increaseThrust.wasPressed()) {
-            computers.thrust.setTarget((computers.thrust.current + FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f), false)
+            computers.thrust.setTarget((computers.thrust.current + FATickCounter.timePassed / 3).coerceIn(-1.0f..1.0f))
         }
     }
 }

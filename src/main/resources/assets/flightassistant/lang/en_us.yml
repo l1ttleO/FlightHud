@@ -222,6 +222,7 @@ menu.flightassistant:
     auto_thrust: Auto thrust
     autopilot: Autopilot
     speed: Speed
+    pitch: Pitch
 
 mode.flightassistant:
   thrust:
@@ -237,6 +238,7 @@ mode.flightassistant:
     stall_protection: STALL PROT
     terrain_protection: TERR PROT
     terrain_escape: TERR ESC
+    selected: PITCH %s
   autoflight:
     flight_directors: FD
     auto_thrust: A/THR
@@ -262,6 +264,7 @@ short.flightassistant:
 keys.flightassistant:
   .: FlightAssistant
   open_flight_setup: Open flight setup screen
+  autopilot_disconnect: Disconnect autopilot
   manual_pitch_override: Manual pitch override (hold)
   hide_current_alert: Hide currently active alert
   show_hidden_alert: Show last hidden alert

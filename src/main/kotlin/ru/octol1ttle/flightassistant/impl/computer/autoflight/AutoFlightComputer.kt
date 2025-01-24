@@ -6,35 +6,39 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
+import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchController
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
+import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustChangeCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.data
 import ru.octol1ttle.flightassistant.api.util.protections
 import ru.octol1ttle.flightassistant.api.util.thrust
 
-class AutoFlightComputer : Computer(), ThrustController {
+// TODO: automatic autopilot disconnect when a) input has different ID and b) when resistance is too much
+class AutoFlightComputer : Computer(), ThrustController, PitchController {
     var flightDirectors: Boolean = false
 
     var autoThrust: Boolean = false
     var autoThrustAlert: Boolean = false
-    var selectedSpeed: Int? = null
-
-    private var targetThrust: Float? = null
 
     var autopilot: Boolean = false
     var autopilotAlert: Boolean = false
 
+    var selectedSpeed: Int? = null
+    var selectedPitch: Float? = null
+
     override fun subscribeToEvents() {
         ThrustControllerRegistrationCallback.EVENT.register { it.accept(this) }
-        ThrustChangeCallback.EVENT.register(ThrustChangeCallback { _, newThrust, automatic ->
-            if (newThrust != targetThrust) {
+        PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
+        ThrustChangeCallback.EVENT.register(ThrustChangeCallback { _, _, input ->
+            if (input?.identifier != ID) {
                 if (autoThrust) {
                     autoThrustAlert = true
                 }
                 autoThrust = false
             }
-            if (!automatic && autoThrustAlert) {
+            if (input == null && autoThrustAlert) {
                 autoThrustAlert = false
             }
         })
@@ -52,6 +56,11 @@ class AutoFlightComputer : Computer(), ThrustController {
                 autoThrust = false
                 autoThrustAlert = true
             }
+        }
+
+        if (autopilot) {
+            autopilotAlert = false
+            flightDirectors = true
         }
     }
 
@@ -77,12 +86,30 @@ class AutoFlightComputer : Computer(), ThrustController {
         }
 
         val target: Int = selectedSpeed!!
-        targetThrust = computers.thrust.calculateThrustForSpeed(computers, target) ?: 0.0f
 
         return ControlInput(
-            targetThrust!!,
+            computers.thrust.calculateThrustForSpeed(computers, target) ?: 0.0f,
             ControlInput.Priority.NORMAL,
-            Text.translatable("mode.flightassistant.thrust.speed", target)
+            Text.translatable("mode.flightassistant.thrust.speed", target),
+            identifier = ID
+        )
+    }
+
+    override fun getPitchInput(computers: ComputerAccess): ControlInput? {
+        if (!flightDirectors && !autopilot) {
+            return null
+        }
+
+        if (selectedPitch == null) {
+            selectedPitch = computers.data.pitch
+        }
+
+        return ControlInput(
+            selectedPitch!!,
+            ControlInput.Priority.NORMAL,
+            Text.translatable("mode.flightassistant.pitch.selected", "%.1f".format(selectedPitch)),
+            active = autopilot,
+            identifier = ID
         )
     }
 

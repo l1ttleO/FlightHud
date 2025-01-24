@@ -16,6 +16,7 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
     private lateinit var autopilot: ColoredButtonWidget
 
     private var targetSpeed: TextFieldWidget? = null
+    private var targetPitch: TextFieldWidget? = null
 
     override fun init() {
         super.init()
@@ -30,19 +31,27 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
             ComputerHost.autoflight.autopilot = !ComputerHost.autoflight.autopilot
         }.position(this.centerX + 5, this.centerY + 80).width(95).build()
 
-        targetSpeed = TextFieldWidget(mc.textRenderer, this.centerX - 250, this.centerY - 30, 50, 15, targetSpeed, Text.translatable("menu.flightassistant.autoflight.speed"))
+        targetSpeed = TextFieldWidget(mc.textRenderer, this.centerX - 100, this.centerY - 30, 40, 15, targetSpeed, Text.translatable("menu.flightassistant.autoflight.speed"))
         targetSpeed!!.setTextPredicate { it.isEmpty() || it.toIntOrNull() != null }
         targetSpeed!!.setChangedListener {
             ComputerHost.autoflight.selectedSpeed = it.toIntOrNull()
         }
         targetSpeed!!.text = ComputerHost.autoflight.selectedSpeed.toString()
-
-        this.addDrawableChild(TextWidget(this.centerX - 250, this.centerY - 50, 50, 15, Text.translatable("menu.flightassistant.autoflight.speed"), mc.textRenderer))
+        this.addDrawableChild(TextWidget(this.centerX - 100, this.centerY - 50, 40, 15, Text.translatable("menu.flightassistant.autoflight.speed"), mc.textRenderer))
         this.addDrawableChild(targetSpeed!!)
 
-        this.addDrawableChild(flightDirectors).active = false
+        targetPitch = TextFieldWidget(mc.textRenderer, this.centerX - 50, this.centerY - 30, 40, 15, targetPitch, Text.translatable("menu.flightassistant.autoflight.pitch"))
+        targetPitch!!.setTextPredicate { it.isEmpty() || it == "-" || it.toFloatOrNull() != null }
+        targetPitch!!.setChangedListener {
+            ComputerHost.autoflight.selectedPitch = it.toFloatOrNull()
+        }
+        targetPitch!!.text = ComputerHost.autoflight.selectedPitch.toString()
+        this.addDrawableChild(TextWidget(this.centerX - 50, this.centerY - 50, 40, 15, Text.translatable("menu.flightassistant.autoflight.pitch"), mc.textRenderer))
+        this.addDrawableChild(targetPitch!!)
+
+        this.addDrawableChild(flightDirectors)
         this.addDrawableChild(autoThrust)
-        this.addDrawableChild(autopilot).active = false
+        this.addDrawableChild(autopilot)
     }
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
