@@ -2,7 +2,8 @@ package ru.octol1ttle.flightassistant.api.event
 
 import dev.architectury.event.Event
 import dev.architectury.event.EventFactory
-import net.minecraft.entity.Entity
+import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 
 class ChangeLookDirectionEvents private constructor() {
     companion object {
@@ -11,6 +12,6 @@ class ChangeLookDirectionEvents private constructor() {
     }
 
     fun interface Pitch {
-        fun onPitchChange(entity: Entity, pitchDelta: Float): Float?
+        fun onPitchChange(computers: ComputerAccess, pitchDelta: Float, output: MutableList<ControlInput>)
     }
 }

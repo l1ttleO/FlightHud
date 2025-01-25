@@ -1,8 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
 import kotlin.math.abs
-import net.minecraft.client.network.ClientPlayerEntity
-import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
@@ -69,23 +67,21 @@ class PitchComputer : Computer(), PitchController {
         }
     }
 
-    private fun onPitchChange(entity: Entity, mcPitchDelta: Float): Float? {
-        if (entity is ClientPlayerEntity && !manualOverride && automationsAllowed) {
+    private fun onPitchChange(computers: ComputerAccess, mcPitchDelta: Float, output: MutableList<ControlInput>) {
+        if (!manualOverride && automationsAllowed) {
             val pitchDelta: Float = -mcPitchDelta
 
-            val oldPitch: Float = -entity.pitch
+            val oldPitch: Float = computers.data.pitch
             val newPitch: Float = oldPitch + pitchDelta
 
             val min: ControlInput? = minimumPitch
             val max: ControlInput? = maximumPitch
-            if (min != null && min.active && pitchDelta < 0.0f && newPitch < min.target) {
-                return -(min.target - oldPitch).coerceAtMost(0.0f)
-            }
             if (max != null && max.active && pitchDelta > 0.0f && newPitch > max.target) {
-                return -(max.target - oldPitch).coerceAtLeast(0.0f)
+                output.add(ControlInput(-(max.target - oldPitch).coerceAtLeast(0.0f), max.priority))
+            } else if (min != null && min.active && pitchDelta < 0.0f && newPitch < min.target) {
+                output.add(ControlInput(-(min.target - oldPitch).coerceAtMost(0.0f), min.priority))
             }
         }
-        return null
     }
 
     private fun updateSafePitches(computers: ComputerAccess) {

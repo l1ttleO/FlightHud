@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
+import kotlin.math.abs
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
@@ -8,13 +9,11 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchController
 import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
+import ru.octol1ttle.flightassistant.api.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustChangeCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.data
-import ru.octol1ttle.flightassistant.api.util.pitch
-import ru.octol1ttle.flightassistant.api.util.protections
-import ru.octol1ttle.flightassistant.api.util.thrust
+import ru.octol1ttle.flightassistant.api.util.*
 
 class AutoFlightComputer : Computer(), ThrustController, PitchController {
     var flightDirectors: Boolean = false
@@ -24,6 +23,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
 
     var autopilot: Boolean = false
     var autopilotAlert: Boolean = false
+    private var pitchResistance: Float = 0.0f
 
     var selectedSpeed: Int? = null
     var selectedPitch: Float? = null
@@ -42,6 +42,19 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
                 autoThrustAlert = false
             }
         })
+        ChangeLookDirectionEvents.PITCH.register(ChangeLookDirectionEvents.Pitch { _, pitchDelta, output ->
+            if (autopilot) {
+                pitchResistance += abs(pitchDelta)
+                if (pitchResistance < 20.0f) {
+                    output.add(ControlInput(0.0f, ControlInput.Priority.NORMAL))
+                    return@Pitch
+                }
+                autopilot = false
+                autopilotAlert = true
+            }
+
+            pitchResistance = 0.0f
+        })
     }
 
     override fun tick(computers: ComputerAccess) {
@@ -49,6 +62,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
             reset()
             return
         }
+        pitchResistance = (pitchResistance - FATickCounter.timePassed * 10.0f).coerceAtLeast(0.0f)
 
         if (autoThrust) {
             autoThrustAlert = false
@@ -60,7 +74,6 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
 
         if (autopilot) {
             autopilotAlert = false
-            flightDirectors = true
 
             val activeInput: ControlInput? = computers.pitch.activeInput
             if (activeInput != null && activeInput.identifier != ID) {
@@ -68,18 +81,6 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
                 autopilotAlert = true
             }
         }
-    }
-
-    override fun reset() {
-        flightDirectors = false
-        if (autoThrust) {
-            autoThrustAlert = true
-        }
-        autoThrust = false
-        if (autopilot) {
-            autopilotAlert = true
-        }
-        autopilot = false
     }
 
     override fun getThrustInput(computers: ComputerAccess): ControlInput? {
@@ -117,6 +118,19 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
             active = autopilot,
             identifier = ID
         )
+    }
+
+    override fun reset() {
+        flightDirectors = false
+        if (autoThrust) {
+            autoThrustAlert = true
+        }
+        autoThrust = false
+        if (autopilot) {
+            autopilotAlert = true
+        }
+        autopilot = false
+        pitchResistance = 0.0f
     }
 
     companion object {

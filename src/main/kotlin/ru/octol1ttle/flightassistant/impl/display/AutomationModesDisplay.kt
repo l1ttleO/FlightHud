@@ -34,7 +34,7 @@ class AutomationModesDisplay : Display() {
         return@ModeDisplay Pair(text, true)
     }
 
-    private fun toPair(input: ControlInput?): Pair<Text, Boolean>? {
+    private fun toPair(input: ControlInput?): Pair<Text?, Boolean>? {
         if (input != null) {
             return Pair(input.text, input.active)
         }
@@ -65,7 +65,7 @@ class AutomationModesDisplay : Display() {
         const val TOTAL_MODES: Float = 5.0f
     }
 
-    class ModeDisplay(private val order: Int, private val textSupplier: (ComputerAccess) -> (Pair<Text, Boolean>?)) {
+    class ModeDisplay(private val order: Int, private val textSupplier: (ComputerAccess) -> (Pair<Text?, Boolean>?)) {
         private var lastText: Text? = null
         private var textChangeTicks: Int = 0
 
