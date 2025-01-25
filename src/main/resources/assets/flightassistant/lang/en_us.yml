@@ -24,6 +24,7 @@ alerts.flightassistant:
       flightassistant:automation_modes: AUTO MODE DSPL FAULT
       flightassistant:coordinates: COORD DSPL FAULT
       flightassistant:elytra_durability: E/DURA DSPL FAULT
+      flightassistant:flight_directors: FLT DIR DSPL FAULT
       flightassistant:flight_path: F/PATH DSPL FAULT
       flightassistant:heading: HDG DSPL FAULT
       flightassistant:radar_altitude: R/ALT DSPL FAULT
@@ -144,6 +145,7 @@ config.flightassistant:
         coordinates: Show coordinates
         alerts: Show alerts
         automation_modes: Show automation modes
+        flight_directors: Show flight directors
     safety:
       alert_volume: Alert sound volume
       consider_invulnerability: Disable alerts and protections when invulnerable
@@ -239,18 +241,17 @@ mode.flightassistant:
     terrain_protection: TERR PROT
     terrain_escape: TERR ESC
     selected: PITCH %s
-  autoflight:
-    flight_directors: FD
-    auto_thrust: A/THR
-    autopilot: AP
 
 short.flightassistant:
   alert: ALERT
   altitude: ALT
   attitude: ATT
+  auto_thrust: A/THR
+  autopilot: AP
   automation_modes: AUTO/MODE
   elytra: E
   elytra_durability: E/DURA
+  flight_directors: FD
   flight_path: F/PTH
   ground: GRND
   ground_speed: 'G/S%s'

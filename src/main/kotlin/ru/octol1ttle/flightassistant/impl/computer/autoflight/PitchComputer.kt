@@ -127,11 +127,11 @@ class PitchComputer : Computer(), PitchController {
     private fun smoothSetPitch(player: PlayerEntity, current: Float, target: Float, deltaTimeMultiplier: Float) {
         val diff: Float = target - current
 
-        if (abs(diff) < 0.05f) {
-            player.pitch = -target
-        } else {
-            player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier).coerceIn(0.0f..1.0f)
-        }
+        val closeDistanceMultiplier: Float =
+            if (diff == 0.0f) 1.0f
+            else (1.0f / abs(diff)).coerceAtLeast(1.0f)
+
+        player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier * closeDistanceMultiplier).coerceIn(0.0f..1.0f)
     }
 
     override fun reset() {

@@ -8,13 +8,23 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.config.FAConfig
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
 
 class FlightDirectorsDisplay : Display() {
     override fun allowedByConfig(): Boolean {
-        return true // TODO
+        return FAConfig.display.showFlightDirectors
     }
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+        if (!computers.autoflight.flightDirectors) {
+            return
+        }
+        if (computers.pitch.activeInput?.identifier != AutoFlightComputer.ID) {
+            renderFaulted(drawContext)
+            return
+        }
+
         with(drawContext) {
             val pitchY: Int = getScreenSpaceY(computers.autoflight.selectedPitch ?: return) ?: return
 

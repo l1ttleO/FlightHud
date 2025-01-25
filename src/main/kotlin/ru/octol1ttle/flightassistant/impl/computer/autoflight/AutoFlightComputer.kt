@@ -12,10 +12,10 @@ import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerR
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustChangeCallback
 import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.pitch
 import ru.octol1ttle.flightassistant.api.util.protections
 import ru.octol1ttle.flightassistant.api.util.thrust
 
-// TODO: automatic autopilot disconnect when a) input has different ID and b) when resistance is too much
 class AutoFlightComputer : Computer(), ThrustController, PitchController {
     var flightDirectors: Boolean = false
 
@@ -61,6 +61,12 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController {
         if (autopilot) {
             autopilotAlert = false
             flightDirectors = true
+
+            val activeInput: ControlInput? = computers.pitch.activeInput
+            if (activeInput != null && activeInput.identifier != ID) {
+                autopilot = false
+                autopilotAlert = true
+            }
         }
     }
 

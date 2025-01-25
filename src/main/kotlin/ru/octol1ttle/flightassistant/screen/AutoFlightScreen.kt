@@ -45,7 +45,7 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
         targetPitch!!.setChangedListener {
             ComputerHost.autoflight.selectedPitch = it.toFloatOrNull()
         }
-        targetPitch!!.text = ComputerHost.autoflight.selectedPitch.toString()
+        targetPitch!!.text = "%.1f".format(ComputerHost.autoflight.selectedPitch)
         this.addDrawableChild(TextWidget(this.centerX - 50, this.centerY - 50, 40, 15, Text.translatable("menu.flightassistant.autoflight.pitch"), mc.textRenderer))
         this.addDrawableChild(targetPitch!!)
 

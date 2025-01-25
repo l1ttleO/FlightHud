@@ -19,13 +19,13 @@ class AutomationModesDisplay : Display() {
     private val autoFlightDisplay: ModeDisplay = ModeDisplay(5) { computers ->
         val text: MutableText = Text.empty()
         if (computers.autoflight.flightDirectors) {
-            text.appendWithSeparation(Text.translatable("mode.flightassistant.autoflight.flight_directors"))
+            text.appendWithSeparation(Text.translatable("short.flightassistant.flight_directors"))
         }
         if (computers.autoflight.autoThrust) {
-            text.appendWithSeparation(Text.translatable("mode.flightassistant.autoflight.auto_thrust"))
+            text.appendWithSeparation(Text.translatable("short.flightassistant.auto_thrust"))
         }
         if (computers.autoflight.autopilot) {
-            text.appendWithSeparation(Text.translatable("mode.flightassistant.autoflight.autopilot"))
+            text.appendWithSeparation(Text.translatable("short.flightassistant.autopilot"))
         }
 
         if (text.siblings.isEmpty()) {

@@ -72,6 +72,8 @@ class DisplayOptions {
 
     @SerialEntry
     var showAutomationModes: Boolean = true
+    @SerialEntry
+    var showFlightDirectors: Boolean = true
 
     internal fun setMinimal(): DisplayOptions {
         this.showAttitude = AttitudeDisplayMode.DISABLED
@@ -82,6 +84,7 @@ class DisplayOptions {
         this.showRadarAltitude = false
         this.showFlightPathVector = false
         this.showVerticalSpeed = false
+        this.showFlightDirectors = false
         return this
     }
 
@@ -101,6 +104,7 @@ class DisplayOptions {
         this.showVerticalSpeed = false
         this.showAlerts = false
         this.showAutomationModes = false
+        this.showFlightDirectors = false
         return this
     }
 
