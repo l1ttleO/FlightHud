@@ -29,11 +29,16 @@ class FlightDirectorsDisplay : Display() {
         with(drawContext) {
             val halfWidth: Int = (HudFrame.width / 10.0f).toInt()
 
+            matrices.push()
+            matrices.translate(0, 0, -50)
+
             val pitchY: Int = ScreenSpace.getY(computers.autoflight.selectedPitch ?: return) ?: return
             drawHorizontalLine(this.centerXI - halfWidth, this.centerXI + halfWidth, pitchY, advisoryColor)
 
             val headingX: Int = ScreenSpace.getX(computers.autoflight.selectedHeading?.toFloat() ?: return) ?: return
             drawVerticalLine(headingX, this.centerYI - halfWidth, this.centerYI + halfWidth, advisoryColor)
+
+            matrices.pop()
         }
     }
 

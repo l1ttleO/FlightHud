@@ -256,7 +256,7 @@ short.flightassistant:
   attitude: ОРИЕНТ
   auto_thrust: А/ТЯГА
   autopilot: АП
-  automation_mode: АВТО/РЕЖИМ
+  automation_modes: АВТО/РЕЖИМ
   elytra: Э
   elytra_durability: ПРЧН/ЭЛ
   flight_directors: УК

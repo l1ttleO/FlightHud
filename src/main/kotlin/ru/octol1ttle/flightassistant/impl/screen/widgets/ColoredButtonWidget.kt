@@ -17,7 +17,10 @@ class ColoredButtonWidget(x: Int, y: Int, width: Int, height: Int, message: Text
     override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
 *///?} else
     override fun renderButton(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        val minecraftClient = MinecraftClient.getInstance()
+        val minecraftClient: MinecraftClient = MinecraftClient.getInstance()
+//? if >=1.21.4 {
+        /*context.drawGuiTexture(net.minecraft.client.render.RenderLayer::getGuiTextured, textures[active, this.isSelected], this.x, this.y, this.getWidth(), this.getHeight(), net.minecraft.util.math.ColorHelper.getWhite(this.alpha))
+*///?} else {
         context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha)
         RenderSystem.enableBlend()
         RenderSystem.enableDepthTest()
@@ -26,6 +29,7 @@ class ColoredButtonWidget(x: Int, y: Int, width: Int, height: Int, message: Text
 *///?} else
         context.drawNineSlicedTexture(WIDGETS_TEXTURE, this.x, this.y, this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY())
         context.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
+//?}
         val i: Int = if (this.active) color else 10526880
         this.drawMessage(context, minecraftClient.textRenderer, i or (MathHelper.ceil(this.alpha * 255.0f) shl 24))
     }
