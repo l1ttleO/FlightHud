@@ -20,7 +20,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.degrees
-import ru.octol1ttle.flightassistant.api.util.fallFlying
+import ru.octol1ttle.flightassistant.api.util.extensions.fallFlying
 import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 

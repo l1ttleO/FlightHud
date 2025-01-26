@@ -7,10 +7,10 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.cautionColor
-import ru.octol1ttle.flightassistant.api.util.data
-import ru.octol1ttle.flightassistant.api.util.drawText
-import ru.octol1ttle.flightassistant.api.util.firework
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.firework
 
 class FireworkExplosiveAlert(private val hand: Hand) : Alert(), ECAMAlert {
     override val priorityOffset: Int = 5

@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.ChunkPos
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.*
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.extensions.data
 
 class ChunkStatusComputer : Computer() {
     var status: Status = Status.LOADED

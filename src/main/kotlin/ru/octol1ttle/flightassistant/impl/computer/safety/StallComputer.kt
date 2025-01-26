@@ -5,12 +5,12 @@ import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchLimiter
-import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustController
-import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegistrationCallback
-import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.util.extensions.data
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class StallComputer : Computer(), PitchLimiter, ThrustController {

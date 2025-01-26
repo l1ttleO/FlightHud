@@ -6,7 +6,11 @@ import org.lwjgl.glfw.GLFW
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.screen.FlightSetupScreen
+import ru.octol1ttle.flightassistant.api.util.extensions.alert
+import ru.octol1ttle.flightassistant.api.util.extensions.autoflight
+import ru.octol1ttle.flightassistant.api.util.extensions.pitch
+import ru.octol1ttle.flightassistant.api.util.extensions.thrust
+import ru.octol1ttle.flightassistant.impl.screen.FlightSetupScreen
 
 object FAKeyBindings {
     internal val keyBindings: MutableList<KeyBinding> = ArrayList()
@@ -53,8 +57,7 @@ object FAKeyBindings {
         }
 
         while (autopilotDisconnect.wasPressed()) {
-            computers.autoflight.autopilot = false
-            computers.autoflight.autopilotAlert = false
+            computers.autoflight.setAutoPilot(computers, false, alert = false)
         }
         computers.pitch.manualOverride = manualPitchOverride.isPressed
 

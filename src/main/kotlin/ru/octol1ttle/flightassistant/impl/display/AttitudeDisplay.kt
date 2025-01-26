@@ -7,9 +7,10 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.*
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
+import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 
@@ -42,7 +43,7 @@ class AttitudeDisplay : Display() {
             HudFrame.scissor(this)
         }
 
-        getScreenSpaceY(0.0f)?.let {
+        ScreenSpace.getY(0.0f)?.let {
             val leftXEnd: Int = (centerX - halfWidth * 0.025).toInt()
             drawHorizontalLine(0, leftXEnd, it, primaryColor)
 
@@ -62,12 +63,12 @@ class AttitudeDisplay : Display() {
         }
         val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.pitch.toInt(), step)
         for (i: Int in nextUp..90 step step) {
-            drawPitchBar(computers, i, (getScreenSpaceY(i.toFloat()) ?: break))
+            drawPitchBar(computers, i, (ScreenSpace.getY(i.toFloat()) ?: break))
         }
 
         val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.pitch.toDouble(), step)
         for (i: Int in nextDown downTo -90 step step) {
-            drawPitchBar(computers, i, (getScreenSpaceY(i.toFloat()) ?: break))
+            drawPitchBar(computers, i, (ScreenSpace.getY(i.toFloat()) ?: break))
         }
         if (!FAConfig.display.drawPitchOutsideFrame) {
             disableScissor()
@@ -87,7 +88,7 @@ class AttitudeDisplay : Display() {
         var min: Float = (minInput?.target ?: -90.0f).coerceAtMost(max)
 
         while (max <= 180) {
-            val y: Int = getScreenSpaceY(max) ?: break
+            val y: Int = ScreenSpace.getY(max) ?: break
             matrices.push()
 
             matrices.translate(centerXI, y, 0) // Rotate around the middle of the arrow
@@ -98,7 +99,7 @@ class AttitudeDisplay : Display() {
             max += step
         }
         while (min >= -180) {
-            val y: Int = getScreenSpaceY(min) ?: break
+            val y: Int = ScreenSpace.getY(min) ?: break
             matrices.push()
 
             drawMiddleAlignedText(arrowText, centerXI, y, if (minInput?.active == true) warningColor else cautionColor)

@@ -16,10 +16,10 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.SystemHost
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
-import ru.octol1ttle.flightassistant.api.event.HudDisplayRegistrationCallback
+import ru.octol1ttle.flightassistant.api.display.HudDisplayRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
-import ru.octol1ttle.flightassistant.api.util.updateViewport
+import ru.octol1ttle.flightassistant.api.util.ScreenSpace
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
@@ -100,8 +100,8 @@ internal object HudDisplayHost: SystemHost {
             return
         }
 
-        HudFrame.update()
-        updateViewport()
+        HudFrame.updateDimensions()
+        ScreenSpace.updateViewport()
 
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.allowedByConfig() }) {
             if (!display.enabled || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {

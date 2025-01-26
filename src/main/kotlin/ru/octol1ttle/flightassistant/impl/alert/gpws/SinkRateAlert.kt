@@ -7,10 +7,10 @@ import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.CenteredAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
-import ru.octol1ttle.flightassistant.api.util.cautionColor
-import ru.octol1ttle.flightassistant.api.util.centerXI
-import ru.octol1ttle.flightassistant.api.util.drawHighlightedCenteredText
-import ru.octol1ttle.flightassistant.api.util.gpws
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.centerXI
+import ru.octol1ttle.flightassistant.api.util.extensions.drawHighlightedCenteredText
+import ru.octol1ttle.flightassistant.api.util.extensions.gpws
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
 class SinkRateAlert: Alert(), CenteredAlert {

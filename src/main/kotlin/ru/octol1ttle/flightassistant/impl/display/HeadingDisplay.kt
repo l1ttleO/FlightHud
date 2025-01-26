@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class HeadingDisplay : Display() {
@@ -35,7 +36,7 @@ class HeadingDisplay : Display() {
                 matrices.translate(0, 0, -200)
                 matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(computers.data.roll), centerX, centerY, 0.0f)
 
-                getScreenSpaceY(0.0f)?.let {
+                ScreenSpace.getY(0.0f)?.let {
                     drawHeading(computers, it)
                 }
 
@@ -53,7 +54,7 @@ class HeadingDisplay : Display() {
         val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.heading.toDouble(), step)
         for (i: Int in nextDown downTo -360 step step) {
             val heading: Int = i % 360
-            val x: Int = getScreenSpaceX(heading.toFloat()) ?: break
+            val x: Int = ScreenSpace.getX(heading.toFloat()) ?: break
             val text: String = (if (i > 0) i else 360 + i).toString()
 
             drawHeadingLine(x, y, heading, text)
@@ -62,7 +63,7 @@ class HeadingDisplay : Display() {
         val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.heading.toInt(), step)
         for (i: Int in nextUp..720 step step) {
             val heading: Int = i % 360
-            val x: Int = getScreenSpaceX(heading.toFloat()) ?: break
+            val x: Int = ScreenSpace.getX(heading.toFloat()) ?: break
             val text: String = (if (heading == 0) 360 else heading).toString()
 
             drawHeadingLine(x, y, heading, text)

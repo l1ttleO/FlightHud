@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.*
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class FlightPathDisplay : Display() {
@@ -17,7 +18,7 @@ class FlightPathDisplay : Display() {
 
     override fun render(drawContext: DrawContext, computers: ComputerAccess) {
         with(drawContext) {
-            val screenSpaceVec: Vec3d = getScreenSpace(computers.data.velocity) ?: return
+            val screenSpaceVec: Vec3d = ScreenSpace.getVec3d(computers.data.velocity) ?: return
             val trueX: Int = screenSpaceVec.x.toInt()
             val trueY: Int = screenSpaceVec.y.toInt()
 

@@ -4,7 +4,9 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.thrust
 
 class NoThrustSourceAlert : Alert(), ECAMAlert {
     override val priorityOffset: Int = 35

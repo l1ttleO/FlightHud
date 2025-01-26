@@ -4,8 +4,11 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.api.alert.*
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.*
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.centerXI
+import ru.octol1ttle.flightassistant.api.util.extensions.drawHighlightedCenteredText
+import ru.octol1ttle.flightassistant.api.util.extensions.gpws
 import ru.octol1ttle.flightassistant.impl.computer.safety.GroundProximityComputer
 
 class TerrainAheadAlert: Alert(), CenteredAlert {

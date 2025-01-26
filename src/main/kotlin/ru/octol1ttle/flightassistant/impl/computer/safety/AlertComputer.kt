@@ -10,8 +10,9 @@ import ru.octol1ttle.flightassistant.api.alert.AlertCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.event.AlertCategoryRegistrationCallback
+import ru.octol1ttle.flightassistant.api.alert.AlertCategoryRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.impl.alert.AlertSoundInstance
 import ru.octol1ttle.flightassistant.impl.alert.autoflight.AutoThrustOffAlert
 import ru.octol1ttle.flightassistant.impl.alert.autoflight.ForceAutopilotOffAlert

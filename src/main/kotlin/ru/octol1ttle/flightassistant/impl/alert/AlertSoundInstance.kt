@@ -8,7 +8,7 @@ import net.minecraft.client.sound.SoundManager
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundCategory
 import ru.octol1ttle.flightassistant.api.alert.AlertData
-import ru.octol1ttle.flightassistant.api.util.setLooping
+import ru.octol1ttle.flightassistant.api.util.extensions.setLooping
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :

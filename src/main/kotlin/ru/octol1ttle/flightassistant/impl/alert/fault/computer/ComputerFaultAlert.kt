@@ -7,8 +7,8 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.advisoryColor
-import ru.octol1ttle.flightassistant.api.util.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.advisoryColor
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
 class ComputerFaultAlert(private val identifier: Identifier, private val alertText: Text, private val extraTexts: Collection<Text>? = null, override val data: AlertData = AlertData.MASTER_CAUTION) : Alert(), ECAMAlert {

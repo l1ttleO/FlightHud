@@ -6,13 +6,10 @@ import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.api.SystemHost
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.event.ComputerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.computer.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.config.FAConfig
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.FireworkComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.PitchComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
 internal object ComputerHost : ComputerAccess, SystemHost {
@@ -62,6 +59,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         register(AutoFlightComputer.ID, AutoFlightComputer())
         register(FireworkComputer.ID, FireworkComputer(mc))
         register(PitchComputer.ID, PitchComputer())
+        register(HeadingComputer.ID, HeadingComputer())
         register(ThrustComputer.ID, ThrustComputer())
 
         register(AlertComputer.ID, AlertComputer(mc.soundManager))

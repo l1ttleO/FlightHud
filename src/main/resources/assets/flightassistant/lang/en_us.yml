@@ -200,6 +200,7 @@ menu.flightassistant:
         flightassistant:automation_modes: Automation modes display
         flightassistant:coordinates: Coordinates display
         flightassistant:elytra_durability: Elytra durability display
+        flightassistant:flight_directors: Flight directors display
         flightassistant:flight_path: Flight path display
         flightassistant:heading: Heading display
         flightassistant:radar_altitude: Radar altitude display
@@ -225,6 +226,7 @@ menu.flightassistant:
     autopilot: Autopilot
     speed: Speed
     pitch: Pitch
+    heading: Heading
 
 mode.flightassistant:
   thrust:
@@ -241,6 +243,8 @@ mode.flightassistant:
     terrain_protection: TERR PROT
     terrain_escape: TERR ESC
     selected: PITCH %s
+  heading:
+    selected: HDG %s
 
 short.flightassistant:
   alert: ALERT

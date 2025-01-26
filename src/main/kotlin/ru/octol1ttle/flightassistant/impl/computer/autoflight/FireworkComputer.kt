@@ -11,11 +11,11 @@ import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.computer.autoflight.thrust.ThrustSource
-import ru.octol1ttle.flightassistant.api.event.FireworkBoostCallback
-import ru.octol1ttle.flightassistant.api.event.autoflight.thrust.ThrustSourceRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSource
+import ru.octol1ttle.flightassistant.api.util.event.FireworkBoostCallback
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSourceRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
-import ru.octol1ttle.flightassistant.api.util.data
+import ru.octol1ttle.flightassistant.api.util.extensions.data
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {

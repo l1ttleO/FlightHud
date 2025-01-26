@@ -7,9 +7,9 @@ import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
-import ru.octol1ttle.flightassistant.api.util.drawText
-import ru.octol1ttle.flightassistant.api.util.firework
-import ru.octol1ttle.flightassistant.api.util.warningColor
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.firework
+import ru.octol1ttle.flightassistant.api.util.extensions.warningColor
 
 class FireworkNoResponseAlert : Alert(), ECAMAlert {
     override val data: AlertData = AlertData.MASTER_WARNING

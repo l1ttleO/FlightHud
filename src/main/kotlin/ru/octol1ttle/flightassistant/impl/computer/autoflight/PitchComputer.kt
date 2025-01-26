@@ -6,13 +6,17 @@ import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.computer.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchController
-import ru.octol1ttle.flightassistant.api.computer.autoflight.pitch.PitchLimiter
-import ru.octol1ttle.flightassistant.api.event.ChangeLookDirectionEvents
-import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.event.autoflight.pitch.PitchLimiterRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
+import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.util.extensions.filterNonFaulted
+import ru.octol1ttle.flightassistant.api.util.extensions.getActiveHighestPriority
+import ru.octol1ttle.flightassistant.api.util.extensions.protections
 
 class PitchComputer : Computer(), PitchController {
     private val limiters: MutableList<PitchLimiter> = ArrayList()
@@ -28,7 +32,22 @@ class PitchComputer : Computer(), PitchController {
 
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
-        ChangeLookDirectionEvents.PITCH.register(this::onPitchChange)
+        ChangeLookDirectionEvents.PITCH.register { computers, mcPitchDelta, output ->
+            if (!this.manualOverride && this.automationsAllowed) {
+                val pitchDelta: Float = -mcPitchDelta
+
+                val oldPitch: Float = computers.data.pitch
+                val newPitch: Float = oldPitch + pitchDelta
+
+                val min: ControlInput? = this.minimumPitch
+                val max: ControlInput? = this.maximumPitch
+                if (max != null && max.active && pitchDelta > 0.0f && newPitch > max.target) {
+                    output.add(ControlInput(-(max.target - oldPitch).coerceAtLeast(0.0f), max.priority))
+                } else if (min != null && min.active && pitchDelta < 0.0f && newPitch < min.target) {
+                    output.add(ControlInput(-(min.target - oldPitch).coerceAtMost(0.0f), min.priority))
+                }
+            }
+        }
     }
 
     override fun invokeEvents() {
@@ -64,23 +83,6 @@ class PitchComputer : Computer(), PitchController {
                 target = target.coerceAtMost(maximumPitch!!.target)
             }
             smoothSetPitch(computers.data.player, pitch, target.requireIn(-90.0f..90.0f), finalInput.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE))
-        }
-    }
-
-    private fun onPitchChange(computers: ComputerAccess, mcPitchDelta: Float, output: MutableList<ControlInput>) {
-        if (!manualOverride && automationsAllowed) {
-            val pitchDelta: Float = -mcPitchDelta
-
-            val oldPitch: Float = computers.data.pitch
-            val newPitch: Float = oldPitch + pitchDelta
-
-            val min: ControlInput? = minimumPitch
-            val max: ControlInput? = maximumPitch
-            if (max != null && max.active && pitchDelta > 0.0f && newPitch > max.target) {
-                output.add(ControlInput(-(max.target - oldPitch).coerceAtLeast(0.0f), max.priority))
-            } else if (min != null && min.active && pitchDelta < 0.0f && newPitch < min.target) {
-                output.add(ControlInput(-(min.target - oldPitch).coerceAtMost(0.0f), min.priority))
-            }
         }
     }
 
@@ -127,7 +129,9 @@ class PitchComputer : Computer(), PitchController {
             if (diff == 0.0f) 1.0f
             else (1.0f / abs(diff)).coerceAtLeast(1.0f)
 
-        player.pitch -= diff * (FATickCounter.timePassed * deltaTimeMultiplier * closeDistanceMultiplier).coerceIn(0.0f..1.0f)
+        val delta: Float = diff * (FATickCounter.timePassed * deltaTimeMultiplier * closeDistanceMultiplier).coerceIn(0.0f..1.0f)
+        player.pitch -= delta
+        player.prevPitch -= delta
     }
 
     override fun reset() {

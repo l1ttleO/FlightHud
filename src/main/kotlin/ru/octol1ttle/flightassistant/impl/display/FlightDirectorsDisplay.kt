@@ -8,6 +8,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
 
@@ -20,16 +21,19 @@ class FlightDirectorsDisplay : Display() {
         if (!computers.autoflight.flightDirectors) {
             return
         }
-        if (computers.pitch.activeInput?.identifier != AutoFlightComputer.ID) {
+        if (computers.pitch.activeInput?.identifier != AutoFlightComputer.ID || computers.heading.activeInput?.identifier != AutoFlightComputer.ID) {
             renderFaulted(drawContext)
             return
         }
 
         with(drawContext) {
-            val pitchY: Int = getScreenSpaceY(computers.autoflight.selectedPitch ?: return) ?: return
-
             val halfWidth: Int = (HudFrame.width / 10.0f).toInt()
+
+            val pitchY: Int = ScreenSpace.getY(computers.autoflight.selectedPitch ?: return) ?: return
             drawHorizontalLine(this.centerXI - halfWidth, this.centerXI + halfWidth, pitchY, advisoryColor)
+
+            val headingX: Int = ScreenSpace.getX(computers.autoflight.selectedHeading?.toFloat() ?: return) ?: return
+            drawVerticalLine(headingX, this.centerYI - halfWidth, this.centerYI + halfWidth, advisoryColor)
         }
     }
 

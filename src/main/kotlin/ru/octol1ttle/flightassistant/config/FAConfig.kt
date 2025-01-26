@@ -9,7 +9,7 @@ import net.minecraft.item.Items
 import ru.octol1ttle.flightassistant.FlightAssistant.MOD_ID
 import ru.octol1ttle.flightassistant.FlightAssistant.id
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.util.fallFlying
+import ru.octol1ttle.flightassistant.api.util.extensions.fallFlying
 import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 import ru.octol1ttle.flightassistant.config.options.DisplayOptionsStorage
 import ru.octol1ttle.flightassistant.config.options.GlobalOptions

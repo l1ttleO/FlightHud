@@ -28,6 +28,7 @@ alerts.flightassistant:
       flightassistant:automation_modes: ОТКАЗ ИНД АВТО РЕЖИМ
       flightassistant:coordinates: ОТКАЗ ИНД КООРД
       flightassistant:elytra_durability: ОТКАЗ ИНД ПРЧН/ЭЛ
+      flightassistant:flight_directors: ОТКАЗ ИНД УКАЗ/П
       flightassistant:flight_path: ОТКАЗ ИНД ВЕКТ/П
       flightassistant:heading: ОТКАЗ ИНД КУРСА
       flightassistant:radar_altitude: ОТКАЗ ИНД Р/ВЫС
@@ -148,6 +149,7 @@ config.flightassistant:
         coordinates: Отображать координаты
         alerts: Отображать предупреждения
         automation_modes: Отображать режимы автоматизации
+        flight_directors: Отображать указатели полёта
     safety:
       alert_volume: Громкость звуков предупреждений
       consider_invulnerability: Выключать предупреждения и защиты во время неуязвимости
@@ -202,6 +204,7 @@ menu.flightassistant:
         flightassistant:automation_modes: Индикатор режимов автоматизации
         flightassistant:coordinates: Индикатор координат
         flightassistant:elytra_durability: Индикатор прочности элитр
+        flightassistant:flight_directors: Индикатор указателей полёта
         flightassistant:flight_path: Индикатор пути полёта
         flightassistant:heading: Индикатор курса
         flightassistant:radar_altitude: Радиовысотомер
@@ -226,6 +229,8 @@ menu.flightassistant:
     auto_thrust: Автомат тяги
     autopilot: Автопилот
     speed: Скорость
+    pitch: Угол наклона
+    heading: Курс
 
 mode.flightassistant:
   thrust:
@@ -241,18 +246,20 @@ mode.flightassistant:
     stall_protection: СВАЛ ЗАЩ
     terrain_protection: ЗЕМЛ ЗАЩ
     terrain_escape: ЗЕМЛ ИЗБЕЖ
-  autoflight:
-    flight_directors: УК
-    auto_thrust: А/ТЯГА
-    autopilot: АП
+    selected: УГОЛ %s
+  heading:
+    selected: КУРС %s
 
 short.flightassistant:
   alert: ПРЕДУПР
   altitude: ВЫС
   attitude: ОРИЕНТ
+  auto_thrust: А/ТЯГА
+  autopilot: АП
   automation_mode: АВТО/РЕЖИМ
   elytra: Э
   elytra_durability: ПРЧН/ЭЛ
+  flight_directors: УК
   flight_path: ПУТЬ/П
   ground: ЗЕМЛ
   ground_speed: 'Г/С%s'
@@ -266,6 +273,7 @@ short.flightassistant:
 keys.flightassistant:
   .: FlightAssistant
   open_flight_setup: Открыть экран настройки полёта
+  autopilot_disconnect: Отключить автопилот
   manual_pitch_override: Принудительное ручное управление углом наклона (зажать)
   hide_current_alert: Скрыть активное предупреждение
   show_hidden_alert: Показать скрытое предупреждение

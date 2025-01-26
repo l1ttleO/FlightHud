@@ -9,8 +9,8 @@ import net.minecraft.util.math.RotationAxis
 import org.joml.Matrix4f
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import ru.octol1ttle.flightassistant.api.event.FixedHudRenderCallback
-import ru.octol1ttle.flightassistant.api.event.WorldRenderCallback
+import ru.octol1ttle.flightassistant.api.util.event.FixedHudRenderCallback
+import ru.octol1ttle.flightassistant.api.util.event.WorldRenderCallback
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost

@@ -20,7 +20,7 @@ object HudFrame {
     var right: Int = 0
         private set
 
-    fun update() {
+    fun updateDimensions() {
         width = window.scaledWidth * FAConfig.display.frameWidth
         height = window.scaledHeight * FAConfig.display.frameHeight
         top = ((window.scaledHeight - height) * 0.5f).toInt()

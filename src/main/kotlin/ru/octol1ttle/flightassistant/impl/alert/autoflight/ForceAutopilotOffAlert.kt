@@ -6,9 +6,9 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
 import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.autoflight
-import ru.octol1ttle.flightassistant.api.util.drawText
-import ru.octol1ttle.flightassistant.api.util.warningColor
+import ru.octol1ttle.flightassistant.api.util.extensions.autoflight
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.warningColor
 
 class ForceAutopilotOffAlert: Alert(), ECAMAlert {
     override val data: AlertData = AlertData.FORCE_AUTOPILOT_OFF
