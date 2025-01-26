@@ -6,6 +6,7 @@ alerts.flightassistant:
     .: AUTO FLT
     fault: SYS FAULT
     pitch_fault: PITCH CTL FAULT
+    heading_fault: HDG CTL FAULT
     autopilot_off: AP OFF
     auto_thrust_off: A/THR OFF
   elytra:
@@ -217,6 +218,7 @@ menu.flightassistant:
         flightassistant:void_proximity: Void proximity computer
         flightassistant:autopilot: Automatics computer
         flightassistant:firework: Firework computer
+        flightassistant:heading: Heading computer
         flightassistant:pitch: Pitch computer
         flightassistant:thrust: Thrust computer
   autoflight:

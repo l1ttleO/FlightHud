@@ -9,6 +9,7 @@ alerts.flightassistant:
   autoflight:
     .: АВТО ПОЛЕТ
     fault: ОТКАЗ СИСТ
+    heading_fault: ОТКАЗ УПР КУРСОМ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
     autopilot_off: АП ОТКЛ
     auto_thrust_off: А/ТЯГА ОТКЛ
@@ -221,7 +222,8 @@ menu.flightassistant:
         flightassistant:void_proximity: Компьютер близости пустоты
         flightassistant:autopilot: Компьютер автоматики
         flightassistant:firework: Компьютер фейерверков
-        flightassistant:pitch: Компьютер угла наклона
+        flightassistant:heading: Компьютер управления курсом
+        flightassistant:pitch: Компьютер управления углом наклона
         flightassistant:thrust: Компьютер тяги
   autoflight:
     .: Автополёт

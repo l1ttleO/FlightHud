@@ -39,10 +39,7 @@ import ru.octol1ttle.flightassistant.impl.alert.thrust.NoThrustSourceAlert
 import ru.octol1ttle.flightassistant.impl.alert.thrust.ReverseThrustNotSupportedAlert
 import ru.octol1ttle.flightassistant.impl.alert.thrust.ThrustLockedAlert
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.FireworkComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.PitchComputer
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
 // TODO: allow new alerts to repeat an already-played active sound
@@ -65,6 +62,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
                 .add(ComputerFaultAlert(AutoFlightComputer.ID, Text.translatable("alerts.flightassistant.autoflight.fault")))
+                .add(ComputerFaultAlert(HeadingComputer.ID, Text.translatable("alerts.flightassistant.autoflight.heading_fault")))
                 .add(ComputerFaultAlert(PitchComputer.ID, Text.translatable("alerts.flightassistant.autoflight.pitch_fault")))
                 .add(ForceAutopilotOffAlert())
                 .add(PlayerAutopilotOffAlert())
