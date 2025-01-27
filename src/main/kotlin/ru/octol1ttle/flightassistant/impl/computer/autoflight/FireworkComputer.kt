@@ -19,12 +19,9 @@ import ru.octol1ttle.flightassistant.api.util.extensions.data
 import ru.octol1ttle.flightassistant.config.FAConfig
 
 class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {
-    override val priority: ThrustSource.Priority
-        get() = ThrustSource.Priority.LOW
-    override val supportsReverse: Boolean
-        get() = false
-    override val optimumClimbPitch: Float
-        get() = 55.0f
+    override val priority: ThrustSource.Priority = ThrustSource.Priority.LOW
+    override val supportsReverse: Boolean = false
+    override val optimumClimbPitch: Float = 55.0f
 
     private var safeFireworkCount: Int = 0
     private var safeFireworkSlot: Int? = null

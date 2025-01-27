@@ -52,10 +52,14 @@ object FAConfig {
             }
             .build()
 
-    internal val global: GlobalOptions = GLOBAL_HANDLER.instance()
-    internal val hudEnabled: Boolean get() = global.modEnabled && global.hudEnabled
-    internal val safetyEnabled: Boolean get() = global.modEnabled && global.safetyEnabled
-    internal val displaysStorage: DisplayOptionsStorage = DISPLAY_HANDLER.instance()
+    internal val global: GlobalOptions
+        get() = GLOBAL_HANDLER.instance()
+    internal val hudEnabled: Boolean
+        get() = global.modEnabled && global.hudEnabled
+    internal val safetyEnabled: Boolean
+        get() = global.modEnabled && global.safetyEnabled
+    internal val displaysStorage: DisplayOptionsStorage
+        get() = DISPLAY_HANDLER.instance()
 
     val display: DisplayOptions
         get() {
