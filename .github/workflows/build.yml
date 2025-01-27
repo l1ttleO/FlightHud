@@ -1,0 +1,58 @@
+name: Build FlightAssistant
+on: [ pull_request, push ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # Use these Java versions
+        java: [
+          21,    # Current Java LTS
+        ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore Gradle caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/loom-cache
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v2
+
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'microsoft'
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew chiseledBuildAndCollect --stacktrace
+
+      - name: Extract current branch name and version
+        shell: bash
+        # bash pattern expansion to grab branch name without slashes
+        run: |
+          ref="${GITHUB_REF#refs/heads/}" && echo "branch=${ref////-}" >> $GITHUB_OUTPUT
+          echo "version=$(./gradlew properties -q | awk '/^mod.version:/ {print $2}')" >> $GITHUB_OUTPUT
+        id: ref
+
+      - name: Publish build artifacts
+        if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest Java
+        uses: actions/upload-artifact@v4
+        with:
+          name: flightassistant-${{ steps.ref.outputs.branch }}
+          path: build/libs/${{ steps.ref.outputs.version }}
