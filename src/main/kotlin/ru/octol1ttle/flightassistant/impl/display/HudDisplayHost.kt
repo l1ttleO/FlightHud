@@ -11,6 +11,7 @@ import kotlin.collections.iterator
 import kotlin.collections.joinToString
 import kotlin.collections.set
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.SystemHost
@@ -20,6 +21,7 @@ import ru.octol1ttle.flightassistant.api.display.HudDisplayRegistrationCallback
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.ScreenSpace
+import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
@@ -104,12 +106,20 @@ internal object HudDisplayHost: SystemHost {
         ScreenSpace.updateViewport()
 
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.allowedByConfig() }) {
-            if (!display.enabled || !RenderMatrices.ready || FATickCounter.ticksSinceWorldLoad < 60) {
+            if (FATickCounter.ticksSinceWorldLoad < 60) {
+                with(drawContext) {
+                    drawMiddleAlignedText(Text.translatable("misc.flightassistant.waiting_for_world_load"), centerXI, centerYI - 16, primaryColor)
+                    drawMiddleAlignedText(Text.translatable("misc.flightassistant.waiting_for_world_load.maximum_time"), centerXI, centerYI + 8, primaryColor)
+                }
+                return
+            }
+
+            if (!display.enabled || !RenderMatrices.ready) {
                 try {
                     display.renderFaulted(drawContext)
                 } catch (t: Throwable) {
                     FlightAssistant.logger.atError().setCause(t)
-                        .log("Exception rendering already faulted display with identifier: {}", id)
+                        .log("Exception rendering disabled display with identifier: {}", id)
                 }
                 continue
             }

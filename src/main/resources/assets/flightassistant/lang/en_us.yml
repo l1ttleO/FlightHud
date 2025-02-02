@@ -268,6 +268,11 @@ short.flightassistant:
   vertical_speed: 'V/S%s'
   void: VOID
 
+misc.flightassistant:
+  waiting_for_world_load:
+    .: WAITING FOR WORLD LOAD
+    maximum_time: (MAX 3 SECONDS)
+
 keys.flightassistant:
   .: FlightAssistant
   open_flight_setup: Open flight setup screen

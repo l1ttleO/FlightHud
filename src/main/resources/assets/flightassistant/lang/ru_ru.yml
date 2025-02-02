@@ -272,6 +272,11 @@ short.flightassistant:
   vertical_speed: 'В/С%s'
   void: ПУСТ
 
+misc.flightassistant:
+  waiting_for_world_load:
+    .: ОЖИДАНИЕ ЗАГРУЗКИ МИРА
+    maximum_time: (МАКС 3 СЕКУНДЫ)
+
 keys.flightassistant:
   .: FlightAssistant
   open_flight_setup: Открыть экран настройки полёта
