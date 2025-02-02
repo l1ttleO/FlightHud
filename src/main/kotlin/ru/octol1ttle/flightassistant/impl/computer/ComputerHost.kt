@@ -107,6 +107,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
                 } catch (t: Throwable) {
                     computer.faulted = true
                     computer.faultCount++
+
                     computer.enabled = false
                     computer.reset()
 

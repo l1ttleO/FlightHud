@@ -8,6 +8,10 @@ abstract class Computer {
     var faulted: Boolean = false
     var faultCount: Int = 0
 
+    fun disabledOrFaulted(): Boolean {
+        return !enabled || faulted
+    }
+
     /**
      * Called once per world render
      *

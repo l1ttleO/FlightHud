@@ -106,13 +106,13 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
             autopilotAlert = false
 
             val pitchInput: ControlInput? = computers.pitch.activeInput
-            if (pitchInput != null && pitchInput.identifier != ID) {
+            if (computers.pitch.disabledOrFaulted() || pitchInput != null && pitchInput.identifier != ID) {
                 autopilot = false
                 autopilotAlert = true
             }
 
             val headingInput: ControlInput? = computers.heading.activeInput
-            if (headingInput != null && headingInput.identifier != ID) {
+            if (computers.heading.disabledOrFaulted() || headingInput != null && headingInput.identifier != ID) {
                 autopilot = false
                 autopilotAlert = true
             }
@@ -158,11 +158,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
             return null
         }
 
-        if (selectedSpeed == null) {
-            selectedSpeed = (computers.data.forwardVelocity.length() * 20).toInt()
-        }
-
-        val target: Int = selectedSpeed!!
+        val target: Int = selectedSpeed ?: return null
 
         return ControlInput(
             computers.thrust.calculateThrustForSpeed(computers, target) ?: 0.0f,

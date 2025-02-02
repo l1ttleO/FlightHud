@@ -8,11 +8,11 @@ import ru.octol1ttle.flightassistant.api.util.extensions.data
 import ru.octol1ttle.flightassistant.api.util.extensions.pitch
 
 class FlightProtectionsComputer : Computer() {
-    var protectionsLost: Boolean = true
+    var protectionsLost: Boolean = false
         private set
 
     override fun tick(computers: ComputerAccess) {
-        protectionsLost = this.faulted || !computers.data.enabled || computers.data.faulted || !computers.pitch.enabled || computers.pitch.faulted
+        protectionsLost = this.disabledOrFaulted() || computers.data.disabledOrFaulted() || computers.pitch.disabledOrFaulted()
     }
 
     override fun reset() {
