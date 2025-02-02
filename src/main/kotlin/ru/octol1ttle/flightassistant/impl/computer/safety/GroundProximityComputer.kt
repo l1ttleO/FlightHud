@@ -108,7 +108,23 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         )
         if (result.type != HitResult.Type.BLOCK) {
             return Float.MAX_VALUE
+        } else {
+            val otherEnd: Vec3d = data.position.add(data.velocity.multiply(lookAheadTime * 20.0))
+            val otherResult: BlockHitResult = data.world.raycast(
+                RaycastContext(
+                    data.position,
+                    otherEnd,
+                    RaycastContext.ShapeType.COLLIDER,
+                    RaycastContext.FluidHandling.ANY,
+                    data.player
+                )
+            )
+
+            if (otherResult.type != HitResult.Type.BLOCK) {
+                return Float.MAX_VALUE
+            }
         }
+
         val relative: Vec3d = result.pos.subtract(data.position)
         return (relative.horizontalLength() / (data.velocity.horizontalLength() * 20.0f)).toFloat()
     }
