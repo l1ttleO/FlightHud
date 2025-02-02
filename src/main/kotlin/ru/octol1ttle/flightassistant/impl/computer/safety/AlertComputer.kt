@@ -42,7 +42,6 @@ import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
 
-// TODO: allow new alerts to repeat an already-played active sound
 class AlertComputer(private val soundManager: SoundManager) : Computer() {
     internal var alertsFaulted: Boolean = false
     val categories: MutableList<AlertCategory> = ArrayList()

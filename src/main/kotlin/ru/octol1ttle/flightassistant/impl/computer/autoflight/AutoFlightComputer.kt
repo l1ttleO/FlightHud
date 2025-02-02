@@ -86,6 +86,11 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
             reset()
             return
         }
+
+        if (computers.pitch.manualOverride) {
+            setAutoPilot(computers, false, alert = false)
+        }
+
         pitchResistance = (pitchResistance - FATickCounter.timePassed * 10.0f).coerceAtLeast(0.0f)
         headingResistance = (headingResistance - FATickCounter.timePassed * 20.0f).coerceAtLeast(0.0f)
 
