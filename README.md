@@ -9,11 +9,9 @@
     <a href="https://modrinth.com/mod/fabric-api/">
         <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3.2.0/assets/cozy/requires/fabric-api_vector.svg"
             alt="Requires Fabric API"></a>
-    <!-- uncomment if Forge version is released (https://github.com/Octol1ttle/FlightAssistant/pull/2#discussion_r1370700775)
-    <a href="https://modrinth.com/mod/flightassistant/versions?l=forge">
+    <a href="https://modrinth.com/mod/flightassistant/versions?l=forge&l=neoforge">
         <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3.2.0/assets/cozy/supported/forge_vector.svg"
             alt="Available for Forge"></img></a>
-    -->
     <a href="https://discord.gg/5kcBCvnbTp">
         <img src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3.2.0/assets/cozy/social/discord-plural_vector.svg"
             alt="Chat with us on Discord"></a>
@@ -24,7 +22,7 @@
 **FlightAssistant** is a client side Minecraft mod that adds a flight style HUD
 (like one you would see in a flight simulator), autopilot systems, flight protections, and some more features.
 
-## Main Features
+## Main Features (2.x)
 
 - Flight HUD
 - Stall protection<sup>1</sup>, warning and automatic recovery<sup>2</sup>
@@ -46,7 +44,7 @@
 <sup>1</sup> Protection via blocked pitch changes<br>
 <sup>2</sup> Automatic recovery via automatic pitch changes and firework usage
 
-## HUD Features
+## HUD Features (2.x)
 
 <details>
     <summary>Diagram</summary>
