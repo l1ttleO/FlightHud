@@ -31,15 +31,12 @@ class ComputerFaultAlert(private val identifier: Identifier, private val alertTe
             }
         }
 
-        i += drawResetText(drawContext, otherLinesX, y)
+        i +=
+            if (ComputerHost.getFaultCount(identifier) == 1) {
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), otherLinesX, y, advisoryColor)
+            } else {
+                0
+            }
         return i
-    }
-
-    private fun drawResetText(drawContext: DrawContext, x: Int, y: Int): Int {
-        return if (ComputerHost.getFaultCount(identifier) == 1) {
-            drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), x, y, advisoryColor)
-        } else {
-            0
-        }
     }
 }

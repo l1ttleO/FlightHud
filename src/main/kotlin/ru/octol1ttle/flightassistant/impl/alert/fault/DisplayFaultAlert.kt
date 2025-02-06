@@ -25,9 +25,9 @@ class DisplayFaultAlert(val identifier: Identifier) : Alert(), ECAMAlert {
         i += drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.$identifier"), firstLineX, firstLineY, cautionColor)
         i +=
             if (HudDisplayHost.countFaults(identifier) == 1) {
-                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.reset"), otherLinesX, firstLineY + 11, advisoryColor)
+                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.hud.reset"), otherLinesX, firstLineY + 11, advisoryColor)
             } else {
-                drawContext.drawText(Text.translatable("alerts.flightassistant.fault.computer.turn_off"), otherLinesX, firstLineY + 11, advisoryColor)
+                0
             }
         return i
     }

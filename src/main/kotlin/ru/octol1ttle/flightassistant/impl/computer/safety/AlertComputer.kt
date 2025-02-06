@@ -74,7 +74,7 @@ class AlertComputer(private val soundManager: SoundManager) : Computer() {
                 .add(ElytraDurabilityLowAlert())
         )
         register(
-            AlertCategory(Text.translatable("alerts.flightassistant.hud"))
+            AlertCategory(Text.translatable("alerts.flightassistant.fault.hud"))
                 .addAll(HudDisplayHost.identifiers().map { DisplayFaultAlert(it) })
         )
         register(
