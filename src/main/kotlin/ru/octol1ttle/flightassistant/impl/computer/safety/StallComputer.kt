@@ -23,11 +23,13 @@ class StallComputer(computers: ComputerView) : Computer(computers), PitchLimiter
     }
 
     override fun tick() {
+        val angleOfAttack: Float = computers.data.pitch - computers.data.flightPitch
         status =
-            if (computers.data.flying && computers.data.velocity.y < 0 && !computers.data.fallDistanceSafe && computers.data.forwardVelocity.length() == 0.0)
+            if (computers.data.flying && !computers.data.fallDistanceSafe && angleOfAttack > 90.0f)
                 if (status == Status.FULL_STALL || computers.data.velocity.y * 20 <= -10) Status.FULL_STALL else Status.APPROACHING_STALL
             else Status.SAFE
-        maximumSafePitch = (computers.data.forwardVelocity.length() * 20.0f * 3.0f).toFloat().coerceIn(0.0f..90.0f)
+
+        maximumSafePitch = (computers.data.flightPitch + 90.0).coerceAtMost(computers.data.forwardVelocity.length() * 20.0 * 3.0 + 45.0).toFloat()
     }
 
     override fun getThrustInput(): ControlInput? {
@@ -44,7 +46,7 @@ class StallComputer(computers: ComputerView) : Computer(computers), PitchLimiter
     }
 
     override fun getMaximumPitch(): ControlInput? {
-        if (computers.data.fallDistanceSafe) {
+        if (maximumSafePitch > 90.0f || computers.data.fallDistanceSafe) {
             return null
         }
 
@@ -52,7 +54,8 @@ class StallComputer(computers: ComputerView) : Computer(computers), PitchLimiter
             maximumSafePitch,
             ControlInput.Priority.HIGHEST,
             Text.translatable("mode.flightassistant.pitch.stall_protection"),
-            active = FAConfig.safety.stallLimitPitch
+            1.5f,
+            FAConfig.safety.stallLimitPitch
         )
     }
 

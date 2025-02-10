@@ -1,5 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer
 
+import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.max
 import net.minecraft.client.MinecraftClient
@@ -40,16 +41,19 @@ class AirDataComputer(computers: ComputerView, private val mc: MinecraftClient) 
         get() = world.bottomY - 64
     var groundLevel: Double? = null
         private set(value) { field = value?.requireIn(world.bottomY.toDouble()..Double.MAX_VALUE) }
+
     private val fallDistance: Float
         get() =
             if (groundLevel == null || groundLevel!! == Double.MAX_VALUE) Float.MAX_VALUE
             else max(player.fallDistance, (altitude - groundLevel!!).toFloat())
     val fallDistanceSafe: Boolean
         get() = player.isTouchingWater || fallDistance <= player.safeFallDistance || isInvulnerableTo(player.damageSources.fall())
+
     var velocity: Vec3d = Vec3d.ZERO
         private set
     var forwardVelocity: Vec3d = Vec3d.ZERO
         private set
+
     val pitch: Float
         get() = -player.pitch.requireIn(-90.0f..90.0f)
     val yaw: Float
@@ -58,6 +62,10 @@ class AirDataComputer(computers: ComputerView, private val mc: MinecraftClient) 
         get() = (yaw + 180.0f).requireIn(0.0f..360.0f)
     var roll: Float = 0.0f
         private set(value) { field = value.requireIn(-180.0f..180.0f) }
+
+    val flightPitch: Float
+        get() = degrees(asin(velocity.normalize().y).toFloat())
+
     val isCurrentChunkLoaded: Boolean
         get() = world.chunkManager.isChunkLoaded(player.chunkPos.x, player.chunkPos.z)
 

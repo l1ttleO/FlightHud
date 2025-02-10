@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import ru.octol1ttle.flightassistant.MixinHandlerKt;
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput;
 import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents;
-import ru.octol1ttle.flightassistant.impl.computer.ComputerHost;
 
 @Mixin(Entity.class)
 abstract class EntityChangeLookDirectionMixin {

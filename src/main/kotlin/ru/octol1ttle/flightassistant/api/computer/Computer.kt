@@ -17,8 +17,6 @@ abstract class Computer(val computers: ComputerView) {
      *
      * If this method throws an exception or error, it is caught and the computer is considered "faulted".
      * It won't be ticked until it is reset and an alert about the issue will be displayed
-     *
-     * @param computers Access to other computers
      */
     abstract fun tick()
 

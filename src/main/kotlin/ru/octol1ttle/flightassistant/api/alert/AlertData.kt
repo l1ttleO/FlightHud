@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.api.alert
 
 import net.minecraft.sound.SoundEvent
-import net.minecraft.sound.SoundEvents
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.config.FAConfig
 
@@ -67,12 +66,6 @@ class AlertData(val priority: Int, val soundEvent: SoundEvent, val repeat: Repea
                 FlightAssistant.soundEvent("master_caution"),
                 RepeatType.NO_REPEAT
             ) { FAConfig.display.cautionColor.rgb }
-        val EMPTY =
-            AlertData(
-                Int.MAX_VALUE,
-                SoundEvents.INTENTIONALLY_EMPTY,
-                RepeatType.NO_REPEAT
-            ) { FAConfig.display.primaryColor.rgb }
     }
 
     enum class RepeatType {
