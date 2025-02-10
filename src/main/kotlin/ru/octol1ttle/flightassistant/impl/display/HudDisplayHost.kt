@@ -1,34 +1,30 @@
 package ru.octol1ttle.flightassistant.impl.display
 
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
-import kotlin.collections.Set
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.filter
-import kotlin.collections.iterator
-import kotlin.collections.joinToString
 import kotlin.collections.set
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.SystemHost
+import ru.octol1ttle.flightassistant.api.SystemController
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.display.Display
-import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.display.HudDisplayRegistrationCallback
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.ScreenSpace
-import ru.octol1ttle.flightassistant.api.util.extensions.*
+import ru.octol1ttle.flightassistant.api.util.extensions.centerXI
+import ru.octol1ttle.flightassistant.api.util.extensions.centerYI
+import ru.octol1ttle.flightassistant.api.util.extensions.drawMiddleAlignedText
+import ru.octol1ttle.flightassistant.api.util.extensions.primaryColor
 import ru.octol1ttle.flightassistant.config.FAConfig
-import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
-internal object HudDisplayHost: SystemHost {
+internal object HudDisplayHost: SystemController<Display> {
     private val displays: MutableMap<Identifier, Display> = HashMap()
 
-    private fun get(identifier: Identifier): Display {
+    override fun get(identifier: Identifier): Display {
         return displays[identifier] ?: throw IllegalArgumentException("No display was found with identifier: $identifier")
     }
 
@@ -40,10 +36,12 @@ internal object HudDisplayHost: SystemHost {
         return get(identifier).faulted
     }
 
-    override fun toggleEnabled(identifier: Identifier): Boolean {
+    override fun setEnabled(identifier: Identifier, enabled: Boolean): Boolean {
         val display: Display = get(identifier)
-        display.enabled = !display.enabled
-        return display.enabled
+
+        val oldEnabled: Boolean = display.enabled
+        display.enabled = enabled
+        return oldEnabled
     }
 
     fun countFaults(identifier: Identifier): Int {
@@ -54,32 +52,35 @@ internal object HudDisplayHost: SystemHost {
         return displays.keys
     }
 
-    private fun register(identifier: Identifier, display: Display) {
+    override fun register(identifier: Identifier, system: Display) {
+        if (FlightAssistant.initComplete) {
+            throw IllegalStateException("Initialization is already complete, but trying to register a display with identifier: $identifier")
+        }
         if (displays.containsKey(identifier)) {
             throw IllegalArgumentException("Already registered display with identifier: $identifier")
         }
 
-        displays[identifier] = display
+        displays[identifier] = system
     }
 
-    private fun registerBuiltin() {
-        register(AlertDisplay.ID, AlertDisplay())
-        register(AltitudeDisplay.ID, AltitudeDisplay())
-        register(AttitudeDisplay.ID, AttitudeDisplay())
-        register(AutomationModesDisplay.ID, AutomationModesDisplay())
-        register(CoordinatesDisplay.ID, CoordinatesDisplay())
-        register(ElytraDurabilityDisplay.ID, ElytraDurabilityDisplay())
-        register(FlightDirectorsDisplay.ID, FlightDirectorsDisplay())
-        register(FlightPathDisplay.ID, FlightPathDisplay())
-        register(HeadingDisplay.ID, HeadingDisplay())
-        register(RadarAltitudeDisplay.ID, RadarAltitudeDisplay())
-        register(SpeedDisplay.ID, SpeedDisplay())
-        register(VelocityComponentsDisplay.ID, VelocityComponentsDisplay())
+    private fun registerBuiltin(computers: ComputerView) {
+        register(AlertDisplay.ID, AlertDisplay(computers))
+        register(AltitudeDisplay.ID, AltitudeDisplay(computers))
+        register(AttitudeDisplay.ID, AttitudeDisplay(computers))
+        register(AutomationModesDisplay.ID, AutomationModesDisplay(computers))
+        register(CoordinatesDisplay.ID, CoordinatesDisplay(computers))
+        register(ElytraDurabilityDisplay.ID, ElytraDurabilityDisplay(computers))
+        register(FlightDirectorsDisplay.ID, FlightDirectorsDisplay(computers))
+        register(FlightPathDisplay.ID, FlightPathDisplay(computers))
+        register(HeadingDisplay.ID, HeadingDisplay(computers))
+        register(RadarAltitudeDisplay.ID, RadarAltitudeDisplay(computers))
+        register(SpeedDisplay.ID, SpeedDisplay(computers))
+        register(VelocityComponentsDisplay.ID, VelocityComponentsDisplay(computers))
     }
 
-    internal fun sendRegistrationEvent() {
-        registerBuiltin()
-        HudDisplayRegistrationCallback.EVENT.invoker().register(this::register)
+    internal fun sendRegistrationEvent(computers: ComputerView) {
+        registerBuiltin(computers)
+        HudDisplayRegistrationCallback.EVENT.invoker().register(computers, this::register)
         logRegisterComplete()
     }
 
@@ -125,7 +126,7 @@ internal object HudDisplayHost: SystemHost {
             }
 
             try {
-                display.render(drawContext, ComputerHost)
+                display.render(drawContext)
                 display.faulted = false
             } catch (t: Throwable) {
                 display.faulted = true

@@ -17,14 +17,14 @@ abstract class EntityChangeLookDirectionMixin {
     @ModifyVariable(method = "changeLookDirection", at = @At("STORE"), ordinal = 0)
     private float overridePitchChange(float pitchDelta) {
         List<ControlInput> list = new ArrayList<>();
-        ChangeLookDirectionEvents.PITCH.invoker().onChangeLookDirection(ComputerHost.INSTANCE, pitchDelta, list);
+        ChangeLookDirectionEvents.PITCH.invoker().onChangeLookDirection(pitchDelta, list);
         return Objects.requireNonNullElse(MixinHandlerKt.onEntityChangePitch(list), pitchDelta);
     }
 
     @ModifyVariable(method = "changeLookDirection", at = @At("STORE"), ordinal = 1)
     private float overrideHeadingChange(float headingDelta) {
         List<ControlInput> list = new ArrayList<>();
-        ChangeLookDirectionEvents.HEADING.invoker().onChangeLookDirection(ComputerHost.INSTANCE, headingDelta, list);
+        ChangeLookDirectionEvents.HEADING.invoker().onChangeLookDirection(headingDelta, list);
         return Objects.requireNonNullElse(MixinHandlerKt.onEntityChangeHeading(list), headingDelta);
     }
 }

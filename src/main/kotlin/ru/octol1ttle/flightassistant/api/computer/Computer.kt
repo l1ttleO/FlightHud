@@ -3,7 +3,7 @@ package ru.octol1ttle.flightassistant.api.computer
 /**
  * A class responsible for computing data and providing it to [ru.octol1ttle.flightassistant.api.display.Display]s and [ru.octol1ttle.flightassistant.api.alert.Alert]s
  */
-abstract class Computer {
+abstract class Computer(val computers: ComputerView) {
     var enabled: Boolean = true
     var faulted: Boolean = false
     var faultCount: Int = 0
@@ -20,7 +20,7 @@ abstract class Computer {
      *
      * @param computers Access to other computers
      */
-    abstract fun tick(computers: ComputerAccess)
+    abstract fun tick()
 
     /**
      * Called when this computer should be reset. This computer's state should be reset to the initial ("everything is good") state.

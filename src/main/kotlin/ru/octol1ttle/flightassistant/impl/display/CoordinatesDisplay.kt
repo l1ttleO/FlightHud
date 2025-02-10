@@ -3,17 +3,21 @@ package ru.octol1ttle.flightassistant.impl.display
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.display.*
-import ru.octol1ttle.flightassistant.api.util.extensions.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
+import ru.octol1ttle.flightassistant.api.util.extensions.fontHeight
+import ru.octol1ttle.flightassistant.api.util.extensions.primaryColor
+import ru.octol1ttle.flightassistant.api.util.extensions.warningColor
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class CoordinatesDisplay : Display() {
+class CoordinatesDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showCoordinates
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             val x: Int = HudFrame.left + 10
             val y: Int = HudFrame.bottom - 19

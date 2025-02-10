@@ -3,16 +3,16 @@ package ru.octol1ttle.flightassistant.impl.computer
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.SystemHost
+import ru.octol1ttle.flightassistant.api.SystemController
 import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.computer.ComputerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
-internal object ComputerHost : ComputerAccess, SystemHost {
+internal object ComputerHost : SystemController<Computer>, ComputerView {
     private val computers: MutableMap<Identifier, Computer> = HashMap()
 
     override fun isEnabled(identifier: Identifier): Boolean {
@@ -23,11 +23,14 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         return get(identifier).faulted
     }
 
-    override fun toggleEnabled(identifier: Identifier): Boolean {
+    override fun setEnabled(identifier: Identifier, enabled: Boolean): Boolean {
         val computer: Computer = get(identifier)
-        computer.enabled = !computer.enabled
+
+        val oldEnabled: Boolean = computer.enabled
+        computer.enabled = enabled
         computer.reset()
-        return computer.enabled
+
+        return oldEnabled
     }
 
     fun getFaultCount(identifier: Identifier): Int {
@@ -38,36 +41,39 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         return computers.keys
     }
 
-    private fun register(identifier: Identifier, computer: Computer) {
+    override fun register(identifier: Identifier, system: Computer) {
+        if (FlightAssistant.initComplete) {
+            throw IllegalStateException("Initialization is already complete, but trying to register a computer with identifier: $identifier")
+        }
         if (computers.containsKey(identifier)) {
             throw IllegalArgumentException("Already registered computer with identifier: $identifier")
         }
 
-        computers[identifier] = computer
+        computers[identifier] = system
     }
 
     private fun registerBuiltin() {
-        register(AirDataComputer.ID, AirDataComputer(mc))
-        register(FlightProtectionsComputer.ID, FlightProtectionsComputer())
+        register(AirDataComputer.ID, AirDataComputer(this, mc))
+        register(FlightProtectionsComputer.ID, FlightProtectionsComputer(this))
 
-        register(StallComputer.ID, StallComputer())
-        register(VoidProximityComputer.ID, VoidProximityComputer())
-        register(GroundProximityComputer.ID, GroundProximityComputer())
-        register(ElytraStatusComputer.ID, ElytraStatusComputer())
-        register(ChunkStatusComputer.ID, ChunkStatusComputer())
+        register(StallComputer.ID, StallComputer(this))
+        register(VoidProximityComputer.ID, VoidProximityComputer(this))
+        register(GroundProximityComputer.ID, GroundProximityComputer(this))
+        register(ElytraStatusComputer.ID, ElytraStatusComputer(this))
+        register(ChunkStatusComputer.ID, ChunkStatusComputer(this))
 
-        register(AutoFlightComputer.ID, AutoFlightComputer())
-        register(FireworkComputer.ID, FireworkComputer(mc))
-        register(PitchComputer.ID, PitchComputer())
-        register(HeadingComputer.ID, HeadingComputer())
-        register(ThrustComputer.ID, ThrustComputer())
+        register(AutoFlightComputer.ID, AutoFlightComputer(this))
+        register(FireworkComputer.ID, FireworkComputer(this, mc))
+        register(PitchComputer.ID, PitchComputer(this))
+        register(HeadingComputer.ID, HeadingComputer(this))
+        register(ThrustComputer.ID, ThrustComputer(this))
 
-        register(AlertComputer.ID, AlertComputer(mc.soundManager))
+        register(AlertComputer.ID, AlertComputer(this, mc.soundManager))
     }
 
     internal fun sendRegistrationEvent() {
         registerBuiltin()
-        ComputerRegistrationCallback.EVENT.invoker().register(this::register)
+        ComputerRegistrationCallback.EVENT.invoker().register(this)
         for (computer: Computer in computers.values) {
             computer.subscribeToEvents()
         }
@@ -102,7 +108,7 @@ internal object ComputerHost : ComputerAccess, SystemHost {
         for ((id: Identifier, computer: Computer) in computers) {
             if (computer.enabled) {
                 try {
-                    computer.tick(this)
+                    computer.tick()
                     computer.faulted = false
                 } catch (t: Throwable) {
                     computer.faulted = true

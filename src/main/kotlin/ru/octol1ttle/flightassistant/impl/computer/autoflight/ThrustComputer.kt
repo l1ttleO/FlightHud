@@ -6,19 +6,19 @@ import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSource
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustChangeCallback
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSourceRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.totalTicks
-import ru.octol1ttle.flightassistant.api.util.extensions.*
+import ru.octol1ttle.flightassistant.api.util.extensions.advisoryColor
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.filterNonFaulted
+import ru.octol1ttle.flightassistant.api.util.extensions.getActiveHighestPriority
+import ru.octol1ttle.flightassistant.api.util.furtherFromZero
+import ru.octol1ttle.flightassistant.api.util.requireIn
 
-class ThrustComputer : Computer() {
+class ThrustComputer(computers: ComputerView) : Computer(computers) {
     private val sources: MutableList<ThrustSource> = ArrayList()
     private val controllers: MutableList<ThrustController> = ArrayList()
 
@@ -41,10 +41,10 @@ class ThrustComputer : Computer() {
         ThrustControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         val thrustSource: ThrustSource? = sources.filterNonFaulted().filter { it.isAvailable() }.minByOrNull { it.priority.value }
 
-        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getThrustInput(computers) }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getThrustInput() }.sortedBy { it.priority.value }
         val finalInput: ControlInput? = inputs.getActiveHighestPriority().maxByOrNull { it.target }
 
         noThrustSource = false
@@ -87,7 +87,7 @@ class ThrustComputer : Computer() {
         activeInput = activeInput?.copy(text = text!!, active = active)
 
         if (computers.data.automationsAllowed()) {
-            thrustSource?.tickThrust(computers, current.coerceIn((if (thrustSource.supportsReverse) -1.0f else 0.0f)..1.0f))
+            thrustSource?.tickThrust(current.coerceIn((if (thrustSource.supportsReverse) -1.0f else 0.0f)..1.0f))
         }
     }
 
@@ -109,10 +109,10 @@ class ThrustComputer : Computer() {
         return 55.0f
     }
 
-    fun calculateThrustForSpeed(computers: ComputerAccess, targetSpeed: Int): Float? {
+    fun calculateThrustForSpeed(targetSpeed: Int): Float? {
         val thrustSource: ThrustSource? = sources.filterNonFaulted().filter { it.isAvailable() }.minByOrNull { it.priority.value }
         if (thrustSource != null) {
-            return thrustSource.calculateThrustForSpeed(computers, targetSpeed)
+            return thrustSource.calculateThrustForSpeed(targetSpeed)
         }
 
         return null

@@ -2,7 +2,6 @@ package ru.octol1ttle.flightassistant.api.util.event
 
 import dev.architectury.event.Event
 import dev.architectury.event.EventFactory
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 
 class ChangeLookDirectionEvents private constructor() {
@@ -14,6 +13,6 @@ class ChangeLookDirectionEvents private constructor() {
     }
 
     fun interface ChangeLookDirection {
-        fun onChangeLookDirection(computers: ComputerAccess, delta: Float, output: MutableList<ControlInput>)
+        fun onChangeLookDirection(delta: Float, output: MutableList<ControlInput>)
     }
 }

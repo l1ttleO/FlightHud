@@ -6,31 +6,31 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class AltitudeDisplay : Display() {
+class AltitudeDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAltitudeReading || FAConfig.display.showAltitudeScale
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             val trueX: Int = HudFrame.right
             val trueY: Int = centerYI
             if (FAConfig.display.showAltitudeReading) {
-                renderAltitudeReading(trueX, trueY, computers)
+                renderAltitudeReading(trueX, trueY)
             }
             if (FAConfig.display.showAltitudeScale) {
-                renderAltitudeScale(trueX - 1, trueY, computers)
+                renderAltitudeScale(trueX - 1, trueY)
             }
         }
     }
 
-    private fun DrawContext.renderAltitudeReading(trueX: Int, trueY: Int, computers: ComputerAccess) {
+    private fun DrawContext.renderAltitudeReading(trueX: Int, trueY: Int) {
         matrices.push()
         val (x: Int, y: Int) = scaleMatrix(READING_MATRIX_SCALE, trueX, trueY)
 
@@ -47,7 +47,7 @@ class AltitudeDisplay : Display() {
         matrices.pop()
     }
 
-    private fun DrawContext.renderAltitudeScale(x: Int, y: Int, computers: ComputerAccess) {
+    private fun DrawContext.renderAltitudeScale(x: Int, y: Int) {
         val altitude: Double = computers.data.altitude
 
         val minY: Int = HudFrame.top

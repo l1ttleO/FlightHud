@@ -10,20 +10,20 @@ import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertCategory
 import ru.octol1ttle.flightassistant.api.alert.CenteredAlert
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class AlertDisplay : Display() {
+class AlertDisplay(computers: ComputerView) : Display(computers) {
     private val withUnderline: Style = Style.EMPTY.withUnderline(true)
 
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAlerts
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             val x: Int = HudFrame.left + 10
             var y: Int = HudFrame.top + 5
@@ -38,7 +38,7 @@ class AlertDisplay : Display() {
                 var lastRenderedLines = 0
                 for (alert: Alert in category.activeAlerts) {
                     if (!renderedCentered && alert is CenteredAlert) {
-                        renderedCentered = alert.render(this, computers, centerYI + 8)
+                        renderedCentered = alert.render(this, centerYI + 8)
                         categoryRendered = categoryRendered || renderedCentered
                         y += fontHeight
                     }
@@ -48,7 +48,7 @@ class AlertDisplay : Display() {
                             y += 3
                         }
 
-                        lastRenderedLines = alert.render(this, computers, x + getTextWidth(copy), x, y)
+                        lastRenderedLines = alert.render(this, x + getTextWidth(copy), x, y)
                         y += fontHeight
                         if (lastRenderedLines > 1) {
                             y += (fontHeight + 1) * (lastRenderedLines - 1)

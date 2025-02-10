@@ -2,8 +2,7 @@ package ru.octol1ttle.flightassistant.api.alert
 
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.extensions.alert
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 
 class AlertCategory(val categoryText: Text) {
     private val registeredAlerts: MutableList<Alert> = ArrayList()
@@ -26,10 +25,10 @@ class AlertCategory(val categoryText: Text) {
         return this
     }
 
-    fun updateActiveAlerts(computers: ComputerAccess) {
+    fun updateActiveAlerts(computers: ComputerView) {
         for (alert: Alert in registeredAlerts) {
             try {
-                if (alert.shouldActivate(computers)) {
+                if (alert.shouldActivate()) {
                     if (!activeAlerts.contains(alert) && !ignoredAlerts.contains(alert)) {
                         activeAlerts.add(alert)
                     }

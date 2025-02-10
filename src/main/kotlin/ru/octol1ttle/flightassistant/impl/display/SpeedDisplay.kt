@@ -5,30 +5,31 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.display.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class SpeedDisplay : Display() {
+class SpeedDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showSpeedReading || FAConfig.display.showSpeedScale
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             val trueX: Int = HudFrame.left
             val trueY: Int = centerYI
             if (FAConfig.display.showSpeedReading) {
-                renderSpeedReading(trueX, trueY, computers)
+                renderSpeedReading(trueX, trueY)
             }
             if (FAConfig.display.showSpeedScale) {
-                renderSpeedScale(trueX, trueY, computers)
+                renderSpeedScale(trueX, trueY)
             }
         }
     }
 
-    private fun DrawContext.renderSpeedReading(trueX: Int, trueY: Int, computers: ComputerAccess) {
+    private fun DrawContext.renderSpeedReading(trueX: Int, trueY: Int) {
         matrices.push()
         val (x: Int, y: Int) = scaleMatrix(READING_MATRIX_SCALE, trueX, trueY)
 
@@ -48,7 +49,7 @@ class SpeedDisplay : Display() {
         matrices.pop()
     }
 
-    private fun DrawContext.renderSpeedScale(x: Int, y: Int, computers: ComputerAccess) {
+    private fun DrawContext.renderSpeedScale(x: Int, y: Int) {
         val speed: Double = computers.data.forwardVelocity.length() * 20
         val color: Int =
             if (speed <= 0.0) warningColor

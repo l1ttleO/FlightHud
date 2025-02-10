@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.api.alert
 
 import net.minecraft.client.gui.DrawContext
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 
 interface ECAMAlert {
     /**
@@ -9,5 +8,5 @@ interface ECAMAlert {
      *
      * @return the amount of lines rendered
      */
-    fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int
+    fun render(drawContext: DrawContext, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int
 }

@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.degrees
@@ -24,7 +24,7 @@ import ru.octol1ttle.flightassistant.api.util.extensions.fallFlying
 import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class AirDataComputer(private val mc: MinecraftClient) : Computer() {
+class AirDataComputer(computers: ComputerView, private val mc: MinecraftClient) : Computer(computers) {
     val player: ClientPlayerEntity
         get() = checkNotNull(mc.player)
     val flying: Boolean
@@ -61,7 +61,7 @@ class AirDataComputer(private val mc: MinecraftClient) : Computer() {
     val isCurrentChunkLoaded: Boolean
         get() = world.chunkManager.isChunkLoaded(player.chunkPos.x, player.chunkPos.z)
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         position = player.getLerpedPos(tickDelta)
         groundLevel = computeGroundLevel()
         velocity = player.lerpVelocity(tickDelta)

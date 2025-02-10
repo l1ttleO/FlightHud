@@ -4,17 +4,18 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.display.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class ElytraDurabilityDisplay : Display() {
+class ElytraDurabilityDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showElytraDurability
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             val x: Int = centerXI
             val y: Int = HudFrame.bottom + 1

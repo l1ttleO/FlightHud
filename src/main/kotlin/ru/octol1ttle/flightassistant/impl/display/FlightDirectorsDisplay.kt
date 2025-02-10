@@ -4,20 +4,20 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudFrame
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.util.ScreenSpace
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
 
-class FlightDirectorsDisplay : Display() {
+class FlightDirectorsDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showFlightDirectors
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         if (!computers.autoflight.flightDirectors) {
             return
         }

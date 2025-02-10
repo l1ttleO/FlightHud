@@ -8,7 +8,6 @@ import net.minecraft.client.gui.widget.TextWidget
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.util.extensions.autoflight
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
 import ru.octol1ttle.flightassistant.impl.screen.widgets.ColoredButtonWidget
@@ -28,13 +27,13 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
         val autoflight: AutoFlightComputer = ComputerHost.autoflight
 
         flightDirectors = ColoredButtonWidget.builder(Text.translatable("menu.flightassistant.autoflight.flight_directors")) {
-            autoflight.setFlightDirectors(ComputerHost, !autoflight.flightDirectors)
+            autoflight.setFlightDirectors(!autoflight.flightDirectors)
         }.position(this.centerX - 100, this.centerY + 50).width(200).build()
         autoThrust = ColoredButtonWidget.builder(Text.translatable("menu.flightassistant.autoflight.auto_thrust")) {
-            autoflight.setAutoThrust(ComputerHost, !autoflight.autoThrust, true)
+            autoflight.setAutoThrust(!autoflight.autoThrust, true)
         }.position(this.centerX - 100, this.centerY + 80).width(95).build()
         autopilot = ColoredButtonWidget.builder(Text.translatable("menu.flightassistant.autoflight.autopilot")) {
-            autoflight.setAutoPilot(ComputerHost, !autoflight.autopilot, true)
+            autoflight.setAutoPilot(!autoflight.autopilot, true)
         }.position(this.centerX + 5, this.centerY + 80).width(95).build()
 
         targetSpeed = createAutoFlightWidget(this.centerX - 100, this.centerY - 30, 40, 15,

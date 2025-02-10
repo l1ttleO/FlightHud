@@ -10,19 +10,18 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.Heightmap
 import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
-class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
+class GroundProximityComputer(computers: ComputerView) : Computer(computers), PitchLimiter, PitchController {
     private var groundImpactTime: Float = Float.MAX_VALUE
     var groundImpactStatus: Status = Status.SAFE
         private set
@@ -35,7 +34,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         val data: AirDataComputer = computers.data
         if (!data.flying || data.player.isTouchingWater) {
             groundImpactStatus = Status.SAFE
@@ -129,7 +128,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         return (relative.horizontalLength() / (data.velocity.horizontalLength() * 20.0f)).toFloat()
     }
 
-    override fun getMinimumPitch(computers: ComputerAccess): ControlInput? {
+    override fun getMinimumPitch(): ControlInput? {
         if (groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateLimitPitch || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleLimitPitch) {
             return ControlInput(
                 computers.data.pitch.coerceAtMost(0.0f),
@@ -141,7 +140,7 @@ class GroundProximityComputer : Computer(), PitchLimiter, PitchController {
         return null
     }
 
-    override fun getPitchInput(computers: ComputerAccess): ControlInput? {
+    override fun getPitchInput(): ControlInput? {
         if (groundImpactStatus <= Status.WARNING && FAConfig.safety.sinkRateAutoPitch || obstacleImpactStatus <= Status.WARNING && FAConfig.safety.obstacleAutoPitch) {
             val minImpactTime: Float = min(groundImpactTime, obstacleImpactTime)
             if (minImpactTime == 0.0f) {

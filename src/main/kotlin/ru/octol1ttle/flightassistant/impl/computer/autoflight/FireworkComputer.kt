@@ -9,16 +9,15 @@ import net.minecraft.item.ItemStack
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSource
-import ru.octol1ttle.flightassistant.api.util.event.FireworkBoostCallback
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSourceRegistrationCallback
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
-import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.util.event.FireworkBoostCallback
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSource {
+class FireworkComputer(computers: ComputerView, private val mc: MinecraftClient) : Computer(computers), ThrustSource {
     override val priority: ThrustSource.Priority = ThrustSource.Priority.LOW
     override val supportsReverse: Boolean = false
     override val optimumClimbPitch: Float = 55.0f
@@ -67,7 +66,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
         })
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         if (!computers.data.flying) {
             waitingForResponse = false
         }
@@ -107,7 +106,7 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
     }
 
     private fun tryActivateFirework(player: PlayerEntity) {
-        if (FATickCounter.totalTicks < lastActivationTime + 10) {
+        if (FATickCounter.totalTicks < lastActivationTime + if (waitingForResponse) 30 else 10) {
             return
         }
 
@@ -121,19 +120,21 @@ class FireworkComputer(private val mc: MinecraftClient) : Computer(), ThrustSour
 
     private fun useFirework(player: PlayerEntity, hand: Hand) {
         mc.interactionManager!!.interactItem(player, hand)
+        lastActivationTime = FATickCounter.totalTicks
+        waitingForResponse = true
     }
 
     override fun isAvailable(): Boolean {
         return safeFireworkCount > 0
     }
 
-    override fun tickThrust(computers: ComputerAccess, currentThrust: Float) {
+    override fun tickThrust(currentThrust: Float) {
         if (currentThrust > computers.data.forwardVelocity.length() * 20.0f / 30.0f) {
             tryActivateFirework(computers.data.player)
         }
     }
 
-    override fun calculateThrustForSpeed(computers: ComputerAccess, targetSpeed: Int): Float {
+    override fun calculateThrustForSpeed(targetSpeed: Int): Float {
         return (targetSpeed / 30.0f).coerceIn(0.0f..1.0f)
     }
 

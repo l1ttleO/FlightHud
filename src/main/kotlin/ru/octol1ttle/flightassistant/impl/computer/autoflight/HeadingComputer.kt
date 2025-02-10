@@ -4,17 +4,17 @@ import kotlin.math.abs
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingController
 import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.extensions.filterNonFaulted
 import ru.octol1ttle.flightassistant.api.util.extensions.getActiveHighestPriority
+import ru.octol1ttle.flightassistant.api.util.requireIn
 
-class HeadingComputer : Computer() {
+class HeadingComputer(computers: ComputerView) : Computer(computers) {
     private val controllers: MutableList<HeadingController> = ArrayList()
     private var automationsAllowed: Boolean = false
     var activeInput: ControlInput? = null
@@ -24,10 +24,10 @@ class HeadingComputer : Computer() {
         HeadingControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         automationsAllowed = computers.data.automationsAllowed()
 
-        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getHeadingInput(computers) }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getHeadingInput() }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
             activeInput = null
             return

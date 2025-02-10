@@ -9,9 +9,9 @@ import net.minecraft.util.math.RotationAxis
 import org.joml.Matrix4f
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.event.FixedHudRenderCallback
 import ru.octol1ttle.flightassistant.api.util.event.WorldRenderCallback
-import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
@@ -20,6 +20,7 @@ object FlightAssistant  {
     const val MOD_ID: String = "flightassistant"
     internal val mc: MinecraftClient = MinecraftClient.getInstance()
     internal val logger: Logger = LoggerFactory.getLogger("FlightAssistant")
+    internal var initComplete: Boolean = false
 
     internal fun init() {
         logger.info("Initializing (stage 1)")
@@ -27,8 +28,9 @@ object FlightAssistant  {
         FAKeyBindings.setup()
         ClientLifecycleEvent.CLIENT_STARTED.register {
             logger.info("Initializing (stage 2)")
-            HudDisplayHost.sendRegistrationEvent()
+            HudDisplayHost.sendRegistrationEvent(ComputerHost)
             ComputerHost.sendRegistrationEvent()
+            initComplete = true
         }
         WorldRenderCallback.EVENT.register { tickDelta, camera, projectionMatrix, positionMatrix ->
             FAKeyBindings.checkPressed(ComputerHost)

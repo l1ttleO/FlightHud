@@ -2,21 +2,23 @@ package ru.octol1ttle.flightassistant.impl.display
 
 import kotlin.math.roundToInt
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.text.*
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.display.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.safety.VoidProximityComputer
 
-class RadarAltitudeDisplay : Display() {
+class RadarAltitudeDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showRadarAltitude
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         val groundLevel: Double? = computers.data.groundLevel
         if (!computers.data.isCurrentChunkLoaded || groundLevel != null && groundLevel > computers.data.altitude) {
             renderFaulted(drawContext)

@@ -10,20 +10,20 @@ import net.minecraft.client.gui.widget.TextWidget
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.SystemHost
+import ru.octol1ttle.flightassistant.api.SystemController
 import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
 import ru.octol1ttle.flightassistant.api.util.extensions.textRenderer
 
-class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSED_PARAMETER", "KotlinRedundantDiagnosticSuppress") bottom: Int, left: Int, systemHost: SystemHost, baseKey: String)
+class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSED_PARAMETER", "KotlinRedundantDiagnosticSuppress") bottom: Int, left: Int, controller: SystemController<*>, baseKey: String)
     : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top,
 /*? if <1.21 {*/ bottom, //?}
     25) {
     init {
         var y = 20
-        for (system: Identifier in systemHost.identifiers()) {
+        for (system: Identifier in controller.identifiers()) {
             this.addEntry(
                 SystemStatusWidgetEntry(
-                left, y, width, system, Text.translatable("$baseKey.$system"), systemHost)
+                left, y, width, system, Text.translatable("$baseKey.$system"), controller)
             )
             y += 25
         }
@@ -43,14 +43,14 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
         return this.width
     }
 
-    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int, val identifier: Identifier, displayNameText: Text, private val systemHost: SystemHost)
+    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int, val identifier: Identifier, displayNameText: Text, private val controller: SystemController<*>)
         : Entry<SystemStatusWidgetEntry>() {
         private val displayName: TextWidget = TextWidget(x, y, this.listWidth / 2, 9, displayNameText, textRenderer).alignLeft()
         private val faultText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, FAULT_TEXT, textRenderer)
         private val offText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, OFF_TEXT, textRenderer)
         private val toggleButton: ButtonWidget = ButtonWidget.builder(OFF_TEXT) {
             it.message =
-                if (systemHost.toggleEnabled(identifier)) OFF_TEXT
+                if (controller.toggleEnabled(identifier)) OFF_TEXT
                 else ON_RESET_TEXT
         }.position(x, y).width(60).build()
 
@@ -63,20 +63,20 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
             toggleButton.y = this.y - toggleButton.height / 4 - 1
             toggleButton.render(context, mouseX, mouseY, tickDelta)
             toggleButton.message =
-                if (systemHost.isEnabled(identifier)) OFF_TEXT
+                if (controller.isEnabled(identifier)) OFF_TEXT
                 else ON_RESET_TEXT
 
             offText.x = toggleButton.x - toggleButton.width / 2 - textRenderer.getWidth(OFF_TEXT) - 2
             offText.render(context, mouseX, mouseY, tickDelta)
             offText.setTextColor(
-                if (systemHost.isEnabled(identifier)) 0x0F0F0F
+                if (controller.isEnabled(identifier)) 0x0F0F0F
                 else 0xFFFFFF
             )
 
             faultText.x = offText.x - textRenderer.getWidth(FAULT_TEXT) - 2
             faultText.render(context, mouseX, mouseY, tickDelta)
             faultText.setTextColor(
-                if (systemHost.isFaulted(identifier)) cautionColor
+                if (controller.isFaulted(identifier)) cautionColor
                 else 0x0F0F0F
             )
         }

@@ -3,15 +3,13 @@ package ru.octol1ttle.flightassistant.impl.computer.safety
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.extensions.data
-import ru.octol1ttle.flightassistant.api.util.extensions.pitch
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 
-class FlightProtectionsComputer : Computer() {
+class FlightProtectionsComputer(computers: ComputerView) : Computer(computers) {
     var protectionsLost: Boolean = false
         private set
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         protectionsLost = this.disabledOrFaulted() || computers.data.disabledOrFaulted() || computers.pitch.disabledOrFaulted()
     }
 

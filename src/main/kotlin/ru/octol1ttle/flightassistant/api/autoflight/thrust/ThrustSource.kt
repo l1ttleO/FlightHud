@@ -1,7 +1,5 @@
 package ru.octol1ttle.flightassistant.api.autoflight.thrust
 
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-
 interface ThrustSource {
     /**
      * Defines the priority of this thrust source.
@@ -30,12 +28,12 @@ interface ThrustSource {
      *
      * @param currentThrust The current requested thrust. Ranges are `[0.0, 1.0]` or `[-1.0, 1.0]` depending on whether this source [supportsReverse]
      */
-    fun tickThrust(computers: ComputerAccess, currentThrust: Float)
+    fun tickThrust(currentThrust: Float)
 
     /**
      * Calculates the thrust required to achieve the target speed.
      */
-    fun calculateThrustForSpeed(computers: ComputerAccess, targetSpeed: Int): Float
+    fun calculateThrustForSpeed(targetSpeed: Int): Float
 
     /**
      * Defines the priority, which determines which thrust source to choose in the case there are multiple sources available ([isAvailable]).

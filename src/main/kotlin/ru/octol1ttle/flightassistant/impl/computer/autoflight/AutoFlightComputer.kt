@@ -4,21 +4,20 @@ import kotlin.math.abs
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingController
 import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
-import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustChangeCallback
+import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.api.util.extensions.*
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
+import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 
-class AutoFlightComputer : Computer(), ThrustController, PitchController, HeadingController {
+class AutoFlightComputer(computers: ComputerView) : Computer(computers), ThrustController, PitchController, HeadingController {
     var flightDirectors: Boolean = false
         private set
 
@@ -53,7 +52,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
                 autoThrustAlert = false
             }
         })
-        ChangeLookDirectionEvents.PITCH.register(ChangeLookDirectionEvents.ChangeLookDirection { _, pitchDelta, output ->
+        ChangeLookDirectionEvents.PITCH.register(ChangeLookDirectionEvents.ChangeLookDirection { pitchDelta, output ->
             if (autopilot) {
                 pitchResistance += abs(pitchDelta)
                 if (pitchResistance < 20.0f) {
@@ -66,7 +65,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
 
             pitchResistance = 0.0f
         })
-        ChangeLookDirectionEvents.HEADING.register(ChangeLookDirectionEvents.ChangeLookDirection { _, headingDelta, output ->
+        ChangeLookDirectionEvents.HEADING.register(ChangeLookDirectionEvents.ChangeLookDirection { headingDelta, output ->
             if (autopilot) {
                 headingResistance += abs(headingDelta)
                 if (headingResistance < 40.0f) {
@@ -81,14 +80,14 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         })
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         if (computers.protections.protectionsLost || !computers.data.isCurrentChunkLoaded) {
             reset()
             return
         }
 
         if (computers.pitch.manualOverride) {
-            setAutoPilot(computers, false, alert = false)
+            setAutoPilot(false, alert = false)
         }
 
         pitchResistance = (pitchResistance - FATickCounter.timePassed * 10.0f).coerceAtLeast(0.0f)
@@ -119,14 +118,14 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         }
     }
 
-    fun setFlightDirectors(computers: ComputerAccess, flightDirectors: Boolean) {
+    fun setFlightDirectors(flightDirectors: Boolean) {
         if (flightDirectors) {
-            setDefaultSelections(computers)
+            setDefaultSelections()
         }
         this.flightDirectors = flightDirectors
     }
 
-    fun setAutoThrust(computers: ComputerAccess, autoThrust: Boolean, alert: Boolean? = null) {
+    fun setAutoThrust(autoThrust: Boolean, alert: Boolean? = null) {
         if (autoThrust && !this.autoThrust && this.selectedSpeed == null) {
             this.selectedSpeed = (computers.data.forwardVelocity.length() * 20).toInt().coerceAtLeast(1)
         }
@@ -136,9 +135,9 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         }
     }
 
-    fun setAutoPilot(computers: ComputerAccess, autopilot: Boolean, alert: Boolean? = null) {
+    fun setAutoPilot(autopilot: Boolean, alert: Boolean? = null) {
         if (autopilot) {
-            setDefaultSelections(computers)
+            setDefaultSelections()
         }
         this.autopilot = autopilot
         if (alert != null) {
@@ -146,14 +145,14 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         }
     }
 
-    private fun setDefaultSelections(computers: ComputerAccess) {
+    private fun setDefaultSelections() {
         if (!this.flightDirectors && !this.autopilot && this.selectedPitch == null && this.selectedHeading == null) {
             this.selectedPitch = computers.data.pitch
             this.selectedHeading = computers.data.heading.toInt()
         }
     }
 
-    override fun getThrustInput(computers: ComputerAccess): ControlInput? {
+    override fun getThrustInput(): ControlInput? {
         if (!autoThrust) {
             return null
         }
@@ -161,14 +160,14 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         val target: Int = selectedSpeed ?: return null
 
         return ControlInput(
-            computers.thrust.calculateThrustForSpeed(computers, target) ?: 0.0f,
+            computers.thrust.calculateThrustForSpeed(target) ?: 0.0f,
             ControlInput.Priority.NORMAL,
             Text.translatable("mode.flightassistant.thrust.speed", target),
             identifier = ID
         )
     }
 
-    override fun getPitchInput(computers: ComputerAccess): ControlInput? {
+    override fun getPitchInput(): ControlInput? {
         if (!flightDirectors && !autopilot) {
             return null
         }
@@ -184,7 +183,7 @@ class AutoFlightComputer : Computer(), ThrustController, PitchController, Headin
         )
     }
 
-    override fun getHeadingInput(computers: ComputerAccess): ControlInput? {
+    override fun getHeadingInput(): ControlInput? {
         if (!flightDirectors && !autopilot) {
             return null
         }

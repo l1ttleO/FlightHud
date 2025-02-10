@@ -4,23 +4,25 @@ import kotlin.math.sign
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.*
+import net.minecraft.util.math.MathHelper
+import net.minecraft.util.math.RotationAxis
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.display.*
-import ru.octol1ttle.flightassistant.api.util.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.display.Display
+import ru.octol1ttle.flightassistant.api.display.HudFrame
+import ru.octol1ttle.flightassistant.api.util.ScreenSpace
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 
 
-class AttitudeDisplay : Display() {
+class AttitudeDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
         return FAConfig.display.showAttitude != DisplayOptions.AttitudeDisplayMode.DISABLED
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess) {
+    override fun render(drawContext: DrawContext) {
         with(drawContext) {
             matrices.push()
             matrices.translate(0, 0, -200)
@@ -30,8 +32,8 @@ class AttitudeDisplay : Display() {
                 renderHorizon()
             }
             if (FAConfig.display.showAttitude == DisplayOptions.AttitudeDisplayMode.HORIZON_AND_LADDER) {
-                renderPitchBars(computers)
-                renderPitchLimits(computers)
+                renderPitchBars()
+                renderPitchLimits()
             }
 
             matrices.pop()
@@ -56,26 +58,26 @@ class AttitudeDisplay : Display() {
         }
     }
 
-    private fun DrawContext.renderPitchBars(computers: ComputerAccess) {
+    private fun DrawContext.renderPitchBars() {
         val step: Int = FAConfig.display.attitudeDegreeStep
         if (!FAConfig.display.drawPitchOutsideFrame) {
             HudFrame.scissor(this)
         }
         val nextUp: Int = MathHelper.roundUpToMultiple(computers.data.pitch.toInt(), step)
         for (i: Int in nextUp..90 step step) {
-            drawPitchBar(computers, i, (ScreenSpace.getY(i.toFloat()) ?: break))
+            drawPitchBar(i, (ScreenSpace.getY(i.toFloat()) ?: break))
         }
 
         val nextDown: Int = MathHelper.roundDownToMultiple(computers.data.pitch.toDouble(), step)
         for (i: Int in nextDown downTo -90 step step) {
-            drawPitchBar(computers, i, (ScreenSpace.getY(i.toFloat()) ?: break))
+            drawPitchBar(i, (ScreenSpace.getY(i.toFloat()) ?: break))
         }
         if (!FAConfig.display.drawPitchOutsideFrame) {
             disableScissor()
         }
     }
 
-    private fun DrawContext.renderPitchLimits(computers: ComputerAccess) {
+    private fun DrawContext.renderPitchLimits() {
         val step: Int = FAConfig.display.attitudeDegreeStep / 2
         if (!FAConfig.display.drawPitchOutsideFrame) {
             HudFrame.scissor(this)
@@ -113,8 +115,9 @@ class AttitudeDisplay : Display() {
         }
     }
 
-    private fun DrawContext.drawPitchBar(computers: ComputerAccess, pitch: Int, y: Int) {
+    private fun DrawContext.drawPitchBar(pitch: Int, y: Int) {
         if (pitch == 0) return
+
         val min: ControlInput? = computers.pitch.minimumPitch
         val max: ControlInput? = computers.pitch.maximumPitch
         val color: Int =

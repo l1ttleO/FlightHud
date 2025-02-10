@@ -5,18 +5,20 @@ import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
-import ru.octol1ttle.flightassistant.api.util.extensions.*
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.util.extensions.advisoryColor
+import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
+import ru.octol1ttle.flightassistant.api.util.extensions.drawText
 
-class ProtectionsLostAlert : Alert(), ECAMAlert {
+class ProtectionsLostAlert(computers: ComputerView) : Alert(computers), ECAMAlert {
     override val priorityOffset: Int = 10
     override val data: AlertData = AlertData.MASTER_CAUTION
 
-    override fun shouldActivate(computers: ComputerAccess): Boolean {
+    override fun shouldActivate(): Boolean {
         return computers.protections.protectionsLost
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+    override fun render(drawContext: DrawContext, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
         var i = 0
         i += drawContext.drawText(Text.translatable("alerts.flightassistant.flight_controls.protections_lost"), firstLineX, firstLineY, cautionColor)
 

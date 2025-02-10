@@ -4,21 +4,20 @@ import kotlin.math.abs
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
-import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
-import ru.octol1ttle.flightassistant.api.util.*
-import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
+import ru.octol1ttle.flightassistant.api.util.FATickCounter
+import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 import ru.octol1ttle.flightassistant.api.util.extensions.filterNonFaulted
 import ru.octol1ttle.flightassistant.api.util.extensions.getActiveHighestPriority
-import ru.octol1ttle.flightassistant.api.util.extensions.protections
+import ru.octol1ttle.flightassistant.api.util.requireIn
 
-class PitchComputer : Computer(), PitchController {
+class PitchComputer(computers: ComputerView) : Computer(computers), PitchController {
     private val limiters: MutableList<PitchLimiter> = ArrayList()
     private val controllers: MutableList<PitchController> = ArrayList()
     private var automationsAllowed: Boolean = false
@@ -32,7 +31,7 @@ class PitchComputer : Computer(), PitchController {
 
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
-        ChangeLookDirectionEvents.PITCH.register { computers, mcPitchDelta, output ->
+        ChangeLookDirectionEvents.PITCH.register { mcPitchDelta, output ->
             if (!this.manualOverride && this.automationsAllowed) {
                 val pitchDelta: Float = -mcPitchDelta
 
@@ -55,12 +54,12 @@ class PitchComputer : Computer(), PitchController {
         PitchControllerRegistrationCallback.EVENT.invoker().register(controllers::add)
     }
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         automationsAllowed = !manualOverride && !computers.protections.protectionsLost && computers.data.automationsAllowed()
 
-        updateSafePitches(computers)
+        updateSafePitches()
 
-        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getPitchInput(computers) }.sortedBy { it.priority.value }
+        val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getPitchInput() }.sortedBy { it.priority.value }
         if (inputs.isEmpty()) {
             activeInput = null
             return
@@ -86,8 +85,8 @@ class PitchComputer : Computer(), PitchController {
         }
     }
 
-    private fun updateSafePitches(computers: ComputerAccess) {
-        val maximums: List<ControlInput> = limiters.filterNonFaulted().mapNotNull { it.getMaximumPitch(computers) }.sortedBy { it.priority.value }
+    private fun updateSafePitches() {
+        val maximums: List<ControlInput> = limiters.filterNonFaulted().mapNotNull { it.getMaximumPitch() }.sortedBy { it.priority.value }
         maximumPitch = maximums.getActiveHighestPriority().minByOrNull { it.target }
         val max: ControlInput? = maximumPitch
         if (max != null) {
@@ -95,7 +94,7 @@ class PitchComputer : Computer(), PitchController {
             max.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE)
         }
 
-        val minimums: List<ControlInput> = limiters.filterNonFaulted().mapNotNull { it.getMinimumPitch(computers) }.sortedBy { it.priority.value }
+        val minimums: List<ControlInput> = limiters.filterNonFaulted().mapNotNull { it.getMinimumPitch() }.sortedBy { it.priority.value }
         minimumPitch = minimums.getActiveHighestPriority().maxByOrNull { it.target }
         val min: ControlInput? = minimumPitch
         if (min != null) {
@@ -108,7 +107,7 @@ class PitchComputer : Computer(), PitchController {
         }
     }
 
-    override fun getPitchInput(computers: ComputerAccess): ControlInput? {
+    override fun getPitchInput(): ControlInput? {
         val max: ControlInput? = maximumPitch
         if (max != null && computers.data.pitch > max.target) {
             return max

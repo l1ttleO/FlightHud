@@ -13,18 +13,17 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.extensions.canUse
-import ru.octol1ttle.flightassistant.api.util.extensions.data
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.config.options.DisplayOptions
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
-class ElytraStatusComputer : Computer() {
+class ElytraStatusComputer(computers: ComputerView) : Computer(computers) {
     private var activeElytra: ItemStack? = null
     private var syncedFlyingState: Boolean? = null
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         val data: AirDataComputer = computers.data
         activeElytra = findActiveElytra(data.player)
 

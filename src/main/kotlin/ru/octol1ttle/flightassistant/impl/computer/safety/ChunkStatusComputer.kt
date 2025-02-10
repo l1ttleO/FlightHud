@@ -5,14 +5,14 @@ import net.minecraft.client.world.ClientChunkManager
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.ChunkPos
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.computer.*
-import ru.octol1ttle.flightassistant.api.util.extensions.data
+import ru.octol1ttle.flightassistant.api.computer.Computer
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 
-class ChunkStatusComputer : Computer() {
+class ChunkStatusComputer(computers: ComputerView) : Computer(computers) {
     var status: Status = Status.LOADED
         private set
 
-    override fun tick(computers: ComputerAccess) {
+    override fun tick() {
         val chunkPos: ChunkPos = computers.data.player.chunkPos
         val world: ClientChunkManager = computers.data.world.chunkManager
 

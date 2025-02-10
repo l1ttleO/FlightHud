@@ -6,19 +6,24 @@ import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.api.alert.Alert
 import ru.octol1ttle.flightassistant.api.alert.AlertData
 import ru.octol1ttle.flightassistant.api.alert.ECAMAlert
-import ru.octol1ttle.flightassistant.api.computer.ComputerAccess
+import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.extensions.advisoryColor
 import ru.octol1ttle.flightassistant.api.util.extensions.drawText
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 
-class ComputerFaultAlert(private val identifier: Identifier, private val alertText: Text, private val extraTexts: Collection<Text>? = null, override val data: AlertData = AlertData.MASTER_CAUTION) : Alert(), ECAMAlert {
+class ComputerFaultAlert(computers: ComputerView,
+                         private val identifier: Identifier,
+                         private val alertText: Text,
+                         private val extraTexts: Collection<Text>? = null,
+                         override val data: AlertData = AlertData.MASTER_CAUTION
+): Alert(computers), ECAMAlert {
     override val priorityOffset: Int = 25
 
-    override fun shouldActivate(computers: ComputerAccess): Boolean {
+    override fun shouldActivate(): Boolean {
         return ComputerHost.isFaulted(identifier)
     }
 
-    override fun render(drawContext: DrawContext, computers: ComputerAccess, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
+    override fun render(drawContext: DrawContext, firstLineX: Int, otherLinesX: Int, firstLineY: Int): Int {
         val color: Int = data.colorSupplier.invoke()
         var i = 0
         i += drawContext.drawText(alertText, firstLineX, firstLineY, color)
