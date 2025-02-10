@@ -106,7 +106,7 @@ class FireworkComputer(computers: ComputerView, private val mc: MinecraftClient)
     }
 
     private fun tryActivateFirework(player: PlayerEntity) {
-        if (FATickCounter.totalTicks < lastActivationTime + if (waitingForResponse) 30 else 10) {
+        if (FATickCounter.totalTicks < lastActivationTime + 10) {
             return
         }
 
