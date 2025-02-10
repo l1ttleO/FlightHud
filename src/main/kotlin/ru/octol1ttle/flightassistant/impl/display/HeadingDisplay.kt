@@ -23,7 +23,7 @@ class HeadingDisplay(computers: ComputerView) : Display(computers) {
         with(drawContext) {
             if (FAConfig.display.showHeadingReading) {
                 val x: Int = centerXI
-                val y: Int = HudFrame.top + 1
+                val y: Int = HudFrame.top - 24
 
                 drawBorder(x - 11, y, 23, 11, primaryColor)
                 drawMiddleAlignedText("%03d".format(computers.data.heading.roundToInt()), x, y + 2, primaryColor)
