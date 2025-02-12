@@ -95,7 +95,7 @@ class AttitudeDisplay(computers: ComputerView) : Display(computers) {
 
             matrices.translate(centerXI, y, 0) // Rotate around the middle of the arrow
             matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(180.0f)) // Flip upside down
-            drawMiddleAlignedText(arrowText, -1, 0, if (maxInput?.active != false) warningColor else cautionColor)
+            drawMiddleAlignedText(arrowText, -1, 0, if (maxInput?.active == true) warningColor else cautionColor)
 
             matrices.pop()
             max += step
@@ -104,7 +104,7 @@ class AttitudeDisplay(computers: ComputerView) : Display(computers) {
             val y: Int = ScreenSpace.getY(min) ?: break
             matrices.push()
 
-            drawMiddleAlignedText(arrowText, centerXI, y, if (minInput?.active != false) warningColor else cautionColor)
+            drawMiddleAlignedText(arrowText, centerXI, y, if (minInput?.active == true) warningColor else cautionColor)
 
             matrices.pop()
             min -= step
@@ -121,9 +121,9 @@ class AttitudeDisplay(computers: ComputerView) : Display(computers) {
         val min: ControlInput? = computers.pitch.minimumPitch
         val max: ControlInput? = computers.pitch.maximumPitch
         val color: Int =
-            if (max != null && pitch >= max.target)
+            if (max != null && pitch > max.target)
                 if (max.active) warningColor else cautionColor
-            else if (min != null && pitch <= min.target)
+            else if (min != null && pitch < min.target)
                 if (min.active) warningColor else cautionColor
             else
                 primaryColor
