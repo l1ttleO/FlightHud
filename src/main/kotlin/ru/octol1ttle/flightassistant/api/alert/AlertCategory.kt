@@ -4,7 +4,10 @@ import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
 
-class AlertCategory(val categoryText: Text) {
+/**
+ * A class that represents a category of alerts.
+ */
+sealed class AlertCategory(val categoryText: Text) {
     private val registeredAlerts: MutableList<Alert> = ArrayList()
     val activeAlerts: MutableList<Alert> = ArrayList()
     val ignoredAlerts: MutableList<Alert> = ArrayList()

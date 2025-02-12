@@ -40,6 +40,11 @@ val cautionColor: Int
 val warningColor: Int
     get() = FAConfig.display.warningColor.rgb
 
+/**
+ * Scales this draw context's matrix and returns the adjusted coordinates.
+ *
+ * @return a pair of adjusted coordinates.
+ */
 fun DrawContext.scaleMatrix(scale: Float, trueX: Int, trueY: Int): Pair<Int, Int> {
     matrices.scale(scale, scale, 1.0f)
 

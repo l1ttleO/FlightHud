@@ -4,8 +4,19 @@ package ru.octol1ttle.flightassistant.api.computer
  * A class responsible for computing data and providing it to [ru.octol1ttle.flightassistant.api.display.Display]s and [ru.octol1ttle.flightassistant.api.alert.Alert]s
  */
 abstract class Computer(val computers: ComputerView) {
+    /**
+     * Whether or not this computer is enabled. Disabled computers do not tick.
+     */
     var enabled: Boolean = true
+
+    /**
+     * Whether or not this computer has faulted. This value is set to false whenever the computer is reset.
+     */
     var faulted: Boolean = false
+
+    /**
+     * The amount of times this computer has faulted.
+     */
     var faultCount: Int = 0
 
     fun disabledOrFaulted(): Boolean {

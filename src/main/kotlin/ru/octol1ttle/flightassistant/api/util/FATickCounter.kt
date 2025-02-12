@@ -15,10 +15,10 @@ object FATickCounter {
         private set
     var timePassed: Float = 0.0f
         private set
-    var tickDelta: Float = 0.0f
+    var tickProgress: Float = 0.0f
         private set
 
-    fun tick(player: ClientPlayerEntity, tickDelta: Float, paused: Boolean) {
+    fun tick(player: ClientPlayerEntity, tickProgress: Float, paused: Boolean) {
         if (!paused) {
             if (player.age < lastPlayerAge) {
                 ticksSinceWorldLoad = player.age
@@ -27,7 +27,7 @@ object FATickCounter {
             lastPlayerAge = player.age
             totalTicks += ticksPassed
             ticksSinceWorldLoad += ticksPassed
-            this.tickDelta = tickDelta
+            this.tickProgress = tickProgress
         }
 
         val millis: Long = Util.getMeasuringTimeMs()

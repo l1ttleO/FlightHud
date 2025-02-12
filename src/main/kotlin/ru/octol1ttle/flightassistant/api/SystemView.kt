@@ -1,5 +1,4 @@
 package ru.octol1ttle.flightassistant.api
-// TODO: documentation for the whole package
 
 import net.minecraft.util.Identifier
 

@@ -18,7 +18,7 @@ import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
-import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickDelta
+import ru.octol1ttle.flightassistant.api.util.FATickCounter.tickProgress
 import ru.octol1ttle.flightassistant.api.util.RenderMatrices
 import ru.octol1ttle.flightassistant.api.util.degrees
 import ru.octol1ttle.flightassistant.api.util.extensions.fallFlying
@@ -70,9 +70,9 @@ class AirDataComputer(computers: ComputerView, private val mc: MinecraftClient) 
         get() = world.chunkManager.isChunkLoaded(player.chunkPos.x, player.chunkPos.z)
 
     override fun tick() {
-        position = player.getLerpedPos(tickDelta)
+        position = player.getLerpedPos(tickProgress)
         groundLevel = computeGroundLevel()
-        velocity = player.lerpVelocity(tickDelta)
+        velocity = player.lerpVelocity(tickProgress)
         forwardVelocity = computeForwardVelocity()
         roll = degrees(atan2(-RenderMatrices.worldSpaceMatrix.m10(), RenderMatrices.worldSpaceMatrix.m11()))
     }
