@@ -1,9 +1,9 @@
-package ru.octol1ttle.flightassistant.impl.screen.status
+package ru.octol1ttle.flightassistant.screen.status
 
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 import ru.octol1ttle.flightassistant.impl.display.HudDisplayHost
-import ru.octol1ttle.flightassistant.impl.screen.FABaseScreen
+import ru.octol1ttle.flightassistant.screen.FABaseScreen
 
 class SystemStatusScreen : FABaseScreen(Text.translatable("menu.flightassistant.status")) {
     override fun init() {

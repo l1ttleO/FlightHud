@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.screen
+package ru.octol1ttle.flightassistant.screen
 
 import kotlin.properties.Delegates
 import net.minecraft.client.gui.DrawContext

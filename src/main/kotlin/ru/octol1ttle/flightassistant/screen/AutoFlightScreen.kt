@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.screen
+package ru.octol1ttle.flightassistant.screen
 
 import java.util.function.Consumer
 import java.util.function.Predicate
@@ -10,7 +10,7 @@ import net.minecraft.util.Formatting
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
 import ru.octol1ttle.flightassistant.impl.computer.ComputerHost
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
-import ru.octol1ttle.flightassistant.impl.screen.widgets.ColoredButtonWidget
+import ru.octol1ttle.flightassistant.screen.widgets.ColoredButtonWidget
 
 class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.autoflight")) {
     private lateinit var flightDirectors: ColoredButtonWidget

@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.screen.widgets
+package ru.octol1ttle.flightassistant.screen.widgets
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.MinecraftClient

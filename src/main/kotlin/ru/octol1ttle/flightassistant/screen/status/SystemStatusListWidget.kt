@@ -1,4 +1,4 @@
-package ru.octol1ttle.flightassistant.impl.screen.status
+package ru.octol1ttle.flightassistant.screen.status
 
 import com.google.common.collect.ImmutableList
 import net.minecraft.client.gui.DrawContext
