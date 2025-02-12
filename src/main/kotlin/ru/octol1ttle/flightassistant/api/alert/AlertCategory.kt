@@ -7,7 +7,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerView
 /**
  * A class that represents a category of alerts.
  */
-sealed class AlertCategory(val categoryText: Text) {
+class AlertCategory(val categoryText: Text) {
     private val registeredAlerts: MutableList<Alert> = ArrayList()
     val activeAlerts: MutableList<Alert> = ArrayList()
     val ignoredAlerts: MutableList<Alert> = ArrayList()
