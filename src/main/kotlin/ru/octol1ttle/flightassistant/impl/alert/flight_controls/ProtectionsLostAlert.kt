@@ -34,7 +34,9 @@ class ProtectionsLostAlert(computers: ComputerView) : Alert(computers), ECAMAler
         y += 10
         i += drawContext.drawText(Text.translatable("alerts.flightassistant.flight_controls.protections_lost.max_pitch"), otherLinesX, y, advisoryColor)
         y += 10
-        i += drawContext.drawText(Text.translatable("alerts.flightassistant.flight_controls.protections_lost.max_descent_rate"), otherLinesX, y, advisoryColor)
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.flight_controls.protections_lost.min_pitch"), otherLinesX, y, advisoryColor)
+        y += 10
+        i += drawContext.drawText(Text.translatable("alerts.flightassistant.flight_controls.protections_lost.maneuver_with_care"), otherLinesX, y, advisoryColor)
 
         return i
     }

@@ -50,10 +50,11 @@ alerts.flightassistant:
       use_manual_pitch: ' -РУЧН УПР УГЛ НАКЛ: ИСПОЛЬЗ'
     protections_lost:
       .: ЗАЩИТЫ ПОТЕРЯНЫ
-      enable_air_data: ' -КОМП ДАННЫХ ПОЛЕТА: ВКЛ'
-      enable_pitch: ' -КОМП УГЛА НАКЛ: ВКЛ'
-      max_pitch: ' МАКС УГОЛ НАКЛ: 55* UP'
-      max_descent_rate: ' МАКС СКОР СНИЖЕНИЯ: 8 Б/С'
+      enable_air_data: ' -КОМП ДАННЫХ ПОЛЕТА: ВКЛ/СБРОС'
+      enable_pitch: ' -КОМП УГЛА НАКЛ: ВКЛ/СБРОС'
+      max_pitch: ' МАКС УГОЛ НАКЛ: 55* ВВЕРХ'
+      min_pitch: ' МИН УГОЛ НАКЛ: 35* ВНИЗ'
+      maneuver_with_care: ' МАНЕВРИРУЙ С ОСТОРОЖНОСТЬЮ'
   gpws:
     .: GPWS
     fault: ОТКАЗ

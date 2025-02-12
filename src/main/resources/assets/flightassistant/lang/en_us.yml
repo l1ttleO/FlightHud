@@ -46,10 +46,11 @@ alerts.flightassistant:
       use_manual_pitch: ' -MAN PITCH OVRD: USE'
     protections_lost:
       .: PROTECT LOST
-      enable_air_data: ' -AIR DATA: ON'
-      enable_pitch: ' -PITCH SYS: ON'
+      enable_air_data: ' -AIR DATA: ON/RESET'
+      enable_pitch: ' -PITCH SYS: ON/RESET'
       max_pitch: ' MAX PITCH: 55* UP'
-      max_descent_rate: ' MAX DESCENT RATE: 8 BPS'
+      min_pitch: ' MIN PITCH: 35* DOWN'
+      maneuver_with_care: ' MANEUVER WITH CARE'
   gpws:
     .: GPWS
     fault: FAULT
