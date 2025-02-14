@@ -27,7 +27,7 @@ class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
         }
     }
 
-    override fun canPlay(): Boolean {
+    override fun shouldAlwaysPlay(): Boolean {
         return true
     }
 

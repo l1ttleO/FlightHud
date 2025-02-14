@@ -201,11 +201,16 @@ class AlertComputer(computers: ComputerView, private val soundManager: SoundMana
     }
 
     private fun startNewSounds() {
-        val activeDatas: List<AlertData> = alertLists.filterValues { it.hasNewElements() }.keys.sortedBy { it.priority }
-        val highestPriority: List<AlertData> = activeDatas.getHighestPriority()
+        val newDatas: List<AlertData> = alertLists.filterValues { list -> list.hasNewElements() || list.any { !sounds.containsKey(it.data) } }.keys.sortedBy { it.priority }
+        val newHighestPriorityDatas: List<AlertData> = newDatas.getHighestPriority()
+        val activeHighestPriority: Int = sounds.keys.minByOrNull { it.priority }?.priority ?: Int.MAX_VALUE
 
         var anyStartedThisTick = false
-        for (data: AlertData in highestPriority) {
+        for (data: AlertData in newHighestPriorityDatas) {
+            if (data.priority > activeHighestPriority) {
+                break
+            }
+
             val existing: AlertSoundInstance? = sounds[data]
             if (existing == null || (!existing.isRepeatable && existing.age > 60)) {
                 soundManager.stop(existing)
@@ -216,9 +221,7 @@ class AlertComputer(computers: ComputerView, private val soundManager: SoundMana
                     soundManager.play(instance)
                 } else if (instance.isRepeatable) {
                     soundManager.play(instance)
-                    if (instance.isRepeatable) {
-                        soundManager.pause(instance)
-                    }
+                    soundManager.pause(instance)
                 }
 
                 anyStartedThisTick = true
