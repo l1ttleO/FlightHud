@@ -285,3 +285,7 @@ keys.flightassistant:
   increase_thrust: Increase thrust
   set_idle: Set thrust to idle (0%)
   set_toga: Set thrust to TOGA (100%)
+
+alerts.do_a_barrel_roll.thrust:
+  .: DABR THR
+  fault: SYS FAULT

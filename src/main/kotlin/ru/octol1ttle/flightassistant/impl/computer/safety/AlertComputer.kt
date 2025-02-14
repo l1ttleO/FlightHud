@@ -53,7 +53,7 @@ class AlertComputer(computers: ComputerView, private val soundManager: SoundMana
 
     override fun invokeEvents() {
         registerBuiltin()
-        AlertCategoryRegistrationCallback.EVENT.invoker().register(this::register)
+        AlertCategoryRegistrationCallback.EVENT.invoker().register(computers, this::register)
     }
 
     private fun registerBuiltin() {

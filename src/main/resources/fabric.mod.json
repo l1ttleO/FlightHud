@@ -21,6 +21,10 @@
             {
                 "value": "ru.octol1ttle.flightassistant.FlightAssistantFabric",
                 "adapter": "kotlin"
+            },
+            {
+                "value": "nl.enjarai.doabarrelroll.compat.flightassistant.DaBRCompatFA",
+                "adapter": "kotlin"
             }
         ],
         "modmenu": [
