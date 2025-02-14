@@ -96,8 +96,8 @@ class ThrustComputer(computers: ComputerView) : Computer(computers) {
         if (oldThrust != target) {
             current = target
             ThrustChangeCallback.EVENT.invoker().onThrustChange(oldThrust, current, input)
+            lastChangeAutomatic = input != null
         }
-        lastChangeAutomatic = input != null
     }
 
     fun getOptimumClimbPitch(): Float {
