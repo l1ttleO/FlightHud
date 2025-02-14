@@ -36,6 +36,7 @@ repositories {
     strictMaven("https://thedarkcolour.github.io/KotlinForForge/", "thedarkcolour")
     strictMaven("https://maven.fallenbreath.me/releases", "me.fallenbreath")
     strictMaven("https://maven.isxander.dev/releases", "dev.isxander", "org.quiltmc.parsers")
+    strictMaven("https://maven.su5ed.dev/releases", "org.sinytra", "org.sinytra.forgified-fabric-api")
     maven("https://jitpack.io")
     maven("https://maven.neoforged.net/releases/")
     maven("https://maven.terraformersmc.com/releases/")
@@ -62,9 +63,8 @@ dependencies {
     if (isFabric) {
         modImplementation("net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
         modImplementation("net.fabricmc:fabric-language-kotlin:${property("deps.flk")}+kotlin.2.1.0")
-        modImplementation("dev.architectury:architectury-fabric:${property("deps.arch_api")}")
         val fapi = property("deps.fapi")
-        if (fapi != "[VERSIONED]") {
+        if (stonecutter.current.isActive && fapi != "[VERSIONED]") {
             modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$fapi")
         }
         ifStable("com.terraformersmc:modmenu:${property("deps.modmenu")}")
@@ -73,10 +73,8 @@ dependencies {
             "forge"("net.minecraftforge:forge:${mcVersion}-${property("deps.fml")}")
             compileOnly(annotationProcessor(mixinExtras.format("common"))!!)
             include(implementation(mixinExtras.format("forge"))!!)
-            modImplementation("dev.architectury:architectury-forge:${property("deps.arch_api")}")
         } else {
             "neoForge"("net.neoforged:neoforge:${property("deps.fml")}")
-            modImplementation("dev.architectury:architectury-neoforge:${property("deps.arch_api")}")
         }
         implementation("thedarkcolour:kotlinforforge${if (loader == "neoforge") "-neoforge" else ""}:${property("deps.kff")}") {
             exclude("net.neoforged.fancymodloader")
@@ -84,17 +82,34 @@ dependencies {
         "forgeRuntimeLibrary"("org.quiltmc.parsers:json:0.2.1")
         "forgeRuntimeLibrary"("org.quiltmc.parsers:gson:0.2.1")
     }
+    modImplementation("dev.architectury:architectury-${loader}:${property("deps.arch_api")}")
+
     // Config
     modImplementation("dev.isxander:yet-another-config-lib:${property("deps.yacl")}") {
         if (!isFabric) {
             isTransitive = false
         }
     }
+
+    // Other
+    for (it in property("deps.compat").toString().split(',')) {
+        @Suppress("UselessCallOnNotNull")
+        if (it.isNullOrBlank() || it == "[VERSIONED]") continue
+        val (group, modId, version) = it.split(':')
+        if (group == "maven.modrinth") {
+            modCompileOnly("${group}:${modId}:${version}")
+        }
+        if (!isSnapshot && stonecutter.current.isActive) {
+            modLocalRuntime("${group}:${modId}:${version}")
+        }
+        stonecutter.consts[modId] = true
+    }
 }
 
 // Loom config
 loom {
     if (loader == "forge") forge {
+        convertAccessWideners.set(true)
         mixinConfigs("${mod.id}.client.mixins.json")
     } else if (loader == "neoforge") neoForge {}
 
@@ -143,9 +158,11 @@ tasks.processResources {
         "mnd" to if (loader == "neoforge") "" else "mandatory = true"
     )
 
-    filesMatching("fabric.mod.json") { expand(map) }
-    filesMatching("META-INF/mods.toml") { expand(map) }
-    filesMatching("META-INF/neoforge.mods.toml") { expand(map) }
+    fun FileCopyDetails.expandOrExclude(expand: Boolean, map: Map<String, String>): Any = if (expand) expand(map) else exclude()
+
+    filesMatching("fabric.mod.json") { expandOrExclude(loader == "fabric", map) }
+    filesMatching("META-INF/mods.toml") { expandOrExclude(loader == "forge", map) }
+    filesMatching("META-INF/neoforge.mods.toml") { expandOrExclude(loader == "neoforge", map) }
 }
 
 yamlang {
