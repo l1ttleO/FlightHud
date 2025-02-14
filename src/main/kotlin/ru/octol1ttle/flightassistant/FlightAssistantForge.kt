@@ -22,10 +22,10 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
+import nl.enjarai.doabarrelroll.compat.flightassistant.DaBRCompatFA
 import ru.octol1ttle.flightassistant.api.util.event.FixedHudRenderCallback
 import ru.octol1ttle.flightassistant.config.FAConfigScreen
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext
-
 
 typealias CSF = net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactory
 ^///?}
@@ -34,6 +34,7 @@ typealias CSF = net.minecraftforge.client.ConfigScreenHandler.ConfigScreenFactor
 object FlightAssistantForge {
     init {
         FlightAssistant.init()
+        DaBRCompatFA.init()
         ModLoadingContext.get().registerExtensionPoint(
             CSF::class.java,
         ) { CSF { _, parent -> FAConfigScreen.generate(parent) } }

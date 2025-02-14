@@ -1,7 +1,6 @@
 package nl.enjarai.doabarrelroll.compat.flightassistant
 
 import dev.architectury.platform.Platform
-import net.fabricmc.api.ClientModInitializer
 import net.minecraft.text.Text
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.alert.AlertCategory
@@ -10,10 +9,10 @@ import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSourceRegistrat
 import ru.octol1ttle.flightassistant.api.computer.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 
-object DaBRCompatFA : ClientModInitializer {
+object DaBRCompatFA {
     private lateinit var thrustComputer: DaBRThrustComputer
 
-    override fun onInitializeClient() {
+    fun init() {
         if (!Platform.isModLoaded("do_a_barrel_roll")) {
             return
         }
