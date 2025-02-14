@@ -101,7 +101,7 @@ internal object ComputerHost : SystemController<Computer>, ComputerView {
     internal fun tick(tickDelta: Float) {
         val paused: Boolean = mc.isPaused /*? if >=1.21 {*//*|| !(mc as ru.octol1ttle.flightassistant.mixin.ClientShouldTickInvoker).invokeShouldTick() *///?}
         FATickCounter.tick(mc.player!!, tickDelta, paused)
-        if (paused || FATickCounter.ticksSinceWorldLoad < 60 || !FAConfig.global.modEnabled) {
+        if (paused || FATickCounter.ticksSinceWorldLoad < FATickCounter.worldLoadWaitTime || !FAConfig.global.modEnabled) {
             return
         }
 

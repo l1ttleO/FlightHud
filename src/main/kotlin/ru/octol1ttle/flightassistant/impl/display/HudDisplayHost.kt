@@ -107,7 +107,7 @@ internal object HudDisplayHost: SystemController<Display> {
         ScreenSpace.updateViewport()
 
         for ((id: Identifier, display: Display) in displays.filter { entry -> entry.value.allowedByConfig() }) {
-            if (FATickCounter.ticksSinceWorldLoad < 60) {
+            if (FATickCounter.ticksSinceWorldLoad < FATickCounter.worldLoadWaitTime) {
                 with(drawContext) {
                     drawMiddleAlignedText(Text.translatable("misc.flightassistant.waiting_for_world_load"), centerXI, centerYI - 16, primaryColor)
                     drawMiddleAlignedText(Text.translatable("misc.flightassistant.waiting_for_world_load.maximum_time"), centerXI, centerYI + 8, primaryColor)

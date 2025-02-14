@@ -1,9 +1,12 @@
 package ru.octol1ttle.flightassistant.api.util
 
+import kotlin.random.Random
+import kotlin.random.nextInt
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.util.Util
 
 object FATickCounter {
+    val worldLoadWaitTime = Random.Default.nextInt(10..60)
     private var lastPlayerAge: Int = 0
     private var lastMillis: Long = 0
 
