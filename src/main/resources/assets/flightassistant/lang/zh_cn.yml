@@ -1,0 +1,260 @@
+modmenu:
+  descriptionTranslation:
+    flightassistant: FlightAssistant 带给您全新的鞘翅飞行体验！纯客户端模组！
+
+alerts.flightassistant:
+  alert:
+    .: 警报
+    fault: 系统故障（部分警报丢失）
+  autoflight:
+    .: 自动驾驶
+    pitch_fault: 俯仰控制故障
+  elytra:
+    .: 鞘翅
+    fault: 状态故障
+    low_durability: 耐久度低
+    critical_durability: 耐久度临界
+  fault:
+    computer:
+      reset: ' -系统：关闭/重启'
+    hud:
+      .: HUD
+      reset: ' -显示：关闭/重启'
+      flightassistant:altitude: 高度显示故障
+      flightassistant:attitude: 姿态显示故障
+      flightassistant:automation_modes: 自动模式显示故障
+      flightassistant:coordinates: 坐标显示故障
+      flightassistant:elytra_durability: 鞘翅耐久度显示故障
+      flightassistant:flight_path: 飞行路径显示故障
+      flightassistant:heading: 航向显示故障
+      flightassistant:radar_altitude: 雷达高度显示故障
+      flightassistant:speed: 速度显示故障
+      flightassistant:velocity_components: 地速与垂直速度显示故障
+  firework:
+    .: 烟花
+    fault: 系统故障
+    explosive:
+      main_hand: 主手烟花具爆炸性
+      off_hand: 副手烟花具爆炸性
+    slow_response: 响应缓慢
+    no_response: 无响应
+  flight_controls:
+    .: 飞行控制
+    pitch_fault:
+      .: 俯仰限制故障
+      use_manual_pitch: ' -手动俯仰控制：启动'
+    protections_lost:
+      .: 保护功能丧失
+      enable_air_data: ' -空速数据：开启'
+      enable_pitch: ' -俯仰系统：开启'
+      max_pitch: ' 最大俯仰角：55° 上仰'
+      max_descent_rate: ' 最大下降率：8 BPS'
+  gpws:
+    .: 近地警告系统
+    fault: 故障
+    sink_rate: 下降率过高
+    terrain_ahead: 前方地形
+    pull_up: 抬升
+  stall:
+    .: 失速
+    detection_fault: 检测故障
+  navigation:
+    .: 导航
+    air_data_fault: 空速数据故障
+    chunk_status_fault: 区块状态故障
+    void_proximity_fault: 虚空邻近检测故障
+    slow_chunk_loading: 区块加载缓慢
+    no_chunks_loaded: 未加载区块
+    approaching_void_damage_altitude: 邻近虚空伤害高度
+    reached_void_damage_altitude: 到达虚空伤害高度
+  thrust:
+    .: 推力
+    fault: 系统故障
+    no_source: 无可用推力源
+    locked:
+      .: 锁定
+      use_keys: ' -推力控制:开启'
+    reverse_not_supported:
+      .: 不支持反推
+      set_forward: ' -推力:正前方'
+
+config.flightassistant:
+  categories:
+    global: 全局选项
+    no_elytra: 未飞行（未装备鞘翅）
+    has_elytra: 未飞行（装备鞘翅）
+    flying: 飞行过程中
+    safety: 警告与飞行保护
+  options:
+    global:
+      mod_enabled: 开启 FlightAssistant
+      hud_enabled: 开启HUD
+      safety_enabled: 开启安全功能（警告和保护）
+      automations_allowed_in_overlays: 允许自动化（自动驾驶和飞行保护）在 GUI 中运行（如背包和暂停界面）
+    display:
+      frame:
+        .: 显示框架
+        width: 框架宽度
+        height: 框架高度
+      colors:
+        .: 色彩
+        primary: 主颜色
+        advisory: 提示颜色
+        caution: 警告颜色
+        warning: 危险颜色
+      attitude:
+        .: 姿态
+        show:
+          .: 显示姿态
+          horizon_and_ladder: 显示地平线和俯仰梯
+          horizon_only: 仅显示地平线
+          disabled: 禁用
+        degree_step: 刻度间隔（度）
+        horizon_outside_frame: 在框架外绘制地平线
+        pitch_outside_frame: 在框架外绘制俯仰刻度
+      heading:
+        .: 航向
+        show_reading: 显示航向读数
+        show_scale: 在地平线上显示航向刻度
+        scale_step: 航向刻度间隔（度）
+      speed:
+        .: 速度
+        show_reading: 显示速度读数
+        show_scale: 显示速度刻度
+        show_ground: 显示地速
+        show_vertical: 显示垂直速度
+      altitude:
+        .: 高度
+        show_reading: 显示高度读数
+        show_scale: 显示高度刻度
+        show_radar: 显示雷达高度
+      flight_path_vector:
+        .: 飞行路径向量
+        show: 显示飞行路径向量
+        size: 飞行路径向量大小
+      elytra_durability:
+        .: 鞘翅耐久度
+        show: 显示鞘翅耐久度
+        units:
+          .: 耐久度单位
+          raw: Minecraft 原版
+          percentage: 百分比
+          time: 时间（近似）
+      misc:
+        .: 其他
+        coordinates: 显示坐标
+        alerts: 显示警告
+        automation_modes: 显示自动化模式
+    safety:
+      alert_volume: 警告音量
+      consider_invulnerability: 无敌时禁用警告和保护
+      alert_mode:
+        warning_and_caution: 警告与提示
+        warning: 仅警告
+        caution: 仅提示
+        disabled: 禁用
+      elytra:
+        .: 鞘翅
+        durability_alert_mode: 鞘翅耐久度警告模式
+        auto_open: 自动展开鞘翅
+        close_underwater: 在水下自动关闭鞘翅
+      stall:
+        .: 失速
+        alert_mode: 失速警告模式
+        limit_pitch: 限制俯仰角以防止失速
+        auto_thrust: 自动使用推力恢复失速
+      void:
+        .: 虚空伤害高度
+        alert_mode: 虚空伤害高度警告模式
+        limit_pitch: 在接近虚空时限制俯仰角
+        auto_thrust: 自动使用推力逃离虚空
+        auto_pitch: 自动提升俯仰角逃离虚空
+      gpws:
+        .: 近地警告系统
+        sink_rate:
+          alert_mode: 下降率警告模式
+          limit_pitch: 下降率过高时限制俯仰角
+          auto_pitch: 自动提升俯仰角恢复下降率
+        obstacle:
+          alert_mode: 地形警告模式
+          limit_pitch: 检测到地形时限制俯仰角
+          auto_pitch: 自动提升俯仰角逃离地形
+      firework:
+        .: 烟花
+        lock_explosive: 锁定含烟火之星的烟花
+
+menu.flightassistant:
+  .: 飞行配置
+  flight_plan: 飞行计划
+  system:
+    .: 系统状态
+    fault: 故障
+    'off': '关'
+    on_reset: 开/重置
+    name:
+      hud:
+        flightassistant:alert: 显示警告
+        flightassistant:altitude: 显示高度
+        flightassistant:attitude: 显示姿态
+        flightassistant:automation_modes: 显示自动化模式
+        flightassistant:coordinates: 显示坐标
+        flightassistant:elytra_durability: 显示鞘翅耐久度
+        flightassistant:flight_path: 显示飞行路径
+        flightassistant:heading: 显示航向
+        flightassistant:radar_altitude: 显示雷达高度
+        flightassistant:speed: 速度
+        flightassistant:velocity_components: 显示地速和垂直速度
+      computer:
+        flightassistant:air_data: 空气数据计算器
+        flightassistant:alert: 警告计算器
+        flightassistant:chunk_status: 区块状态计算器
+        flightassistant:elytra_status: 鞘翅状态计算器
+        flightassistant:flight_protections: 飞行保护计算器
+        flightassistant:ground_proximity: 近地警告计算器
+        flightassistant:stall: 失速计算器
+        flightassistant:void_proximity: 虚空邻近计算器
+        flightassistant:firework: 烟花计算器
+        flightassistant:pitch: 俯仰计算器
+        flightassistant:thrust: 推力计算器
+
+mode.flightassistant:
+  thrust:
+    manual: 手动推力 %s
+    manual_toga: 手动 TOGA
+    locked: 推力锁定 %s
+    locked_toga: TOGA 锁定
+    toga: 推力 TOGA
+  pitch:
+    void_protection: 虚空保护
+    void_escape: 虚空逃离
+    stall_protection: 失速保护
+    terrain_protection: 地形保护
+    terrain_escape: 地形逃离
+
+short.flightassistant:
+  alert: 警告
+  altitude: 高度
+  attitude: 姿态
+  automation_modes: 自动/模式
+  elytra: 鞘翅
+  elytra_durability: 鞘翅耐久
+  flight_path: 飞行路径
+  ground: 地面
+  ground_speed: '地速 %s'
+  heading: 航向
+  infinite: 无限
+  radar_altitude: 雷达高度
+  speed: 速度
+  vertical_speed: '垂直速度 %s'
+  void: 虚空
+
+keys.flightassistant:
+  .: FlightAssistant
+  open_flight_configuration: 打开飞行配置界面
+  manual_pitch_override: 强制手动俯仰控制（按住）
+  hide_current_alert: 隐藏当前激活的警告
+  show_hidden_alert: 显示上次隐藏的警告
+  decrease_thrust: 减少推力
+  increase_thrust: 增加推力
+  set_idle: 将推力设置为怠速（0%）
+  set_toga: 将推力设置为 TOGA（100%）
