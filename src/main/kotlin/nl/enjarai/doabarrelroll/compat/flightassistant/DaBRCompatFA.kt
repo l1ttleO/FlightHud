@@ -10,6 +10,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.impl.alert.fault.computer.ComputerFaultAlert
 
 object DaBRCompatFA {
+//? if do-a-barrel-roll {
     private lateinit var thrustComputer: DaBRThrustComputer
 
     fun init() {
@@ -30,4 +31,11 @@ object DaBRCompatFA {
         })
         ThrustSourceRegistrationCallback.EVENT.register { it.accept(thrustComputer) }
     }
+//?} else {
+    /*fun init() {
+        if (Platform.isModLoaded("do_a_barrel_roll")) {
+            FlightAssistant.logger.warn("Do a Barrel Roll is present, but this version of FlightAssistant does not have support for it. Update FlightAssistant, or report this issue if there are no updates available")
+        }
+    }
+*///?}
 }

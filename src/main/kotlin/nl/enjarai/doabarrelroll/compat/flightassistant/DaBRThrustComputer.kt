@@ -1,5 +1,6 @@
 package nl.enjarai.doabarrelroll.compat.flightassistant
 
+//? if do-a-barrel-roll {
 import kotlin.math.sign
 import net.minecraft.util.Identifier
 import nl.enjarai.doabarrelroll.DoABarrelRoll
@@ -47,3 +48,5 @@ class DaBRThrustComputer(computers: ComputerView) : Computer(computers), ThrustS
         val ID: Identifier = DoABarrelRoll.id("thrust")
     }
 }
+
+//?}

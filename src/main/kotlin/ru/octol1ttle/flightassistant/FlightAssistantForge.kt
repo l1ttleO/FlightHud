@@ -10,6 +10,7 @@ import net.neoforged.fml.common.Mod
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers
+import nl.enjarai.doabarrelroll.compat.flightassistant.DaBRCompatFA
 import ru.octol1ttle.flightassistant.api.util.event.FixedHudRenderCallback
 import ru.octol1ttle.flightassistant.config.FAConfigScreen
 import thedarkcolour.kotlinforforge.neoforge.KotlinModLoadingContext

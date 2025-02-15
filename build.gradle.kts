@@ -96,6 +96,10 @@ dependencies {
         @Suppress("UselessCallOnNotNull")
         if (it.isNullOrBlank() || it == "[VERSIONED]") continue
         val (group, modId, version) = it.split(':')
+        if (version == "[NONE]") {
+            stonecutter.consts[modId] = false
+            continue
+        }
         if (group == "maven.modrinth") {
             modCompileOnly("${group}:${modId}:${version}")
         }
