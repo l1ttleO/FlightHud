@@ -4,11 +4,11 @@ or [GitHub](https://github.com/Octol1ttle/FlightAssistant) to discuss this alpha
 
 Versions 1.20.2, 1.20.3 and 1.20.4 are no longer supported.
 
-## New features in Alpha 4
+## New features in Alpha 5
 - **Added support for Do a Barrel Roll's Thrusting feature**
 - **Added ability for autopilot to control roll when Do a Barrel Roll is installed**
 
-## Changes in Alpha 4
+## Changes in Alpha 5
 - **Significantly reduced the strictness of the stall protection**
 - Increased the speed at which the stall protection will move the camera to a safe position
 - Moved the Heading Display above the Automation Modes Display, to not overlap with alerts
