@@ -11,7 +11,7 @@ import net.minecraft.world.Heightmap
 import net.minecraft.world.RaycastContext
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.autoflight.FlightController
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
@@ -21,7 +21,7 @@ import ru.octol1ttle.flightassistant.api.util.requireIn
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 
-class GroundProximityComputer(computers: ComputerView) : Computer(computers), PitchLimiter, PitchController {
+class GroundProximityComputer(computers: ComputerView) : Computer(computers), PitchLimiter, FlightController {
     private var groundImpactTime: Float = Float.MAX_VALUE
     var groundImpactStatus: Status = Status.SAFE
         private set

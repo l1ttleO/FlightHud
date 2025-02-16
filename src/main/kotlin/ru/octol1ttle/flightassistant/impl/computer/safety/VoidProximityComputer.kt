@@ -4,18 +4,17 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.autoflight.FlightController
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer
 
-class VoidProximityComputer(computers: ComputerView) : Computer(computers), PitchLimiter, PitchController, ThrustController {
+class VoidProximityComputer(computers: ComputerView) : Computer(computers), PitchLimiter, FlightController {
     var status: Status = Status.ABOVE_GROUND
         private set
 

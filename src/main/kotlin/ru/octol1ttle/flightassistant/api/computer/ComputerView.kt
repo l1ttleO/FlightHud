@@ -21,6 +21,9 @@ interface ComputerView : SystemView<Computer> {
     val pitch: PitchComputer
         get() = get(PitchComputer.ID) as PitchComputer
 
+    val roll: RollComputer
+        get() = get(RollComputer.ID) as RollComputer
+
     val thrust: ThrustComputer
         get() = get(ThrustComputer.ID) as ThrustComputer
 

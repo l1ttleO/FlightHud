@@ -18,7 +18,8 @@ data class ControlInput(val target: Float, val priority: Priority, val text: Tex
         HIGHEST(0),
         HIGH(1),
         NORMAL(2),
-        LOW(3);
+        LOW(3),
+        LOWEST(4);
 
         fun isHigherOrSame(other: Priority?): Boolean {
             if (other == null) {

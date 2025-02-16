@@ -1,5 +1,8 @@
 package ru.octol1ttle.flightassistant.api.autoflight.thrust
 
+/**
+ * Defines a source of thrust to be used by the [ru.octol1ttle.flightassistant.impl.computer.autoflight.ThrustComputer]
+ */
 interface ThrustSource {
     /**
      * Defines the priority of this thrust source.
@@ -19,7 +22,7 @@ interface ThrustSource {
     val optimumClimbPitch: Float
 
     /**
-     * Defines whether this thrust source currently can be used. For example, there are fireworks in the player's hand that can be used.
+     * @return whether this thrust source can be used right now. For example, there are fireworks in the player's hand that can be used.
      */
     fun isAvailable(): Boolean
 
@@ -28,7 +31,7 @@ interface ThrustSource {
      *
      * @param currentThrust The current requested thrust. Ranges are `[0.0, 1.0]` or `[-1.0, 1.0]` depending on whether this source [supportsReverse]
      */
-    fun tickThrust(currentThrust: Float)
+    fun tickThrust(currentThrust: Float) {}
 
     /**
      * Calculates the thrust required to achieve the target speed.

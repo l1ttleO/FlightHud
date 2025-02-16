@@ -49,3 +49,16 @@ fun Double.requireIn(range: ClosedRange<Double>): Double {
 
     return this
 }
+
+fun findShortestPath(from: Float, to: Float, valueRange: Float): Float {
+    var diff: Float = to - from
+
+    if (diff < -valueRange * 0.5) {
+        diff += valueRange
+    }
+    if (diff > valueRange * 0.5) {
+        diff -= valueRange
+    }
+
+    return diff
+}

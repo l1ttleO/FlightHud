@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
+import ru.octol1ttle.flightassistant.api.autoflight.FlightController
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiter
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchLimiterRegistrationCallback
@@ -17,11 +17,11 @@ import ru.octol1ttle.flightassistant.api.util.extensions.filterNonFaulted
 import ru.octol1ttle.flightassistant.api.util.extensions.getActiveHighestPriority
 import ru.octol1ttle.flightassistant.api.util.requireIn
 
-class PitchComputer(computers: ComputerView) : Computer(computers), PitchController {
+class PitchComputer(computers: ComputerView) : Computer(computers), FlightController {
     private val limiters: MutableList<PitchLimiter> = ArrayList()
-    private val controllers: MutableList<PitchController> = ArrayList()
-    private var automationsAllowed: Boolean = false
+    private val controllers: MutableList<FlightController> = ArrayList()
     internal var manualOverride: Boolean = false
+
     var minimumPitch: ControlInput? = null
         private set
     var maximumPitch: ControlInput? = null
@@ -32,7 +32,7 @@ class PitchComputer(computers: ComputerView) : Computer(computers), PitchControl
     override fun subscribeToEvents() {
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
         ChangeLookDirectionEvents.PITCH.register { mcPitchDelta, output ->
-            if (!this.manualOverride && this.automationsAllowed) {
+            if (canMoveOrBlockPitch()) {
                 val pitchDelta: Float = -mcPitchDelta
 
                 val oldPitch: Float = computers.data.pitch
@@ -55,8 +55,6 @@ class PitchComputer(computers: ComputerView) : Computer(computers), PitchControl
     }
 
     override fun tick() {
-        automationsAllowed = !manualOverride && !computers.protections.protectionsLost && computers.data.automationsAllowed()
-
         updateSafePitches()
 
         val inputs: List<ControlInput> = controllers.filterNonFaulted().mapNotNull { it.getPitchInput() }.sortedBy { it.priority.value }
@@ -73,7 +71,7 @@ class PitchComputer(computers: ComputerView) : Computer(computers), PitchControl
         }
 
         activeInput = finalInput
-        if (automationsAllowed && finalInput.active) {
+        if (canMoveOrBlockPitch() && finalInput.active) {
             var target: Float = finalInput.target
             if (!finalInput.priority.isHigherOrSame(minimumPitch?.priority)) {
                 target = target.coerceAtLeast(minimumPitch!!.target)
@@ -83,6 +81,10 @@ class PitchComputer(computers: ComputerView) : Computer(computers), PitchControl
             }
             smoothSetPitch(computers.data.player, pitch, target.requireIn(-90.0f..90.0f), finalInput.deltaTimeMultiplier.requireIn(0.001f..Float.MAX_VALUE))
         }
+    }
+
+    private fun canMoveOrBlockPitch(): Boolean {
+        return !manualOverride && !computers.protections.protectionsLost && computers.data.automationsAllowed()
     }
 
     private fun updateSafePitches() {
@@ -134,7 +136,6 @@ class PitchComputer(computers: ComputerView) : Computer(computers), PitchControl
     }
 
     override fun reset() {
-        automationsAllowed = false
         manualOverride = true
         minimumPitch = null
         maximumPitch = null

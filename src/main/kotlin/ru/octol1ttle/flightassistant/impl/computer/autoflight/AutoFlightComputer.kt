@@ -5,19 +5,18 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
-import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingController
+import ru.octol1ttle.flightassistant.api.autoflight.FlightController
 import ru.octol1ttle.flightassistant.api.autoflight.heading.HeadingControllerRegistrationCallback
-import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchController
 import ru.octol1ttle.flightassistant.api.autoflight.pitch.PitchControllerRegistrationCallback
+import ru.octol1ttle.flightassistant.api.autoflight.roll.RollControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustChangeCallback
-import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustController
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustControllerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 
-class AutoFlightComputer(computers: ComputerView) : Computer(computers), ThrustController, PitchController, HeadingController {
+class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightController {
     var flightDirectors: Boolean = false
         private set
 
@@ -41,6 +40,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), ThrustC
         ThrustControllerRegistrationCallback.EVENT.register { it.accept(this) }
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
         HeadingControllerRegistrationCallback.EVENT.register { it.accept(this) }
+        RollControllerRegistrationCallback.EVENT.register { it.accept(this) }
         ThrustChangeCallback.EVENT.register(ThrustChangeCallback { _, _, input ->
             if (input?.identifier != ID) {
                 if (autoThrust) {
@@ -197,6 +197,14 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), ThrustC
             active = autopilot,
             identifier = ID
         )
+    }
+
+    override fun getRollInput(): ControlInput? {
+        if (!autopilot) {
+            return null
+        }
+
+        return ControlInput(0.0f, ControlInput.Priority.NORMAL)
     }
 
     override fun reset() {

@@ -7,6 +7,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
+import ru.octol1ttle.flightassistant.api.autoflight.FlightController
 import ru.octol1ttle.flightassistant.api.autoflight.thrust.*
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
@@ -20,7 +21,7 @@ import ru.octol1ttle.flightassistant.api.util.requireIn
 
 class ThrustComputer(computers: ComputerView) : Computer(computers) {
     private val sources: MutableList<ThrustSource> = ArrayList()
-    private val controllers: MutableList<ThrustController> = ArrayList()
+    private val controllers: MutableList<FlightController> = ArrayList()
 
     private var lastChangeAutomatic: Boolean = false
 

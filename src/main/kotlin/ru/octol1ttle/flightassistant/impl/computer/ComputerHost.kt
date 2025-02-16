@@ -48,7 +48,6 @@ internal object ComputerHost : SystemController<Computer>, ComputerView {
         if (computers.containsKey(identifier)) {
             throw IllegalArgumentException("Already registered computer with identifier: $identifier")
         }
-
         computers[identifier] = system
     }
 
@@ -66,6 +65,7 @@ internal object ComputerHost : SystemController<Computer>, ComputerView {
         register(FireworkComputer.ID, FireworkComputer(this, mc))
         register(PitchComputer.ID, PitchComputer(this))
         register(HeadingComputer.ID, HeadingComputer(this))
+        register(RollComputer.ID, RollComputer(this))
         register(ThrustComputer.ID, ThrustComputer(this))
 
         register(AlertComputer.ID, AlertComputer(this, mc.soundManager))

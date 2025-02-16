@@ -7,6 +7,7 @@ alerts.flightassistant:
     fault: SYS FAULT
     pitch_fault: PITCH CTL FAULT
     heading_fault: HDG CTL FAULT
+    roll_fault: ROLL CTL FAULT
     autopilot_off: AP OFF
     auto_thrust_off: A/THR OFF
   elytra:
@@ -221,6 +222,7 @@ menu.flightassistant:
         flightassistant:firework: Firework computer
         flightassistant:heading: Heading computer
         flightassistant:pitch: Pitch computer
+        flightassistant:roll: Roll computer
         flightassistant:thrust: Thrust computer
   autoflight:
     .: Auto flight
@@ -286,6 +288,6 @@ keys.flightassistant:
   set_idle: Set thrust to idle (0%)
   set_toga: Set thrust to TOGA (100%)
 
-alerts.do_a_barrel_roll.thrust:
-  .: DABR THR
-  fault: SYS FAULT
+# Other mods
+menu.flightassistant.system.name.computer.do_a_barrel_roll:roll: DaBR Roll Computer
+menu.flightassistant.system.name.computer.do_a_barrel_roll:thrust: DaBR Thrust Computer

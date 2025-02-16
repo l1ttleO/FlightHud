@@ -11,6 +11,7 @@ alerts.flightassistant:
     fault: ОТКАЗ СИСТ
     heading_fault: ОТКАЗ УПР КУРСОМ
     pitch_fault: ОТКАЗ УПР УГЛ НАКЛ
+    roll_fault: ОТКАЗ УПР КРЕНОМ
     autopilot_off: АП ОТКЛ
     auto_thrust_off: А/ТЯГА ОТКЛ
   elytra:
@@ -225,6 +226,7 @@ menu.flightassistant:
         flightassistant:firework: Компьютер фейерверков
         flightassistant:heading: Компьютер управления курсом
         flightassistant:pitch: Компьютер управления углом наклона
+        flightassistant:roll: Компьютер управления креном
         flightassistant:thrust: Компьютер тяги
   autoflight:
     .: Автополёт
@@ -289,3 +291,7 @@ keys.flightassistant:
   increase_thrust: Добавить тягу (накл. рычаги вперед)
   set_idle: Установить нулевую тягу (0%)
   set_toga: Установить взлётную тягу (100%)
+
+# Other mods
+menu.flightassistant.system.name.computer.do_a_barrel_roll:roll: Компьютер крена DaBR
+menu.flightassistant.system.name.computer.do_a_barrel_roll:thrust: Компьютер тяги DaBR
