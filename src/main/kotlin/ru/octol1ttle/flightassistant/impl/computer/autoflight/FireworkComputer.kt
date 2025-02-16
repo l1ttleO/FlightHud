@@ -14,6 +14,7 @@ import ru.octol1ttle.flightassistant.api.autoflight.thrust.ThrustSourceRegistrat
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
+import ru.octol1ttle.flightassistant.api.util.LimitedFIFOQueue
 import ru.octol1ttle.flightassistant.api.util.event.FireworkBoostCallback
 import ru.octol1ttle.flightassistant.config.FAConfig
 
@@ -27,7 +28,7 @@ class FireworkComputer(computers: ComputerView, private val mc: MinecraftClient)
 
     var waitingForResponse: Boolean = false
     var lastActivationTime: Int = 0
-    var responseTimes: ArrayDeque<Int> = ArrayDeque()
+    var responseTimes: LimitedFIFOQueue<Int> = LimitedFIFOQueue(5)
 
     override fun subscribeToEvents() {
         ThrustSourceRegistrationCallback.EVENT.register { it.accept(this) }
@@ -69,10 +70,6 @@ class FireworkComputer(computers: ComputerView, private val mc: MinecraftClient)
     override fun tick() {
         if (!computers.data.flying) {
             waitingForResponse = false
-        }
-
-        while (responseTimes.size > 5) {
-            responseTimes.removeFirst()
         }
 
         safeFireworkCount = 0

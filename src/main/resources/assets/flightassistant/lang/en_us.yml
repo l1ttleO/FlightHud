@@ -230,7 +230,7 @@ menu.flightassistant:
     auto_thrust: Auto thrust
     autopilot: Autopilot
     speed: Speed
-    pitch: Pitch
+    altitude: Altitude
     heading: Heading
 
 mode.flightassistant:
@@ -247,7 +247,7 @@ mode.flightassistant:
     stall_protection: STALL PROT
     terrain_protection: TERR PROT
     terrain_escape: TERR ESC
-    selected: PITCH %s
+    altitude: ALT %s
   heading:
     selected: HDG %s
 

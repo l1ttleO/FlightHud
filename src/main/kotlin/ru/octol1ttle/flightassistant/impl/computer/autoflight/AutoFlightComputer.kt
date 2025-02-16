@@ -33,7 +33,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
     private var headingResistance: Float = 0.0f
 
     var selectedSpeed: Int? = null
-    var selectedPitch: Float? = null
+    var selectedAltitude: Int? = null
     var selectedHeading: Int? = null
 
     override fun subscribeToEvents() {
@@ -106,14 +106,12 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
 
             val pitchInput: ControlInput? = computers.pitch.activeInput
             if (computers.pitch.disabledOrFaulted() || pitchInput != null && pitchInput.identifier != ID) {
-                autopilot = false
-                autopilotAlert = true
+                setAutoPilot(false, alert = true)
             }
 
             val headingInput: ControlInput? = computers.heading.activeInput
             if (computers.heading.disabledOrFaulted() || headingInput != null && headingInput.identifier != ID) {
-                autopilot = false
-                autopilotAlert = true
+                setAutoPilot(false, alert = true)
             }
         }
     }
@@ -146,8 +144,8 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
     }
 
     private fun setDefaultSelections() {
-        if (!this.flightDirectors && !this.autopilot && this.selectedPitch == null && this.selectedHeading == null) {
-            this.selectedPitch = computers.data.pitch
+        if (!this.flightDirectors && !this.autopilot && this.selectedAltitude == null && this.selectedHeading == null) {
+            this.selectedAltitude = computers.data.altitude.toInt()
             this.selectedHeading = computers.data.heading.toInt()
         }
     }
@@ -172,12 +170,14 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
             return null
         }
 
-        val pitch: Float = selectedPitch ?: return null
+        val altitude: Int = selectedAltitude ?: return null
+        val altitudeDiff: Double = altitude - computers.data.altitude
+        val pitch: Float = (TODO()).toFloat().coerceIn(-35.0f..computers.thrust.getOptimumClimbPitch())
 
         return ControlInput(
             pitch,
             ControlInput.Priority.NORMAL,
-            Text.translatable("mode.flightassistant.pitch.selected", "%.1f".format(pitch)),
+            Text.translatable("mode.flightassistant.pitch.altitude", altitude),
             active = autopilot,
             identifier = ID
         )

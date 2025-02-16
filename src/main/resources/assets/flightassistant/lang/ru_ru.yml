@@ -234,7 +234,7 @@ menu.flightassistant:
     auto_thrust: Автомат тяги
     autopilot: Автопилот
     speed: Скорость
-    pitch: Угол наклона
+    pitch: Высота
     heading: Курс
 
 mode.flightassistant:
@@ -251,7 +251,7 @@ mode.flightassistant:
     stall_protection: СВАЛ ЗАЩ
     terrain_protection: ЗЕМЛ ЗАЩ
     terrain_escape: ЗЕМЛ ИЗБЕЖ
-    selected: УГОЛ %s
+    altitude: ВЫС %s
   heading:
     selected: КУРС %s
 

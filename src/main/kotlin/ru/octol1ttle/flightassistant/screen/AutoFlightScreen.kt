@@ -18,7 +18,7 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
     private lateinit var autopilot: ColoredButtonWidget
 
     private var targetSpeed: TextFieldWidget? = null
-    private var targetPitch: TextFieldWidget? = null
+    private var targetAltitude: TextFieldWidget? = null
     private var targetHeading: TextFieldWidget? = null
 
     override fun init() {
@@ -50,19 +50,18 @@ class AutoFlightScreen : FABaseScreen(Text.translatable("menu.flightassistant.au
             autoflight.selectedSpeed?.toString()
         )
 
-        targetPitch = createAutoFlightWidget(this.centerX - 50, this.centerY - 30, 40, 15,
-            targetPitch,
-            Text.translatable("menu.flightassistant.autoflight.pitch"),
+        targetAltitude = createAutoFlightWidget(this.centerX - 50, this.centerY - 30, 40, 15,
+            targetAltitude,
+            Text.translatable("menu.flightassistant.autoflight.altitude"),
             Predicate {
-                if (it.isEmpty() || it == "-") return@Predicate true
-                val v: Float = it.toFloatOrNull() ?: return@Predicate false
-                return@Predicate v in -90.0f..90.0f
+                if (it.isEmpty()) return@Predicate true
+                return@Predicate it.toIntOrNull() != null
             },
             {
-                autoflight.selectedPitch = it.toFloatOrNull()
+                autoflight.selectedAltitude = it.toIntOrNull()
             },
-            if (autoflight.selectedPitch == null) null
-            else "%.1f".format(autoflight.selectedPitch)
+            if (autoflight.selectedAltitude == null) null
+            else autoflight.selectedAltitude.toString()
         )
 
         targetHeading = createAutoFlightWidget(this.centerX, this.centerY - 30, 40, 15,

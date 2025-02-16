@@ -32,10 +32,10 @@ class FlightDirectorsDisplay(computers: ComputerView) : Display(computers) {
             matrices.push()
             matrices.translate(0, 0, -50)
 
-            val pitchY: Int = ScreenSpace.getY(computers.autoflight.selectedPitch ?: return) ?: return
+            val pitchY: Int = ScreenSpace.getY(computers.pitch.activeInput?.target ?: return) ?: return
             drawHorizontalLine(this.centerXI - halfWidth, this.centerXI + halfWidth, pitchY, advisoryColor)
 
-            val headingX: Int = ScreenSpace.getX(computers.autoflight.selectedHeading?.toFloat() ?: return) ?: return
+            val headingX: Int = ScreenSpace.getX(computers.heading.activeInput?.target ?: return) ?: return
             drawVerticalLine(headingX, this.centerYI - halfWidth, this.centerYI + halfWidth, advisoryColor)
 
             matrices.pop()
