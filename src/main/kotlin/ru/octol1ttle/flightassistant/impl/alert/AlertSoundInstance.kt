@@ -58,4 +58,8 @@ class AlertSoundInstance(val player: PlayerEntity, val data: AlertData) :
         this.volume = max(0.0f, this.volume - 0.1f * ticksPassed)
         return this.volume <= 0.0f
     }
+
+    fun silence() {
+        this.volume = 0.0f
+    }
 }

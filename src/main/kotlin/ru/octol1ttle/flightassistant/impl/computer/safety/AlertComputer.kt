@@ -221,6 +221,7 @@ class AlertComputer(computers: ComputerView, private val soundManager: SoundMana
                 if (!anyStartedThisTick) {
                     soundManager.play(instance)
                 } else if (instance.isRepeatable) {
+                    instance.silence()
                     soundManager.play(instance)
                     soundManager.pause(instance)
                 }
