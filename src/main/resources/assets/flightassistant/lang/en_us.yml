@@ -218,7 +218,8 @@ menu.flightassistant:
         flightassistant:ground_proximity: Ground proximity computer
         flightassistant:stall: Stall computer
         flightassistant:void_proximity: Void proximity computer
-        flightassistant:autopilot: Automatics computer
+        flightassistant:automations: Automatics computer
+        flightassistant:autopilot_logic: Autopilot logic computer
         flightassistant:firework: Firework computer
         flightassistant:heading: Heading computer
         flightassistant:pitch: Pitch computer
@@ -229,9 +230,10 @@ menu.flightassistant:
     flight_directors: Flight directors
     auto_thrust: Auto thrust
     autopilot: Autopilot
-    speed: Speed
-    altitude: Altitude
-    heading: Heading
+    thrust:
+      selected_speed: SPD
+      vertical_target: VERT
+      waypoint_thrust: F/PLN
 
 mode.flightassistant:
   thrust:
@@ -240,7 +242,7 @@ mode.flightassistant:
     locked: THR LK %s
     locked_toga: TOGA LK
     toga: THR TOGA
-    speed: SPD %s
+    selected_speed: SPD %s
   pitch:
     void_protection: VOID PROT
     void_escape: VOID ESC

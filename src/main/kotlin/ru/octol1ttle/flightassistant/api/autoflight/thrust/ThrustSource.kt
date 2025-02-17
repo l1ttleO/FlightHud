@@ -36,7 +36,7 @@ interface ThrustSource {
     /**
      * Calculates the thrust required to achieve the target speed.
      */
-    fun calculateThrustForSpeed(targetSpeed: Int): Float
+    fun calculateThrustForSpeed(targetSpeed: Float): Float
 
     /**
      * Defines the priority, which determines which thrust source to choose in the case there are multiple sources available ([isAvailable]).

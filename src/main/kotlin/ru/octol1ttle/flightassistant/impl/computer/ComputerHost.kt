@@ -3,7 +3,7 @@ package ru.octol1ttle.flightassistant.impl.computer
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.SystemController
+import ru.octol1ttle.flightassistant.api.ModuleController
 import ru.octol1ttle.flightassistant.api.computer.Computer
 import ru.octol1ttle.flightassistant.api.computer.ComputerRegistrationCallback
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
@@ -12,7 +12,7 @@ import ru.octol1ttle.flightassistant.config.FAConfig
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
-internal object ComputerHost : SystemController<Computer>, ComputerView {
+internal object ComputerHost : ModuleController<Computer>, ComputerView {
     private val computers: MutableMap<Identifier, Computer> = HashMap()
 
     override fun isEnabled(identifier: Identifier): Boolean {
@@ -41,14 +41,14 @@ internal object ComputerHost : SystemController<Computer>, ComputerView {
         return computers.keys
     }
 
-    override fun register(identifier: Identifier, system: Computer) {
+    override fun register(identifier: Identifier, module: Computer) {
         if (FlightAssistant.initComplete) {
             throw IllegalStateException("Initialization is already complete, but trying to register a computer with identifier: $identifier")
         }
         if (computers.containsKey(identifier)) {
             throw IllegalArgumentException("Already registered computer with identifier: $identifier")
         }
-        computers[identifier] = system
+        computers[identifier] = module
     }
 
     private fun registerBuiltin() {
@@ -61,7 +61,8 @@ internal object ComputerHost : SystemController<Computer>, ComputerView {
         register(ElytraStatusComputer.ID, ElytraStatusComputer(this))
         register(ChunkStatusComputer.ID, ChunkStatusComputer(this))
 
-        register(AutoFlightComputer.ID, AutoFlightComputer(this))
+        register(AutomationsComputer.ID, AutomationsComputer(this))
+        register(AutopilotLogicComputer.ID, AutopilotLogicComputer(this))
         register(FireworkComputer.ID, FireworkComputer(this, mc))
         register(PitchComputer.ID, PitchComputer(this))
         register(HeadingComputer.ID, HeadingComputer(this))

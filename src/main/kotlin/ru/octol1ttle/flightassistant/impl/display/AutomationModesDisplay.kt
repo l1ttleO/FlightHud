@@ -20,13 +20,13 @@ class AutomationModesDisplay(computers: ComputerView) : Display(computers) {
     private val headingDisplay: ModeDisplay = ModeDisplay(3) { toPair(computers.heading.activeInput) }
     private val autoFlightDisplay: ModeDisplay = ModeDisplay(5) {
         val text: MutableText = Text.empty()
-        if (computers.autoflight.flightDirectors) {
+        if (computers.automations.flightDirectors) {
             text.appendWithSeparation(Text.translatable("short.flightassistant.flight_directors"))
         }
-        if (computers.autoflight.autoThrust) {
+        if (computers.automations.autoThrust) {
             text.appendWithSeparation(Text.translatable("short.flightassistant.auto_thrust"))
         }
-        if (computers.autoflight.autopilot) {
+        if (computers.automations.autopilot) {
             text.appendWithSeparation(Text.translatable("short.flightassistant.autopilot"))
         }
 

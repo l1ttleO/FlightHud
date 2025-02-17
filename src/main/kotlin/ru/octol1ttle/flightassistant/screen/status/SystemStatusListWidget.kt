@@ -10,11 +10,11 @@ import net.minecraft.client.gui.widget.TextWidget
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant.mc
-import ru.octol1ttle.flightassistant.api.SystemController
+import ru.octol1ttle.flightassistant.api.ModuleController
 import ru.octol1ttle.flightassistant.api.util.extensions.cautionColor
 import ru.octol1ttle.flightassistant.api.util.extensions.textRenderer
 
-class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSED_PARAMETER", "KotlinRedundantDiagnosticSuppress") bottom: Int, left: Int, controller: SystemController<*>, baseKey: String)
+class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSED_PARAMETER", "KotlinRedundantDiagnosticSuppress") bottom: Int, left: Int, controller: ModuleController<*>, baseKey: String)
     : ElementListWidget<SystemStatusListWidget.SystemStatusWidgetEntry>(mc, width, height, top,
 /*? if <1.21 {*/ bottom, //?}
     25) {
@@ -43,7 +43,7 @@ class SystemStatusListWidget(width: Int, height: Int, top: Int, @Suppress("UNUSE
         return this.width
     }
 
-    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int, val identifier: Identifier, displayNameText: Text, private val controller: SystemController<*>)
+    class SystemStatusWidgetEntry(val x: Int, val y: Int, private val listWidth: Int, val identifier: Identifier, displayNameText: Text, private val controller: ModuleController<*>)
         : Entry<SystemStatusWidgetEntry>() {
         private val displayName: TextWidget = TextWidget(x, y, this.listWidth / 2, 9, displayNameText, textRenderer).alignLeft()
         private val faultText: TextWidget = TextWidget(x, y, this.listWidth / 8, 9, FAULT_TEXT, textRenderer)

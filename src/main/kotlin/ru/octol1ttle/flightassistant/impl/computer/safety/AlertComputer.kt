@@ -63,7 +63,7 @@ class AlertComputer(computers: ComputerView, private val soundManager: SoundMana
         )
         register(
             AlertCategory(Text.translatable("alerts.flightassistant.autoflight"))
-                .add(ComputerFaultAlert(computers, AutoFlightComputer.ID, Text.translatable("alerts.flightassistant.autoflight.fault")))
+                .add(ComputerFaultAlert(computers, AutomationsComputer.ID, Text.translatable("alerts.flightassistant.autoflight.fault")))
                 .add(ComputerFaultAlert(computers, PitchComputer.ID, Text.translatable("alerts.flightassistant.autoflight.pitch_fault")))
                 .add(ComputerFaultAlert(computers, HeadingComputer.ID, Text.translatable("alerts.flightassistant.autoflight.heading_fault")))
                 .add(ComputerFaultAlert(computers, RollComputer.ID, Text.translatable("alerts.flightassistant.autoflight.roll_fault")))

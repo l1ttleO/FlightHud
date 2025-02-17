@@ -110,7 +110,7 @@ class ThrustComputer(computers: ComputerView) : Computer(computers) {
         return 55.0f
     }
 
-    fun calculateThrustForSpeed(targetSpeed: Int): Float? {
+    fun calculateThrustForSpeed(targetSpeed: Float): Float? {
         val thrustSource: ThrustSource? = sources.filterNonFaulted().filter { it.isAvailable() }.minByOrNull { it.priority.value }
         if (thrustSource != null) {
             return thrustSource.calculateThrustForSpeed(targetSpeed)

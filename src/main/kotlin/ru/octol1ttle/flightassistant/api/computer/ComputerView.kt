@@ -1,16 +1,19 @@
 package ru.octol1ttle.flightassistant.api.computer
 
-import ru.octol1ttle.flightassistant.api.SystemView
+import ru.octol1ttle.flightassistant.api.ModuleView
 import ru.octol1ttle.flightassistant.impl.computer.AirDataComputer
 import ru.octol1ttle.flightassistant.impl.computer.autoflight.*
 import ru.octol1ttle.flightassistant.impl.computer.safety.*
 
-interface ComputerView : SystemView<Computer> {
+interface ComputerView : ModuleView<Computer> {
     val data: AirDataComputer
         get() = get(AirDataComputer.ID) as AirDataComputer
 
-    val autoflight: AutoFlightComputer
-        get() = get(AutoFlightComputer.ID) as AutoFlightComputer
+    val automations: AutomationsComputer
+        get() = get(AutomationsComputer.ID) as AutomationsComputer
+
+    val autopilot: AutopilotLogicComputer
+        get() = get(AutopilotLogicComputer.ID) as AutopilotLogicComputer
 
     val firework: FireworkComputer
         get() = get(FireworkComputer.ID) as FireworkComputer

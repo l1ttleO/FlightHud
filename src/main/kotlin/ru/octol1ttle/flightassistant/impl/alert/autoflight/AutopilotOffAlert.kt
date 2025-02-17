@@ -12,21 +12,21 @@ import ru.octol1ttle.flightassistant.api.util.extensions.warningColor
 
 class AutopilotOffAlert(computers: ComputerView) : Alert(computers), ECAMAlert {
     override val data: AlertData
-        get() = if (computers.autoflight.autopilotAlert) AlertData.FORCE_AUTOPILOT_OFF else AlertData.PLAYER_AUTOPILOT_OFF
+        get() = if (computers.automations.autopilotAlert) AlertData.FORCE_AUTOPILOT_OFF else AlertData.PLAYER_AUTOPILOT_OFF
     private var age: Int = 0
     private var wasAutopilot: Boolean = false
 
     override fun shouldActivate(): Boolean {
-        if (computers.autoflight.autopilotAlert || age > 80) {
+        if (computers.automations.autopilotAlert || age > 80) {
             wasAutopilot = false
             age = 0
-            return computers.autoflight.autopilotAlert
+            return computers.automations.autopilotAlert
         }
 
-        if (computers.autoflight.autopilot) {
+        if (computers.automations.autopilot) {
             wasAutopilot = true
         }
-        val autopilotOff: Boolean = wasAutopilot && !computers.autoflight.autopilot
+        val autopilotOff: Boolean = wasAutopilot && !computers.automations.autopilot
         if (autopilotOff) {
             age += FATickCounter.ticksPassed
         }

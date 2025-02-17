@@ -1,7 +1,6 @@
 package ru.octol1ttle.flightassistant.impl.computer.autoflight
 
 import kotlin.math.abs
-import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
 import ru.octol1ttle.flightassistant.api.autoflight.ControlInput
@@ -16,7 +15,7 @@ import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.util.FATickCounter
 import ru.octol1ttle.flightassistant.api.util.event.ChangeLookDirectionEvents
 
-class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightController {
+class AutomationsComputer(computers: ComputerView) : Computer(computers), FlightController {
     var flightDirectors: Boolean = false
         private set
 
@@ -32,21 +31,14 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
     private var pitchResistance: Float = 0.0f
     private var headingResistance: Float = 0.0f
 
-    var selectedSpeed: Int? = null
-    var selectedAltitude: Int? = null
-    var selectedHeading: Int? = null
-
     override fun subscribeToEvents() {
         ThrustControllerRegistrationCallback.EVENT.register { it.accept(this) }
         PitchControllerRegistrationCallback.EVENT.register { it.accept(this) }
         HeadingControllerRegistrationCallback.EVENT.register { it.accept(this) }
         RollControllerRegistrationCallback.EVENT.register { it.accept(this) }
         ThrustChangeCallback.EVENT.register(ThrustChangeCallback { _, _, input ->
-            if (input?.identifier != ID) {
-                if (autoThrust) {
-                    autoThrustAlert = true
-                }
-                autoThrust = false
+            if (input?.identifier != AutopilotLogicComputer.ID) {
+                setAutoThrust(false, alert = true)
             }
             if (input == null && autoThrustAlert) {
                 autoThrustAlert = false
@@ -59,8 +51,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
                     output.add(ControlInput(0.0f, ControlInput.Priority.NORMAL))
                     return@ChangeLookDirection
                 }
-                autopilot = false
-                autopilotAlert = true
+                setAutoPilot(false, alert = true)
             }
 
             pitchResistance = 0.0f
@@ -72,8 +63,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
                     output.add(ControlInput(0.0f, ControlInput.Priority.NORMAL))
                     return@ChangeLookDirection
                 }
-                autopilot = false
-                autopilotAlert = true
+                setAutoPilot(false, alert = true)
             }
 
             headingResistance = 0.0f
@@ -96,8 +86,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
         if (autoThrust) {
             autoThrustAlert = false
             if (computers.thrust.faulted) {
-                autoThrust = false
-                autoThrustAlert = true
+                setAutoThrust(false, alert = true)
             }
         }
 
@@ -105,49 +94,33 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
             autopilotAlert = false
 
             val pitchInput: ControlInput? = computers.pitch.activeInput
-            if (computers.pitch.disabledOrFaulted() || pitchInput != null && pitchInput.identifier != ID) {
+            if (computers.pitch.disabledOrFaulted() || pitchInput != null && pitchInput.identifier != AutopilotLogicComputer.ID) {
                 setAutoPilot(false, alert = true)
             }
 
             val headingInput: ControlInput? = computers.heading.activeInput
-            if (computers.heading.disabledOrFaulted() || headingInput != null && headingInput.identifier != ID) {
+            if (computers.heading.disabledOrFaulted() || headingInput != null && headingInput.identifier != AutopilotLogicComputer.ID) {
                 setAutoPilot(false, alert = true)
             }
         }
     }
 
     fun setFlightDirectors(flightDirectors: Boolean) {
-        if (flightDirectors) {
-            setDefaultSelections()
-        }
         this.flightDirectors = flightDirectors
     }
 
     fun setAutoThrust(autoThrust: Boolean, alert: Boolean? = null) {
-        if (autoThrust && !this.autoThrust && this.selectedSpeed == null) {
-            this.selectedSpeed = (computers.data.forwardVelocity.length() * 20).toInt().coerceAtLeast(1)
+        if (alert != null) {
+            this.autoThrustAlert = this.autoThrust && !autoThrust && alert
         }
         this.autoThrust = autoThrust
-        if (alert != null) {
-            this.autoThrustAlert = !autoThrust && alert
-        }
     }
 
     fun setAutoPilot(autopilot: Boolean, alert: Boolean? = null) {
-        if (autopilot) {
-            setDefaultSelections()
+        if (alert != null) {
+            this.autopilotAlert = this.autopilot && !autopilot && alert
         }
         this.autopilot = autopilot
-        if (alert != null) {
-            this.autopilotAlert = !autopilot && alert
-        }
-    }
-
-    private fun setDefaultSelections() {
-        if (!this.flightDirectors && !this.autopilot && this.selectedAltitude == null && this.selectedHeading == null) {
-            this.selectedAltitude = computers.data.altitude.toInt()
-            this.selectedHeading = computers.data.heading.toInt()
-        }
     }
 
     override fun getThrustInput(): ControlInput? {
@@ -155,14 +128,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
             return null
         }
 
-        val target: Int = selectedSpeed ?: return null
-
-        return ControlInput(
-            computers.thrust.calculateThrustForSpeed(target) ?: 0.0f,
-            ControlInput.Priority.NORMAL,
-            Text.translatable("mode.flightassistant.thrust.speed", target),
-            identifier = ID
-        )
+        return computers.autopilot.computeThrust()
     }
 
     override fun getPitchInput(): ControlInput? {
@@ -170,17 +136,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
             return null
         }
 
-        val altitude: Int = selectedAltitude ?: return null
-        val altitudeDiff: Double = altitude - computers.data.altitude
-        val pitch: Float = (TODO()).toFloat().coerceIn(-35.0f..computers.thrust.getOptimumClimbPitch())
-
-        return ControlInput(
-            pitch,
-            ControlInput.Priority.NORMAL,
-            Text.translatable("mode.flightassistant.pitch.altitude", altitude),
-            active = autopilot,
-            identifier = ID
-        )
+        return computers.autopilot.computePitch(autopilot)
     }
 
     override fun getHeadingInput(): ControlInput? {
@@ -188,15 +144,7 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
             return null
         }
 
-        val heading: Int = selectedHeading ?: return null
-
-        return ControlInput(
-            heading.toFloat(),
-            ControlInput.Priority.NORMAL,
-            Text.translatable("mode.flightassistant.heading.selected", heading),
-            active = autopilot,
-            identifier = ID
-        )
+        return computers.autopilot.computeHeading(autopilot)
     }
 
     override fun getRollInput(): ControlInput? {
@@ -222,6 +170,6 @@ class AutoFlightComputer(computers: ComputerView) : Computer(computers), FlightC
     }
 
     companion object {
-        val ID: Identifier = FlightAssistant.id("autopilot")
+        val ID: Identifier = FlightAssistant.id("automations")
     }
 }

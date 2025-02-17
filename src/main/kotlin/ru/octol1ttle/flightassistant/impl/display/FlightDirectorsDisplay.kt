@@ -10,7 +10,7 @@ import ru.octol1ttle.flightassistant.api.display.HudFrame
 import ru.octol1ttle.flightassistant.api.util.ScreenSpace
 import ru.octol1ttle.flightassistant.api.util.extensions.*
 import ru.octol1ttle.flightassistant.config.FAConfig
-import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutoFlightComputer
+import ru.octol1ttle.flightassistant.impl.computer.autoflight.AutomationsComputer
 
 class FlightDirectorsDisplay(computers: ComputerView) : Display(computers) {
     override fun allowedByConfig(): Boolean {
@@ -18,10 +18,10 @@ class FlightDirectorsDisplay(computers: ComputerView) : Display(computers) {
     }
 
     override fun render(drawContext: DrawContext) {
-        if (!computers.autoflight.flightDirectors) {
+        if (!computers.automations.flightDirectors) {
             return
         }
-        if (computers.pitch.activeInput?.identifier != AutoFlightComputer.ID || computers.heading.activeInput?.identifier != AutoFlightComputer.ID) {
+        if (computers.pitch.activeInput?.identifier != AutomationsComputer.ID || computers.heading.activeInput?.identifier != AutomationsComputer.ID) {
             renderFaulted(drawContext)
             return
         }

@@ -31,8 +31,8 @@ class DaBRThrustComputer(computers: ComputerView) : Computer(computers), ThrustS
         return ModConfig.INSTANCE.enableThrust
     }
 
-    override fun calculateThrustForSpeed(targetSpeed: Int): Float {
-        return targetSpeed / (ModConfig.INSTANCE.maxThrust * 20.0).toFloat()
+    override fun calculateThrustForSpeed(targetSpeed: Float): Float {
+        return targetSpeed / (ModConfig.INSTANCE.maxThrust * 20.0).toFloat().coerceIn(-1.0f..1.0f)
     }
 
     override fun tick() {

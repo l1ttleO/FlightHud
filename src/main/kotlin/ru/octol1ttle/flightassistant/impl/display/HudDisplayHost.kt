@@ -7,7 +7,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import ru.octol1ttle.flightassistant.FlightAssistant
-import ru.octol1ttle.flightassistant.api.SystemController
+import ru.octol1ttle.flightassistant.api.ModuleController
 import ru.octol1ttle.flightassistant.api.computer.ComputerView
 import ru.octol1ttle.flightassistant.api.display.Display
 import ru.octol1ttle.flightassistant.api.display.HudDisplayRegistrationCallback
@@ -21,7 +21,7 @@ import ru.octol1ttle.flightassistant.api.util.extensions.drawMiddleAlignedText
 import ru.octol1ttle.flightassistant.api.util.extensions.primaryColor
 import ru.octol1ttle.flightassistant.config.FAConfig
 
-internal object HudDisplayHost: SystemController<Display> {
+internal object HudDisplayHost: ModuleController<Display> {
     private val displays: MutableMap<Identifier, Display> = HashMap()
 
     override fun get(identifier: Identifier): Display {
@@ -52,7 +52,7 @@ internal object HudDisplayHost: SystemController<Display> {
         return displays.keys
     }
 
-    override fun register(identifier: Identifier, system: Display) {
+    override fun register(identifier: Identifier, module: Display) {
         if (FlightAssistant.initComplete) {
             throw IllegalStateException("Initialization is already complete, but trying to register a display with identifier: $identifier")
         }
@@ -60,7 +60,7 @@ internal object HudDisplayHost: SystemController<Display> {
             throw IllegalArgumentException("Already registered display with identifier: $identifier")
         }
 
-        displays[identifier] = system
+        displays[identifier] = module
     }
 
     private fun registerBuiltin(computers: ComputerView) {

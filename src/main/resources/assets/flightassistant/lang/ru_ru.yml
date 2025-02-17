@@ -222,7 +222,8 @@ menu.flightassistant:
         flightassistant:ground_proximity: Компьютер близости земли
         flightassistant:stall: Компьютер обнаружения сваливания
         flightassistant:void_proximity: Компьютер близости пустоты
-        flightassistant:autopilot: Компьютер автоматики
+        flightassistant:automations: Компьютер автоматики
+        flightassistant:autopilot_logic: Компьютер логики автопилота
         flightassistant:firework: Компьютер фейерверков
         flightassistant:heading: Компьютер управления курсом
         flightassistant:pitch: Компьютер управления углом наклона
